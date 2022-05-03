@@ -99,7 +99,7 @@ do_help()
 	${SCRIPTNAME} [-c|--chroot DIR][--proxy proxy_string] -i|--install
 	${SCRIPTNAME} [--vpn FQDN][-c|--chroot DIR] start|stop|status
 	${SCRIPTNAME} [-c|--chroot DIR] uninstall
-	${SCRIPTNAME} disconnect|split|selfupdate
+	${SCRIPTNAME} disconnect|split|upgrade|selfupdate
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
@@ -115,6 +115,7 @@ do_help()
 	status       check if CShell daemon is running
 	disconnect   disconnect VPN/SNX session from the command line
 	split        split tunnel VPN - use only after session is up
+        upgrade      OS upgrade inside chroot
 	uninstall    delete chroot and host file(s)
 	selfupdate   self update this script if new version available
 	
@@ -512,6 +513,15 @@ doUninstall()
    echo "chroot+checkpoint software deleted" >&2
 }
 
+# upgrade OS inside chroot
+Upgrade() {
+   sudo chroot "${CHROOT}" /bin/bash --login -pf <<-EOF12
+        apt update
+        apt -y upgrade
+        apt clean
+        EOF12
+}
+
 # self update
 selfUpdate() {
     cd /tmp
@@ -590,6 +600,7 @@ argCommands()
       status)       showStatus ;;
       shell)        doShell ;;
       uninstall)    doUninstall ;;
+      upgrade)      Upgrade ;;
       selfupdate)   selfUpdate;;
       *)            do_help ;;
 
