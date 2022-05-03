@@ -98,8 +98,8 @@ do_help()
 
 	${SCRIPTNAME} [-c|--chroot DIR][--proxy proxy_string] -i|--install
 	${SCRIPTNAME} [--vpn FQDN][-c|--chroot DIR] start|stop|status
-        ${SCRIPTNAME} [-c|--chroot DIR] uninstall
-	${SCRIPTNAME} disconnect|split
+	${SCRIPTNAME} [-c|--chroot DIR] uninstall
+	${SCRIPTNAME} disconnect|split|selfupdate
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
@@ -115,8 +115,8 @@ do_help()
 	status       check if CShell daemon is running
 	disconnect   disconnect VPN/SNX session from the command line
 	split        split tunnel VPN - use only after session is up
-        uninstall    delete chroot and host file(s)
-        selfupdate   self update this script if new version available
+	uninstall    delete chroot and host file(s)
+	selfupdate   self update this script if new version available
 	
 	For debugging/maintenance:
 	
