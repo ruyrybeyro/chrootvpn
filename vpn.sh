@@ -529,8 +529,15 @@ selfUpdate() {
         if wget "https://github.com/ruyrybeyro/chrootvpn/releases/tag/${VER}/vpn.sh" 
         then
            sed -i 's/VPN=""/VPN="${VPN}"/;s/VPNIP=""/VPNIP="${VPNIP}"/;s/SPLIT=""/SPLIT="${SPLIT}"/' vpn.sh
+
+           if [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]]
+           then
+              sudo cp -f vpn.sh "${SCRIPT}" 
+           fi
+
            sudo mv -f vpn.sh "${INSTALLSCRIPT}"
-           sudo chmod a+rx "${INSTALLSCRIPT}"
+
+           sudo chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
 
            echo "Running the new version..."
            exec "${INSTALLSCRIPT}" "$@"
