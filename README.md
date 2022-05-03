@@ -4,7 +4,11 @@ Checkpoint R80+ VPN client chroot wrapper
  VPN client chroot'ed setup/wrapper for Debian/Ubuntu
 Checkpoint R80.10 and up
 
-first time run it as sudo ./vpn.sh -i
+- first time run it as sudo ./vpn.sh -i
+
+- accept localhost https://localhost:14186/id certificate in brower 
+
+- visit VPN page for logging in 
 
 It will get CShell and SNX installations scripts from the firewall, and install them.
 CShell installation script patch included at the end of file.
