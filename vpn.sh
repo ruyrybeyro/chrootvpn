@@ -870,10 +870,12 @@ InstallChroot()
 # main ()
 main()
 {
-   PreCheck
 
    # command options handling
    doGetOpts $*
+
+   # after options check, as we want help to work.
+   PreCheck
 
    # clean all the getopts logic from the arguments
    # leaving only commands
