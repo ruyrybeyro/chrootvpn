@@ -517,10 +517,10 @@ selfUpdate() {
     cd /tmp
     # get latest release version
     VER=$(curl -sL https://api.github.com/repos/ruyrybeyro/chrootvpn/releases/latest | jq -r ".tag_name")
-    echo "current version : ${VERSION}
-    if [[ ${VER} != ${VERSION}  ]]
+    echo "current version : ${VERSION}"
+    if [[ "${VER}" != "${VERSION}" ]]
     then
-        echo "Found a new version of me, updating myself..."
+        echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
         if [ curl "https://github.com/ruyrybeyro/chrootvpn/releases/tag/${VER}/vpn.sh" ]
         then
