@@ -22,7 +22,7 @@
 # hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
 #
 
-VERSION="0.90"
+VERSION="v0.90-beta"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
