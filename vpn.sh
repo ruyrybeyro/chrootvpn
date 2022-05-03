@@ -22,7 +22,7 @@
 # hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
 #
 
-VERSION="v0.90-beta"
+VERSION="xx"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -348,7 +348,8 @@ showStatus()
    echo -n "SNX - installed              "
    sudo chroot "${CHROOT}"  snx -v 2> /dev/null | awk '/build/ { print $2 }'
    echo -n "SNX - available for download "
-   curl -skL "https://${VPN}/SNX/CSHELL/snx_ver.txt"
+   #curl -skL "https://${VPN}/SNX/CSHELL/snx_ver.txt"
+   wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt"
 
    # IP connectivity
    echo
@@ -373,7 +374,7 @@ showStatus()
       # OS/ca-certificates package needs to be recent
       # or otherwise, the OS CA root certificates chain file needs to be recent
       echo
-      if curl -sL --noproxy '*' "${URL_VPN_TEST}" &> /dev/null
+      if wget -O /dev/null -o /dev/null --no-proxy "${URL_VPN_TEST}"
       then
          # if it works we are talking with the actual site
          echo "split tunnel VPN"
@@ -382,7 +383,6 @@ showStatus()
          # we are talking with the "transparent proxy" firewall site
          echo "full  tunnel VPN"
       fi
-
    else
       echo "VPN off"
    fi
@@ -516,13 +516,17 @@ doUninstall()
 selfUpdate() {
     cd /tmp
     # get latest release version
-    VER=$(curl -sL https://api.github.com/repos/ruyrybeyro/chrootvpn/releases/latest | jq -r ".tag_name")
+    VER=$(wget -q -O- --no-check-certificate https://api.github.com/repos/ruyrybeyro/chrootvpn/releases/latest | jq -r ".tag_name")
     echo "current version : ${VERSION}"
+    if [[ ${VER} == "null" ]]
+    then
+       die "did not find any github release. Something went wrong"
+    fi
     if [[ "${VER}" != "${VERSION}" ]]
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
-        if [ curl "https://github.com/ruyrybeyro/chrootvpn/releases/tag/${VER}/vpn.sh" ]
+        if wget "https://github.com/ruyrybeyro/chrootvpn/releases/tag/${VER}/vpn.sh" 
         then
            sed -i 's/VPN=""/VPN="${VPN}"/;s/VPNIP=""/VPNIP="${VPNIP}"/;s/SPLIT=""/SPLIT="${SPLIT}"/' vpn.sh
            sudo mv -f vpn.sh "${INSTALLSCRIPT}"
@@ -621,7 +625,7 @@ installPackages()
    apt -y upgrade
 
    # install needed packages
-   apt -y install debootstrap ca-certificates patch x11-xserver-utils jq curl
+   apt -y install debootstrap ca-certificates patch x11-xserver-utils jq wget
    # we want to make sure resolconf is the last one
    apt -y install resolvconf
    # clean APT host cache
@@ -674,8 +678,9 @@ buildFS()
    # getting the last version of the agents installation scripts
    # from the firewall
    rm -f snx_install.sh cshell_install.sh
-   curl -k "https://${VPN}/SNX/INSTALL/snx_install.sh"
-   curl -k "https://${VPN}/SNX/INSTALL/cshell_install.sh"
+   #curl -k "https://${VPN}/SNX/INSTALL/cshell_install.sh"
+   wget --no-check-certificate "https://${VPN}/SNX/INSTALL/snx_install.sh"
+   wget --no-check-certificate "https://${VPN}/SNX/INSTALL/cshell_install.sh"
 
    # doing the cshell_install.sh patches after the __DIFF__ line
    n=$(awk '/^__DIFF__/ {print NR ; exit 0; }' "${SCRIPT}")
