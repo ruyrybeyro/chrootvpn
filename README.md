@@ -21,32 +21,54 @@ hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
 Usage:
 
 vpn.sh [-c|--chroot DIR][--proxy proxy_string] -i|--install
+
 vpn.sh [--vpn FQDN][-c|--chroot DIR] start|stop|status
+
 vpn.sh [-c|--chroot DIR] uninstall
+
 vpn.sh disconnect|split|selfupdate
+
 vpn.sh -h|--help
+
 vpn.sh -v|--version
 
 -i|--install install mode - create chroot
+
 -c|--chroot  change default chroot /opt/chroot directory
+
 -h|--help    show this help
+
 -v|--version script version
+
 --vpn        select another VPN DNS full name
+
 --proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 
+
 start        start CShell daemon
+
 stop         stop  CShell daemon
+
 status       check if CShell daemon is running
+
 disconnect   disconnect VPN/SNX session from the command line
+
 split        split tunnel VPN - use only after session is up
+
 uninstall    delete chroot and host file(s)
+
 selfupdate   self update this script if new version available
+
 
 For debugging/maintenance:
 
+
 vpn.sh -d|--debug
+
 vpn.sh shell
 
+
 -d|--debug   bash debug mode on
+
 shell        bash shell inside chroot
 
