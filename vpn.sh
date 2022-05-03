@@ -121,10 +121,11 @@ do_help()
 	For debugging/maintenance:
 	
 	${SCRIPTNAME} -d|--debug
-	${SCRIPTNAME} shell
+	${SCRIPTNAME} [-c|--chroot DIR] shell|upgrade
 	
 	-d|--debug   bash debug mode on
 	shell        bash shell inside chroot
+	upgrade      OS upgrade inside chroot
 	
 	EOF1
 
@@ -512,6 +513,15 @@ doUninstall()
    echo "chroot+checkpoint software deleted" >&2
 }
 
+# upgrade OS inside chroot
+Upgrade() {
+   sudo chroot "${CHROOT}" /bin/bash --login -pf <<-EOF12
+	apt update
+	apt -y upgrade
+	apt clean
+	EOF12
+}
+
 # self update
 selfUpdate() {
     cd /tmp
@@ -590,6 +600,7 @@ argCommands()
       status)       showStatus ;;
       shell)        doShell ;;
       uninstall)    doUninstall ;;
+      upgrade)      Upgrade ;;
       selfupdate)   selfUpdate;;
       *)            do_help ;;
 

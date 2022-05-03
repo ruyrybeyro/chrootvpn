@@ -76,3 +76,4 @@ vpn.sh shell
 
 shell        bash shell inside chroot
 
+upgrade      OS upgrade inside chroot
