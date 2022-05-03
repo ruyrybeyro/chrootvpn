@@ -28,7 +28,7 @@ VERSION="xx"
 CHROOT="/opt/chroot"
 
 # Checkpoint VPN address
-# Fill VPN *and* VPNIP
+# Fill VPN *and* VPNIP *before* using the script
 VPN=""
 VPNIP=""
 
