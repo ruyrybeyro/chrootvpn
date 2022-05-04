@@ -536,7 +536,7 @@ selfUpdate() {
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
-        if wget "https://github.com/ruyrybeyro/chrootvpn/releases/tag/${VER}/vpn.sh" 
+        if wget "https://github.com/ruyrybeyro/chrootvpn/releases/tag/${VER}/vpn.sh?raw=true" 
         then
            sed -i 's/VPN=""/VPN="${VPN}"/;s/VPNIP=""/VPNIP="${VPNIP}"/;s/SPLIT=""/SPLIT="${SPLIT}"/' vpn.sh
 
