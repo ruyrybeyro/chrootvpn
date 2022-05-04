@@ -538,7 +538,7 @@ selfUpdate() {
 
         if wget -O vpn.sh "https://github.com/ruyrybeyro/chrootvpn/releases/download/${VER}/vpn.sh" 
         then
-           sed -i 's/VPN=""/VPN="${VPN}"/;s/VPNIP=""/VPNIP="${VPNIP}"/;s/SPLIT=""/SPLIT="${SPLIT}"/' vpn.sh
+           sed -i "s/VPN=\"\"/VPN=\"${VPN}\"/;s/VPNIP=\"\"/VPNIP=\"${VPNIP}\"/;s/SPLIT=\"\"/SPLIT=\"${SPLIT}\"/" vpn.sh
 
            if [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]]
            then
