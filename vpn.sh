@@ -28,7 +28,7 @@
 # hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
 #
 
-VERSION="v0.90"
+VERSION="v0.91"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -45,7 +45,7 @@ SPLIT=""
 # OS to deploy inside 32-bit chroot  
 VARIANT="minbase"
 RELEASE="bullseye" # Debian 11
-REPO="http://ftp.us.debian.org/debian/" # US repo
+REPO="http://deb.debian.org/debian/" # US repo
 
 # used during initial chroot setup
 # for chroot shell correct time
