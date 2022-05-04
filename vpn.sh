@@ -45,7 +45,7 @@ SPLIT=""
 # OS to deploy inside 32-bit chroot  
 VARIANT="minbase"
 RELEASE="bullseye" # Debian 11
-REPO="http://deb.debian.org/debian/" # US repo
+REPO="http://deb.debian.org/debian/" # fastly repo
 
 # used during initial chroot setup
 # for chroot shell correct time
