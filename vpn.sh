@@ -5,7 +5,13 @@
 # VPN client chroot'ed setup/wrapper for Debian/Ubuntu
 # Checkpoint R80.10 and up
 #
+# Please fill VPN and VPNIP before using this script.
+# SPLIT might or not have to be filled, depending on your needs 
+# and Checkpoint VPN routes.
+#
 # first time run it as sudo ./vpn.sh -i
+# Accept localhost certificate visiting https://localhost:14186/id
+# Then open VPN URL to login/start the VPN
 #
 # It will get CShell and SNX installations scripts from the firewall,
 # and install them. 
