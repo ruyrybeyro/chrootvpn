@@ -536,9 +536,10 @@ selfUpdate() {
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
-        if wget -O vpn.sh "https://github.com/ruyrybeyro/chrootvpn/releases/download/${VER}/vpn.sh" 
+        if wget -O vpn.sh -o /dev/null "https://github.com/ruyrybeyro/chrootvpn/releases/download/${VER}/vpn.sh" 
         then
-           sed -i "s/VPN=\"\"/VPN=\"${VPN}\"/;s/VPNIP=\"\"/VPNIP=\"${VPNIP}\"/;s/SPLIT=\"\"/SPLIT=\"${SPLIT}\"/" vpn.sh
+           # sed can use any char as separator for avoiding rule clashes
+           sed -i "s/VPN=\"\"/VPN=\""${VPN}"\"/;s/VPNIP=\"\"/VPNIP=\""${VPNIP}"\"/;s@SPLIT=\"\"@SPLIT=\"${SPLIT}\"@" vpn.sh
 
            if [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]]
            then
@@ -549,12 +550,11 @@ selfUpdate() {
 
            sudo chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
 
-           echo "Running the new version..."
-           exec "${INSTALLSCRIPT}" "$@"
+           echo "scripts updated to version ${VER}"
+           exit 0
+        else
+           die "could not fetch new version"
         fi
-
-       # Now exit this old instance
-       exit 1
 
     else
        die "Already the latest version."
