@@ -569,7 +569,7 @@ selfUpdate()
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
-        vpnsh=$(mktemp)
+        vpnsh=$(mktemp) || die "failed creating mktemp file"
 
         if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
