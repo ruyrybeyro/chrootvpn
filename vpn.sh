@@ -608,7 +608,7 @@ PreCheck2()
          then
             umountChrootFS
 
-            # proceeds if uninstall
+            # does not abort if uninstall
             if [[ "$1" != "uninstall" ]]
             then
                die "Something went wrong. Correct or to reinstall, run: ./${SCRIPTNAME} uninstall ; sudo ./${SCRIPTNAME} -i"
