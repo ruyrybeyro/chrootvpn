@@ -934,7 +934,7 @@ chrootEnd()
 
       # delete temporary setup scripts from chroot's root home
       ROOTHOME="${CHROOT}/root"
-      sudo rm -f "${ROOTHOME}/chroot_setup.sh" "${ROOTHOME}/cshell_install.sh" "${ROOTHOME}/snx_install.sh"
+      rm -f "${ROOTHOME}/chroot_setup.sh" "${ROOTHOME}/cshell_install.sh" "${ROOTHOME}/snx_install.sh"
 
       echo "chroot setup done." >&2
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
