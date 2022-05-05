@@ -553,7 +553,11 @@ doUninstall()
    sudo rm -f  "${XDGAUTO}"
    sudo rm -rf "${CHROOT}"
    sudo rm -f  "${INSTALLSCRIPT}" 
-   sudo rm -f  "${CONFFILE}"
+   if [[ -f "${CONFFILE}" ]]
+   then
+      echo "${CONFFILE} not deleted. If you are not reinstalling do:"
+      echo "sudo rm -f ${CONFFILE}"
+   fi
 
    echo "chroot+checkpoint software deleted" >&2
 }
