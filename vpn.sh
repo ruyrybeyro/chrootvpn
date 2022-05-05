@@ -197,7 +197,7 @@ doGetOpts()
          d | debug )       set -x ;;                 # bash debug on
          h | help )        do_help ;;                # show help
          ??* )             die "Illegal option --${OPT}" ;;  # bad long option
-         ? )               exit 2 ;;  # bad short option (error reported via getopts)
+         ? )               die "bad short option" ;;
        esac
 
    done
