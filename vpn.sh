@@ -553,8 +553,11 @@ Upgrade() {
 }
 
 # self update
-selfUpdate() {
-    cd /tmp
+selfUpdate() 
+{
+    # temporary file for downloading new vpn.sh    
+    local vpnsh
+
     # get latest release version
     VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
     echo "current version : ${VERSION}"
@@ -566,19 +569,23 @@ selfUpdate() {
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
-        if wget -O vpn.sh -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
+        vpnsh=$(mktemp)
+
+        if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
            # sed can use any char as separator for avoiding rule clashes
-           sed -i "s/VPN=\"\"/VPN=\""${VPN}"\"/;s/VPNIP=\"\"/VPNIP=\""${VPNIP}"\"/;s@SPLIT=\"\"@SPLIT=\"${SPLIT}\"@" vpn.sh
+           sed -i "s/VPN=\"\"/VPN=\""${VPN}"\"/;s/VPNIP=\"\"/VPNIP=\""${VPNIP}"\"/;s@SPLIT=\"\"@SPLIT=\"${SPLIT}\"@" "${vpnsh}"
 
            if [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]]
            then
-              sudo cp -f vpn.sh "${SCRIPT}" 
+              sudo cp -f "${vpnsh}" "${SCRIPT}" 
            fi
 
-           sudo mv -f vpn.sh "${INSTALLSCRIPT}"
+           sudo cp -f "${vpnsh}" "${INSTALLSCRIPT}"
 
            sudo chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
+           
+           rm -f "${vpnsh}"
 
            echo "scripts updated to version ${VER}"
            exit 0
