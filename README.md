@@ -1,10 +1,12 @@
-# chrootvpn  Rui Ribeiro 2022
+# chrootvpn  
 
 Checkpoint R80+ VPN client chroot wrapper
 
 VPN client chroot'ed setup/wrapper for Debian/Ubuntu
 
 Checkpoint R80.10 and up
+
+Rui Ribeiro 2022
 
 Please fill VPN and VPNIP before using this script.
 SPLIT might or not have to be filled, depending on your needs
