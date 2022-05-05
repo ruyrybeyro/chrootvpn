@@ -156,7 +156,7 @@ vpnlookup()
 die() 
 {
    # calling function name: message 
-   echo "${FUNCNAME[1]}: $*" >&2 
+   echo "${FUNCNAME[2]}->${FUNCNAME[1]}: $*" >&2 
 
    exit 2 
 }  
