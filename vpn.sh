@@ -241,9 +241,9 @@ PreCheck()
 
    ischroot && die "Do not run this script inside a chroot"
 
-   if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]]
+   if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
-      die "Please fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
+      [[ "$1" == "uninstall" ]] || die "Please fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
 }
 
@@ -982,12 +982,12 @@ main()
    # command options handling
    doGetOpts $*
 
-   # after options check, as we want help to work.
-   PreCheck
-
    # clean all the getopts logic from the arguments
    # leaving only commands
    shift $((OPTIND-1))
+
+   # after options check, as we want help to work.
+   PreCheck "$1"
 
    if [[ ${install} -eq false ]]
    then
