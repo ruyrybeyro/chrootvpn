@@ -797,12 +797,6 @@ buildFS()
    if [[ ! -z "${HOSTNAME}" ]]
    then
       echo -e "\n127.0.0.1 ${HOSTNAME}" >> etc/hosts
-      
-      # add also hostname to host if not present
-      if ! grep "${HOSTNAME}" /etc/hosts 
-      then
-         echo -e "\n127.0.0.1 ${HOSTNAME}" >> /etc/hosts
-      fi
    fi
 
    # APT proxy for inside chroot
@@ -924,6 +918,8 @@ GnomeAutoRun()
 # after finishing chroot setup
 chrootEnd()
 {
+   local ROOTHOME
+
    # do the last leg of setup inside chroot
    chroot "${CHROOT}" /bin/bash --login -pf "/root/chroot_setup.sh"
 
@@ -936,8 +932,9 @@ chrootEnd()
       # install Gnome autorun file
       GnomeAutoRun
 
-      # delete temporary setup scripts
-      sudo rm -f "${CHROOT}/chroot_setup.sh" "${CHROOT}/cshell_install.sh" "${CHROOT}/snx_install.sh"
+      # delete temporary setup scripts from chroot's root home
+      ROOTHOME="${CHROOT}/root"
+      sudo rm -f "${ROOTHOME}/chroot_setup.sh" "${ROOTHOME}/cshell_install.sh" "${ROOTHOME}/snx_install.sh"
 
       echo "chroot setup done." >&2
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
