@@ -47,7 +47,7 @@ SPLIT=""
 # OS to deploy inside 32-bit chroot  
 VARIANT="minbase"
 RELEASE="bullseye" # Debian 11
-REPO="http://deb.debian.org/debian/" # fastly repo
+DEBIANREPO="http://deb.debian.org/debian/" # fastly repo
 
 # github repository for command selfupdate
 GITHUB_REPO="ruyrybeyro/chrootvpn"
@@ -709,7 +709,7 @@ createChroot()
 
    mkdir -p "${CHROOT}" || die "could not create directory ${CHROOT}"
 
-   debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${REPO}"
+   debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    if [ $? -ne 0 ] || [ ! -d "${CHROOT}" ]
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
