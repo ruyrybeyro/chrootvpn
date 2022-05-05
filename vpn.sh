@@ -9,6 +9,9 @@
 # SPLIT might or not have to be filled, depending on your needs 
 # and Checkpoint VPN routes.
 #
+# if /etc/opt/vpn.conf is present the above script settings will be 
+# ignored. vpn.conf is created upon first instalation.
+#
 # first time run it as sudo ./vpn.sh -i
 # Accept localhost certificate visiting https://localhost:14186/id
 # Then open VPN URL to login/start the VPN
@@ -33,18 +36,29 @@ VERSION="v0.92"
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
 
-# Checkpoint VPN address
-# selfupdate brings them from the older version
-# Fill VPN *and* VPNIP *before* using the script
-# if filling in keep the format
-VPN=""
-VPNIP=""
+CONFFILE="/opt/etc/vpn.conf"
 
-# split VPN routing table if deleting VPN gateway is not enough
-# selfupdate brings it from the older version
-# if empty script will delete VPN gateway
-# if filling in keep the format
-SPLIT=""
+if [ -f "${CONFFILE}" ]
+then
+   . ${CONFFILE}
+else
+   # Checkpoint VPN address
+   # selfupdate brings them from the older version
+   # Fill VPN *and* VPNIP *before* using the script
+   # if filling in keep the format
+   # values used first time installing, 
+   # otherwise /opt/etc/vpn.conf overrides them
+   VPN=""
+   VPNIP=""
+
+   # split VPN routing table if deleting VPN gateway is not enough
+   # selfupdate brings it from the older version
+   # if empty script will delete VPN gateway
+   # if filling in keep the format
+   # value used first time installing, 
+   # otherwise /opt/etc/vpn.conf overrides it
+   SPLIT=""
+fi
 
 # OS to deploy inside 32-bit chroot  
 VARIANT="minbase"
@@ -536,9 +550,10 @@ doUninstall()
    doStop
 
    # delete autorun file, chroot subdirectory and installed script
-   sudo rm -f "${XDGAUTO}"
+   sudo rm -f  "${XDGAUTO}"
    sudo rm -rf "${CHROOT}"
-   sudo rm -f "${INSTALLSCRIPT}" 
+   sudo rm -f  "${INSTALLSCRIPT}" 
+   sudo rm -f  "${CONFFILE}"
 
    echo "chroot+checkpoint software deleted" >&2
 }
@@ -930,6 +945,18 @@ chrootEnd()
    fi
 }
 
+# create /opt/etc/vpn.conf 
+# upon service is running first time
+createConfFile()
+{
+    mkdir -p $(dirname "${CONFFILE}") 2> /dev/null 
+    cat <<-EOF13 > "${CONFFILE}"
+	VPN="${VPN}"
+	VPNIP="${VPNIP}"
+	SPLIT="${SPLIT}"
+	EOF13
+}
+
 # main chroot install routine
 InstallChroot()
 {
@@ -941,6 +968,7 @@ InstallChroot()
    FstabMount
    fixDNS
    chrootEnd
+   createConfFile
 }
 
 # main ()

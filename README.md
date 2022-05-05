@@ -5,6 +5,13 @@ Checkpoint R80+ VPN client chroot wrapper
 
 Checkpoint R80.10 and up
 
+Please fill VPN and VPNIP before using this script.
+SPLIT might or not have to be filled, depending on your needs
+and Checkpoint VPN routes.
+
+if /etc/opt/vpn.conf is present the above script settings will be 
+ignored. vpn.conf is created upon first instalation.
+
 - first time run it as sudo ./vpn.sh -i
 
 - accept localhost https://localhost:14186/id certificate in brower 
