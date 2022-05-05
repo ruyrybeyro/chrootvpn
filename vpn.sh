@@ -50,7 +50,7 @@ RELEASE="bullseye" # Debian 11
 REPO="http://deb.debian.org/debian/" # fastly repo
 
 # github repository for command selfupdate
-GITHUB_UPDATE_PATH="ruyrybeyro/chrootvpn"
+GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # used during initial chroot setup
 # for chroot shell correct time
@@ -554,7 +554,7 @@ Upgrade() {
 selfUpdate() {
     cd /tmp
     # get latest release version
-    VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_UPDATE_PATH}/releases/latest" | jq -r ".tag_name")
+    VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
     echo "current version : ${VERSION}"
     if [[ ${VER} == "null" ]]
     then
@@ -564,7 +564,7 @@ selfUpdate() {
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
-        if wget -O vpn.sh -o /dev/null "https://github.com/${GITHUB_UPDATE_PATH}/releases/download/${VER}/vpn.sh" 
+        if wget -O vpn.sh -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
            # sed can use any char as separator for avoiding rule clashes
            sed -i "s/VPN=\"\"/VPN=\""${VPN}"\"/;s/VPNIP=\"\"/VPNIP=\""${VPNIP}"\"/;s@SPLIT=\"\"@SPLIT=\"${SPLIT}\"@" vpn.sh
