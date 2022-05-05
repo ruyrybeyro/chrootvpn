@@ -147,8 +147,9 @@ vpnlookup()
 
 # complain to STDERR and exit with error
 die() 
-{ 
-   echo "$*" >&2 
+{
+   # calling function name: message 
+   echo "${FUNCNAME[1]}: $*" >&2 
    exit 2 
 }  
 
@@ -258,6 +259,10 @@ mountChrootFS()
       mount | grep "${CHROOT}" &> /dev/null
       if [ $? -eq 1 ]
       then
+         if [[ ! -f "${CHROOT}/etc/fstab" ]]
+         then
+            die "no ${CHROOT}/etc/fstab" 
+         fi
          # mount using fstab inside chroot, all filesystems
          sudo mount --fstab "${CHROOT}/etc/fstab" -a
       fi
@@ -594,11 +599,14 @@ PreCheck2()
          if [[ -d "${CHROOT}" ]]
          then
             umountChrootFS
+
             if [[ "$1" != "uninstall" ]]
             then
                die "Something went wrong. Correct or to reinstall, run: ./${SCRIPTNAME} uninstall ; sudo ./${SCRIPTNAME} -i"
             fi
+
          else
+
             die "To install the chrooted Checkpoint client software, run: sudo ./${SCRIPTNAME} -i"
          fi
       fi
@@ -676,8 +684,7 @@ checkDNS()
    then
       echo "DNS problems after installing resolvconf?" >&2
       echo "Not resolving ${VPN} DNS" >&2
-      echo "Fix or reboot to fix" >&2
-      exit 1
+      die "Fix or reboot to fix" 
    fi	   
 }
 
@@ -693,8 +700,7 @@ createChroot()
    if [ $? -ne 0 ] || [ ! -d "${CHROOT}" ]
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
-      echo "run sudo rm -rf ${CHROOT} and do it again" >&2
-      exit 1
+      die "run sudo rm -rf ${CHROOT} and do it again" 
    fi
 }
 
