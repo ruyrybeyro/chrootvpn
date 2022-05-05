@@ -31,6 +31,7 @@
 # hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
 #
 
+# script/deploy version, make the same as deploy
 VERSION="v0.92"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
