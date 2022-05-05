@@ -28,7 +28,7 @@
 # hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
 #
 
-VERSION="v0.91"
+VERSION="v0.92"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -273,8 +273,12 @@ umountChrootFS()
    # if mounted
    if [ $? -eq 0 ]
    then
-      # there is no --fstab for umount
-      sudo chroot "${CHROOT}" /usr/bin/umount -a 2> /dev/null
+
+      if [[ -f "${CHROOT}/etc/fstab" ]]
+      then
+         # there is no --fstab for umount
+         sudo chroot "${CHROOT}" /usr/bin/umount -a 2> /dev/null
+      fi
 
       # umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
@@ -500,7 +504,10 @@ doShell()
 # disconnect SNX/VPN session
 doDisconnect()
 {
-   sudo chroot "${CHROOT}" /usr/bin/snx -d
+   if [[ -f "${CHROOT}/usr/bin/snx" ]]
+   then
+      sudo chroot "${CHROOT}" /usr/bin/snx -d
+   fi
 }
 
 # uninstall command
@@ -582,12 +589,18 @@ PreCheck2()
    else
       # if launcher not present something went wrong
 
-      if [[ -d "${CHROOT}" ]]
+      if [[ "$1" != "selfupdate" ]]
       then
-         umountChrootFS
-         die "Something went wrong. Correct or to reinstall, run: ./${SCRIPTNAME} uninstall ; sudo ./${SCRIPTNAME} -i"
-      else
-         die "To install the chrooted Checkpoint client software, run: sudo ./${SCRIPTNAME} -i"
+         if [[ -d "${CHROOT}" ]]
+         then
+            umountChrootFS
+            if [[ "$1" != "uninstall" ]]
+            then
+               die "Something went wrong. Correct or to reinstall, run: ./${SCRIPTNAME} uninstall ; sudo ./${SCRIPTNAME} -i"
+            fi
+         else
+            die "To install the chrooted Checkpoint client software, run: sudo ./${SCRIPTNAME} -i"
+         fi
       fi
    fi
 }
@@ -595,7 +608,7 @@ PreCheck2()
 # arguments - command handling
 argCommands()
 {
-   PreCheck2 
+   PreCheck2 "$1"
 
    case "$1" in
 
