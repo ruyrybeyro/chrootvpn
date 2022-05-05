@@ -797,6 +797,12 @@ buildFS()
    if [[ ! -z "${HOSTNAME}" ]]
    then
       echo -e "\n127.0.0.1 ${HOSTNAME}" >> etc/hosts
+      
+      # add also hostname to host if not present
+      if ! grep "${HOSTNAME}" /etc/hosts 
+      then
+         echo -e "\n127.0.0.1 ${HOSTNAME}" >> /etc/hosts
+      fi
    fi
 
    # APT proxy for inside chroot
