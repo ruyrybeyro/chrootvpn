@@ -150,13 +150,14 @@ die()
 {
    # calling function name: message 
    echo "${FUNCNAME[1]}: $*" >&2 
+
    exit 2 
 }  
 
 # optional arguments handling
 needs_arg() 
 { 
-   if [ -z "${OPTARG}" ]; 
+   if [ -z "${OPTARG}" ] 
    then 
       die "No arg for --$OPT option" 
    fi 
@@ -217,10 +218,7 @@ PreCheck()
       die "This script is for Debian/Ubuntu Linux based flavours only" 
    fi
 
-   if ischroot
-   then
-      die "Do not run this script inside a chroot" 
-   fi
+   ischroot || die "Do not run this script inside a chroot"
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]]
    then
@@ -695,7 +693,8 @@ createChroot()
    echo "slow command, often debootstrap hangs talking with Debian repositories" >&2
    echo "do ^C and start it over again if needed" >&2
 
-   mkdir -p "${CHROOT}" || exit 1
+   mkdir -p "${CHROOT}" || die "could not create directory ${CHROOT}"
+
    debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${REPO}"
    if [ $? -ne 0 ] || [ ! -d "${CHROOT}" ]
    then
@@ -707,7 +706,7 @@ createChroot()
 # build required chroot file system structure + scripts
 buildFS()
 {
-   cd "${CHROOT}" >&2 || exit 1
+   cd "${CHROOT}" >&2 || die "could not chdir to ${CHROOT}" 
 
    # for sharing X11 with the host
    mkdir -p tmp/.X11-unix
@@ -898,7 +897,9 @@ chrootEnd()
 
    else
       umountChrootFS
+
       die "Something went wrong. Chroot unmounted. Fix it or delete $CHROOT and run this script again" 
+
    fi
 }
 
