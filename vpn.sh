@@ -895,7 +895,7 @@ chrootEnd()
    # do the last leg of setup inside chroot
    chroot "${CHROOT}" /bin/bash --login -pf "/root/chroot_setup.sh"
 
-   if isCShellRunning
+   if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
       # copy this script to /usr/local/bin
       cp "${SCRIPT}" "${INSTALLSCRIPT}"
@@ -903,6 +903,9 @@ chrootEnd()
 
       # install Gnome autorun file
       GnomeAutoRun
+
+      # delete temporary setup scripts
+      sudo rm -f "${CHROOT}/chroot_setup.sh" "${CHROOT}/cshell_install.sh" "${CHROOT}/snx_install.sh"
 
       echo "chroot setup done." >&2
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
