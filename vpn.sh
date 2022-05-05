@@ -35,11 +35,13 @@ CHROOT="/opt/chroot"
 
 # Checkpoint VPN address
 # Fill VPN *and* VPNIP *before* using the script
+# selfupdate brings them from the older version
 VPN=""
 VPNIP=""
 
 # split VPN routing table if deleting VPN gateway is not enough
 # if empty script will delete VPN gateway
+# selfupdate brings it from the older version
 SPLIT=""
 
 # OS to deploy inside 32-bit chroot  
