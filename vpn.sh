@@ -225,7 +225,7 @@ PreCheck()
       die "This script is for Debian/Ubuntu Linux based flavours only" 
    fi
 
-   ischroot || die "Do not run this script inside a chroot"
+   ischroot && die "Do not run this script inside a chroot"
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]]
    then
