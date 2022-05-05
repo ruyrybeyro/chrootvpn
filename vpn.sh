@@ -257,13 +257,16 @@ mountChrootFS()
       mount | grep "${CHROOT}" &> /dev/null
       if [ $? -eq 1 ]
       then
+         # consistency checks
          if [[ ! -f "${CHROOT}/etc/fstab" ]]
          then
             die "no ${CHROOT}/etc/fstab" 
          fi
+
          # mount using fstab inside chroot, all filesystems
          sudo mount --fstab "${CHROOT}/etc/fstab" -a
       fi
+
    fi
 }
 
@@ -281,6 +284,8 @@ umountChrootFS()
       then
          # there is no --fstab for umount
          sudo chroot "${CHROOT}" /usr/bin/umount -a 2> /dev/null
+         
+         # we dont want to abort if not present
       fi
 
       # umount any leftover mount
@@ -417,6 +422,7 @@ killCShell()
 {
    if isCShellRunning
    then
+
       # kill all java CShell agents (1)
       sudo kill -9 $(ps ax | grep CShell | grep -v grep | awk ' { print $1 } ')
 
@@ -427,6 +433,7 @@ killCShell()
          # something very wrong happened
          die "Something is wrong. kill -9 did not kill CShell"
       fi
+
    fi
 }
 
@@ -592,12 +599,14 @@ PreCheck2()
    else
       # if launcher not present something went wrong
 
+      # alway allow selfupdate
       if [[ "$1" != "selfupdate" ]]
       then
          if [[ -d "${CHROOT}" ]]
          then
             umountChrootFS
 
+            # proceeds if uninstall
             if [[ "$1" != "uninstall" ]]
             then
                die "Something went wrong. Correct or to reinstall, run: ./${SCRIPTNAME} uninstall ; sudo ./${SCRIPTNAME} -i"
@@ -751,6 +760,7 @@ buildFS()
 	${VPNIP} ${VPN}
 	EOF7
 
+   # add hostname to /etc/hosts inside chroot
    if [[ ! -z "${HOSTNAME}" ]]
    then
       echo -e "\n127.0.0.1 ${HOSTNAME}" >> etc/hosts
