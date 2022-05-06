@@ -32,7 +32,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v0.92"
+VERSION="v0.93"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -305,7 +305,7 @@ umountChrootFS()
       if [[ -f "${CHROOT}/etc/fstab" ]]
       then
          # there is no --fstab for umount
-         sudo chroot "${CHROOT}" /usr/bin/umount -a 2> /dev/null
+         sudo setarch i386 chroot "${CHROOT}" /usr/bin/umount -a 2> /dev/null
          
          # we dont want to abort if not present
       fi
@@ -375,19 +375,19 @@ showStatus()
    arch
    echo -n "Chroot: "
 
-   sudo chroot "${CHROOT}" /bin/bash --login -pf <<-EOF2 | awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } '
+   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF2 | awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } '
 	cat /etc/os-release
 	EOF2
 
    # print--architecture and not uname because chroot shares the same kernel
-   sudo chroot "${CHROOT}" /bin/bash --login -pf <<-EOF3
+   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF3
 	/usr/bin/dpkg --print-architecture
 	EOF3
 
    # SNX
    echo
    echo -n "SNX - installed              "
-   sudo chroot "${CHROOT}"  snx -v 2> /dev/null | awk '/build/ { print $2 }'
+   sudo setarch i386 chroot "${CHROOT}"  snx -v 2> /dev/null | awk '/build/ { print $2 }'
    echo -n "SNX - available for download "
    #curl -skL "https://${VPN}/SNX/CSHELL/snx_ver.txt"
    wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt"
@@ -491,7 +491,7 @@ doStart()
    fi
 
    # launch CShell inside chroot
-   sudo chroot "${CHROOT}" /bin/bash --login -pf <<-EOF4
+   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF4
 	DISPLAY=${DISPLAY} /usr/bin/cshell/launcher
 	EOF4
 
@@ -524,7 +524,7 @@ doShell()
    # otherwise shell wont work well
    mountChrootFS
 
-   sudo chroot "${CHROOT}" /bin/bash --login -pf
+   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf
 
    # dont need mounted filesystem with CShell agent down
    if ! isCShellRunning
@@ -538,7 +538,7 @@ doDisconnect()
 {
    if [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
-      sudo chroot "${CHROOT}" /usr/bin/snx -d
+      sudo setarch i386 chroot "${CHROOT}" /usr/bin/snx -d
    fi
 }
 
@@ -565,7 +565,7 @@ doUninstall()
 
 # upgrade OS inside chroot
 Upgrade() {
-   sudo chroot "${CHROOT}" /bin/bash --login -pf <<-EOF12
+   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF12
 	apt update
 	apt -y upgrade
 	apt clean
@@ -922,7 +922,7 @@ chrootEnd()
    local ROOTHOME
 
    # do the last leg of setup inside chroot
-   chroot "${CHROOT}" /bin/bash --login -pf "/root/chroot_setup.sh"
+   setarch i386 chroot "${CHROOT}" /bin/bash --login -pf "/root/chroot_setup.sh"
 
    if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
