@@ -20,6 +20,9 @@
 # and install them. 
 # CShell installation script patch included at the end of file. 
 #
+# vpn.sh selfupdate 
+# might update this script if new version+Internet connectivity available
+#
 # non-chroot version not written intencionally. 
 # SNX/CShell behave on odd ways ;
 # the chroot is built to counter some of those behaviours
