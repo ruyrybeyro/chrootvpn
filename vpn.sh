@@ -454,7 +454,7 @@ killCShell()
 # start command
 doStart()
 {
-   # all local apps - X auth
+   # ${CSHELL_USER} (cshell) apps - X auth
    if ! xhost +si:localuser:${CSHELL_USER}
    then
       echo "If there are not X11 desktop permissions, VPN won't run" >&2
@@ -839,18 +839,18 @@ buildFS()
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
 
-        # create cShell user
-        # create group 
-        addgroup --quiet --gid ${CSHELL_GID} ${CSHELL_GROUP} 2>/dev/null ||true
-        # create user
-        adduser --quiet \
-                --uid ${CSHELL_UID} \
-                --gid ${CSHELL_GID} \
-                --no-create-home \
-                --disabled-password \
-                --home "${CSHELL_HOME}" \
-                --gecos "Checkpoint Agent" \
-                "${CSHELL_USER}" 2>/dev/null || true
+	# create cShell user
+	# create group 
+	addgroup --quiet --gid ${CSHELL_GID} ${CSHELL_GROUP} 2>/dev/null ||true
+	# create user
+	adduser --quiet \
+	        --uid ${CSHELL_UID} \
+	        --gid ${CSHELL_GID} \
+	        --no-create-home \
+	        --disabled-password \
+	        --home "${CSHELL_HOME}" \
+	        --gecos "Checkpoint Agent" \
+	        "${CSHELL_USER}" 2>/dev/null || true
 
         # adjust file and directory permissions
         # create homedir 
@@ -869,9 +869,10 @@ buildFS()
 	
 	# install SNX
 	/root/snx_install.sh
-	# install CShell
+	# install CShell - wont hide xhost errors
+	# as it can hide a cshell_install patch failure
 	echo "Installing CShell - ignore xhost errors" >&2
-	DISPLAY=${DISPLAY} /root/cshell_install.sh
+	DISPLAY=${DISPLAY} /root/cshell_install.sh 
 	
 	exit 0
 	EOF9
