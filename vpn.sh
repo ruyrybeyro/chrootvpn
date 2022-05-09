@@ -291,14 +291,10 @@ umountChrootFS()
    if [ $? -eq 0 ]
    then
 
-      if [[ -f "${CHROOT}/etc/fstab" ]]
-      then
-         # there is no --fstab for umount
-         sudo setarch i386 chroot "${CHROOT}" /usr/bin/umount -a 2> /dev/null
+      # there is no --fstab for umount
+      # we dont want to abort if not present
+      [ -f "${CHROOT}/etc/fstab" ] && sudo setarch i386 chroot "${CHROOT}" /usr/bin/umount -a 2> /dev/null
          
-         # we dont want to abort if not present
-      fi
-
       # umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
