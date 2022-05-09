@@ -247,6 +247,7 @@ PreCheck()
 # wrapper for chroot
 doSudoChroot()
 {
+   # setarch i386 lies to uname about being 32 bits
    sudo setarch i386 chroot "${CHROOT}" $*
 }
 
