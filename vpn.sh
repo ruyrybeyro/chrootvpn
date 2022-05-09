@@ -455,7 +455,7 @@ killCShell()
 doStart()
 {
    # all local apps - X auth
-   if ! xhost + local:
+   if ! xhost +si:localuser:${CSHELL_USER}
    then
       echo "If there are not X11 desktop permissions, VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2
