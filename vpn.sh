@@ -99,6 +99,13 @@ XDGAUTO="/etc/xdg/autostart/cshell.desktop"
 # script PATH upon successful setup
 INSTALLSCRIPT="/usr/local/bin/${SCRIPTNAME}"
 
+# cshell user
+CSHELL_USER=cshell
+CSHELL_UID=9000
+CSHELL_GROUP=${CSHELL_USER}
+CSHELL_GID=9000
+CSHELL_HOME="/home/${CSHELL_USER}"
+
 # "booleans"
 true=0
 false=1
@@ -477,7 +484,7 @@ doStart()
 
    # launch CShell inside chroot
    sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF4
-	DISPLAY=${DISPLAY} /usr/bin/cshell/launcher
+	su -c "DISPLAY=${DISPLAY} /usr/bin/cshell/launcher" ${CSHELL_USER}
 	EOF4
 
    if ! isCShellRunning
@@ -723,6 +730,35 @@ createChroot()
    fi
 }
 
+# create user for running CShell
+# to avoid running server as root
+# more secure running as an independent user
+createCshellUser()
+{
+   # create group 
+   if ! getent group | grep -q "^${CSHELL_GROUP}:" 
+   then
+      addgroup --quiet --gid ${CSHELL_GID} ${CSHELL_GROUP} 2>/dev/null ||true
+   fi
+   # create user
+   if ! getent passwd | grep -q "^${CSHELL_USER}:" 
+   then
+      adduser --quiet \
+            --uid ${CSHELL_UID} \
+            --gid ${CSHELL_GID} \
+            --no-create-home \
+            --disabled-password \
+            --home "${CSHELL_HOME}" \
+            --gecos "Checkpoint Agent" \
+            "${CSHELL_USER}" 2>/dev/null || true
+   fi
+   # adjust file and directory permissions
+   # create homedir 
+   test -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
+   chown -R ${CSHELL_USER}:${CSHELL_GROUP} "${CSHELL_HOME}"
+   chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
+}
+
 # build required chroot file system structure + scripts
 buildFS()
 {
@@ -732,7 +768,7 @@ buildFS()
    mkdir -p tmp/.X11-unix
 
    # for leaving cshell_install.sh happy
-   mkdir -p root/.config
+   mkdir -p "${CHROOT}/${CSHELL_HOME}/.config"
 
    # for showing date right when in shell mode inside chroot
    echo "TZ=${TZ}; export TZ" >> root/.profile
@@ -747,6 +783,10 @@ buildFS()
    # doing the cshell_install.sh patches after the __DIFF__ line
    n=$(awk '/^__DIFF__/ {print NR ; exit 0; }' "${SCRIPT}")
    sed -e "1,${n}d" "${SCRIPT}" | patch cshell_install.sh
+   # change from root to ${CSHELL_USER}
+   sed -i "s@AUTOSTART_DIR=/root@AUTOSTART_DIR=${CSHELL_HOME}@" cshell_install.sh
+   sed -i "s/USER_NAME=root/USER_NAME=${CSHELL_USER}/" cshell_install.sh
+    
    mv cshell_install.sh "${CHROOT}/root"
    mv snx_install.sh "${CHROOT}/root"
 
@@ -762,7 +802,7 @@ buildFS()
    mv usr/bin/who usr/bin/who.old
    cat <<-EOF6 > usr/bin/who
 	#!/bin/bash
-	echo -e "root\t:0"
+	echo -e "${CSHELL_USER}\t:0"
 	EOF6
 
    # hosts inside chroot
@@ -794,6 +834,26 @@ buildFS()
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
+
+        # create cShell user
+        # create group 
+        addgroup --quiet --gid ${CSHELL_GID} ${CSHELL_GROUP} 2>/dev/null ||true
+        # create user
+        adduser --quiet \
+                --uid ${CSHELL_UID} \
+                --gid ${CSHELL_GID} \
+                --no-create-home \
+                --disabled-password \
+                --home "${CSHELL_HOME}" \
+                --gecos "Checkpoint Agent" \
+                "${CSHELL_USER}" 2>/dev/null || true
+
+        # adjust file and directory permissions
+        # create homedir 
+        test  -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
+        chown -R ${CSHELL_USER}:${CSHELL_GROUP} "${CSHELL_HOME}"
+        chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
+
 	# create a who apt diversion for the fake one not being replaced
 	# by security updates inside chroot
 	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
@@ -901,6 +961,14 @@ chrootEnd()
    # do the last leg of setup inside chroot
    setarch i386 chroot "${CHROOT}" /bin/bash --login -pf "/root/chroot_setup.sh"
 
+   # stop it running as root and lauch it as $CSHELL_USER
+   # doubles as test
+   if isCShellRunning
+   then
+      doStop
+      doStart
+   fi
+
    if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
       # copy this script to /usr/local/bin
@@ -949,6 +1017,7 @@ InstallChroot()
    installPackages
    checkDNS
    createChroot
+   createCshellUser
    buildFS
    FstabMount
    fixDNS
