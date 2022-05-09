@@ -750,6 +750,8 @@ createCshellUser()
             --disabled-password \
             --home "${CSHELL_HOME}" \
             --gecos "Checkpoint Agent" \
+            --shell "/bin/false" \
+            --disabled-login \
             "${CSHELL_USER}" 2>/dev/null || true
    fi
    # adjust file and directory permissions
