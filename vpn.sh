@@ -961,14 +961,6 @@ chrootEnd()
    # do the last leg of setup inside chroot
    setarch i386 chroot "${CHROOT}" /bin/bash --login -pf "/root/chroot_setup.sh"
 
-   # stop it running as root and lauch it as $CSHELL_USER
-   # doubles as test
-   if isCShellRunning
-   then
-      doStop
-      doStart
-   fi
-
    if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
       # copy this script to /usr/local/bin
