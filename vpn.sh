@@ -42,27 +42,26 @@ CHROOT="/opt/chroot"
 
 CONFFILE="/opt/etc/vpn.conf"
 
-if [ -f "${CONFFILE}" ]
-then
-   . ${CONFFILE}
-else
-   # Checkpoint VPN address
-   # selfupdate brings them from the older version
-   # Fill VPN *and* VPNIP *before* using the script
-   # if filling in keep the format
-   # values used first time installing, 
-   # otherwise /opt/etc/vpn.conf overrides them
-   VPN=""
-   VPNIP=""
+[ -f "${CONFFILE}" ] && . ${CONFFILE}
 
-   # split VPN routing table if deleting VPN gateway is not enough
-   # selfupdate brings it from the older version
-   # if empty script will delete VPN gateway
-   # if filling in keep the format
-   # value used first time installing, 
-   # otherwise /opt/etc/vpn.conf overrides it
-   SPLIT=""
-fi
+# Sane defaults:
+ 
+# Checkpoint VPN address
+# selfupdate brings them from the older version
+# Fill VPN *and* VPNIP *before* using the script
+# if filling in keep the format
+# values used first time installing, 
+# otherwise /opt/etc/vpn.conf overrides them
+[ -z "$VPN" ] && VPN=""
+[ -z "$VPNIP" ] && VPNIP=""
+
+# split VPN routing table if deleting VPN gateway is not enough
+# selfupdate brings it from the older version
+# if empty script will delete VPN gateway
+# if filling in keep the format
+# value used first time installing, 
+# otherwise /opt/etc/vpn.conf overrides it
+[ -z "$SPLIT" ] && SPLIT=""
 
 # OS to deploy inside 32-bit chroot  
 VARIANT="minbase"
@@ -74,20 +73,13 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # used during initial chroot setup
 # for chroot shell correct time
-if [ -z "${TZ}" ]
-then
-   TZ='Europe/Lisbon'
-fi
+[ -z "${TZ}" ] && TZ='Europe/Lisbon'
 
 # URL for testing if split or full VPN
 URL_VPN_TEST="https://www.debian.com"
 
 # CShell writes in the display
-if [ -z "${DISPLAY}" ]
-then
-   DISPLAY=":0.0"
-fi
-export DISPLAY
+[ -z "${DISPLAY}" ] && export DISPLAY=":0.0"
 
 # dont bother with locales
 export LC_ALL=C LANG=C
@@ -182,10 +174,7 @@ die()
 # optional arguments handling
 needs_arg() 
 { 
-   if [ -z "${OPTARG}" ] 
-   then 
-      die "No arg for --$OPT option" 
-   fi 
+   [ -z "${OPTARG}" ] && die "No arg for --$OPT option"
 }
 
 # arguments - script getopts options handling
@@ -238,10 +227,7 @@ PreCheck()
    fi
 
    # If not Debian/Ubuntu based
-   if [ ! -f /etc/debian_version ]  
-   then
-      die "This script is for Debian/Ubuntu Linux based flavours only" 
-   fi
+   [ ! -f /etc/debian_version ]  && die "This script is for Debian/Ubuntu Linux based flavours only"
 
    ischroot && die "Do not run this script inside a chroot"
 
@@ -539,10 +525,7 @@ doShell()
 # disconnect SNX/VPN session
 doDisconnect()
 {
-   if [[ -f "${CHROOT}/usr/bin/snx" ]]
-   then
-      sudo setarch i386 chroot "${CHROOT}" /usr/bin/snx -d
-   fi
+   [ -f "${CHROOT}/usr/bin/snx" ] && sudo setarch i386 chroot "${CHROOT}" /usr/bin/snx -d
 }
 
 # uninstall command
@@ -584,10 +567,9 @@ selfUpdate()
     # get latest release version
     VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
     echo "current version : ${VERSION}"
-    if [[ ${VER} == "null" ]]
-    then
-       die "did not find any github release. Something went wrong"
-    fi
+
+    [ ${VER} == "null" ] && die "did not find any github release. Something went wrong"
+
     if [[ "${VER}" != "${VERSION}" ]]
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
@@ -599,10 +581,7 @@ selfUpdate()
            # sed can use any char as separator for avoiding rule clashes
            sed -i "s/VPN=\"\"/VPN=\""${VPN}"\"/;s/VPNIP=\"\"/VPNIP=\""${VPNIP}"\"/;s@SPLIT=\"\"@SPLIT=\"${SPLIT}\"@" "${vpnsh}"
 
-           if [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]]
-           then
-              sudo cp -f "${vpnsh}" "${SCRIPT}" 
-           fi
+           [ "${INSTALLSCRIPT}" != "${SCRIPT}"  ] && sudo cp -f "${vpnsh}" "${SCRIPT}"
 
            sudo cp -f "${vpnsh}" "${INSTALLSCRIPT}"
 
@@ -627,12 +606,11 @@ PreCheck2()
    # if setup successfully finished, launcher has to be there
    if [[ -f "${CHROOT}/usr/bin/cshell/launcher" ]]
    then
+
       # for using/relaunching
       # call the script as regular user with sudo permissions
-      if [ "${EUID}" -eq 0 ]
-      then
-         die "Do not run as root"
-      fi
+      [ "${EUID}" -eq 0 ] && die "Do not run as root"
+
    else
       # if launcher not present something went wrong
 
@@ -692,7 +670,7 @@ preFlight()
       die "Please run as: sudo ./${SCRIPTNAME} --install [--chroot DIR]" 
    fi
 
-   if  isCShellRunning
+   if  isCShellRunning 
    then
       die "CShell running. Before proceeding, run: ./${SCRIPTNAME} uninstall" 
    fi
