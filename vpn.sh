@@ -540,9 +540,11 @@ doUninstall()
    doStop
 
    # delete autorun file, chroot subdirectory and installed script
-   sudo rm -f  "${XDGAUTO}"
-   sudo rm -rf "${CHROOT}"
-   sudo rm -f  "${INSTALLSCRIPT}" 
+   sudo rm -f  "${XDGAUTO}"          &>/dev/null
+   sudo rm -rf "${CHROOT}"           &>/dev/null
+   sudo rm -f  "${INSTALLSCRIPT}"    &>/dev/null
+   sudo userdel -rf "${CSHELL_USER}" &>/dev/null
+   sudo groupdel "${CSHELL_GROUP}"   &>/dev/null
    if [[ -f "${CONFFILE}" ]]
    then
       echo "${CONFFILE} not deleted. If you are not reinstalling do:"
