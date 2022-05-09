@@ -244,6 +244,12 @@ PreCheck()
    fi
 }
 
+# wrapper for chroot
+doSudoChroot()
+{
+   sudo setarch i386 chroot "${CHROOT}" $*
+}
+
 # C/Unix convention - 0 success, 1 failed
 isCShellRunning()
 {
@@ -300,7 +306,7 @@ umountChrootFS()
 
       # there is no --fstab for umount
       # we dont want to abort if not present
-      [ -f "${CHROOT}/etc/fstab" ] && sudo setarch i386 chroot "${CHROOT}" /usr/bin/umount -a 2> /dev/null
+      [ -f "${CHROOT}/etc/fstab" ] && doSudoChroot /usr/bin/umount -a 2> /dev/null
          
       # umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
@@ -367,19 +373,19 @@ showStatus()
    arch
    echo -n "Chroot: "
 
-   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF2 | awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } '
+   doSudoChroot /bin/bash --login -pf <<-EOF2 | awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } '
 	cat /etc/os-release
 	EOF2
 
    # print--architecture and not uname because chroot shares the same kernel
-   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF3
+   doSudoChroot /bin/bash --login -pf <<-EOF3
 	/usr/bin/dpkg --print-architecture
 	EOF3
 
    # SNX
    echo
    echo -n "SNX - installed              "
-   sudo setarch i386 chroot "${CHROOT}"  snx -v 2> /dev/null | awk '/build/ { print $2 }'
+   doSudoChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
    echo -n "SNX - available for download "
    #curl -skL "https://${VPN}/SNX/CSHELL/snx_ver.txt"
    wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt"
@@ -483,7 +489,7 @@ doStart()
    fi
 
    # launch CShell inside chroot
-   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF4
+   doSudoChroot /bin/bash --login -pf <<-EOF4
 	su -c "DISPLAY=${DISPLAY} /usr/bin/cshell/launcher" ${CSHELL_USER}
 	EOF4
 
@@ -516,7 +522,7 @@ doShell()
    # otherwise shell wont work well
    mountChrootFS
 
-   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf
+   doSudoChroot /bin/bash --login -pf
 
    # dont need mounted filesystem with CShell agent down
    if ! isCShellRunning
@@ -528,7 +534,7 @@ doShell()
 # disconnect SNX/VPN session
 doDisconnect()
 {
-   [ -f "${CHROOT}/usr/bin/snx" ] && sudo setarch i386 chroot "${CHROOT}" /usr/bin/snx -d
+   [ -f "${CHROOT}/usr/bin/snx" ] && doSudoChroot /usr/bin/snx -d
 }
 
 # uninstall command
@@ -556,7 +562,7 @@ doUninstall()
 
 # upgrade OS inside chroot
 Upgrade() {
-   sudo setarch i386 chroot "${CHROOT}" /bin/bash --login -pf <<-EOF12
+   doSudoChroot /bin/bash --login -pf <<-EOF12
 	apt update
 	apt -y upgrade
 	apt clean
