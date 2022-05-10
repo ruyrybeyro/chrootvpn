@@ -465,6 +465,10 @@ doStart()
       echo "If there are not X11 desktop permissions, VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2
       echo "or in a terminal inside the graphic console" >&2
+   else
+      echo "X11 auth not given" >&2
+      echo "Please run as the X11/regular user:" >&2
+      echo "xhost +si:localuser:${CSHELL_USER}" >&2
    fi
 
    # fixes potential resolv.conf/DNS issues inside chroot. 
@@ -932,7 +936,7 @@ GnomeAutoRun()
 	[Desktop Entry]
 	Type=Application
 	Name=cshell
-	Exec=sudo "${INSTALLSCRIPT} -c ${CHROOT} start"
+	Exec=sudo ${INSTALLSCRIPT} -c ${CHROOT} start
 	Icon=
 	Comment=
 	X-GNOME-Autostart-enabled=true
