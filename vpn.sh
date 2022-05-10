@@ -570,6 +570,7 @@ Upgrade() {
    doChroot /bin/bash --login -pf <<-EOF12
 	apt update
 	apt -y upgrade
+        apt -y autoremove
 	apt clean
 	EOF12
 }
@@ -953,7 +954,7 @@ GnomeAutoRun()
       # if you dont agent wont be started automatically after login
       # and vpn.sh start will be have to be done after each X11 login
       echo "Added graphical auto-start" >&2
-
+      echo
 
       echo "For it to run, modify your /etc/sudoers for not asking for password" >&2
       echo "As in:" >&2
