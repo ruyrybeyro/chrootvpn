@@ -951,6 +951,8 @@ GnomeAutoRun()
       # if you dont agent wont be started automatically after login
       # and vpn.sh start will be have to be done after each X11 login
       echo "Added graphical auto-start" >&2
+
+
       echo "For it to run, modify your /etc/sudoers for not asking for password" >&2
       echo "As in:" >&2
       echo >&2
@@ -972,6 +974,18 @@ GnomeAutoRun()
    fi
 }
 
+# create /opt/etc/vpn.conf
+# upon service is running first time
+createConfFile()
+{
+    mkdir -p $(dirname "${CONFFILE}") 2> /dev/null
+    cat <<-EOF13 > "${CONFFILE}"
+        VPN="${VPN}"
+        VPNIP="${VPNIP}"
+        SPLIT="${SPLIT}"
+        EOF13
+}
+
 # last leg inside chroot
 #
 # minimal house keeping and user messages
@@ -985,16 +999,20 @@ chrootEnd()
 
    if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
+      # delete temporary setup scripts from chroot's root home
+      ROOTHOME="${CHROOT}/root"
+      rm -f "${ROOTHOME}/chroot_setup.sh" "${ROOTHOME}/cshell_install.sh" "${ROOTHOME}/snx_install.sh"
+
       # copy this script to /usr/local/bin
       cp "${SCRIPT}" "${INSTALLSCRIPT}"
       chmod a+rx "${INSTALLSCRIPT}"
 
-      # install Gnome autorun file
-      GnomeAutoRun
+      # create /etc/vpn.conf
+      createConfFile
 
-      # delete temporary setup scripts from chroot's root home
-      ROOTHOME="${CHROOT}/root"
-      rm -f "${ROOTHOME}/chroot_setup.sh" "${ROOTHOME}/cshell_install.sh" "${ROOTHOME}/snx_install.sh"
+      # install Gnome autorun file
+      # last thing to run
+      GnomeAutoRun
 
       echo "chroot setup done." >&2
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
@@ -1012,18 +1030,6 @@ chrootEnd()
    fi
 }
 
-# create /opt/etc/vpn.conf 
-# upon service is running first time
-createConfFile()
-{
-    mkdir -p $(dirname "${CONFFILE}") 2> /dev/null 
-    cat <<-EOF13 > "${CONFFILE}"
-	VPN="${VPN}"
-	VPNIP="${VPNIP}"
-	SPLIT="${SPLIT}"
-	EOF13
-}
-
 # main chroot install routine
 InstallChroot()
 {
@@ -1036,7 +1042,6 @@ InstallChroot()
    FstabMount
    fixDNS
    chrootEnd
-   createConfFile
 }
 
 # main ()
