@@ -248,7 +248,7 @@ PreCheck()
 doChroot()
 {
    # setarch i386 lies to uname about being 32 bits
-   setarch i386 chroot "${CHROOT}" $*
+   setarch i386 chroot "${CHROOT}" "$@"
 }
 
 # C/Unix convention - 0 success, 1 failed
@@ -312,13 +312,13 @@ umountChrootFS()
       # umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
-         umount $i 2> /dev/null
-         umount -l $i 2> /dev/null
+         umount "$i" 2> /dev/null
+         umount -l "$i" 2> /dev/null
       done
       # force umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
-         umount -l $i 2> /dev/null
+         umount -l "$i" 2> /dev/null
       done
    fi
 }
@@ -400,7 +400,7 @@ showStatus()
    echo
 
    # if $IP not empty
-   if [[ ! -z ${IP+x} ]]
+   if [[ -n ${IP+x} ]]
    then
       echo "VPN on"
       echo
@@ -460,12 +460,12 @@ killCShell()
 doStart()
 {
    # ${CSHELL_USER} (cshell) apps - X auth
-   if ! su - ${SUDO_USER} -c "DISPLAY=${DISPLAY} xhost +si:localuser:${CSHELL_USER}"
+   if ! su - "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +si:localuser:${CSHELL_USER}"
    then
       echo "If there are not X11 desktop permissions, VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2
       echo "or in a terminal inside the graphic console" >&2
-   else
+      echo 
       echo "X11 auth not given" >&2
       echo "Please run as the X11/regular user:" >&2
       echo "xhost +si:localuser:${CSHELL_USER}" >&2
@@ -582,7 +582,7 @@ selfUpdate()
     VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
     echo "current version     : ${VERSION}"
 
-    [ ${VER} == "null" ] && die "did not find any github release. Something went wrong"
+    [[ "${VER}" == "null" ]] && die "did not find any github release. Something went wrong"
 
     echo "github last release : ${VER}"
 
@@ -827,13 +827,13 @@ buildFS()
 	EOF7
 
    # add hostname to /etc/hosts inside chroot
-   if [[ ! -z "${HOSTNAME}" ]]
+   if [[ -n "${HOSTNAME}" ]]
    then
       echo -e "\n127.0.0.1 ${HOSTNAME}" >> etc/hosts
    fi
 
    # APT proxy for inside chroot
-   if [[ ! -z "${CHROOTPROXY}" ]]
+   if [[ -n "${CHROOTPROXY}" ]]
    then
       cat <<-EOF8 > etc/apt/apt.conf.d/02proxy
 	Acquire::http::proxy "${CHROOTPROXY}";
@@ -919,7 +919,7 @@ fixDNS()
    # fix resolv.conf for resolvconf
    # shared resolv.conf between host and chroot via /run/
    rm -f etc/resolv.conf
-   cd etc
+   cd etc || die "could not enter ${CHROOT}/etc"
    ln -s ../run/resolvconf/resolv.conf resolv.conf
    cd ..
 }
@@ -931,7 +931,7 @@ GnomeAutoRun()
 {
    # directory for starting apps upon X11 login
    # /etc/xdg/autostart/
-   if [ -d $(dirname "${XDGAUTO}") ]
+   if [ -d "$(dirname ${XDGAUTO})" ]
    then
       # XDGAUTO="/etc/xdg/autostart/cshell.desktop"
       cat > "${XDGAUTO}" <<-EOF11
@@ -960,7 +960,7 @@ GnomeAutoRun()
       echo "#or: " >&2
       echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
      
-      if [[ ! -z "${SUDO_USER+x}" ]]
+      if [[ -n "${SUDO_USER+x}" ]]
       then
          echo "#or: " >&2
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
@@ -978,7 +978,7 @@ GnomeAutoRun()
 # upon service is running first time
 createConfFile()
 {
-    mkdir -p $(dirname "${CONFFILE}") 2> /dev/null
+    mkdir -p "$(dirname ${CONFFILE})" 2> /dev/null
     cat <<-EOF13 > "${CONFFILE}"
 	VPN="${VPN}"
 	VPNIP="${VPNIP}"
