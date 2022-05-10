@@ -86,7 +86,6 @@ export LC_ALL=C LANG=C
 
 # script full PATH
 SCRIPT=$(realpath "${BASH_SOURCE[0]}")
-SCRIPTPATH=$(dirname $SCRIPT)
 
 # script name
 SCRIPTNAME=$(basename "${SCRIPT}")
