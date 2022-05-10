@@ -1086,8 +1086,8 @@ __DIFF__
  
 -AUTOSTART_DIR=
 -USER_NAME=
-+AUTOSTART_DIR=/home/cshell
-+USER_NAME=cshell
++AUTOSTART_DIR=/root
++USER_NAME=root
  
  CERT_DIR=/etc/ssl/certs
  CERT_NAME=CShell_Certificate
