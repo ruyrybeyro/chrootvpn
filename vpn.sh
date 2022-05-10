@@ -245,10 +245,10 @@ PreCheck()
 }
 
 # wrapper for chroot
-doSudoChroot()
+doChroot()
 {
    # setarch i386 lies to uname about being 32 bits
-   sudo setarch i386 chroot "${CHROOT}" $*
+   setarch i386 chroot "${CHROOT}" $*
 }
 
 # C/Unix convention - 0 success, 1 failed
@@ -289,7 +289,7 @@ mountChrootFS()
          fi
 
          # mount using fstab inside chroot, all filesystems
-         sudo mount --fstab "${CHROOT}/etc/fstab" -a
+         mount --fstab "${CHROOT}/etc/fstab" -a
       fi
 
    fi
@@ -307,18 +307,18 @@ umountChrootFS()
 
       # there is no --fstab for umount
       # we dont want to abort if not present
-      [ -f "${CHROOT}/etc/fstab" ] && doSudoChroot /usr/bin/umount -a 2> /dev/null
+      [ -f "${CHROOT}/etc/fstab" ] && doChroot /usr/bin/umount -a 2> /dev/null
          
       # umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
-         sudo umount $i 2> /dev/null
-         sudo umount -l $i 2> /dev/null
+         umount $i 2> /dev/null
+         umount -l $i 2> /dev/null
       done
       # force umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
-         sudo umount -l $i 2> /dev/null
+         umount -l $i 2> /dev/null
       done
    fi
 }
@@ -336,19 +336,19 @@ Split()
    if [[ -z "${SPLIT+x}" ]]
    then
       echo "If this does not work, please fill in SPLIT with a network/mask list eg x.x.x.x/x x.x.x.x/x" >&2
-      sudo ip route delete 0.0.0.0/1
+      ip route delete 0.0.0.0/1
       echo "default VPN gateway deleted" >&2
    else 
       # get local VPN given IP address
       IP=$(ip -4 addr show "${TUNSNX}" | awk '/inet/ { print $2 } ')
 
       # clean all VPN routes
-      sudo ip route flush table main dev "${TUNSNX}"
+      ip route flush table main dev "${TUNSNX}"
 
       # create a new VPN routes according to $SPLIT
       for i in ${SPLIT}
       do
-         sudo ip route add "$i" dev "${TUNSNX}" src "${IP}"
+         ip route add "$i" dev "${TUNSNX}" src "${IP}"
       done
    fi
 }
@@ -364,8 +364,6 @@ showStatus()
       echo "CShell running"
    fi
 
-   sudo "true"   # asking sudo password and caching it
-
    # host / chroot arquitecture
    echo
    echo -n "System: "
@@ -374,19 +372,19 @@ showStatus()
    arch
    echo -n "Chroot: "
 
-   doSudoChroot /bin/bash --login -pf <<-EOF2 | awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } '
+   doChroot /bin/bash --login -pf <<-EOF2 | awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } '
 	cat /etc/os-release
 	EOF2
 
    # print--architecture and not uname because chroot shares the same kernel
-   doSudoChroot /bin/bash --login -pf <<-EOF3
+   doChroot /bin/bash --login -pf <<-EOF3
 	/usr/bin/dpkg --print-architecture
 	EOF3
 
    # SNX
    echo
    echo -n "SNX - installed              "
-   doSudoChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
+   doChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
    echo -n "SNX - available for download "
    #curl -skL "https://${VPN}/SNX/CSHELL/snx_ver.txt"
    wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt"
@@ -430,7 +428,7 @@ showStatus()
 
    # VPN signature(s) - local - outside chroot
    echo "VPN signatures"
-   sudo bash -c 'cat /etc/snx/*.db' 2> /dev/null  # workaround for using * expansion inside sudo
+   bash -c 'cat /etc/snx/*.db' 2> /dev/null  # workaround for using * expansion inside sudo
 
    # DNS
    echo
@@ -445,7 +443,7 @@ killCShell()
    then
 
       # kill all java CShell agents (1)
-      sudo kill -9 $(ps ax | grep CShell | grep -v grep | awk ' { print $1 } ')
+      kill -9 $(ps ax | grep CShell | grep -v grep | awk ' { print $1 } ')
 
       if ! isCShellRunning
       then
@@ -472,8 +470,8 @@ doStart()
    # fixes potential resolv.conf/DNS issues inside chroot. 
    # Checkpoint software seems not mess up with it.
    # Unless a security update inside chroot damages it
-   sudo rm -f "${CHROOT}/etc/resolv.conf"
-   sudo ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
+   rm -f "${CHROOT}/etc/resolv.conf"
+   ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
 
    # mount Chroot file systems
    mountChrootFS
@@ -490,7 +488,7 @@ doStart()
    fi
 
    # launch CShell inside chroot
-   doSudoChroot /bin/bash --login -pf <<-EOF4
+   doChroot /bin/bash --login -pf <<-EOF4
 	su -c "DISPLAY=${DISPLAY} /usr/bin/cshell/launcher" ${CSHELL_USER}
 	EOF4
 
@@ -523,7 +521,7 @@ doShell()
    # otherwise shell wont work well
    mountChrootFS
 
-   doSudoChroot /bin/bash --login -pf
+   doChroot /bin/bash --login -pf
 
    # dont need mounted filesystem with CShell agent down
    if ! isCShellRunning
@@ -535,7 +533,7 @@ doShell()
 # disconnect SNX/VPN session
 doDisconnect()
 {
-   [ -f "${CHROOT}/usr/bin/snx" ] && doSudoChroot /usr/bin/snx -d
+   [ -f "${CHROOT}/usr/bin/snx" ] && doChroot /usr/bin/snx -d
 }
 
 # uninstall command
@@ -547,11 +545,11 @@ doUninstall()
    doStop
 
    # delete autorun file, chroot subdirectory and installed script
-   sudo rm -f  "${XDGAUTO}"          &>/dev/null
-   sudo rm -rf "${CHROOT}"           &>/dev/null
-   sudo rm -f  "${INSTALLSCRIPT}"    &>/dev/null
-   sudo userdel -rf "${CSHELL_USER}" &>/dev/null
-   sudo groupdel "${CSHELL_GROUP}"   &>/dev/null
+   rm -f  "${XDGAUTO}"          &>/dev/null
+   rm -rf "${CHROOT}"           &>/dev/null
+   rm -f  "${INSTALLSCRIPT}"    &>/dev/null
+   userdel -rf "${CSHELL_USER}" &>/dev/null
+   groupdel "${CSHELL_GROUP}"   &>/dev/null
    if [[ -f "${CONFFILE}" ]]
    then
       echo "${CONFFILE} not deleted. If you are not reinstalling do:"
@@ -563,7 +561,7 @@ doUninstall()
 
 # upgrade OS inside chroot
 Upgrade() {
-   doSudoChroot /bin/bash --login -pf <<-EOF12
+   doChroot /bin/bash --login -pf <<-EOF12
 	apt update
 	apt -y upgrade
 	apt clean
@@ -593,11 +591,11 @@ selfUpdate()
            # sed can use any char as separator for avoiding rule clashes
            sed -i "s/VPN=\"\"/VPN=\""${VPN}"\"/;s/VPNIP=\"\"/VPNIP=\""${VPNIP}"\"/;s@SPLIT=\"\"@SPLIT=\"${SPLIT}\"@" "${vpnsh}"
 
-           [ "${INSTALLSCRIPT}" != "${SCRIPT}"  ] && sudo cp -f "${vpnsh}" "${SCRIPT}"
+           [ "${INSTALLSCRIPT}" != "${SCRIPT}"  ] && cp -f "${vpnsh}" "${SCRIPT}"
 
-           sudo cp -f "${vpnsh}" "${INSTALLSCRIPT}"
+           cp -f "${vpnsh}" "${INSTALLSCRIPT}"
 
-           sudo chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
+           chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
            
            rm -f "${vpnsh}"
 
@@ -620,8 +618,8 @@ PreCheck2()
    then
 
       # for using/relaunching
-      # call the script as regular user with sudo permissions
-      [ "${EUID}" -eq 0 ] && die "Do not run as root"
+      # call the script with sudo 
+      [ "${EUID}" -ne 0 ] && die "Please run as sudo ${SCRIPT}"
 
    else
       # if launcher not present something went wrong
@@ -933,7 +931,7 @@ GnomeAutoRun()
 	[Desktop Entry]
 	Type=Application
 	Name=cshell
-	Exec="${INSTALLSCRIPT}" -c "${CHROOT}" start
+	Exec="sudo ${INSTALLSCRIPT}" -c "${CHROOT}" start
 	Icon=
 	Comment=
 	X-GNOME-Autostart-enabled=true
@@ -950,10 +948,15 @@ GnomeAutoRun()
       echo "As in:" >&2
       echo >&2
       echo "%sudo	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
+      echo "#or: " >&2
+      echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
+     
       if [[ ! -z "${SUDO_USER+x}" ]]
       then
          echo "#or: " >&2
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
+         echo "#or: " >&2
+         echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
       fi
       echo >&2
 
@@ -971,7 +974,7 @@ chrootEnd()
    local ROOTHOME
 
    # do the last leg of setup inside chroot
-   setarch i386 chroot "${CHROOT}" /bin/bash --login -pf "/root/chroot_setup.sh"
+   doChroot /bin/bash --login -pf "/root/chroot_setup.sh"
 
    if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
