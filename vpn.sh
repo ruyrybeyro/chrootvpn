@@ -980,10 +980,10 @@ createConfFile()
 {
     mkdir -p $(dirname "${CONFFILE}") 2> /dev/null
     cat <<-EOF13 > "${CONFFILE}"
-        VPN="${VPN}"
-        VPNIP="${VPNIP}"
-        SPLIT="${SPLIT}"
-        EOF13
+	VPN="${VPN}"
+	VPNIP="${VPNIP}"
+	SPLIT="${SPLIT}"
+	EOF13
 }
 
 # last leg inside chroot
