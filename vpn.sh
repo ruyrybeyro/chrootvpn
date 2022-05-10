@@ -580,11 +580,13 @@ selfUpdate()
 
     # get latest release version
     VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
-    echo "current version : ${VERSION}"
+    echo "current version     : ${VERSION}"
 
     [ ${VER} == "null" ] && die "did not find any github release. Something went wrong"
 
-    if [[ "${VER}" != "${VERSION}" ]]
+    echo "github last release : ${VER}"
+
+    if [[ "${VER}" > "${VERSION}" ]]
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
