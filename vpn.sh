@@ -948,10 +948,15 @@ GnomeAutoRun()
       echo "As in:" >&2
       echo >&2
       echo "%sudo	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
+      echo "#or: " >&2
+      echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
+     
       if [[ ! -z "${SUDO_USER+x}" ]]
       then
          echo "#or: " >&2
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
+         echo "#or: " >&2
+         echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
       fi
       echo >&2
 
