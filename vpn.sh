@@ -87,6 +87,7 @@ export LC_ALL=C LANG=C
 # script full PATH
 SCRIPT=$(realpath "${BASH_SOURCE[0]}")
 SCRIPTPATH=$(dirname $SCRIPT)
+
 # script name
 SCRIPTNAME=$(basename "${SCRIPT}")
 
@@ -369,7 +370,8 @@ showStatus()
    echo -n "System: "
    awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } ' /etc/os-release
    #uname -m
-   arch
+   echo -n $(arch)" "
+   uname -r
    echo -n "Chroot: "
 
    doChroot /bin/bash --login -pf <<-EOF2 | awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } '
@@ -400,7 +402,7 @@ showStatus()
    echo
 
    # if $IP not empty
-   if [[ -n ${IP+x} ]]
+   if [[ -n ${IP} ]]
    then
       echo "VPN on"
       echo
@@ -960,7 +962,7 @@ GnomeAutoRun()
       echo "#or: " >&2
       echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
      
-      if [[ -n "${SUDO_USER+x}" ]]
+      if [[ -n "${SUDO_USER}" ]]
       then
          echo "#or: " >&2
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
