@@ -460,7 +460,7 @@ killCShell()
 doStart()
 {
    # ${CSHELL_USER} (cshell) apps - X auth
-   if ! xhost +si:localuser:${CSHELL_USER}
+   if ! su - ${SUDO_USER} -c "DISPLAY=${DISPLAY} xhost +si:localuser:${CSHELL_USER}"
    then
       echo "If there are not X11 desktop permissions, VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2
@@ -924,14 +924,15 @@ fixDNS()
 GnomeAutoRun()
 {
    # directory for starting apps upon X11 login
+   # /etc/xdg/autostart/
    if [ -d $(dirname "${XDGAUTO}") ]
    then
-
+      # XDGAUTO="/etc/xdg/autostart/cshell.desktop"
       cat > "${XDGAUTO}" <<-EOF11
 	[Desktop Entry]
 	Type=Application
 	Name=cshell
-	Exec="sudo ${INSTALLSCRIPT}" -c "${CHROOT}" start
+	Exec=sudo "${INSTALLSCRIPT} -c ${CHROOT} start"
 	Icon=
 	Comment=
 	X-GNOME-Autostart-enabled=true
