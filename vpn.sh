@@ -106,6 +106,10 @@ CSHELL_GROUP=${CSHELL_USER}
 CSHELL_GID=9000
 CSHELL_HOME="/home/${CSHELL_USER}"
 
+# we test / and sslvnp SSL VPN portal PATHs. 
+# Change here for a custom PATH
+SSLVPN="sslvpn"
+
 # "booleans"
 true=0
 false=1
@@ -390,7 +394,7 @@ showStatus()
 
    if [ ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null ]
    then
-      wget -q -O- --no-check-certificate "https://${VPN}/sslvpn/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
+      wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
 
    # IP connectivity
@@ -805,8 +809,8 @@ buildFS()
    then 
       wget --no-check-certificate "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
    else
-      wget --no-check-certificate "https://${VPN}/sslvpn/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh"
-      wget --no-check-certificate "https://${VPN}/sslvpn/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
+      wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh"
+      wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
    fi
 
    # doing the cshell_install.sh patches after the __DIFF__ line
