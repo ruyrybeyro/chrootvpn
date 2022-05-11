@@ -515,7 +515,9 @@ doStart()
 # disconnect SNX/VPN session
 doDisconnect()
 {
+   # if snx/VPN up, disconnect
    pgrep snx > /dev/null && doChroot /usr/bin/snx -d
+
    # restore resolv.conf
    resolvconf -u
 }
