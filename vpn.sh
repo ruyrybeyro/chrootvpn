@@ -512,11 +512,25 @@ doStart()
    fi
 }
 
+# disconnect SNX/VPN session
+doDisconnect()
+{
+   pgrep snx > /dev/null && doChroot /usr/bin/snx -d
+   # restore resolv.conf
+   resolvconf -u
+}
+
 # stop command
 doStop()
 {
-   # kill Checkpoint agent
-   killCShell
+   if isCShellRunning
+   then
+      # disconnect VPN
+      doDisconnect
+
+      # kill Checkpoint agent
+      killCShell
+   fi
   
    # unmount chroot filesystems 
    umountChrootFS
@@ -536,12 +550,6 @@ doShell()
    then
       umountChrootFS
    fi
-}
-
-# disconnect SNX/VPN session
-doDisconnect()
-{
-   [ -f "${CHROOT}/usr/bin/snx" ] && doChroot /usr/bin/snx -d
 }
 
 # uninstall command
