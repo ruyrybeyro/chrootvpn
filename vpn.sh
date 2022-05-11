@@ -523,14 +523,11 @@ doDisconnect()
 # stop command
 doStop()
 {
-   if isCShellRunning
-   then
-      # disconnect VPN
-      doDisconnect
+   # disconnect VPN
+   doDisconnect
 
-      # kill Checkpoint agent
-      killCShell
-   fi
+   # kill Checkpoint agent
+   killCShell
   
    # unmount chroot filesystems 
    umountChrootFS
@@ -555,8 +552,6 @@ doShell()
 # uninstall command
 doUninstall()
 {
-   # stop SNX VPN session
-   doDisconnect
    # stop CShell
    doStop
 
