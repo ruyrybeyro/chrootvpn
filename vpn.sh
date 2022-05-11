@@ -387,8 +387,12 @@ showStatus()
    echo -n "SNX - installed              "
    doChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
    echo -n "SNX - available for download "
-   #curl -skL "https://${VPN}/SNX/CSHELL/snx_ver.txt"
-   wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt"
+
+   if ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2 >/dev/null
+   then
+      wget -q -O- --no-check-certificate "https://${VPN}/sslvpn/SNX/CSHELL/snx_ver.txt" 2 >/dev/null
+      echo "Could not get SNX download version" >&2
+   fi
 
    # IP connectivity
    echo
@@ -793,9 +797,13 @@ buildFS()
    # getting the last version of the agents installation scripts
    # from the firewall
    rm -f snx_install.sh cshell_install.sh
-   #curl -k "https://${VPN}/SNX/INSTALL/cshell_install.sh"
-   wget --no-check-certificate "https://${VPN}/SNX/INSTALL/snx_install.sh"
-   wget --no-check-certificate "https://${VPN}/SNX/INSTALL/cshell_install.sh"
+   if wget --no-check-certificate "https://${VPN}/SNX/INSTALL/snx_install.sh"
+   then 
+      wget --no-check-certificate "https://${VPN}/SNX/INSTALL/cshell_install.sh" && die "could not download cshell_install.sh"
+   else
+      wget --no-check-certificate "https://${VPN}/sslvpn/SNX/INSTALL/snx_install.sh" && die "could not download snx_install.sh"
+      wget --no-check-certificate "https://${VPN}/sslvpn/SNX/INSTALL/cshell_install.sh" && die "could not download cshell_install.sh"
+   fi
 
    # doing the cshell_install.sh patches after the __DIFF__ line
    n=$(awk '/^__DIFF__/ {print NR ; exit 0; }' "${SCRIPT}")
