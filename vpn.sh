@@ -1021,6 +1021,7 @@ chrootEnd()
       echo >&2
 
       # if localhost generated certificate not accepted, VPN auth will fail
+      # and will ask to "install" software upon failure
       echo "open browser with https://localhost:14186/id to accept new localhost certificate" >&2
       echo "afterwards open browser at https://${VPN} to login into VPN" >&2
 
