@@ -461,7 +461,7 @@ killCShell()
 doStart()
 {
    # ${CSHELL_USER} (cshell) apps - X auth
-   if ! su - "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +si:localuser:${CSHELL_USER}"
+   if ! su - "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:"
    then
       echo "If there are not X11 desktop permissions, VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2
