@@ -469,7 +469,7 @@ doStart()
       echo 
       echo "X11 auth not given" >&2
       echo "Please run as the X11/regular user:" >&2
-      echo "xhost +si:localuser:${CSHELL_USER}" >&2
+      echo "xhost +si:local:" >&2
    fi
 
    # fixes potential resolv.conf/DNS issues inside chroot. 
