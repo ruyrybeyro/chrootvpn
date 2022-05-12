@@ -453,7 +453,7 @@ showStatus()
     echo "current ${SCRIPTNAME} version     : ${VERSION}"
 
     # full VPN it might not work
-    [[ "${VER}" == "null" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VERSION}"
+    [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VER}"
 }
 
 # kill Java daemon agent
@@ -615,7 +615,7 @@ selfUpdate()
     VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
     echo "current version     : ${VERSION}"
 
-    [[ "${VER}" == "null" ]] && die "did not find any github release. Something went wrong"
+    [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] && die "did not find any github release. Something went wrong"
 
     if [[ "${VER}" > "${VERSION}" ]]
     then
