@@ -452,9 +452,8 @@ showStatus()
 
     echo "current ${SCRIPTNAME} version     : ${VERSION}"
 
-    [[ "${VER}" == "null" ]] && die "did not find any github release. Something went wrong"
-    
-    echo "GitHub  ${SCRIPTNAME} version     : ${VERSION}"
+    # full VPN it might not work
+    [[ "${VER}" == "null" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VERSION}"
 }
 
 # kill Java daemon agent
