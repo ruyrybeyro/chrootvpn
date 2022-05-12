@@ -133,7 +133,7 @@ do_help()
 	${SCRIPTNAME} [-c|--chroot DIR][--proxy proxy_string] -i|--install
 	${SCRIPTNAME} [--vpn FQDN][-c|--chroot DIR] start|stop|status
 	${SCRIPTNAME} [-c|--chroot DIR] uninstall
-	${SCRIPTNAME} disconnect|split|selfupdate
+	${SCRIPTNAME} disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
@@ -151,6 +151,7 @@ do_help()
 	split        split tunnel VPN - use only after session is up
 	uninstall    delete chroot and host file(s)
 	selfupdate   self update this script if new version available
+	fixdns       try to fix resolv.conf
 	
 	For debugging/maintenance:
 	
@@ -692,6 +693,7 @@ argCommands()
       start)        doStart ;;
       stop)         doStop ;;
       disconnect)   doDisconnect ;;
+      fixdns)       resolvconf -u ;;
       split)        Split ;;
       status)       showStatus ;;
       shell)        doShell ;;

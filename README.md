@@ -42,7 +42,7 @@ vpn.sh [--vpn FQDN][-c|--chroot DIR] start|stop|status
 
 vpn.sh [-c|--chroot DIR] uninstall
 
-vpn.sh disconnect|split|selfupdate
+vpn.sh disconnect|split|selfupdate|fixdns
 
 vpn.sh -h|--help
 
@@ -74,6 +74,8 @@ split        split tunnel VPN - use only after session is up
 uninstall    delete chroot and host file(s)
 
 selfupdate   self update this script if new version available
+
+fixdns       try to fix resolv.conf
 
 
 For debugging/maintenance:
