@@ -359,7 +359,9 @@ Split()
 
 # status command
 showStatus()
-{
+{  
+   local VER
+
    if ! isCShellRunning
    then
       # chroot/mount down, etc, not showing status
@@ -442,6 +444,16 @@ showStatus()
    echo
    #resolvectl status
    cat /etc/resolv.conf
+   echo
+    
+   # get latest release version
+   VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
+
+    echo "current ${SCRIPTNAME} version     : ${VERSION}"
+
+    [[ "${VER}" == "null" ]] && die "did not find any github release. Something went wrong"
+    
+    echo "GitHub  ${SCRIPTNAME} version     : ${VERSION}"
 }
 
 # kill Java daemon agent
@@ -604,8 +616,6 @@ selfUpdate()
     echo "current version     : ${VERSION}"
 
     [[ "${VER}" == "null" ]] && die "did not find any github release. Something went wrong"
-
-    echo "github last release : ${VER}"
 
     if [[ "${VER}" > "${VERSION}" ]]
     then
