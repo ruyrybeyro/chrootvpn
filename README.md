@@ -38,7 +38,7 @@ Usage:
 
 vpn.sh [-c|--chroot DIR][--proxy proxy_string] -i|--install
 
-vpn.sh [--vpn FQDN][-c|--chroot DIR] start|stop|status
+vpn.sh [--vpn FQDN][-c|--chroot DIR] start|stop|restart|status
 
 vpn.sh [-c|--chroot DIR] uninstall
 
@@ -64,6 +64,8 @@ vpn.sh -v|--version
 start        start CShell daemon
 
 stop         stop  CShell daemon
+
+restart      restart CShell daemon
 
 status       check if CShell daemon is running
 

@@ -131,7 +131,7 @@ do_help()
 	Checkpoint R80.10+	${VERSION}
 
 	${SCRIPTNAME} [-c|--chroot DIR][--proxy proxy_string] -i|--install
-	${SCRIPTNAME} [--vpn FQDN][-c|--chroot DIR] start|stop|status
+	${SCRIPTNAME} [--vpn FQDN][-c|--chroot DIR] start|stop|restart|status
 	${SCRIPTNAME} [-c|--chroot DIR] uninstall
 	${SCRIPTNAME} disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
@@ -144,8 +144,9 @@ do_help()
 	--vpn        select another VPN DNS full name
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 	
-	start        start CShell daemon
-	stop         stop  CShell daemon
+	start        start    CShell daemon
+	stop         stop     CShell daemon
+        restart      restart  CShell daemon
 	status       check if CShell daemon is running
 	disconnect   disconnect VPN/SNX session from the command line
 	split        split tunnel VPN - use only after session is up
@@ -689,7 +690,8 @@ argCommands()
 
    case "$1" in
 
-      start)        doStart ;;
+      start)        doStart ;; 
+      restart)      doStart ;;
       stop)         doStop ;;
       disconnect)   doDisconnect ;;
       fixdns)       resolvconf -u ;;
