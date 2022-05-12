@@ -76,7 +76,7 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 [ -z "${TZ}" ] && TZ='Europe/Lisbon'
 
 # URL for testing if split or full VPN
-URL_VPN_TEST="https://www.debian.com"
+URL_VPN_TEST="https://www.debian.org"
 
 # CShell writes in the display
 [ -z "${DISPLAY}" ] && export DISPLAY=":0.0"
