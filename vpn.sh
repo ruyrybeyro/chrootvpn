@@ -1048,7 +1048,7 @@ chrootEnd()
       then
 
          # if policies file not already installed
-         if [[ ! -f /usr/lib/firefox/distribution/policies.json ]] && grep CShell_Certificate /usr/lib/firefox/distribution/policies.json &> /dev/null
+         if [[ ! -f /usr/lib/firefox/distribution/policies.json ]] || grep CShell_Certificate /usr/lib/firefox/distribution/policies.json &> /dev/null
          then
 
             # aparently present in Debian, nevertheless
@@ -1077,7 +1077,7 @@ chrootEnd()
             fi
 
             echo "Firefox policy created for accepting https://localhost certificate"
-            echo "if using other browser than firefox"
+            echo "If using other browser than firefox"
 
          fi         
 
@@ -1086,7 +1086,7 @@ chrootEnd()
       # if localhost generated certificate not accepted, VPN auth will fail
       # and will ask to "install" software upon failure
       echo "open browser with https://localhost:14186/id to accept new localhost certificate" >&2
-
+      echo
       echo "afterwards open browser at https://${VPN} to login into VPN" >&2
 
    else
