@@ -35,7 +35,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v0.96"
+VERSION="v0.97"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -392,7 +392,7 @@ showStatus()
    doChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
    echo -n "SNX - available for download "
 
-   if [ ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null ]
+   if ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
    then
       wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
@@ -567,6 +567,13 @@ doUninstall()
    rm -f  "${INSTALLSCRIPT}"    &>/dev/null
    userdel -rf "${CSHELL_USER}" &>/dev/null
    groupdel "${CSHELL_GROUP}"   &>/dev/null
+
+   # delete Firefox policy for accepting Firefox certificate
+   if grep CShell_Certificate /usr/lib/firefox/distribution/policies.json &> /dev/null
+   then
+      rm /usr/lib/firefox/distribution/policies.json
+   fi
+
    if [[ -f "${CONFFILE}" ]]
    then
       echo "${CONFFILE} not deleted. If you are not reinstalling do:"
@@ -1036,9 +1043,50 @@ chrootEnd()
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
       echo >&2
 
+      # if Firefox installed
+      if [[ -d /usr/lib/firefox ]] 
+      then
+
+         # if policies file not already installed
+         if [[ ! -f /usr/lib/firefox/distribution/policies.json ]] || grep CShell_Certificate /usr/lib/firefox/distribution/policies.json &> /dev/null
+         then
+
+            # aparently present in Debian, nevertheless
+            mkdir -p /usr/lib/firefox/distribution 2> /dev/null
+
+            # create policy file
+            # Accepting CShell certificate
+
+            cat <<-EOF14 > /usr/lib/firefox/distribution/policies.json
+	{
+	    "policies": {
+	        "ImportEnterpriseRoots": true,
+	        "Certificates": {
+	            "Install": [
+	                "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt"
+	            ]
+	       }
+	    }
+	}
+	EOF14
+
+            # if Firefox running         
+            if pgrep firefox
+            then
+               Please restart Firefox
+            fi
+
+            echo "Firefox policy created for accepting https://localhost certificate"
+            echo "If using other browser than firefox"
+
+         fi         
+
+      fi
+
       # if localhost generated certificate not accepted, VPN auth will fail
       # and will ask to "install" software upon failure
       echo "open browser with https://localhost:14186/id to accept new localhost certificate" >&2
+      echo
       echo "afterwards open browser at https://${VPN} to login into VPN" >&2
 
    else
