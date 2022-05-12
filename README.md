@@ -17,7 +17,7 @@ ignored. vpn.conf is created upon first instalation.
 
 - first time run it as sudo ./vpn.sh -i
 
-- accept localhost https://localhost:14186/id certificate in brower 
+- accept localhost https://localhost:14186/id certificate in brower if not Firefox 
 
 - visit VPN page for logging in 
 
