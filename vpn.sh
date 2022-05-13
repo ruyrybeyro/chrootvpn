@@ -2,7 +2,7 @@
 #
 # Rui Ribeiro doc_v1.50
 #
-# VPN client chroot'ed setup/wrapper for Debian/Ubuntu
+# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RH/CentOS/Fedora hosts 
 # Checkpoint R80.10 and up
 #
 # Please fill VPN and VPNIP before using this script.
@@ -35,7 +35,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v0.98"
+VERSION="v0.99"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -240,9 +240,25 @@ PreCheck()
    fi
 
    # If not Debian/Ubuntu based
-   [ ! -f /etc/debian_version ]  && die "This script is for Debian/Ubuntu Linux based flavours only"
+   # If not Debian/Ubuntu based
+   if [ ! -f /etc/debian_version ] && [ ! -f /etc/redhat-release ] 
+   then
+      die "This script is only for Debian/Ubuntu or RedHat/CentOS Linux based flavours only" 
+   else
+      DEB=0
+      RH=0
 
-   ischroot && die "Do not run this script inside a chroot"
+      if [ -f /etc/debian_version ]
+      then
+         DEB=1
+         ischroot && die "Do not run this script inside a chroot"
+      fi
+
+      if [ -f /etc/redhat-release ]
+      then
+         RH=1
+      fi
+   fi
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
@@ -495,8 +511,11 @@ doStart()
    # fixes potential resolv.conf/DNS issues inside chroot. 
    # Checkpoint software seems not mess up with it.
    # Unless a security update inside chroot damages it
-   rm -f "${CHROOT}/etc/resolv.conf"
-   ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
+   if [[ ${DEB} -eq 1 ]]
+   then
+      rm -f "${CHROOT}/etc/resolv.conf"
+      ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
+   fi
 
    # mount Chroot file systems
    mountChrootFS
@@ -737,16 +756,25 @@ preFlight()
 # system update and package requirements
 installPackages()
 {
-   # upgrade system
-   apt -y update
-   apt -y upgrade
+   if [[ ${DEB} -eq 1 ]]
+   then
+      # upgrade system
+      apt -y update
+      apt -y upgrade
 
-   # install needed packages
-   apt -y install debootstrap ca-certificates patch x11-xserver-utils jq wget
-   # we want to make sure resolconf is the last one
-   apt -y install resolvconf
-   # clean APT host cache
-   apt clean
+      # install needed packages
+      apt -y install debootstrap ca-certificates patch x11-xserver-utils jq wget
+      # we want to make sure resolconf is the last one
+      apt -y install resolvconf
+      # clean APT host cache
+      apt clean
+   fi
+
+   if [[ ${RH} -eq 1 ]]
+   then
+      yum -y install epel-release debootstrap ca-certificates patch xorg-x11-server-utils jq wget 
+      yum clean all 
+   fi
 }
 
 # "bug/feature": check DNS health
@@ -958,7 +986,17 @@ fixDNS()
    # shared resolv.conf between host and chroot via /run/
    rm -f etc/resolv.conf
    cd etc || die "could not enter ${CHROOT}/etc"
-   ln -s ../run/resolvconf/resolv.conf resolv.conf
+
+   if [[ ${DEB} -eq 1 ]]
+   then
+      ln -s ../run/resolvconf/resolv.conf resolv.conf
+   fi
+
+   if [[ ${RH} -eq 1 ]]
+   then
+      ln -s ../run/NetworkManager/resolv.conf resolv.conf
+   fi
+
    cd ..
 }
 
