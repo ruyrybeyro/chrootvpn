@@ -824,6 +824,7 @@ fixRHDNS()
  if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
  then
    if ! grep dns=systemd-resolved /etc/NetworkManager/NetworkManager.conf &> /dev/null
+   then
        sed -i '/[main]/a dns=systemd-resolved' /etc/NetworkManager/NetworkManager.conf
        systemctl --now enable systemd-resolved
        systemctl start systemd-resolved
