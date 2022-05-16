@@ -516,6 +516,11 @@ doStart()
       rm -f "${CHROOT}/etc/resolv.conf"
       ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
    fi
+   if [[ ${RH} -eq 1 ]]
+   then
+      rm -f "${CHROOT}/etc/resolv.conf"
+      ln -s ../run/systemd/resolve/stub-resolv.conf "${CHROOT}/etc/resolv.conf"
+   fi
 
    # mount Chroot file systems
    mountChrootFS
@@ -555,7 +560,14 @@ doDisconnect()
    pgrep snx > /dev/null && doChroot /usr/bin/snx -d
 
    # restore resolv.conf
-   resolvconf -u
+   if [[ ${DEB} -eq 1 ]]
+   then
+      resolvconf -u
+   fi
+   if [[ ${RH} -eq 1 ]]
+   then
+      authselect apply-changes --force
+   fi
 }
 
 # stop command
@@ -772,7 +784,9 @@ installPackages()
 
    if [[ ${RH} -eq 1 ]]
    then
-      yum -y install epel-release debootstrap ca-certificates patch xorg-x11-server-utils jq wget 
+      # not needed for Fedora
+      yum -y install epel-release 
+      yum -y install debootstrap ca-certificates patch xorg-x11-server-utils jq wget 
       yum clean all 
    fi
 }
@@ -994,7 +1008,7 @@ fixDNS()
 
    if [[ ${RH} -eq 1 ]]
    then
-      ln -s ../run/NetworkManager/resolv.conf resolv.conf
+      ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
    fi
 
    cd ..
