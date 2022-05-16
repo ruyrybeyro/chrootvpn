@@ -163,6 +163,9 @@ do_help()
 	shell        bash shell inside chroot
 	upgrade      OS upgrade inside chroot
 	
+	URL for accepting CShell localhost certificate 
+	https://localhost:14186/id
+
 	EOF1
 
    # exits after help
