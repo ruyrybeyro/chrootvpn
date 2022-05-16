@@ -806,6 +806,7 @@ installPackages()
 
    if [[ ${RH} -eq 1 ]]
    then
+      yum -y update || die "cannot update. Fix before trying again"
       # not needed for Fedora
       if grep -v ^Fedora /etc/redhat-release &> /dev/null
       then
@@ -815,6 +816,21 @@ installPackages()
       yum -y install debootstrap ca-certificates patch xorg-x11-server-utils jq wget 
       yum clean all 
    fi
+}
+
+# fix DNS CentOS 8
+fixRHDNS()
+{
+ if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
+ then
+   if ! grep dns=systemd-resolved /etc/NetworkManager/NetworkManager.conf &> /dev/null
+   then
+       sed -i '/[main]/a dns=systemd-resolved' /etc/NetworkManager/NetworkManager.conf
+       systemctl --now enable systemd-resolved
+       systemctl start systemd-resolved
+       systemctl reload NetworkManager
+    fi
+ fi
 }
 
 # "bug/feature": check DNS health
@@ -1205,6 +1221,7 @@ InstallChroot()
 {
    preFlight
    installPackages
+   fixRHDNS
    checkDNS
    createChroot
    createCshellUser
