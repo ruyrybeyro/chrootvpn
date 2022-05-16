@@ -265,6 +265,11 @@ PreCheck()
       then
          RH=1
       fi
+
+      if [[ $DEB -eq 0 ]] && [[ $RH -eq 0 ]]
+      then
+         die "Only Debian and RedHat family distributions supported"
+      fi
    fi
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
