@@ -553,12 +553,8 @@ doStart()
    fi
 }
 
-# disconnect SNX/VPN session
-doDisconnect()
+fixDNS2()
 {
-   # if snx/VPN up, disconnect
-   pgrep snx > /dev/null && doChroot /usr/bin/snx -d
-
    # restore resolv.conf
    if [[ ${DEB} -eq 1 ]]
    then
@@ -566,8 +562,17 @@ doDisconnect()
    fi
    if [[ ${RH} -eq 1 ]]
    then
-      authselect apply-changes --force
+      authselect apply-changes
    fi
+}
+
+# disconnect SNX/VPN session
+doDisconnect()
+{
+   # if snx/VPN up, disconnect
+   pgrep snx > /dev/null && doChroot /usr/bin/snx -d
+
+   fixDNS2
 }
 
 # stop command
@@ -616,6 +621,11 @@ doUninstall()
    if grep CShell_Certificate /usr/lib/firefox/distribution/policies.json &> /dev/null
    then
       rm /usr/lib/firefox/distribution/policies.json
+   fi
+   # delete Firefox policy for accepting Firefox certificate
+   if grep CShell_Certificate /usr/lib64/firefox/distribution/policies.json &> /dev/null
+   then
+      rm /usr/lib64/firefox/distribution/policies.json
    fi
 
    if [[ -f "${CONFFILE}" ]]
@@ -725,7 +735,7 @@ argCommands()
       restart)      doStart ;;
       stop)         doStop ;;
       disconnect)   doDisconnect ;;
-      fixdns)       resolvconf -u ;;
+      fixdns)       fixDNS2 ;;
       split)        Split ;;
       status)       showStatus ;;
       shell)        doShell ;;
@@ -785,7 +795,11 @@ installPackages()
    if [[ ${RH} -eq 1 ]]
    then
       # not needed for Fedora
-      yum -y install epel-release 
+      if grep -v ^Fedora /etc/redhat-release &> /dev/null
+      then
+         yum -y install epel-release 
+      fi
+
       yum -y install debootstrap ca-certificates patch xorg-x11-server-utils jq wget 
       yum clean all 
    fi
@@ -1083,6 +1097,7 @@ createConfFile()
 chrootEnd()
 {
    local ROOTHOME
+   local firefoxPath
 
    # do the last leg of setup inside chroot
    doChroot /bin/bash --login -pf "/root/chroot_setup.sh"
@@ -1109,20 +1124,31 @@ chrootEnd()
       echo >&2
 
       # if Firefox installed
-      if [[ -d /usr/lib/firefox ]] 
+      if [[ -d /usr/lib/firefox ]]
+      then
+         firefoxPath="/usr/lib/firefox"
+      fi
+      # if Firefox installed
+      if [[ -d /usr/lib64/firefox ]]
+      then
+         firefoxPath="/usr/lib64/firefox"
+      fi
+
+      # if Firefox installed
+      if [[ -n ${firefoxPath} ]] 
       then
 
          # if policies file not already installed
-         if [[ ! -f /usr/lib/firefox/distribution/policies.json ]] || grep CShell_Certificate /usr/lib/firefox/distribution/policies.json &> /dev/null
+         if [[ ! -f ${firefoxPath}/distribution/policies.json ]] || grep CShell_Certificate ${firefoxPath}/distribution/policies.json &> /dev/null
          then
 
             # aparently present in Debian, nevertheless
-            mkdir -p /usr/lib/firefox/distribution 2> /dev/null
+            mkdir -p ${firefoxPath}/distribution 2> /dev/null
 
             # create policy file
             # Accepting CShell certificate
 
-            cat <<-EOF14 > /usr/lib/firefox/distribution/policies.json
+            cat <<-EOF14 > ${firefoxPath}/distribution/policies.json
 	{
 	    "policies": {
 	        "ImportEnterpriseRoots": true,
