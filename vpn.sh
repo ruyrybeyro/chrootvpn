@@ -1,6 +1,6 @@
 #!/bin/bash 
 #
-# Rui Ribeiro doc_v1.50
+# Rui Ribeiro
 #
 # VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RH/CentOS/Fedora hosts 
 # Checkpoint R80.10 and up
