@@ -33,6 +33,10 @@
 # tested with chroot Debian Bullseye 11 (32 bits)
 # hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
 #
+# For DNS sync between host and chroot
+# "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
+# "RedHat" hosts systemd-resolved and /run/systemd/resolve/stub-resolv.conf
+#
 
 # script/deploy version, make the same as deploy
 VERSION="v0.99"
