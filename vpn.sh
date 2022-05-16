@@ -806,7 +806,7 @@ installPackages()
 
    if [[ ${RH} -eq 1 ]]
    then
-      yum -y update
+      yum -y update || die "cannot update. Fix before trying again"
       # not needed for Fedora
       if grep -v ^Fedora /etc/redhat-release &> /dev/null
       then
