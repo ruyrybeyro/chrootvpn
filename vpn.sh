@@ -842,7 +842,7 @@ checkDNS()
    then
       echo "DNS problems after installing resolvconf?" >&2
       echo "Not resolving ${VPN} DNS" >&2
-      echo "Relaunch vpn.sh for possible timeout issues" >&2
+      echo "Relaunch ${SCRIPTNAME} for possible timeout issues" >&2
       die "Otherwise fix or reboot to fix" 
    fi	   
 }
