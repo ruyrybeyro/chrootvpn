@@ -823,24 +823,35 @@ fixRHDNS()
 {
  if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
  then
-   if ! grep dns=systemd-resolved /etc/NetworkManager/NetworkManager.conf &> /dev/null
-   then
-       sed -i '/[main]/a dns=systemd-resolved' /etc/NetworkManager/NetworkManager.conf
-       systemctl --now enable systemd-resolved
-       systemctl start systemd-resolved
-       systemctl reload NetworkManager
-    fi
+    systemctl start  systemd-resolved
+    systemctl enable systemd-resolved
+    while ! systemctl is-active systemd-resolved &> /dev/null
+    do
+       sleep 2
+    done
+    sed -i '/NMCONTROLLED/' /etc/sysconfig/network-scripts/ifcfg-*
+    sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*
+    cd /etc
+    rm /etc/resolv.conf
+    ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
+    systemctl reload NetworkManager
+    while ! systemctl is-active NetworkManager &> /dev/null
+    do 
+       sleep 4
+    done
  fi
 }
 
 # "bug/feature": check DNS health
 checkDNS()
 {
+   getent ahostsv4 "${VPN}"  &> /dev/null
    if ! getent ahostsv4 "${VPN}" &> /dev/null
    then
       echo "DNS problems after installing resolvconf?" >&2
       echo "Not resolving ${VPN} DNS" >&2
-      die "Fix or reboot to fix" 
+      echo "Relaunch ${SCRIPTNAME} for possible timeout issues" >&2
+      die "Otherwise fix or reboot to fix" 
    fi	   
 }
 
