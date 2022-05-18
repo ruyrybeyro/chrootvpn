@@ -567,6 +567,7 @@ doStart()
       echo >&2
       # if localhost generated certificate not accepted, VPN auth will fail
       echo "Accept localhost certificate anytime visiting https://localhost:14186/id" >&2
+      echo "If it does not work, launch it in a terminal from the X11 console" >&2
    fi
 }
 
