@@ -19,7 +19,9 @@ ignored. vpn.conf is created upon first instalation.
 
 - first time run it as 
 
+	
 	sudo ./vpn.sh -i
+	
 
 - accept localhost certificate in brower if not Firefox
 
