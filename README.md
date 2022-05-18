@@ -40,11 +40,11 @@ Usage:
 
 vpn.sh [-c|--chroot DIR][--proxy proxy_string] -i|--install
 
-vpn.sh [--vpn FQDN][-c|--chroot DIR] start|stop|restart|status
+vpn.sh [-o|--output FILE][--vpn FQDN][-c|--chroot DIR] start|stop|restart|status
 
 vpn.sh [-c|--chroot DIR] uninstall
 
-vpn.sh disconnect|split|selfupdate|fixdns
+vpn.sh [-o|--output FILE] disconnect|split|selfupdate|fixdns
 
 vpn.sh -h|--help
 
@@ -61,6 +61,10 @@ vpn.sh -v|--version
 --vpn        select another VPN DNS full name
 
 --proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
+
+-o|--output  redirect ALL output for FILE
+
+-s|--silent  special case of output, no arguments
 
 
 start        start CShell daemon
