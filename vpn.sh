@@ -141,9 +141,9 @@ do_help()
 	Checkpoint R80.10+	${VERSION}
 
 	${SCRIPTNAME} [-c|--chroot DIR][--proxy proxy_string] -i|--install
-	${SCRIPTNAME} [--vpn FQDN][-c|--chroot DIR] start|stop|restart|status
+	${SCRIPTNAME} [-o|--output FILE][--vpn FQDN][-c|--chroot DIR] start|stop|restart|status
 	${SCRIPTNAME} [-c|--chroot DIR] uninstall
-	${SCRIPTNAME} disconnect|split|selfupdate|fixdns
+	${SCRIPTNAME} [-o|--output FILE] disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
@@ -153,10 +153,12 @@ do_help()
 	-v|--version script version
 	--vpn        select another VPN DNS full name
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
+	-o|--output  redirect ALL output for FILE
+	-s|--silent  special case of output, no arguments
 	
 	start        start    CShell daemon
 	stop         stop     CShell daemon
-        restart      restart  CShell daemon
+	restart      restart  CShell daemon
 	status       check if CShell daemon is running
 	disconnect   disconnect VPN/SNX session from the command line
 	split        split tunnel VPN - use only after session is up
@@ -203,6 +205,23 @@ needs_arg()
    [ -z "${OPTARG}" ] && die "No arg for --$OPT option"
 }
 
+# silence
+doOutput()
+{
+   LOG_FILE="$1"
+
+   # Close standard output file descriptor
+   exec 1<&-
+   # Close standard error file descriptor
+   exec 2<&-
+
+   # Open standard output as LOG_FILE for read and write.
+   exec 1<> "${LOG_FILE}"
+
+   # Redirect standard error to standard output
+   exec 2>&1
+}
+
 # arguments - script getopts options handling
 doGetOpts()
 {
@@ -234,6 +253,9 @@ doGetOpts()
                            exit 0 ;;
          osver)            awk -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2 } ' /etc/os-release
                            exit 0 ;;
+         o | output )      needs_arg
+                           doOutput "${OPTARG}" ;;
+         s | silent )      doOutput "/dev/null" ;;
          d | debug )       set -x ;;                 # bash debug on
          h | help )        do_help ;;                # show help
          ??* )             die "Illegal option --${OPT}" ;;  # bad long option
@@ -1116,7 +1138,7 @@ GnomeAutoRun()
 	[Desktop Entry]
 	Type=Application
 	Name=cshell
-	Exec=sudo ${INSTALLSCRIPT} -c ${CHROOT} start
+	Exec=sudo ${INSTALLSCRIPT} -s -c ${CHROOT} start
 	Icon=
 	Comment=
 	X-GNOME-Autostart-enabled=true
