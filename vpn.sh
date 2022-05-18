@@ -247,26 +247,25 @@ PreCheck()
    fi
 
    # If not Debian/Ubuntu based
-   # If not Debian/Ubuntu based
-   if [ ! -f /etc/debian_version ] && [ ! -f /etc/redhat-release ] 
+   if [ ! -f "/etc/debian_version" ] && [ ! -f "/etc/redhat-release" ] 
    then
       die "This script is only for Debian/Ubuntu or RedHat/CentOS Linux based flavours only" 
    else
       DEB=0
       RH=0
 
-      if [ -f /etc/debian_version ]
+      if [ -f "/etc/debian_version" ]
       then
          DEB=1
          ischroot && die "Do not run this script inside a chroot"
       fi
 
-      if [ -f /etc/redhat-release ]
+      if [ -f "/etc/redhat-release" ]
       then
          RH=1
       fi
 
-      if [[ $DEB -eq 0 ]] && [[ $RH -eq 0 ]]
+      if [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]]
       then
          die "Only Debian and RedHat family distributions supported"
       fi
