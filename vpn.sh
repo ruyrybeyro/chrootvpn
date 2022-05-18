@@ -30,8 +30,13 @@
 # CShell CheckPoint Java agent needs Java *and* X11 desktop rights
 # binary SNX VPN client needs 32-bits environment
 #
-# tested with chroot Debian Bullseye 11 (32 bits)
-# hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
+# tested with chroot Debian Bullseye 11 (32 bits) and
+# hosts: Debian 10 
+#        Debian 11 
+#        Ubuntu LTS 18.04 
+#        Ubuntu LTS 22.04 
+#        Fedora 8 
+#        CentOS 8
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
