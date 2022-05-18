@@ -804,7 +804,6 @@ installPackages()
 {
    if [[ ${DEB} -eq 1 ]]
    then
-      # upgrade system
       apt -y update
       #apt -y upgrade
 
@@ -819,7 +818,8 @@ installPackages()
    if [[ ${RH} -eq 1 ]]
    then
       # yum -y update
-      # not needed for Fedora
+
+      # epel-release not needed for Fedora
       if grep -v ^Fedora /etc/redhat-release &> /dev/null
       then
          yum -y install epel-release || needCentOSFix
