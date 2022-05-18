@@ -216,7 +216,7 @@ doOutput()
    exec 2<&-
 
    # Open standard output as LOG_FILE for read and write.
-   exec 1<> ${LOG_FILE}
+   exec 1<> "${LOG_FILE}"
 
    # Redirect standard error to standard output
    exec 2>&1
