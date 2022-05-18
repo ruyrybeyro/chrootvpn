@@ -229,7 +229,7 @@ doGetOpts()
    install=false
 
    # process command line options
-   while getopts dic:-:hv OPT
+   while getopts dic:-:o:shv OPT
    do
 
       # long option: reformulate OPT and OPTARG
