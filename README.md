@@ -17,9 +17,13 @@ and Checkpoint VPN routes.
 if /etc/opt/vpn.conf is present the above script settings will be 
 ignored. vpn.conf is created upon first instalation.
 
-- first time run it as sudo ./vpn.sh -i
+- first time run it as 
 
-- accept localhost https://localhost:14186/id certificate in brower if not Firefox 
+	sudo ./vpn.sh -i
+
+- accept localhost certificate in brower if not Firefox
+
+	https://localhost:14186/id 
 
 - visit VPN page for logging in 
 
@@ -102,16 +106,16 @@ upgrade      OS upgrade inside chroot
 
 tested with hosts:
 
-	Debian 10
+Debian 10
 
-	Debian 11
+Debian 11
 
-	Ubuntu LTS 18.04
+Ubuntu LTS 18.04
 
-	Ubuntu LTS 22.04
+Ubuntu LTS 22.04
 
-	Mint   20.2
+Mint   20.2
 
-	Fedora 8
+Fedora 8
 
-	CentOS 8
+CentOS 8
