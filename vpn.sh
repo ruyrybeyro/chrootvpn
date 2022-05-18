@@ -823,14 +823,22 @@ fixRHDNS()
 {
  if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
  then
-    systemctl enable systemd-resolved
     systemctl start  systemd-resolved
+    systemctl enable systemd-resolved
+    while ! systemctl is-active systemd-resolved &> /dev/null
+    do
+       sleep 2
+    done
     sed -i '/NMCONTROLLED/' /etc/sysconfig/network-scripts/ifcfg-*
     sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*
     cd /etc
     rm /etc/resolv.conf
     ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
     systemctl reload NetworkManager
+    while ! systemctl is-active NetworkManager &> /dev/null
+    do 
+       sleep 4
+    done
  fi
 }
 
