@@ -787,6 +787,18 @@ preFlight()
    fi
 }
 
+# CentOS change to upstream
+needCentOSFix()
+{
+   if grep -v "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
+   then
+      sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+      sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+   else
+      die "could not do yum. Fix it"
+   fi
+}
+
 # system update and package requirements
 installPackages()
 {
@@ -794,7 +806,7 @@ installPackages()
    then
       # upgrade system
       apt -y update
-      apt -y upgrade
+      #apt -y upgrade
 
       # install needed packages
       apt -y install debootstrap ca-certificates patch x11-xserver-utils jq wget
@@ -806,11 +818,11 @@ installPackages()
 
    if [[ ${RH} -eq 1 ]]
    then
-      yum -y update || die "cannot update. Fix before trying again"
+      # yum -y update
       # not needed for Fedora
       if grep -v ^Fedora /etc/redhat-release &> /dev/null
       then
-         yum -y install epel-release 
+         yum -y install epel-release || needCentOSFix
       fi
 
       yum -y install debootstrap ca-certificates patch xorg-x11-server-utils jq wget 
