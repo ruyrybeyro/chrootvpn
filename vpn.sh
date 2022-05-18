@@ -790,7 +790,7 @@ preFlight()
 # CentOS change to upstream
 needCentOSFix()
 {
-   if grep -v "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
+   if grep "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
    then
       sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
