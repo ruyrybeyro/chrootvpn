@@ -825,16 +825,32 @@ fixRHDNS()
  then
     systemctl start  systemd-resolved
     systemctl enable systemd-resolved
+
+    # Possibly waiting for sysstemd service to be active
     while ! systemctl is-active systemd-resolved &> /dev/null
     do
        sleep 2
     done
+
+    if [ ! -f /run/systemd/resolve/stub-resolv.conf ]
+    then
+       die "Something went wrong activating systemd-resolved"
+    fi
+
+    # if any old style interface scripts
+    # we need them controlled by NetworkManager
     sed -i '/NMCONTROLLED/' /etc/sysconfig/network-scripts/ifcfg-*
     sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*
+
+    # replace /etc/resolv.conf for a resolved link 
     cd /etc
     rm /etc/resolv.conf
     ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
+
+    # reload NeworkManager
     systemctl reload NetworkManager
+
+    # wait for it to be up
     while ! systemctl is-active NetworkManager &> /dev/null
     do 
        sleep 4
