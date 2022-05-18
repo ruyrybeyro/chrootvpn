@@ -95,3 +95,19 @@ vpn.sh shell
 shell        bash shell inside chroot
 
 upgrade      OS upgrade inside chroot
+
+tested with hosts:
+
+	Debian 10
+
+	Debian 11
+
+	Ubuntu LTS 18.04
+
+	Ubuntu LTS 22.04
+
+	Mint   20.2
+
+	Fedora 8
+
+	CentOS 8
