@@ -1275,6 +1275,7 @@ chrootEnd()
       echo "open browser with https://localhost:14186/id to accept new localhost certificate" >&2
       echo
       echo "afterwards open browser at https://${VPN} to login into VPN" >&2
+      echo "If it does not work, launch it in a terminal from the X11 console" >&2
 
    else
       umountChrootFS
