@@ -865,6 +865,8 @@ fixRHDNS()
 {
  if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
  then
+    yum install systemd-resolved
+    systemctl unmask systemd-resolved
     systemctl start  systemd-resolved
     systemctl enable systemd-resolved
 
@@ -881,8 +883,8 @@ fixRHDNS()
 
     # if any old style interface scripts
     # we need them controlled by NetworkManager
-    sed -i '/NMCONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-*
-    sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*
+    sed -i '/NMCONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
+    sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
 
     # replace /etc/resolv.conf for a resolved link 
     cd /etc || die "was not able to cd /etc"
