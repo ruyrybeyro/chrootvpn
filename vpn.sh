@@ -864,6 +864,8 @@ installPackages()
 # fix DNS CentOS 8
 fixRHDNS()
 {
+   local counter
+
  if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
  then
     if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
@@ -875,9 +877,12 @@ fixRHDNS()
     systemctl enable systemd-resolved
 
     # Possibly waiting for sysstemd service to be active
+    counter=0
     while ! systemctl is-active systemd-resolved &> /dev/null
     do
        sleep 2
+       let counter=counter+1
+       [[ $counter -eq 30 ]] && die "systemd-resolved not going live"
     done
 
     if [ ! -f /run/systemd/resolve/stub-resolv.conf ]
@@ -899,9 +904,12 @@ fixRHDNS()
     systemctl reload NetworkManager
 
     # wait for it to be up
+    counter=0
     while ! systemctl is-active NetworkManager &> /dev/null
     do 
        sleep 4
+       let counter=counter+1
+       [[ $counter -eq 20 ]] && die "NetworkManager not going live"
     done
  fi
 }
