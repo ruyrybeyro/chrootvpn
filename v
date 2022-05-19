@@ -53,7 +53,7 @@ CHROOT="/opt/chroot"
 
 CONFFILE="/opt/etc/vpn.conf"
 
-[ -f "${CONFFILE}" ] && . "${CONFFILE}"
+[ -f "${CONFFILE}" ] && . ${CONFFILE}
 
 # Sane defaults:
  
@@ -885,7 +885,7 @@ fixRHDNS()
     sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*
 
     # replace /etc/resolv.conf for a resolved link 
-    cd /etc || die "was not able to cd /etc"
+    cd /etc
     rm /etc/resolv.conf
     ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
 
@@ -1332,95 +1332,3 @@ main $*
 
 # patches for cshell_install.sh
 # diff output, do not change bellow this line
-__DIFF__
---- old/cshell_install.sh	2022-02-09 11:53:44.000000000 +0000
-+++ new/cshell_install.sh	2022-05-10 17:12:43.164330311 +0100
-@@ -13,8 +13,8 @@
- 
- PATH_TO_JAR=${INSTALL_DIR}/CShell.jar
- 
--AUTOSTART_DIR=
--USER_NAME=
-+AUTOSTART_DIR=/root
-+USER_NAME=root
- 
- CERT_DIR=/etc/ssl/certs
- CERT_NAME=CShell_Certificate
-@@ -330,14 +330,14 @@
-     if [ -z "$FF_DATABASE" ]
-        then
-             show_error "Cannot get Firefox database"
--		   return 1
-+		   return 0
-     fi
- 
-    #install certificate to Firefox 
- 	`certutil -A -n "${CERT_NAME}" -t "TCPu,TCPu,TCPu" -i "${INSTALL_DIR}/cert/${CERT_NAME}.crt" -d "${FF_DATABASE}" >/dev/null 2>&1`
- 
-     
--    STATUS=$?
-+    STATUS=0
-     if [ ${STATUS} != 0 ]
-          then
-               rm -rf ${INSTALL_DIR}/cert/*
-@@ -362,7 +362,7 @@
-     #install certificate to Chrome
-     `certutil -A -n "${CERT_NAME}" -t "TCPu,TCPu,TCPu" -i "${INSTALL_DIR}/cert/${CERT_NAME}.crt" -d "sql:${CHROME_PROFILE_PATH}" >/dev/null 2>&1`
- 
--    STATUS=$?
-+    STATUS=0
-     if [ ${STATUS} != 0 ]
-          then
-               rm -rf ${INSTALL_DIR}/cert/*
-@@ -452,7 +452,7 @@
-     fi
- 
-     ln -s ${INSTALL_DIR}/cert/${CERT_NAME}.p12 /etc/ssl/certs/${CERT_NAME}.p12
--
-+    return 0
-     if [ "$(IsFirefoxInstalled)" = 1 ]
-     then 
- 		installFirefoxCerts
-@@ -560,7 +560,7 @@
- 	if [ ${res} != 0 ]
- 	then
- 		echo "Please add \"root\" and \"$USER_NAME\" to X11 access list"
--		exit 1
-+		#exit 1
- 	fi
- fi
- 
-@@ -572,7 +572,7 @@
- 	if [ ${res} != 0 ]
- 	then
- 		echo "Please add \"root\" and \"$USER_NAME\" to X11 access list"
--		exit 1
-+		#exit 1
- 	fi
- fi
- 
-@@ -652,7 +652,7 @@
- #check if xterm is installed
- xterm -h > /dev/null 2>&1
- 
--STATUS=$?
-+STATUS=0
- if [ ${STATUS} != 0 ]
-    then
-        echo "Please install xterm."
-@@ -723,7 +723,7 @@
- 
- #remove certificates. This will result in re-issuance of certificates
- cleanupCertificates
--if [ $? -ne 0 ]
-+if [ 0 -ne 0 ]
- then 
- 	show_error "Cannot delete certificates"
- 	exit 1
-@@ -12073,4 +12073,4 @@
- Jž´¼ºEÊ'QútsÅqOª*ªEZÞ€ý{%gr@‘ß8[ƒM¼‘qŸ`:š¨t¬öJgS–ìŠL‘aß6…Cq¦´’yåtj?¼~•Z¼_kì9;š†Î6¶»2)´{”ôyºý¼ƒGT…¸—ÿF8ëe.dÛõÐ¬½&‹.€ÔjPˆcPH3¹=]ïÊ%¥¨™©ù×'—0fd¸¸joû…HÍ»{ƒ(éü•„fŽ³¿…8$]ç¹>BD‹	=ò7^œ­iÈøö;†ù²,‹ê­bTKÅ2†¹ç£ÍKAjêc¢±ý¾\3’>Ox‰ÉW|Ah
- °õ4–äÃ‡!ëïÿC'ß›¡ìP‘ÏåŒ,û3&Œî­ã¯ÓÉx¬”(½z–4…ÓAÈlñ•èðß7©ýå‡#}Ö@`aEG²p`2	b‹XJ$«0qÑóý0–,_}¡ £y÷EÂ©÷>j/nù®×ˆ{Ý²>@j  k9î‹€¢îït˜°"ƒõE½9c+¸k¨5á^Ùv'ÐsàÕûà@îo5ãtZzb‡ËÊáÑ Úµõ@1¿ÆÉÕ\ddˆJM•LñÿÊ;fSf¨}I)Î]8ýT¦œZ9ÖF<Ô€rŠé¹lW1ÐýR¥ÅTMŸ¿Ãšn&Ììrí†]´×l|o’@ÖÍËøñl+£h-(o—W®²Wû^ÝÏ‡H˜`ÏUéŠÁÓ;àQ;í+c|ºcóM­±Bs¥/™ÐàZZYlÅz’4ª,ïkü¯ýd$€ÚúD‰X˜Š}êHÉ [$îè*Úýób#ÊÎHX
- ñÃÈg¸„¹YÓ¹ãk¨€¿ÓÅÞC16â ­‡ ²BçÓp‘©„/¿r»ÂÖÅ×SRŸ7W1YR§Ê!Ð¼‚ãA}{ƒŽö~¯úôýrßï¢é{œÝžk3g¾è«œGñ„”4ÿô+nM²|Ã”Ç¸¿¶{/ÐILT¹Ê‰Îr­HQBr8)DŠ¥RN*‰N>©9 !‘Nô¶ŽÆÃñ“ÿ'ÛÇ}<ï-°öþÍÆj:ÆÿâîH§
-- òIj@
-\ No newline at end of file
-+ òIj@
