@@ -125,4 +125,6 @@ Fedora 8
 
 CentOS 8
 
+CentOS 9 stream
+
 Rocky 8.6
