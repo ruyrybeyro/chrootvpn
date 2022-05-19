@@ -1031,10 +1031,17 @@ buildFS()
 	${VPNIP} ${VPN}
 	EOF7
 
-   # add hostname to /etc/hosts inside chroot
+   # add host hostname to hosts 
    if [[ -n "${HOSTNAME}" ]]
    then
+      # inside chroot
       echo -e "\n127.0.0.1 ${HOSTNAME}" >> etc/hosts
+
+      # add hostname to host /etc/hosts
+      if ! grep "${HOSTNAME}" /etc/hosts &> /dev/null
+      then
+         echo -e "\n127.0.0.1 ${HOSTNAME}" >> /etc/hosts
+      fi
    fi
 
    # APT proxy for inside chroot
