@@ -37,7 +37,8 @@
 #        Ubuntu LTS 22.04 
 #        Mint   20.2
 #        Fedora 8 
-#        CentOS 8
+#        CentOS 8 Stream
+#        CentOS 9 Stream
 #        Rocky  8.6
 #
 # For DNS sync between host and chroot
@@ -590,7 +591,7 @@ doStart()
       echo >&2
       # if localhost generated certificate not accepted, VPN auth will fail
       echo "Accept localhost certificate anytime visiting https://localhost:14186/id" >&2
-      echo "If it does not work, launch it in a terminal from the X11 console" >&2
+      echo "If it does not work, launch ${SCRIPTNAME} in a terminal from the X11 console" >&2
    fi
 }
 
@@ -865,6 +866,11 @@ fixRHDNS()
 {
  if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
  then
+    if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
+    then	    
+       yum -y install systemd-resolved 
+    fi
+    systemctl unmask systemd-resolved &> /dev/null
     systemctl start  systemd-resolved
     systemctl enable systemd-resolved
 
@@ -881,8 +887,8 @@ fixRHDNS()
 
     # if any old style interface scripts
     # we need them controlled by NetworkManager
-    sed -i '/NMCONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-*
-    sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*
+    sed -i '/NMCONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
+    sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
 
     # replace /etc/resolv.conf for a resolved link 
     cd /etc || die "was not able to cd /etc"
@@ -1276,7 +1282,7 @@ chrootEnd()
       echo "open browser with https://localhost:14186/id to accept new localhost certificate" >&2
       echo
       echo "afterwards open browser at https://${VPN} to login into VPN" >&2
-      echo "If it does not work, launch it in a terminal from the X11 console" >&2
+      echo "If it does not work, launch ${SCRIPTNAME} in a terminal from the X11 console" >&2
 
    else
       umountChrootFS
