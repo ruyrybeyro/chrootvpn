@@ -865,8 +865,8 @@ fixRHDNS()
 {
  if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
  then
-    yum install systemd-resolved
-    systemctl unmask systemd-resolved
+    yum install systemd-resolved &> /dev/null
+    systemctl unmask systemd-resolved &> /dev/null
     systemctl start  systemd-resolved
     systemctl enable systemd-resolved
 
