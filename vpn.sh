@@ -38,6 +38,7 @@
 #        Mint   20.2
 #        Fedora 8 
 #        CentOS 8
+#        Rocky  8.6
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
