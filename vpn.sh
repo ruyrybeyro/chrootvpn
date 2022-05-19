@@ -590,7 +590,7 @@ doStart()
       echo >&2
       # if localhost generated certificate not accepted, VPN auth will fail
       echo "Accept localhost certificate anytime visiting https://localhost:14186/id" >&2
-      echo "If it does not work, launch it in a terminal from the X11 console" >&2
+      echo "If it does not work, launch ${SCRIPTNAME} in a terminal from the X11 console" >&2
    fi
 }
 
@@ -865,7 +865,10 @@ fixRHDNS()
 {
  if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
  then
-    yum install systemd-resolved &> /dev/null
+    if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
+    then	    
+       yum -y install systemd-resolved 
+    fi
     systemctl unmask systemd-resolved &> /dev/null
     systemctl start  systemd-resolved
     systemctl enable systemd-resolved
@@ -1278,7 +1281,7 @@ chrootEnd()
       echo "open browser with https://localhost:14186/id to accept new localhost certificate" >&2
       echo
       echo "afterwards open browser at https://${VPN} to login into VPN" >&2
-      echo "If it does not work, launch it in a terminal from the X11 console" >&2
+      echo "If it does not work, launch ${SCRIPTNAME} in a terminal from the X11 console" >&2
 
    else
       umountChrootFS
