@@ -37,7 +37,8 @@
 #        Ubuntu LTS 22.04 
 #        Mint   20.2
 #        Fedora 8 
-#        CentOS 8
+#        CentOS 8 Stream
+#        CentOS 9 Stream
 #        Rocky  8.6
 #
 # For DNS sync between host and chroot
