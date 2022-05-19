@@ -14,7 +14,7 @@ Please fill VPN and VPNIP before using this script.
 SPLIT might or not have to be filled, depending on your needs
 and Checkpoint VPN routes.
 
-if /etc/opt/vpn.conf is present the above script settings will be 
+if /opt/etc/vpn.conf is present the above script settings will be 
 ignored. vpn.conf is created upon first instalation.
 
 - first time run it as 
