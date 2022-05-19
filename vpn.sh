@@ -880,7 +880,7 @@ fixRHDNS()
 
     # if any old style interface scripts
     # we need them controlled by NetworkManager
-    sed -i '/NMCONTROLLED/' /etc/sysconfig/network-scripts/ifcfg-*
+    sed -i '/NMCONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-*
     sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*
 
     # replace /etc/resolv.conf for a resolved link 
