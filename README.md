@@ -124,3 +124,5 @@ Mint   20.2
 Fedora 8
 
 CentOS 8
+
+Rocky 8.6
