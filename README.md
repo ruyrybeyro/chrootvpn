@@ -48,13 +48,13 @@ hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
 
 Usage:
 
-vpn.sh [-c|--chroot DIR][--proxy proxy_string] -i|--install
+vpn.sh [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
 
-vpn.sh [-o|--output FILE][--vpn FQDN][-c|--chroot DIR] start|stop|restart|status
+vpn.sh [-o FILE|--output=FILE][-c|--chroot=DIR] start|stop|restart|status
 
-vpn.sh [-c|--chroot DIR] uninstall
+vpn.sh [-c DIR|--chroot=DIR] uninstall
 
-vpn.sh [-o|--output FILE] disconnect|split|selfupdate|fixdns
+vpn.sh [-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
 
 vpn.sh -h|--help
 
@@ -100,6 +100,7 @@ For debugging/maintenance:
 
 
 vpn.sh -d|--debug
+vpn.sh [-c DIR|--chroot DIR] shell|upgrade
 
 vpn.sh shell
 
