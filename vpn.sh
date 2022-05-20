@@ -1102,17 +1102,28 @@ buildFS()
 	# install CShell - wont hide xhost errors
 	# as it can hide a cshell_install patch failure
 	echo "Installing CShell - ignore xhost errors" >&2
-	DISPLAY=${DISPLAY} /root/cshell_install.sh 
+	DISPLAY=${DISPLAY} PATH=/nopatch:$PATH /root/cshell_install.sh 
 	
 	exit 0
 	EOF9
 
+        mkdir nopatch
+   	cat <<-'EOF22' > nopatch/certutil
+	#!/bin/bash
+	if [[ "$1" == "-H" ]]
+	then
+	   exit 1
+	else
+	   exit 0
+	fi
+	EOF22
+
    # fake xterm and xhost 
    # since they are not needed inside chroot
-   ln -s ../../sbin/modprobe usr/bin/xhost
-   ln -s ../../sbin/modprobe usr/bin/xterm
+   ln -s ../sbin/modprobe nopatch/xhost
+   ln -s ../sbin/modprobe nopatch/xterm
 
-   chmod a+rx usr/bin/who sbin/modprobe root/chroot_setup.sh root/snx_install.sh root/cshell_install.sh
+   chmod a+rx usr/bin/who sbin/modprobe root/chroot_setup.sh root/snx_install.sh root/cshell_install.sh nopatch/certutil
 }
 
 # create chroot fstab for sharing kernel 
