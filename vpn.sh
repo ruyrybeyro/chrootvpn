@@ -1107,6 +1107,10 @@ buildFS()
 	exit 0
 	EOF9
 
+   # fake xterm and xhost inside chroot
+   ln -s ../../sbin/modprobe usr/bin/xhost
+   ln -s ../../sbin/modprobe usr/bin/xterm
+
    chmod a+rx usr/bin/who sbin/modprobe root/chroot_setup.sh root/snx_install.sh root/cshell_install.sh
 }
 
