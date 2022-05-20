@@ -97,7 +97,7 @@ For debugging/maintenance:
 
 
 vpn.sh -d|--debug
-vpn.sh [-c DIR|--chroot DIR] shell|upgrade
+vpn.sh [-c DIR|--chroot=DIR] shell|upgrade
 
 vpn.sh shell
 

@@ -171,7 +171,7 @@ do_help()
 	For debugging/maintenance:
 	
 	${SCRIPTNAME} -d|--debug
-	${SCRIPTNAME} [-c DIR|--chroot DIR] shell|upgrade
+	${SCRIPTNAME} [-c DIR|--chroot=DIR] shell|upgrade
 	
 	-d|--debug   bash debug mode on
 	shell        bash shell inside chroot
