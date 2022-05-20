@@ -142,8 +142,8 @@ do_help()
 	VPN client setup for Debian/Ubuntu
 	Checkpoint R80.10+	${VERSION}
 
-	${SCRIPTNAME} [-c|--chroot DIR][--proxy proxy_string] -i|--install
-	${SCRIPTNAME} [-o|--output FILE][--vpn FQDN][-c|--chroot DIR] start|stop|restart|status
+	${SCRIPTNAME} [-c|--chroot DIR][--proxy proxy_string][--vpn FQDN] -i|--install
+	${SCRIPTNAME} [-o|--output FILE][-c|--chroot DIR] start|stop|restart|status
 	${SCRIPTNAME} [-c|--chroot DIR] uninstall
 	${SCRIPTNAME} [-o|--output FILE] disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
@@ -759,8 +759,10 @@ PreCheck2()
             fi
 
          else
-
-            die "To install the chrooted Checkpoint client software, run: sudo ./${SCRIPTNAME} -i"
+            echo "To install the chrooted Checkpoint client software, run:" >&2
+            echo "sudo ./${SCRIPTNAME} -i" >&2
+            echo "or" >&2
+            die  "sudo ./${SCRIPTNAME} -i --vpn FQDN"
          fi
       fi
    fi
