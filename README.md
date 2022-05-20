@@ -24,7 +24,7 @@ ignored. vpn.conf is created upon first instalation.
 
 Otherwise, run it as:
 
-        sudo ./vnp.sh -i --vpn FQDN_DNS_name_of_VPN
+        sudo ./vnp.sh -i --vpn=FQDN_DNS_name_of_VPN
 	
 
 - accept localhost certificate in brower if not Firefox
