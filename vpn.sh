@@ -142,10 +142,10 @@ do_help()
 	VPN client setup for Debian/Ubuntu
 	Checkpoint R80.10+	${VERSION}
 
-	${SCRIPTNAME} [-c|--chroot DIR][--proxy proxy_string][--vpn FQDN] -i|--install
-	${SCRIPTNAME} [-o|--output FILE][-c|--chroot DIR] start|stop|restart|status
-	${SCRIPTNAME} [-c|--chroot DIR] uninstall
-	${SCRIPTNAME} [-o|--output FILE] disconnect|split|selfupdate|fixdns
+	${SCRIPTNAME} [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
+	${SCRIPTNAME} [-o FILE|--output=FILE][-c DIR|--chroot=DIR] start|stop|restart|status
+	${SCRIPTNAME} [-c|--chroot=DIR] uninstall
+	${SCRIPTNAME} [-o|--output=FILE] disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
@@ -171,7 +171,7 @@ do_help()
 	For debugging/maintenance:
 	
 	${SCRIPTNAME} -d|--debug
-	${SCRIPTNAME} [-c|--chroot DIR] shell|upgrade
+	${SCRIPTNAME} [-c DIR|--chroot DIR] shell|upgrade
 	
 	-d|--debug   bash debug mode on
 	shell        bash shell inside chroot
@@ -235,11 +235,11 @@ doGetOpts()
    do
 
       # long option: reformulate OPT and OPTARG
-      if [ "${OPT}" = "-" ] 
+      if [ ${OPT} = "-" ] 
       then   
-         OPT="${OPTARG%%=*}"       # extract long option name
-         OPTARG="${OPTARG#$OPT}"   # extract long option argument (may be empty)
-         OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
+         OPT=${OPTARG%%=*}       # extract long option name
+         OPTARG=${OPTARG#$OPT}   # extract long option argument (may be empty)
+         OPTARG=${OPTARG#=}      # if long option argument, remove assigning `=`
       fi
 
       case "${OPT}" in
@@ -1327,7 +1327,6 @@ InstallChroot()
 # main ()
 main()
 {
-
    # command options handling
    doGetOpts $*
 
