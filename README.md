@@ -43,9 +43,6 @@ SNX/CShell behave on odd ways ; the chroot is built to counter some of those beh
 CShell CheckPoint Java agent needs Java *and* X11 desktop rights
 binary SNX VPN client needs 32-bits environment
 
-tested with chroot Debian Bullseye 11 (32 bits)
-hosts: Debian 10, Debian 11, Ubuntu LTS 18.04, Ubuntu LTS 22.04
-
 Usage:
 
 vpn.sh [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
@@ -113,6 +110,8 @@ upgrade      OS upgrade inside chroot
 
 
 
+
+Tested with chroot Debian Bullseye 11 (32 bits)
 
 Tested with hosts:
 
