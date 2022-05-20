@@ -144,8 +144,8 @@ do_help()
 
 	${SCRIPTNAME} [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
 	${SCRIPTNAME} [-o FILE|--output=FILE][-c DIR|--chroot=DIR] start|stop|restart|status
-	${SCRIPTNAME} [-c|--chroot=DIR] uninstall
-	${SCRIPTNAME} [-o|--output=FILE] disconnect|split|selfupdate|fixdns
+	${SCRIPTNAME} [-c DIR|--chroot=DIR] uninstall
+	${SCRIPTNAME} [-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
@@ -171,7 +171,7 @@ do_help()
 	For debugging/maintenance:
 	
 	${SCRIPTNAME} -d|--debug
-	${SCRIPTNAME} [-c DIR|--chroot DIR] shell|upgrade
+	${SCRIPTNAME} [-c DIR|--chroot=DIR] shell|upgrade
 	
 	-d|--debug   bash debug mode on
 	shell        bash shell inside chroot
