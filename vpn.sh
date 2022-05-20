@@ -31,15 +31,16 @@
 # binary SNX VPN client needs 32-bits environment
 #
 # tested with chroot Debian Bullseye 11 (32 bits) and
-# hosts: Debian 10 
+# hosts: 
+#        Debian 10 
 #        Debian 11 
 #        Ubuntu LTS 18.04 
 #        Ubuntu LTS 22.04 
 #        Mint   20.2
 #        Fedora 8 
+#        Rocky  8.6
 #        CentOS 8 Stream
 #        CentOS 9 Stream
-#        Rocky  8.6
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
@@ -868,52 +869,56 @@ fixRHDNS()
 {
    local counter
 
- if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
- then
-    if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
-    then	    
-       yum -y install systemd-resolved 
-    fi
-    systemctl unmask systemd-resolved &> /dev/null
-    systemctl start  systemd-resolved
-    systemctl enable systemd-resolved
+   if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
+   then
 
-    # Possibly waiting for sysstemd service to be active
-    counter=0
-    while ! systemctl is-active systemd-resolved &> /dev/null
-    do
-       sleep 2
-       let counter=counter+1
-       [[ $counter -eq 30 ]] && die "systemd-resolved not going live"
-    done
+      # CentOS 9 does not install it by default
+      if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
+      then	    
+         yum -y install systemd-resolved 
+      fi
 
-    if [ ! -f /run/systemd/resolve/stub-resolv.conf ]
-    then
-       die "Something went wrong activating systemd-resolved"
-    fi
+      # start it and configure it to be active on boot 
+      systemctl unmask systemd-resolved &> /dev/null
+      systemctl start  systemd-resolved
+      systemctl enable systemd-resolved
 
-    # if any old style interface scripts
-    # we need them controlled by NetworkManager
-    sed -i '/NMCONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
-    sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
+      # Possibly waiting for sysstemd service to be active
+      counter=0
+      while ! systemctl is-active systemd-resolved &> /dev/null
+      do
+         sleep 2
+         let counter=counter+1
+         [[ $counter -eq 30 ]] && die "systemd-resolved not going live"
+      done
 
-    # replace /etc/resolv.conf for a resolved link 
-    cd /etc || die "was not able to cd /etc"
-    rm /etc/resolv.conf
-    ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
+      if [ ! -f /run/systemd/resolve/stub-resolv.conf ]
+      then
+         die "Something went wrong activating systemd-resolved"
+      fi
 
-    # reload NeworkManager
-    systemctl reload NetworkManager
+      # if any old style interface scripts
+      # we need them controlled by NetworkManager
+      sed -i '/NMCONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
+      sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
 
-    # wait for it to be up
-    counter=0
-    while ! systemctl is-active NetworkManager &> /dev/null
-    do 
-       sleep 4
-       let counter=counter+1
-       [[ $counter -eq 20 ]] && die "NetworkManager not going live"
-    done
- fi
+      # replace /etc/resolv.conf for a resolved link 
+      cd /etc || die "was not able to cd /etc"
+      rm /etc/resolv.conf
+      ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
+
+      # reload NeworkManager
+      systemctl reload NetworkManager
+
+      # wait for it to be up
+      counter=0
+      while ! systemctl is-active NetworkManager &> /dev/null
+      do 
+         sleep 4
+         let counter=counter+1
+         [[ $counter -eq 20 ]] && die "NetworkManager not going live"
+      done
+   fi
 }
 
 # "bug/feature": check DNS health
