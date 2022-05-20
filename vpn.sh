@@ -18,7 +18,6 @@
 #
 # It will get CShell and SNX installations scripts from the firewall,
 # and install them. 
-# CShell installation script patch included at the end of file. 
 #
 # vpn.sh selfupdate 
 # might update this script if new version+Internet connectivity available
@@ -842,7 +841,7 @@ installPackages()
       #apt -y upgrade
 
       # install needed packages
-      apt -y install debootstrap ca-certificates patch x11-xserver-utils jq wget
+      apt -y install debootstrap ca-certificates x11-xserver-utils jq wget
       # we want to make sure resolconf is the last one
       apt -y install resolvconf
       # clean APT host cache
@@ -859,7 +858,7 @@ installPackages()
          yum -y install epel-release || needCentOSFix
       fi
 
-      yum -y install debootstrap ca-certificates patch xorg-x11-server-utils jq wget 
+      yum -y install debootstrap ca-certificates xorg-x11-server-utils jq wget 
       yum clean all 
    fi
 }
@@ -1007,13 +1006,6 @@ buildFS()
       wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
    fi
 
-   # doing the cshell_install.sh patches after the __DIFF__ line
-   n=$(awk '/^__DIFF__/ {print NR ; exit 0; }' "${SCRIPT}")
-   sed -e "1,${n}d" "${SCRIPT}" | patch 
-   # change from root to ${CSHELL_USER}
-   sed -i "s@AUTOSTART_DIR=/root@AUTOSTART_DIR=${CSHELL_HOME}@" cshell_install.sh
-   sed -i "s/USER_NAME=root/USER_NAME=${CSHELL_USER}/" cshell_install.sh
-    
    mv cshell_install.sh "${CHROOT}/root"
    mv snx_install.sh "${CHROOT}/root"
 
@@ -1122,6 +1114,14 @@ buildFS()
    # since they are not needed inside chroot
    ln -s ../sbin/modprobe nopatch/xhost
    ln -s ../sbin/modprobe nopatch/xterm
+
+   # fake Mozilla/Firefox profile
+   mkdir -p home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release
+   touch home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release/cert9.db
+   cat <<-'EOF23' > home/${CSHELL_USER}/.mozilla/firefox/installs.ini
+	[4F96D1932A9F858E]
+	Default=3ui8lv6m.default-release
+	EOF23
 
    chmod a+rx usr/bin/who sbin/modprobe root/chroot_setup.sh root/snx_install.sh root/cshell_install.sh nopatch/certutil
 }
@@ -1373,97 +1373,4 @@ main()
 # main stub will full arguments passing
 main $*
 
-# patches for cshell_install.sh
-# diff output, do not change bellow this line
-__DIFF__
---- old/cshell_install.sh	2022-02-09 11:53:44.000000000 +0000
-+++ new/cshell_install.sh	2022-05-10 17:12:43.164330311 +0100
-@@ -13,8 +13,8 @@
  
- PATH_TO_JAR=${INSTALL_DIR}/CShell.jar
- 
--AUTOSTART_DIR=
--USER_NAME=
-+AUTOSTART_DIR=/root
-+USER_NAME=root
- 
- CERT_DIR=/etc/ssl/certs
- CERT_NAME=CShell_Certificate
-@@ -330,14 +330,14 @@
-     if [ -z "$FF_DATABASE" ]
-        then
-             show_error "Cannot get Firefox database"
--		   return 1
-+		   return 0
-     fi
- 
-    #install certificate to Firefox 
- 	`certutil -A -n "${CERT_NAME}" -t "TCPu,TCPu,TCPu" -i "${INSTALL_DIR}/cert/${CERT_NAME}.crt" -d "${FF_DATABASE}" >/dev/null 2>&1`
- 
-     
--    STATUS=$?
-+    STATUS=0
-     if [ ${STATUS} != 0 ]
-          then
-               rm -rf ${INSTALL_DIR}/cert/*
-@@ -362,7 +362,7 @@
-     #install certificate to Chrome
-     `certutil -A -n "${CERT_NAME}" -t "TCPu,TCPu,TCPu" -i "${INSTALL_DIR}/cert/${CERT_NAME}.crt" -d "sql:${CHROME_PROFILE_PATH}" >/dev/null 2>&1`
- 
--    STATUS=$?
-+    STATUS=0
-     if [ ${STATUS} != 0 ]
-          then
-               rm -rf ${INSTALL_DIR}/cert/*
-@@ -452,7 +452,7 @@
-     fi
- 
-     ln -s ${INSTALL_DIR}/cert/${CERT_NAME}.p12 /etc/ssl/certs/${CERT_NAME}.p12
--
-+    return 0
-     if [ "$(IsFirefoxInstalled)" = 1 ]
-     then 
- 		installFirefoxCerts
-@@ -560,7 +560,7 @@
- 	if [ ${res} != 0 ]
- 	then
- 		echo "Please add \"root\" and \"$USER_NAME\" to X11 access list"
--		exit 1
-+		#exit 1
- 	fi
- fi
- 
-@@ -572,7 +572,7 @@
- 	if [ ${res} != 0 ]
- 	then
- 		echo "Please add \"root\" and \"$USER_NAME\" to X11 access list"
--		exit 1
-+		#exit 1
- 	fi
- fi
- 
-@@ -652,7 +652,7 @@
- #check if xterm is installed
- xterm -h > /dev/null 2>&1
- 
--STATUS=$?
-+STATUS=0
- if [ ${STATUS} != 0 ]
-    then
-        echo "Please install xterm."
-@@ -723,7 +723,7 @@
- 
- #remove certificates. This will result in re-issuance of certificates
- cleanupCertificates
--if [ $? -ne 0 ]
-+if [ 0 -ne 0 ]
- then 
- 	show_error "Cannot delete certificates"
- 	exit 1
-@@ -12073,4 +12073,4 @@
- Jû¥º∫E 'Q˙ts≈qO™*™EZﬁÄ˝{%gr@ëﬂ8[ÉMºëqü`:ö®t¨ˆJgSñÏäLëaﬂ6ÖCq¶¥íyÂtj?º~ïZº_kÏ9;öÜŒ6∂ª2)¥{îÙy∫˝ºÉGçTÖè∏óˇF8Îe.d€ı–¨Ω&ã.Ä‘jPàcPH3π=]Ô %•®ô©˘◊'ó0fd∏∏jo˚ÖHÕª{É(È¸ïÑfé≥øÖ8$]Áπ>BDã	=Ú7^ú≠i»¯ˆ;Ü˘≤,ãÍ≠bTK≈2ÜπÁù£ÕKAjÍc¢±˝æ\3í>Oxâ…W|Ah
- ∞ı4ñ‰√á!ÎÔˇC'ﬂõ°ÏPëœÂå,˚3&ÅåÓ≠„Ø”ê…x¨î(Ωzñ4Ö”A»lÒïËﬂ7©˝Âá#}÷@`aEG≤p`2	bãXJ$´0q—Û˝0ñ,_}°†£èêy˜E¬©˜>j/n˘Æ◊à{›≤>@j  çk9ÓãÄ¢ÓÔtò∞"ÉıEΩ9c+∏k®5·^Ÿv'–s‡’˚‡@Óo5„tZzbáÀ ·—†⁄µı@1ø∆…’\ddàJMïLÒˇ ;fSf®}I)Œ]8˝T¶úZ9÷êF<‘ÄräÈπlW1–˝R•≈TMüø√ön&ÃÏrÌÜ]¥◊l|oí@÷ÕÀç¯Òl+£h-(oóWÆ≤W˚^›œÅáHò`œUÈä¡”;‡Q;Ì+c|∫cÛM≠±Bs•/ô–‡ZZYl≈zí4™,Ôk¸ØÅ˝d$Ä⁄˙DâXòä}ÍH… [$ÓË*⁄˝Ûb# ŒHX
- Ò√»g∏ÑπY”π„k®Äø”≈ﬁC16‚†≠á ≤BÁ”pëê©Ñ/ørª¬÷≈◊SRü7W1YRß !–ºÇ„Aê}{èÉéˆ~ùØ˙Ù˝rﬂÔ¢È{ú›ûk3gæË´úGÒÑî4ˇÙ+nM≤|√î«∏ø∂{/–ILTπ âŒr≠HQBr8)Dä•RN*âNù>©9 !ëNÙ∂é∆√Òìˇ'€«}<Ô-∞ˆ˛Õ∆j:ç∆ˇ‚ÓHß
-- ÚIj@
-\ No newline at end of file
-+ ÚIj@
