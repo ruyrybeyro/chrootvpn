@@ -1404,7 +1404,9 @@ chrootEnd()
       echo
       echo "afterwards open browser at https://${VPN} to login into VPN" >&2
       echo "If it does not work, launch ${SCRIPTNAME} in a terminal from the X11 console" >&2
-
+      echo
+      echo "doing first restart" >&2
+      doStart
    else
       # unsuccessful setup
       umountChrootFS
