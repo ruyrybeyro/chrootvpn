@@ -412,6 +412,7 @@ Split()
    if [[ -z "${SPLIT+x}" ]]
    then
       echo "If this does not work, please fill in SPLIT with a network/mask list eg x.x.x.x/x x.x.x.x/x" >&2
+      echo "either in ${CONFFILE} or in ${SCRIPT}"
       ip route delete 0.0.0.0/1
       echo "default VPN gateway deleted" >&2
    else 
