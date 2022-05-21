@@ -756,7 +756,15 @@ PreCheck2()
             echo "To install the chrooted Checkpoint client software, run:" >&2
             echo "./${SCRIPTNAME} -i" >&2
             echo "or" >&2
-            die  "./${SCRIPTNAME} -i --vpn FQDN"
+
+            # appropriate install command
+            # wether vpn.conf is present
+            if [[ -f "${CONFFILE}" ]]
+            then
+               die  "./${SCRIPTNAME} -i"
+            else
+               die  "./${SCRIPTNAME} -i --vpn FQDN"
+            fi
          fi
       fi
    fi
