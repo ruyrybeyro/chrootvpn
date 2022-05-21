@@ -20,11 +20,11 @@ ignored. vpn.conf is created upon first instalation.
 - first time, if filled VPN, VPNIP inside the script run it as 
 
 	
-	sudo ./vpn.sh -i
+	./vpn.sh -i
 
 Otherwise, run it as:
 
-        sudo ./vnp.sh -i --vpn=FQDN_DNS_name_of_VPN
+        ./vnp.sh -i --vpn=FQDN_DNS_name_of_VPN
 	
 
 - accept localhost certificate in brower if not Firefox

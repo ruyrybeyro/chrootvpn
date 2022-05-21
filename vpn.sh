@@ -12,7 +12,7 @@
 # if /opt/etc/vpn.conf is present the above script settings will be 
 # ignored. vpn.conf is created upon first instalation.
 #
-# first time run it as sudo ./vpn.sh -i
+# first time run it as ./vpn.sh -i
 # Accept localhost certificate visiting https://localhost:14186/id
 # Then open VPN URL to login/start the VPN
 #
@@ -740,7 +740,7 @@ PreCheck2()
 
       # for using/relaunching
       # call the script with sudo 
-      [ "${EUID}" -ne 0 ] && die "Please run as sudo ${SCRIPT}"
+      [ "${EUID}" -ne 0 ] && exec sudo "$0" "$@"
 
    else
       # if launcher not present something went wrong
@@ -755,14 +755,14 @@ PreCheck2()
             # does not abort if uninstall
             if [[ "$1" != "uninstall" ]]
             then
-               die "Something went wrong. Correct or to reinstall, run: ./${SCRIPTNAME} uninstall ; sudo ./${SCRIPTNAME} -i"
+               die "Something went wrong. Correct or to reinstall, run: ./${SCRIPTNAME} uninstall ; ./${SCRIPTNAME} -i"
             fi
 
          else
             echo "To install the chrooted Checkpoint client software, run:" >&2
-            echo "sudo ./${SCRIPTNAME} -i" >&2
+            echo "./${SCRIPTNAME} -i" >&2
             echo "or" >&2
-            die  "sudo ./${SCRIPTNAME} -i --vpn FQDN"
+            die  "./${SCRIPTNAME} -i --vpn FQDN"
          fi
       fi
    fi
@@ -802,7 +802,7 @@ preFlight()
    # for setting chroot up, call the script as root/sudo script
    if [[ "${EUID}" -ne 0 ]] || [[ ${install} -eq false ]]
    then
-      die "Please run as: sudo ./${SCRIPTNAME} --install [--chroot DIR]" 
+      exec sudo "$0" "$@"
    fi
 
    if  isCShellRunning 
