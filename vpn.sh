@@ -47,7 +47,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v0.995"
+VERSION="v0.994"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -649,6 +649,8 @@ doShell()
 # uninstall command
 doUninstall()
 {
+   local DIR
+
    # stop CShell
    doStop
 
@@ -659,16 +661,14 @@ doUninstall()
    userdel -rf "${CSHELL_USER}" &>/dev/null
    groupdel "${CSHELL_GROUP}"   &>/dev/null
 
-   # delete Firefox policy for accepting Firefox certificate
-   if grep CShell_Certificate /usr/lib/firefox/distribution/policies.json &> /dev/null
-   then
-      rm /usr/lib/firefox/distribution/policies.json
-   fi
-   # delete Firefox policy for accepting Firefox certificate
-   if grep CShell_Certificate /usr/lib64/firefox/distribution/policies.json &> /dev/null
-   then
-      rm /usr/lib64/firefox/distribution/policies.json
-   fi
+   for DIR in "/usr/lib/firefox" "/usr/lib64/firefox" "/usr/lib/firefox-esr" "/usr/lib64/firefox-esr"
+   do
+      # delete Firefox policy for accepting Firefox certificate
+      if grep CShell_Certificate "${DIR}/distribution/policies.json" &> /dev/null
+      then
+         rm "${DIR}/distribution/policies.json"
+      fi
+   done
 
    if [[ -f "${CONFFILE}" ]]
    then
@@ -1239,6 +1239,7 @@ chrootEnd()
 {
    local ROOTHOME
    local firefoxPath
+   local DIR
 
    # do the last leg of setup inside chroot
    doChroot /bin/bash --login -pf "/root/chroot_setup.sh"
@@ -1265,15 +1266,13 @@ chrootEnd()
       echo >&2
 
       # if Firefox installed
-      if [[ -d /usr/lib/firefox ]]
-      then
-         firefoxPath="/usr/lib/firefox"
-      fi
-      # if Firefox installed
-      if [[ -d /usr/lib64/firefox ]]
-      then
-         firefoxPath="/usr/lib64/firefox"
-      fi
+      for DIR in "/usr/lib/firefox" "/usr/lib64/firefox" "/usr/lib/firefox-esr" "/usr/lib64/firefox-esr"
+      do
+         if [[ -d "${DIR}" ]]
+         then
+            firefoxPath="${DIR}"
+         fi
+      done 
 
       # if Firefox installed
       if [[ -n ${firefoxPath} ]] 
