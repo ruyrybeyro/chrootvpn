@@ -324,7 +324,7 @@ doChroot()
 # C/Unix convention - 0 success, 1 failed
 isCShellRunning()
 {
-   pgrep -9 -f CShell &>/dev/null
+   pgrep -f CShell &>/dev/null
    return $?
 }
 
