@@ -1174,6 +1174,7 @@ buildFS()
    mkdir -p home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release
    touch home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release/cert9.db
    cat <<-'EOF23' > home/${CSHELL_USER}/.mozilla/firefox/installs.ini
+	Path=3ui8lv6m.default-release
 	Default=3ui8lv6m.default-release
 	EOF23
 
