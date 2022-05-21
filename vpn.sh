@@ -1295,7 +1295,9 @@ FirefoxPolicy()
    local DIR
    local PolInstalled
 
+   # flag as not installed
    PolInstalled=0
+
    # if Firefox installed
    for DIR in "/usr/lib/firefox" "/usr/lib64/firefox" "/usr/lib/firefox-esr" "/usr/lib64/firefox-esr"
    do
@@ -1304,7 +1306,7 @@ FirefoxPolicy()
          # if policies file not already installed
          if [[ ! -f ${DIR}/distribution/policies.json ]] || grep CShell_Certificate ${DIR}/distribution/policies.json &> /dev/null
          then
-            # flag market as installed
+            # flag as installed
             PolInstalled=1
 
             # aparently present in Debian, nevertheless
