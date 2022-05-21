@@ -1287,6 +1287,66 @@ createConfFile()
 }
 
 
+# install Firefox policy accepting
+# CShell localhost certificate
+# in the host machine
+FirefoxPolicy()
+{
+   local DIR
+   local PolInstalled
+
+   # flag as not installed
+   PolInstalled=0
+
+   # if Firefox installed
+   for DIR in "/usr/lib/firefox" "/usr/lib64/firefox" "/usr/lib/firefox-esr" "/usr/lib64/firefox-esr"
+   do
+      if [[ -d "${DIR}" ]]
+      then
+         # if policies file not already installed
+         if [[ ! -f ${DIR}/distribution/policies.json ]] || grep CShell_Certificate ${DIR}/distribution/policies.json &> /dev/null
+         then
+            # flag as installed
+            PolInstalled=1
+
+            # aparently present in Debian, nevertheless
+            mkdir -p ${DIR}/distribution 2> /dev/null
+
+            # create JSON policy file
+            # Accepting CShell certificate
+
+            cat <<-EOF14 > ${DIR}/distribution/policies.json
+	    {
+	    "policies": {
+	                  "ImportEnterpriseRoots": true,
+	                  "Certificates": {
+	                    "Install": [
+	                        "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt"
+	                    ]
+	                  }
+	               }
+	    }
+	EOF14
+
+         fi
+      fi
+   done
+
+   # if Firefox policy installed
+   if [[ $PolInstalled -eq 1 ]]
+   then
+      # if Firefox running
+      if pgrep firefox &>/dev/null
+      then
+         echo "Please restart Firefox" >&2
+      fi
+            
+      echo "Firefox policy created for accepting https://localhost certificate" >&2
+      echo "If using other browser than firefox" >&2
+   fi
+}
+
+
 # last leg inside chroot
 #
 # minimal house keeping and user messages
@@ -1294,8 +1354,6 @@ createConfFile()
 chrootEnd()
 {
    local ROOTHOME
-   local firefoxPath
-   local DIR
 
    # do the last leg of setup inside chroot
    doChroot /bin/bash --login -pf "/root/chroot_setup.sh"
@@ -1322,54 +1380,8 @@ chrootEnd()
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
       echo >&2
 
-      # if Firefox installed
-      for DIR in "/usr/lib/firefox" "/usr/lib64/firefox" "/usr/lib/firefox-esr" "/usr/lib64/firefox-esr"
-      do
-         if [[ -d "${DIR}" ]]
-         then
-            firefoxPath="${DIR}"
-         fi
-      done 
-
-      # if Firefox installed
-      if [[ -n ${firefoxPath} ]] 
-      then
-
-         # if policies file not already installed
-         if [[ ! -f ${firefoxPath}/distribution/policies.json ]] || grep CShell_Certificate ${firefoxPath}/distribution/policies.json &> /dev/null
-         then
-
-            # aparently present in Debian, nevertheless
-            mkdir -p ${firefoxPath}/distribution 2> /dev/null
-
-            # create policy file
-            # Accepting CShell certificate
-
-            cat <<-EOF14 > ${firefoxPath}/distribution/policies.json
-	{
-	    "policies": {
-	        "ImportEnterpriseRoots": true,
-	        "Certificates": {
-	            "Install": [
-	                "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt"
-	            ]
-	       }
-	    }
-	}
-	EOF14
-
-            # if Firefox running         
-            if pgrep firefox &>/dev/null
-            then
-               Please restart Firefox
-            fi
-
-            echo "Firefox policy created for accepting https://localhost certificate"
-            echo "If using other browser than firefox"
-
-         fi         
-
-      fi
+      # install Policy for CShell localhost certificate
+      FirefoxPolicy
 
       # if localhost generated certificate not accepted, VPN auth will fail
       # and will ask to "install" software upon failure
