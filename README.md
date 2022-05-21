@@ -123,6 +123,8 @@ Ubuntu LTS 22.04
 
 Mint   20.2
 
+antiX-21
+
 Fedora 8
 
 CentOS 8

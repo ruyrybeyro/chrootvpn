@@ -36,6 +36,7 @@
 #        Ubuntu LTS 18.04 
 #        Ubuntu LTS 22.04 
 #        Mint   20.2
+#        antiX-21
 #        Fedora 8 
 #        Rocky  8.6
 #        CentOS 8 Stream
