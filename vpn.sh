@@ -42,7 +42,8 @@
 #        Rocky  8.6
 #        CentOS 8 Stream
 #        CentOS 9 Stream
-#        AlmaLinux release 9.0
+#        AlmaLinux 9.0
+#        Oracle Linux 8.6
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
