@@ -1292,7 +1292,7 @@ chrootEnd()
 	EOF14
 
             # if Firefox running         
-            if pgrep firefox
+            if pgrep firefox &>/dev/null
             then
                Please restart Firefox
             fi
