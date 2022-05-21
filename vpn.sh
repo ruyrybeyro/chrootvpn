@@ -37,7 +37,8 @@
 #        Ubuntu LTS 22.04 
 #        Mint   20.2
 #        antiX-21
-#        Fedora 8 
+#        Fedora 23 
+#        Fedora 36
 #        Rocky  8.6
 #        CentOS 8 Stream
 #        CentOS 9 Stream
@@ -903,7 +904,12 @@ installPackages()
          yum -y install epel-release || needCentOSFix
       fi
 
-      yum -y install debootstrap ca-certificates xorg-x11-server-utils jq wget 
+      yum -y install debootstrap ca-certificates jq wget 
+      if [[ ! -f "/usr/bin/xhost" ]]
+      then
+         yum -y xorg-x11-server-utils
+         yum -y xhost
+      fi
       yum clean all 
    fi
 }

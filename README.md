@@ -125,7 +125,9 @@ Mint   20.2
 
 antiX-21
 
-Fedora 8
+Fedora 23
+
+Fedora 36
 
 CentOS 8
 
