@@ -238,10 +238,10 @@ doGetOpts()
    do
 
       # long option: reformulate OPT and OPTARG
-      if [ ${OPT} = "-" ] 
+      if [ "${OPT}" = "-" ] 
       then   
          OPT=${OPTARG%%=*}       # extract long option name
-         OPTARG=${OPTARG#$OPT}   # extract long option argument (may be empty)
+         OPTARG=${OPTARG#"$OPT"}   # extract long option argument (may be empty)
          OPTARG=${OPTARG#=}      # if long option argument, remove assigning `=`
       fi
 
@@ -311,7 +311,7 @@ PreCheck()
 
    # for using/relaunching
    # call the script with sudo
-   [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "$args" 
+   [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
 }
 
 # wrapper for chroot
@@ -324,20 +324,9 @@ doChroot()
 # C/Unix convention - 0 success, 1 failed
 isCShellRunning()
 {
-   local n
+   pgrep CShell
 
-   # n = number of CShell process(es) - usually 1
-   n=$(ps ax | grep CShell | grep -cv grep)
-
-   # if zero processes
-   if [[ $n -eq 0 ]]
-   then
-      # return false
-      return 1
-   else
-      # return true
-      return 0
-   fi
+   return $?
 }
 
 # mount Chroot filesystems
@@ -369,10 +358,8 @@ mountChrootFS()
 umountChrootFS()
 {
    # unmount chroot filesystems
-   mount | grep "${CHROOT}" &> /dev/null
-
    # if mounted
-   if [ $? -eq 0 ]
+   if mount | grep "${CHROOT}" &> /dev/null
    then
 
       # there is no --fstab for umount
@@ -441,7 +428,7 @@ showStatus()
    echo -n "System: "
    awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } ' /etc/os-release
    #uname -m
-   echo -n $(arch)" "
+   echo -n "$(arch) "
    uname -r
    echo -n "Chroot: "
 
@@ -528,7 +515,7 @@ killCShell()
    then
 
       # kill all java CShell agents (1)
-      kill -9 $(ps ax | grep CShell | grep -v grep | awk ' { print $1 } ')
+      kill -9 "$(pgrep CShell)"
 
       if ! isCShellRunning
       then
@@ -716,8 +703,6 @@ selfUpdate()
 
         if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
-           # sed can use any char as separator for avoiding rule clashes
-           sed -i "s/VPN=\"\"/VPN=\""${VPN}"\"/;s/VPNIP=\"\"/VPNIP=\""${VPNIP}"\"/;s@SPLIT=\"\"@SPLIT=\"${SPLIT}\"@" "${vpnsh}"
 
            [ "${INSTALLSCRIPT}" != "${SCRIPT}"  ] && cp -f "${vpnsh}" "${SCRIPT}"
 
@@ -804,7 +789,7 @@ preFlight()
    # for setting chroot up, call the script as root/sudo script
    if [[ "${EUID}" -ne 0 ]] || [[ ${install} -eq false ]]
    then
-      exec sudo "$0" "$args"
+      exec sudo "$0" "${args[@]}"
    fi
 
    if  isCShellRunning 
@@ -889,7 +874,7 @@ fixRHDNS()
       while ! systemctl is-active systemd-resolved &> /dev/null
       do
          sleep 2
-         let counter=counter+1
+         (( counter=counter+1 ))
          [[ $counter -eq 30 ]] && die "systemd-resolved not going live"
       done
 
@@ -916,7 +901,7 @@ fixRHDNS()
       while ! systemctl is-active NetworkManager &> /dev/null
       do 
          sleep 4
-         let counter=counter+1
+         (( counter=counter+1 ))
          [[ $counter -eq 20 ]] && die "NetworkManager not going live"
       done
    fi
@@ -944,8 +929,7 @@ createChroot()
 
    mkdir -p "${CHROOT}" || die "could not create directory ${CHROOT}"
 
-   debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
-   if [ $? -ne 0 ] || [ ! -d "${CHROOT}" ]
+   if ! debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
       die "run sudo rm -rf ${CHROOT} and do it again" 
@@ -1347,7 +1331,7 @@ InstallChroot()
 main()
 {
    # command options handling
-   doGetOpts $*
+   doGetOpts "$*"
 
    # clean all the getopts logic from the arguments
    # leaving only commands
@@ -1369,6 +1353,6 @@ main()
 }
 
 # main stub will full arguments passing
-main $*
+main "$*"
 
  
