@@ -52,6 +52,10 @@ VERSION="v0.996"
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
 
+# default configuration file
+# created first time upon successful setup/run
+# so vpn.sh can be successfuly replaced by new versions
+# or reinstalled from scratch
 CONFFILE="/opt/etc/vpn.conf"
 
 [ -f "${CONFFILE}" ] && . "${CONFFILE}"
@@ -90,7 +94,7 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 # URL for testing if split or full VPN
 URL_VPN_TEST="https://www.debian.org"
 
-# CShell writes in the display
+# CShell writes on the X11 display
 [ -z "${DISPLAY}" ] && export DISPLAY=":0.0"
 
 # dont bother with locales
@@ -102,7 +106,7 @@ SCRIPT=$(realpath "${BASH_SOURCE[0]}")
 # script name
 SCRIPTNAME=$(basename "${SCRIPT}")
 
-#  preserve the $@ into a BASH array
+#  preserve program passed arguments $@ into a BASH array
 args=("$@")
 
 # VPN interface
@@ -189,11 +193,6 @@ do_help()
    exit 0
 }
 
-# DNS lookup: getent is installed by default
-vpnlookup() 
-{ 
-   VPNIP=$(getent ahostsv4 "${VPN}" | awk 'NR==1 { print $1 } ' ) 
-}
 
 # complain to STDERR and exit with error
 die() 
@@ -204,11 +203,21 @@ die()
    exit 2 
 }  
 
+
+# DNS lookup: getent is installed by default
+vpnlookup()
+{
+   VPNIP=$(getent ahostsv4 "${VPN}" | awk 'NR==1 { print $1 } ' )
+   [[ -z ${VPNIP} ]] && die "could not resolve ${VPN} DNS name"
+}
+
+
 # optional arguments handling
 needs_arg() 
 { 
    [ -z "${OPTARG}" ] && die "No arg for --$OPT option"
 }
+
 
 # silence
 doOutput()
@@ -226,6 +235,7 @@ doOutput()
    # Redirect standard error to standard output
    exec 2>&1
 }
+
 
 # arguments - script getopts options handling
 doGetOpts()
@@ -269,6 +279,7 @@ doGetOpts()
 
    done
 }
+
 
 # minimal requirements check
 PreCheck()
@@ -314,6 +325,7 @@ PreCheck()
    [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
 }
 
+
 # wrapper for chroot
 doChroot()
 {
@@ -321,12 +333,14 @@ doChroot()
    setarch i386 chroot "${CHROOT}" "$@"
 }
 
+
 # C/Unix convention - 0 success, 1 failed
 isCShellRunning()
 {
    pgrep -f CShell &>/dev/null
    return $?
 }
+
 
 # mount Chroot filesystems
 mountChrootFS()
@@ -352,6 +366,7 @@ mountChrootFS()
 
    fi
 }
+
 
 # umount chroot fs
 umountChrootFS()
@@ -379,6 +394,7 @@ umountChrootFS()
    fi
 }
 
+
 #
 # Client wrapper section
 #
@@ -401,13 +417,14 @@ Split()
       # clean all VPN routes
       ip route flush table main dev "${TUNSNX}"
 
-      # create a new VPN routes according to $SPLIT
+      # create new VPN routes according to $SPLIT
       for i in ${SPLIT}
       do
          ip route add "$i" dev "${TUNSNX}" src "${IP}"
       done
    fi
 }
+
 
 # status command
 showStatus()
@@ -507,6 +524,7 @@ showStatus()
     [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VER}"
 }
 
+
 # kill Java daemon agent
 killCShell()
 {
@@ -527,6 +545,7 @@ killCShell()
    fi
 }
 
+
 # start command
 doStart()
 {
@@ -545,11 +564,15 @@ doStart()
    # fixes potential resolv.conf/DNS issues inside chroot. 
    # Checkpoint software seems not mess up with it.
    # Unless a security update inside chroot damages it
+
+   # Debian family - resolvconf
    if [[ ${DEB} -eq 1 ]]
    then
       rm -f "${CHROOT}/etc/resolv.conf"
       ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
    fi
+
+   # RH family - systemd-resolved
    if [[ ${RH} -eq 1 ]]
    then
       rm -f "${CHROOT}/etc/resolv.conf"
@@ -588,9 +611,10 @@ doStart()
    fi
 }
 
+
 fixDNS2()
 {
-   # restore resolv.conf
+   # try to restore resolv.conf
    if [[ ${DEB} -eq 1 ]]
    then
       resolvconf -u
@@ -601,6 +625,7 @@ fixDNS2()
    fi
 }
 
+
 # disconnect SNX/VPN session
 doDisconnect()
 {
@@ -609,6 +634,7 @@ doDisconnect()
 
    fixDNS2
 }
+
 
 # stop command
 doStop()
@@ -623,6 +649,7 @@ doStop()
    umountChrootFS
 }
 
+
 # chroot shell command
 doShell()
 {
@@ -630,6 +657,8 @@ doShell()
    # otherwise shell wont work well
    mountChrootFS
 
+   # open an interactive root command line shell 
+   # inside the chrooted environment
    doChroot /bin/bash --login -pf
 
    # dont need mounted filesystem with CShell agent down
@@ -638,6 +667,7 @@ doShell()
       umountChrootFS
    fi
 }
+
 
 # uninstall command
 doUninstall()
@@ -656,7 +686,7 @@ doUninstall()
 
    for DIR in "/usr/lib/firefox" "/usr/lib64/firefox" "/usr/lib/firefox-esr" "/usr/lib64/firefox-esr"
    do
-      # delete Firefox policy for accepting Firefox certificate
+      # delete Firefox policy for accepting localhost CShell certificate
       if grep CShell_Certificate "${DIR}/distribution/policies.json" &> /dev/null
       then
          rm -f "${DIR}/distribution/policies.json"
@@ -672,6 +702,7 @@ doUninstall()
    echo "chroot+checkpoint software deleted" >&2
 }
 
+
 # upgrade OS inside chroot
 Upgrade() {
    doChroot /bin/bash --login -pf <<-EOF12
@@ -682,7 +713,8 @@ Upgrade() {
 	EOF12
 }
 
-# self update
+
+# self update this script
 selfUpdate() 
 {
     # temporary file for downloading new vpn.sh    
@@ -703,15 +735,18 @@ selfUpdate()
         if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
 
+           # if script not run for /usr/local/bin, also update it
            [ "${INSTALLSCRIPT}" != "${SCRIPT}"  ] && cp -f "${vpnsh}" "${SCRIPT}"
 
+           # update the onne in /usr/local/bin
            cp -f "${vpnsh}" "${INSTALLSCRIPT}"
 
            chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
            
+           # remove temporary file
            rm -f "${vpnsh}"
 
-           echo "scripts updated to version ${VER}"
+           echo "script(s) updated to version ${VER}"
            exit 0
         else
            die "could not fetch new version"
@@ -722,7 +757,8 @@ selfUpdate()
     fi
 }
 
-# check if chroot use is sane
+
+# check if chroot usage is sane
 PreCheck2()
 {
    # if setup successfully finished, launcher has to be there
@@ -761,6 +797,7 @@ PreCheck2()
       fi
    fi
 }
+
       
 # arguments - command handling
 argCommands()
@@ -793,7 +830,7 @@ argCommands()
 # minimal checks before install
 preFlight()
 {
-   # for setting chroot up, call the script as root/sudo script
+   # if not sudo/root, call the script as root/sudo script
    if [[ "${EUID}" -ne 0 ]] || [[ ${install} -eq false ]]
    then
       exec sudo "$0" "${args[@]}"
@@ -813,18 +850,22 @@ preFlight()
    fi
 }
 
-# CentOS change to upstream
+
+# CentOS 8 changed to upstream
+# make necessary changes to stock image
 needCentOSFix()
 {
    if grep "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
    then
       sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+       # we came here because we failed to install epel-release, so trying again
        yum -y install epel-release || die "could not install epel-release"
    else
       die "could not do yum. Fix it"
    fi
 }
+
 
 # system update and package requirements
 installPackages()
@@ -857,7 +898,8 @@ installPackages()
    fi
 }
 
-# fix DNS CentOS 8
+
+# fix DNS RH family if systemd-resolved not active
 fixRHDNS()
 {
    local counter
@@ -865,7 +907,7 @@ fixRHDNS()
    if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
    then
 
-      # CentOS 9 does not install it by default
+      # CentOS 9 does not install systemd-resolved by default
       if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
       then	    
          yum -y install systemd-resolved 
@@ -914,10 +956,13 @@ fixRHDNS()
    fi
 }
 
+
 # "bug/feature": check DNS health
 checkDNS()
 {
+   # ask once for slow systems to fail/cache it
    getent ahostsv4 "${VPN}"  &> /dev/null
+   # test it now
    if ! getent ahostsv4 "${VPN}" &> /dev/null
    then
       echo "DNS problems after installing resolvconf?" >&2
@@ -926,6 +971,7 @@ checkDNS()
       die "Otherwise fix or reboot to fix" 
    fi	   
 }
+
 
 # creating the Debian minbase chroot
 createChroot()
@@ -942,6 +988,7 @@ createChroot()
       die "run sudo rm -rf ${CHROOT} and do it again" 
    fi
 }
+
 
 # create user for running CShell
 # to avoid running server as root
@@ -973,6 +1020,7 @@ createCshellUser()
    chown -R ${CSHELL_USER}:${CSHELL_GROUP} "${CSHELL_HOME}"
    chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
 }
+
 
 # build required chroot file system structure + scripts
 buildFS()
@@ -1082,7 +1130,7 @@ buildFS()
 	# clean APT chroot cache
 	apt clean
 	
-	# install SNX
+	# install SNX and CShell
 	/root/snx_install.sh
 	echo "Installing CShell" >&2
 	DISPLAY=${DISPLAY} PATH=/nopatch:$PATH /root/cshell_install.sh 
@@ -1090,7 +1138,12 @@ buildFS()
 	exit 0
 	EOF9
 
-        mkdir nopatch
+        # directory with stub commands for cshell_install.sh
+	mkdir nopatch
+
+        # fake certutil
+        # -H returns 1 (test installed)
+        # otherwise 0
    	cat <<-'EOF22' > nopatch/certutil
 	#!/bin/bash
 	if [[ "$1" == "-H" ]]
@@ -1103,10 +1156,12 @@ buildFS()
 
    # fake xterm and xhost 
    # since they are not needed inside chroot
+   # both return 0
    ln -s ../sbin/modprobe nopatch/xhost
    ln -s ../sbin/modprobe nopatch/xterm
 
-   # fake Mozilla/Firefox profile
+   # fake barebones Mozilla/Firefox profile
+   # just enough to make cshell_install.sh happy
    mkdir -p home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release
    touch home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release/cert9.db
    cat <<-'EOF23' > home/${CSHELL_USER}/.mozilla/firefox/installs.ini
@@ -1115,6 +1170,7 @@ buildFS()
 
    chmod a+rx usr/bin/who sbin/modprobe root/chroot_setup.sh root/snx_install.sh root/cshell_install.sh nopatch/certutil
 }
+
 
 # create chroot fstab for sharing kernel 
 # internals and directories/files with the host
@@ -1137,7 +1193,8 @@ FstabMount()
    mountChrootFS
 }
 
-# change DNS for resolvconf /run file
+
+# change DNS for resolvconf/systemd-resolved /run file
 # for sharing DNS resolver configuration between chroot and host
 fixDNS()
 {
@@ -1146,11 +1203,13 @@ fixDNS()
    rm -f etc/resolv.conf
    cd etc || die "could not enter ${CHROOT}/etc"
 
+   # Debian - resolvconf
    if [[ ${DEB} -eq 1 ]]
    then
       ln -s ../run/resolvconf/resolv.conf resolv.conf
    fi
 
+   # RH - systemd-resolved
    if [[ ${RH} -eq 1 ]]
    then
       ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
@@ -1159,7 +1218,8 @@ fixDNS()
    cd ..
 }
 
-# try to create GNOME autorunn file similar to CShell
+
+# try to create GNOME autorun file similar to CShell
 # but for all users instead of one user private profile
 # on the host system
 GnomeAutoRun()
@@ -1194,7 +1254,8 @@ GnomeAutoRun()
       echo "%sudo	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
       echo "#or: " >&2
       echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
-     
+    
+      # if sudo, SUDO_USER identifies the non-privileged user 
       if [[ -n "${SUDO_USER}" ]]
       then
          echo "#or: " >&2
@@ -1209,17 +1270,22 @@ GnomeAutoRun()
    fi
 }
 
+
 # create /opt/etc/vpn.conf
-# upon service is running first time
+# upon service is running first time successfully
 createConfFile()
 {
+    # create /opt/etc if not there
     mkdir -p "$(dirname ${CONFFILE})" 2> /dev/null
+
+    # save VPN, VPNIP
     cat <<-EOF13 > "${CONFFILE}"
 	VPN="${VPN}"
 	VPNIP="${VPNIP}"
 	SPLIT="${SPLIT}"
 	EOF13
 }
+
 
 # last leg inside chroot
 #
@@ -1234,11 +1300,12 @@ chrootEnd()
    # do the last leg of setup inside chroot
    doChroot /bin/bash --login -pf "/root/chroot_setup.sh"
 
+   # if sucessful installation
    if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
       # delete temporary setup scripts from chroot's root home
       ROOTHOME="${CHROOT}/root"
-      rm -f "${ROOTHOME}/chroot_setup.sh" "${ROOTHOME}/cshell_install.sh" "${ROOTHOME}/snx_install.sh"
+      rm -f "${ROOTHOME}/chroot_setup.sh" "${ROOTHOME}/cshell_install.sh" "${ROOTHOME}/snx_install.sh" "${ROOTHOME}/nopatch"
 
       # copy this script to /usr/local/bin
       cp "${SCRIPT}" "${INSTALLSCRIPT}"
@@ -1312,12 +1379,14 @@ chrootEnd()
       echo "If it does not work, launch ${SCRIPTNAME} in a terminal from the X11 console" >&2
 
    else
+      # unsuccessful setup
       umountChrootFS
 
       die "Something went wrong. Chroot unmounted. Fix it or delete $CHROOT and run this script again" 
 
    fi
 }
+
 
 # main chroot install routine
 InstallChroot()
@@ -1333,6 +1402,7 @@ InstallChroot()
    fixDNS
    chrootEnd
 }
+
 
 # main ()
 main()
@@ -1359,6 +1429,7 @@ main()
 
    exit 0
 }
+
 
 # main stub will full arguments passing
 main $*
