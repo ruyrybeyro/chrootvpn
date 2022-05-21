@@ -667,7 +667,7 @@ doUninstall()
       # delete Firefox policy for accepting Firefox certificate
       if grep CShell_Certificate "${DIR}/distribution/policies.json" &> /dev/null
       then
-         rm "${DIR}/distribution/policies.json"
+         rm -f "${DIR}/distribution/policies.json"
       fi
    done
 
@@ -905,7 +905,7 @@ fixRHDNS()
 
       # replace /etc/resolv.conf for a resolved link 
       cd /etc || die "was not able to cd /etc"
-      rm /etc/resolv.conf
+      rm -f /etc/resolv.conf
       ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
 
       # reload NeworkManager
