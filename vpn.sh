@@ -1338,7 +1338,8 @@ InstallChroot()
 main()
 {
    # command options handling
-   doGetOpts "$*"
+   # dont put inside ""
+   doGetOpts $*
 
    # clean all the getopts logic from the arguments
    # leaving only commands
@@ -1360,6 +1361,6 @@ main()
 }
 
 # main stub will full arguments passing
-main "$*"
+main $*
 
  
