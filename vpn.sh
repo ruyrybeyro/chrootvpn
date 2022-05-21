@@ -52,6 +52,10 @@ VERSION="v0.996"
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
 
+# default configuration file
+# created first time upon successful setup/run
+# so vpn.sh can be successfuly replaced by new versions
+# or reinstalled from scratch
 CONFFILE="/opt/etc/vpn.conf"
 
 [ -f "${CONFFILE}" ] && . "${CONFFILE}"
