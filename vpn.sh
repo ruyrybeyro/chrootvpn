@@ -79,6 +79,10 @@ CONFFILE="/opt/etc/vpn.conf"
 # otherwise /opt/etc/vpn.conf overrides it
 [ -z "$SPLIT" ] && SPLIT=""
 
+# we test / and sslvnp SSL VPN portal PATHs.
+# Change here for a custom PATH
+[ -z "$SSLVPN" ] && SSLVPN="sslvpn"
+
 # OS to deploy inside 32-bit chroot  
 VARIANT="minbase"
 RELEASE="bullseye" # Debian 11
@@ -125,10 +129,6 @@ CSHELL_GROUP=${CSHELL_USER}
 CSHELL_GID=9000
 CSHELL_HOME="/home/${CSHELL_USER}"
 
-# we test / and sslvnp SSL VPN portal PATHs. 
-# Change here for a custom PATH
-SSLVPN="sslvpn"
-
 # "booleans"
 true=0
 false=1
@@ -162,6 +162,8 @@ do_help()
 	-v|--version script version
 	--vpn        select another VPN DNS full name
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
+	--portalurl  custom VPN portal URL prefix (usually sslvpn) ;
+                     use it as --portalurl=STRING together with --install
 	-o|--output  redirect ALL output for FILE
 	-s|--silent  special case of output, no arguments
 	
@@ -264,6 +266,8 @@ doGetOpts()
                            vpnlookup ;;
          proxy )           needs_arg                 # APT proxy inside chroot
                            CHROOTPROXY="${OPTARG}" ;;
+         portalurl )       needs_arg                 # VPN portal URL prefix
+                           SSLVPN="${OPTARG}" ;;
          v | version )     echo "${VERSION}"         # script version
                            exit 0 ;;
          osver)            awk -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2 } ' /etc/os-release
@@ -697,6 +701,10 @@ doUninstall()
    then
       echo "${CONFFILE} not deleted. If you are not reinstalling do:"
       echo "sudo rm -f ${CONFFILE}"
+      echo
+      echo "cat ${CONFFILE}"
+      cat ${CONFFILE}
+      echo
    fi
 
    echo "chroot+checkpoint software deleted" >&2
@@ -1284,6 +1292,12 @@ createConfFile()
 	VPNIP="${VPNIP}"
 	SPLIT="${SPLIT}"
 	EOF13
+
+    # if not default, save it
+    if [[ SSLVPN != "sslvpn" ]]
+    then
+       echo "SSLVPN=${SSLVPN}" >> "${CONFFILE}"
+    fi
 }
 
 
