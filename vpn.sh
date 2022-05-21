@@ -102,6 +102,9 @@ SCRIPT=$(realpath "${BASH_SOURCE[0]}")
 # script name
 SCRIPTNAME=$(basename "${SCRIPT}")
 
+#  preserve the $@ into a BASH array
+args=("$@")
+
 # VPN interface
 TUNSNX="tunsnx"
 
@@ -305,6 +308,10 @@ PreCheck()
    then
       [[ "$1" == "uninstall" ]] || die "Please fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
+
+   # for using/relaunching
+   # call the script with sudo
+   [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "$args" 
 }
 
 # wrapper for chroot
@@ -735,14 +742,9 @@ selfUpdate()
 PreCheck2()
 {
    # if setup successfully finished, launcher has to be there
-   if [[ -f "${CHROOT}/usr/bin/cshell/launcher" ]]
+   if [[ ! -f "${CHROOT}/usr/bin/cshell/launcher" ]]
    then
 
-      # for using/relaunching
-      # call the script with sudo 
-      [ "${EUID}" -ne 0 ] && exec sudo "$0" "$@"
-
-   else
       # if launcher not present something went wrong
 
       # alway allow selfupdate
@@ -802,7 +804,7 @@ preFlight()
    # for setting chroot up, call the script as root/sudo script
    if [[ "${EUID}" -ne 0 ]] || [[ ${install} -eq false ]]
    then
-      exec sudo "$0" "$@"
+      exec sudo "$0" "$args"
    fi
 
    if  isCShellRunning 
