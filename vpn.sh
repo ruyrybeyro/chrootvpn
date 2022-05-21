@@ -1341,7 +1341,7 @@ FirefoxPolicy()
          echo "Please restart Firefox" >&2
       fi
             
-      echo "Firefox policy created for accepting https://localhost certificate" >&2
+      echo "Firefox policy created for accepting https://localhost:14186 certificate" >&2
       echo "If using other browser than firefox" >&2
    fi
 }
