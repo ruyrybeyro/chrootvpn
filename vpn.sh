@@ -324,8 +324,15 @@ doChroot()
 # C/Unix convention - 0 success, 1 failed
 isCShellRunning()
 {
-   pgrep CShell
-
+   # if zero processes
+   if [[ $(ps ax | grep CShell | grep -cv grep) -eq 0 ]]
+   then
+      # return false
+      return 1
+   else
+      # return true
+      return 0
+   fi
    return $?
 }
 
@@ -515,7 +522,7 @@ killCShell()
    then
 
       # kill all java CShell agents (1)
-      kill -9 "$(pgrep CShell)"
+      kill -9 $(ps ax | grep CShell | grep -v grep | awk ' { print $1 } ')
 
       if ! isCShellRunning
       then
