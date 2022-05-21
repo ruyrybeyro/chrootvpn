@@ -42,6 +42,7 @@
 #        Rocky  8.6
 #        CentOS 8 Stream
 #        CentOS 9 Stream
+#        AlmaLinux release 9.0
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
@@ -223,7 +224,7 @@ needs_arg()
 }
 
 
-# silence
+# Redirect Output
 doOutput()
 {
    LOG_FILE="$1"
@@ -323,7 +324,7 @@ PreCheck()
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
-      [[ "$1" == "uninstall" ]] || die "Please fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
+      [[ "$1" == "uninstall" ]] || die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
 
    # for using/relaunching
