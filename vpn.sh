@@ -899,7 +899,7 @@ installPackages()
 }
 
 
-# fix DNS RH family if system-resolved not active
+# fix DNS RH family if systemd-resolved not active
 fixRHDNS()
 {
    local counter
