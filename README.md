@@ -134,3 +134,5 @@ CentOS 8
 CentOS 9 stream
 
 Rocky 8.6
+
+AlmaLinux 9.0
