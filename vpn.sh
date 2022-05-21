@@ -522,7 +522,7 @@ killCShell()
    then
 
       # kill all java CShell agents (1)
-      kill -9 $(ps ax | grep CShell | grep -v grep | awk ' { print $1 } ')
+      kill -9 "$(ps ax | grep CShell | grep -v grep | awk ' { print $1 } ')"
 
       if ! isCShellRunning
       then
