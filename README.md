@@ -35,8 +35,6 @@ Otherwise, run it as:
 
 It will get Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the firewall, and install them.
 
-CShell installation script patch included at the end of file.
-
 non-chroot version not written intencionally.
 SNX/CShell behave on odd ways ; the chroot is built to counter some of those behaviours
 

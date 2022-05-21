@@ -1091,9 +1091,7 @@ buildFS()
 	
 	# install SNX
 	/root/snx_install.sh
-	# install CShell - wont hide xhost errors
-	# as it can hide a cshell_install patch failure
-	echo "Installing CShell - ignore xhost errors" >&2
+	echo "Installing CShell" >&2
 	DISPLAY=${DISPLAY} PATH=/nopatch:$PATH /root/cshell_install.sh 
 	
 	exit 0
