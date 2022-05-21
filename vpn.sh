@@ -1177,6 +1177,15 @@ buildFS()
 	Default=3ui8lv6m.default-release
 	EOF23
 
+   # creates a subshell
+   # to avoid possible pwd complications
+   # in the case of an error
+   ( 
+   # add profiles.ini to keep variations of cshell_install.sh happy
+   cd home/${CSHELL_USER}/.mozilla/firefox/
+   ln -s installs.ini profiles.ini
+   )
+
    chmod a+rx usr/bin/who sbin/modprobe root/chroot_setup.sh root/snx_install.sh root/cshell_install.sh nopatch/certutil
 }
 
