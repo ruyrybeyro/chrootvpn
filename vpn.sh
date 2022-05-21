@@ -47,7 +47,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v0.994"
+VERSION="v0.995"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -1117,7 +1117,6 @@ buildFS()
    mkdir -p home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release
    touch home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release/cert9.db
    cat <<-'EOF23' > home/${CSHELL_USER}/.mozilla/firefox/installs.ini
-	[4F96D1932A9F858E]
 	Default=3ui8lv6m.default-release
 	EOF23
 
