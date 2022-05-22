@@ -37,6 +37,7 @@
 #        Ubuntu LTS 22.04 
 #        Mint   20.2
 #        antiX-21
+#        Pop!_OS 22.04 LTS
 #        Fedora 23 
 #        Fedora 36
 #        Rocky  8.6
