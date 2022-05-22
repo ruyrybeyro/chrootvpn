@@ -876,9 +876,11 @@ needCentOSFix()
        # we came here because we failed to install epel-release, so trying again
        dnf -y install epel-release || die "could not install epel-release"
    else
-      # Fix for CentOS 9 early rolling release (e.g. oxboxes VM)
-      dnf -y update
-      dnf -y install epel-release || die "could not install epel-release. Fix it"
+      if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
+      then
+         dnf install centos-stream-repos
+         dnf -y install epel-release || die "could not install epel-release. Fix it"
+      fi
    fi
 }
 
@@ -901,8 +903,7 @@ installPackages()
 
    if [[ ${RH} -eq 1 ]]
    then
-      # yum -y update
-      dnf makecache
+      #dnf makecache
      
       # epel-release not needed for Fedora
       if grep -v ^Fedora /etc/redhat-release &> /dev/null
