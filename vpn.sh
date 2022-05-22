@@ -900,7 +900,7 @@ installPackages()
    if [[ ${RH} -eq 1 ]]
    then
       # yum -y update
-      dnf check-update
+      dnf makecache
      
       # epel-release not needed for Fedora
       if grep -v ^Fedora /etc/redhat-release &> /dev/null
