@@ -880,6 +880,8 @@ needCentOSFix()
       then
          dnf install centos-stream-repos
          dnf -y install epel-release || die "could not install epel-release. Fix it"
+      else
+         die "could not install epel-release"
       fi
    fi
 }
