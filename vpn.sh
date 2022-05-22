@@ -876,6 +876,7 @@ needCentOSFix()
        # we came here because we failed to install epel-release, so trying again
        dnf -y install epel-release || die "could not install epel-release"
    else
+      # Fix for CentOS 9 early rolling release (e.g. oxboxes VM)
       dnf -y update
       dnf -y install epel-release || die "could not install epel-release. Fix it"
    fi
