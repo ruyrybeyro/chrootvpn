@@ -52,7 +52,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v0.998"
+VERSION="v0.999"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -874,9 +874,9 @@ needCentOSFix()
       sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
        # we came here because we failed to install epel-release, so trying again
-       yum -y install epel-release || die "could not install epel-release"
+       dnf -y install epel-release || die "could not install epel-release"
    else
-      die "could not do yum. Fix it"
+      die "could not do yum/dnf. Fix it"
    fi
 }
 
@@ -900,20 +900,21 @@ installPackages()
    if [[ ${RH} -eq 1 ]]
    then
       # yum -y update
-
+      dnf check-update
+     
       # epel-release not needed for Fedora
       if grep -v ^Fedora /etc/redhat-release &> /dev/null
       then
-         yum -y install epel-release || needCentOSFix
+         dnf -y install epel-release || needCentOSFix
       fi
 
-      yum -y install debootstrap ca-certificates jq wget 
+      dnf -y install debootstrap ca-certificates jq wget 
       if [[ ! -f "/usr/bin/xhost" ]]
       then
-         yum -y xorg-x11-server-utils
-         yum -y xhost
+         dnf -y xorg-x11-server-utils
+         dnf -y xhost
       fi
-      yum clean all 
+      dnf clean all 
    fi
 }
 
@@ -929,7 +930,7 @@ fixRHDNS()
       # CentOS 9 does not install systemd-resolved by default
       if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
       then	    
-         yum -y install systemd-resolved 
+         dnf -y install systemd-resolved 
       fi
 
       # start it and configure it to be active on boot 
