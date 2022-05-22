@@ -878,7 +878,7 @@ needCentOSFix()
    else
       if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
       then
-         dnf install centos-stream-repos
+         dnf -y install centos-stream-repos
          dnf -y install epel-release || die "could not install epel-release. Fix it"
       else
          die "could not install epel-release"
