@@ -879,7 +879,9 @@ needCentOSFix()
       # fix for older CentOS9 VMs (osboxes)
       if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
       then
+         # update repositories (and keys)
          dnf -y install centos-stream-repos
+         # try to install epel-release again
          dnf -y install epel-release || die "could not install epel-release. Fix it"
       else
          die "could not install epel-release"
