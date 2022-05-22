@@ -890,7 +890,8 @@ installPackages()
       #apt -y upgrade
 
       # install needed packages
-      apt -y install debootstrap ca-certificates x11-xserver-utils jq wget
+      apt -y install ca-certificates x11-xserver-utils jq wget
+      apt -y install debootstrap || die "could not download debootstrap" 
       # we want to make sure resolconf is the last one
       apt -y install resolvconf
       # clean APT host cache
@@ -908,7 +909,8 @@ installPackages()
          dnf -y install epel-release || needCentOSFix
       fi
 
-      dnf -y install debootstrap ca-certificates jq wget 
+      dnf -y install ca-certificates jq wget 
+      dnf -y install debootstrap || die "could not download debootstrap" 
       if [[ ! -f "/usr/bin/xhost" ]]
       then
          dnf -y xorg-x11-server-utils
