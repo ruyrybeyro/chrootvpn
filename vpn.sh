@@ -876,7 +876,8 @@ needCentOSFix()
        # we came here because we failed to install epel-release, so trying again
        dnf -y install epel-release || die "could not install epel-release"
    else
-      die "could not do yum/dnf. Try 'dnf update' before running, or fix it"
+      dnf -y update
+      dnf -y install epel-release || die "could not install epel-release. Fix it"
    fi
 }
 
