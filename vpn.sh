@@ -1356,7 +1356,7 @@ createConfFile()
     # if not default, save it
     if [[ SSLVPN != "sslvpn" ]]
     then
-       echo "SSLVPN=${SSLVPN}" >> "${CONFFILE}"
+       echo "SSLVPN=\"${SSLVPN}\"" >> "${CONFFILE}"
     fi
 }
 
