@@ -38,6 +38,7 @@
 #        Mint   20.2
 #        antiX-21
 #        Pop!_OS 22.04 LTS
+#        Kubuntu 22.04 LTS
 #        Fedora 23 
 #        Fedora 36
 #        Rocky  8.6
@@ -1417,7 +1418,7 @@ FirefoxPolicy()
       fi
             
       echo "Firefox policy created for accepting https://localhost:14186 certificate" >&2
-      echo "If using other browser than firefox" >&2
+      echo "If using other browser than Firefox or Firefox is a snap" >&2
    fi
 }
 
