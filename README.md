@@ -27,7 +27,7 @@ Otherwise, run it as:
         ./vnp.sh -i --vpn=FQDN_DNS_name_of_VPN
 	
 
-- accept localhost certificate in brower if not Firefox
+- accept localhost certificate in brower if not Firefox or if Firefox is a snap
 
 	https://localhost:14186/id 
 
@@ -126,6 +126,8 @@ Mint   20.2
 antiX-21
 
 Pop!_OS 22.04 LTS
+
+Kubuntu 22.04 LTS
 
 Fedora 23
 
