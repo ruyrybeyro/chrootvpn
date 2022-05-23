@@ -744,6 +744,7 @@ selfUpdate()
 {
     # temporary file for downloading new vpn.sh    
     local vpnsh
+    local VER
 
     # get latest release version
     VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
