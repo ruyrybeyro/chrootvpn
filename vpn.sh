@@ -64,7 +64,7 @@ CHROOT="/opt/chroot"
 # or reinstalled from scratch
 CONFFILE="/opt/etc/vpn.conf"
 
-[ -f "${CONFFILE}" ] && . "${CONFFILE}"
+[[ -f "${CONFFILE}" ]] && . "${CONFFILE}"
 
 # Sane defaults:
  
@@ -74,8 +74,8 @@ CONFFILE="/opt/etc/vpn.conf"
 # if filling in keep the format
 # values used first time installing, 
 # otherwise /opt/etc/vpn.conf overrides them
-[ -z "$VPN" ] && VPN=""
-[ -z "$VPNIP" ] && VPNIP=""
+[[ -z "$VPN" ]] && VPN=""
+[[ -z "$VPNIP" ]] && VPNIP=""
 
 # split VPN routing table if deleting VPN gateway is not enough
 # selfupdate brings it from the older version
@@ -83,11 +83,11 @@ CONFFILE="/opt/etc/vpn.conf"
 # if filling in keep the format
 # value used first time installing, 
 # otherwise /opt/etc/vpn.conf overrides it
-[ -z "$SPLIT" ] && SPLIT=""
+[[ -z "$SPLIT" ]] && SPLIT=""
 
 # we test / and sslvnp SSL VPN portal PATHs.
 # Change here for a custom PATH
-[ -z "$SSLVPN" ] && SSLVPN="sslvpn"
+[[ -z "$SSLVPN" ]] && SSLVPN="sslvpn"
 
 # OS to deploy inside 32-bit chroot  
 VARIANT="minbase"
@@ -99,13 +99,13 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # used during initial chroot setup
 # for chroot shell correct time
-[ -z "${TZ}" ] && TZ='Europe/Lisbon'
+[[ -z "${TZ}" ]] && TZ='Europe/Lisbon'
 
 # URL for testing if split or full VPN
 URL_VPN_TEST="https://www.debian.org"
 
 # CShell writes on the X11 display
-[ -z "${DISPLAY}" ] && export DISPLAY=":0.0"
+[[ -z "${DISPLAY}" ]] && export DISPLAY=":0.0"
 
 # dont bother with locales
 export LC_ALL=C LANG=C
@@ -215,6 +215,7 @@ die()
 # DNS lookup: getent is installed by default
 vpnlookup()
 {
+   # resolve IPv4 IP address of DNS name $VPN
    VPNIP=$(getent ahostsv4 "${VPN}" | awk 'NR==1 { print $1 } ' )
    [[ -z ${VPNIP} ]] && die "could not resolve ${VPN} DNS name"
 }
@@ -312,17 +313,17 @@ PreCheck()
       then
          DEB=1
          ischroot && die "Do not run this script inside a chroot"
+         echo "Debian family distribution" >&2
       fi
 
       if [ -f "/etc/redhat-release" ]
       then
          RH=1
+         echo "RedHat family distribution" >&2
       fi
 
-      if [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]]
-      then
-         die "Only Debian and RedHat family distributions supported"
-      fi
+      [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
+
    fi
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
@@ -362,13 +363,10 @@ mountChrootFS()
       # mount chroot filesystems
       # if not mounted
       mount | grep "${CHROOT}" &> /dev/null
-      if [ $? -eq 1 ]
+      if [[ $? -eq 1 ]]
       then
          # consistency checks
-         if [[ ! -f "${CHROOT}/etc/fstab" ]]
-         then
-            die "no ${CHROOT}/etc/fstab" 
-         fi
+         [[ ! -f "${CHROOT}/etc/fstab" ]] && die "no ${CHROOT}/etc/fstab"
 
          # mount using fstab inside chroot, all filesystems
          mount --fstab "${CHROOT}/etc/fstab" -a
@@ -468,26 +466,26 @@ showStatus()
 	/usr/bin/dpkg --print-architecture
 	EOF3
 
-   # SNX
+   # SNX version
    echo
    echo -n "SNX - installed              "
    doChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
+   
    echo -n "SNX - available for download "
-
    if ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
    then
       wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
 
-   # Mobile Access Portal Agent
+   # Mobile Access Portal Agent version
    echo
    if [[ -f "${CHROOT}/root/.cshell_ver.txt" ]]
    then
       echo -n "CShell - installed version      "
-      cat ${CHROOT}/root/.cshell_ver.txt  
+      cat "${CHROOT}/root/.cshell_ver.txt"
    fi
-   echo -n "CShell - available for download "
 
+   echo -n "CShell - available for download "
    if ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
    then
       wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null || echo "Could not get CShell download version" >&2
@@ -499,7 +497,7 @@ showStatus()
       echo
       echo "CShell self-signed CA certificate"
       echo
-      openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | egrep ", CN = |  Not [BA]"
+      openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | grep -E ", CN = |  Not [BA]"
    fi
 
    # show vpn.conf
@@ -513,6 +511,7 @@ showStatus()
    IP=$(ip -4 addr show "${TUNSNX}" 2> /dev/null | awk '/inet/ { print $2 } ')
 
    echo -n "Linux  IP address: "
+   # print IP address linked to hostname
    hostname -I | awk '{print $1}'
    echo
 
@@ -541,9 +540,9 @@ showStatus()
    else
       echo "VPN off"
    fi
-   echo
 
    # VPN signature(s) - local - outside chroot
+   echo
    echo "VPN signatures"
    echo
    bash -c "cat ${CHROOT}/etc/snx/"'*.db' 2> /dev/null  # workaround for using * expansion inside sudo
@@ -654,14 +653,8 @@ doStart()
 fixDNS2()
 {
    # try to restore resolv.conf
-   if [[ ${DEB} -eq 1 ]]
-   then
-      resolvconf -u
-   fi
-   if [[ ${RH} -eq 1 ]]
-   then
-      authselect apply-changes
-   fi
+   [[ ${DEB} -eq 1 ]] && resolvconf -u
+   [[ ${RH} -eq 1 ]]  && authselect apply-changes
 }
 
 
@@ -985,10 +978,7 @@ fixRHDNS()
          [[ $counter -eq 30 ]] && die "systemd-resolved not going live"
       done
 
-      if [ ! -f /run/systemd/resolve/stub-resolv.conf ]
-      then
-         die "Something went wrong activating systemd-resolved"
-      fi
+      [[ ! -f /run/systemd/resolve/stub-resolv.conf ]] && die "Something went wrong activating systemd-resolved"
 
       # if any old style interface scripts
       # we need them controlled by NetworkManager
@@ -1089,7 +1079,7 @@ buildFS()
    mkdir -p tmp/.X11-unix
 
    # for leaving cshell_install.sh happy
-   mkdir -p "${CHROOT}/${CSHELL_HOME}/.config"
+   mkdir -p "${CHROOT}/${CSHELL_HOME}/.config" || die "couldn not mkdir ${CHROOT}/${CSHELL_HOME}/.config"
 
    # for showing date right when in shell mode inside chroot
    echo "TZ=${TZ}; export TZ" >> root/.profile
@@ -1234,7 +1224,7 @@ buildFS()
    # in the case of an error
    ( 
    # add profiles.ini to keep variations of cshell_install.sh happy
-   cd home/${CSHELL_USER}/.mozilla/firefox/
+   cd "home/${CSHELL_USER}/.mozilla/firefox/" || die "was not able to cd home/${CSHELL_USER}/.mozilla/firefox/"
    ln -s installs.ini profiles.ini
    )
 
@@ -1274,16 +1264,10 @@ fixDNS()
    cd etc || die "could not enter ${CHROOT}/etc"
 
    # Debian - resolvconf
-   if [[ ${DEB} -eq 1 ]]
-   then
-      ln -s ../run/resolvconf/resolv.conf resolv.conf
-   fi
+   [[ ${DEB} -eq 1 ]] && ln -s ../run/resolvconf/resolv.conf resolv.conf
 
    # RH - systemd-resolved
-   if [[ ${RH} -eq 1 ]]
-   then
-      ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
-   fi
+   [[ ${RH} -eq 1 ]] && ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
 
    cd ..
 }
@@ -1356,10 +1340,7 @@ createConfFile()
 	EOF13
 
     # if not default, save it
-    if [[ SSLVPN != "sslvpn" ]]
-    then
-       echo "SSLVPN=\"${SSLVPN}\"" >> "${CONFFILE}"
-    fi
+    [[ "${SSLVPN}" != "sslvpn" ]] && echo "SSLVPN=\"${SSLVPN}\"" >> "${CONFFILE}"
 }
 
 
@@ -1412,10 +1393,7 @@ FirefoxPolicy()
    if [[ $PolInstalled -eq 1 ]]
    then
       # if Firefox running
-      if pgrep firefox &>/dev/null
-      then
-         echo "Please restart Firefox" >&2
-      fi
+      pgrep firefox &>/dev/null && echo "Please restart Firefox" >&2
             
       echo "Firefox policy created for accepting https://localhost:14186 certificate" >&2
       echo "If using other browser than Firefox or Firefox is a snap" >&2
@@ -1499,7 +1477,7 @@ main()
 {
    # command options handling
    # dont put inside ""
-   doGetOpts $*
+   doGetOpts "$@"
 
    # clean all the getopts logic from the arguments
    # leaving only commands
@@ -1522,6 +1500,6 @@ main()
 
 
 # main stub will full arguments passing
-main $*
+main "$@"
 
  
