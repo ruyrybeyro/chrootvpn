@@ -302,25 +302,18 @@ PreCheck()
       die "This script is for Debian/Ubuntu Linux Intel based flavours only"
    fi
 
-   # If not Debian/Ubuntu based
-   if [[ ! -f "/etc/debian_version" ]] && [[ ! -f "/etc/redhat-release" ]]
+   DEB=0
+   RH=0
+
+   if [[ -f "/etc/debian_version" ]]
    then
-      die "This script is only for Debian/Ubuntu or RedHat/CentOS Linux based flavours only" 
-   else
-      DEB=0
-      RH=0
-
-      if [[ -f "/etc/debian_version" ]]
-      then
-         DEB=1
-         ischroot && die "Do not run this script inside a chroot"
-      fi
-
-      [[ -f "/etc/redhat-release" ]] && RH=1
-
-      [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
-
+      DEB=1
+      ischroot && die "Do not run this script inside a chroot"
    fi
+
+   [[ -f "/etc/redhat-release" ]] && RH=1
+
+   [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
