@@ -96,6 +96,7 @@ RELEASE="bullseye" # Debian 11
 DEBIANREPO="http://deb.debian.org/debian/" # fastly repo
 
 # github repository for command selfupdate
+# https://github.com/ruyrybeyro/chrootvpn
 GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # used during initial chroot setup
