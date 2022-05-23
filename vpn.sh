@@ -64,6 +64,7 @@ CHROOT="/opt/chroot"
 # or reinstalled from scratch
 CONFFILE="/opt/etc/vpn.conf"
 
+# if vpn.conf present, source VPN, VPNIP, SPLIT and SSLVPN from it
 [[ -f "${CONFFILE}" ]] && . "${CONFFILE}"
 
 # Sane defaults:
