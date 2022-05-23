@@ -498,7 +498,7 @@ showStatus()
    echo
    if [[ -f "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" ]]
    then
-      LANG=C openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | egrep ", CN = |  Not [BA]"
+      openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | egrep ", CN = |  Not [BA]"
    fi
 
    # show vpn.conf
