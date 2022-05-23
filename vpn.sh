@@ -480,6 +480,11 @@ showStatus()
 
    # Mobile Access Portal Agent
    echo
+   if [[ -f "${CHROOT}/root/.cshell_ver.txt" ]]
+   then
+      echo -n "CShell - installed version      "
+      cat ${CHROOT}/root/.cshell_ver.txt  
+   fi
    echo -n "CShell - available for download "
 
    if ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
