@@ -493,7 +493,7 @@ showStatus()
    echo
    if [[ -f "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" ]]
    then
-      openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | head -14 | tail +7
+      LANG=C openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | egrep ", CN = |  Not [BA]"
    fi
 
    # IP connectivity
