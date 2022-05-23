@@ -496,6 +496,10 @@ showStatus()
       LANG=C openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | egrep ", CN = |  Not [BA]"
    fi
 
+   # show vpn.conf
+   echo
+   [ -f "${CONFFILE}" ] && cat "${CONFFILE}"
+
    # IP connectivity
    echo
    # IP address VPN local address given
