@@ -493,11 +493,11 @@ showStatus()
    fi
 
    # Mobile Access Portal Agent X.509 self-signed CA certificate
-   echo
-   echo "CShell self-signed CA certificate"
-   echo
    if [[ -f "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" ]]
    then
+      echo
+      echo "CShell self-signed CA certificate"
+      echo
       openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | egrep ", CN = |  Not [BA]"
    fi
 
