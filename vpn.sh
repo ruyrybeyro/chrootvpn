@@ -544,6 +544,7 @@ showStatus()
 
    # VPN signature(s) - local - outside chroot
    echo "VPN signatures"
+   echo
    bash -c "cat ${CHROOT}/etc/snx/"'*.db' 2> /dev/null  # workaround for using * expansion inside sudo
 
    # DNS
