@@ -478,6 +478,13 @@ showStatus()
       wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
 
+   echo -n "CShell - available for download "
+
+   if ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
+   then
+      wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
+   fi
+
    # IP connectivity
    echo
    # IP address VPN local address given
