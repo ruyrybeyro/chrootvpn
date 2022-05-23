@@ -225,7 +225,7 @@ vpnlookup()
 # optional arguments handling
 needs_arg() 
 { 
-   [ -z "${OPTARG}" ] && die "No arg for --$OPT option"
+   [[ -z "${OPTARG}" ]] && die "No arg for --$OPT option"
 }
 
 
@@ -258,7 +258,7 @@ doGetOpts()
    do
 
       # long option: reformulate OPT and OPTARG
-      if [ "${OPT}" = "-" ] 
+      if [[ "${OPT}" = "-" ]]
       then   
          OPT=${OPTARG%%=*}       # extract long option name
          OPTARG=${OPTARG#"$OPT"}   # extract long option argument (may be empty)
@@ -303,25 +303,20 @@ PreCheck()
    fi
 
    # If not Debian/Ubuntu based
-   if [ ! -f "/etc/debian_version" ] && [ ! -f "/etc/redhat-release" ] 
+   if [[ ! -f "/etc/debian_version" ]] && [[ ! -f "/etc/redhat-release" ]]
    then
       die "This script is only for Debian/Ubuntu or RedHat/CentOS Linux based flavours only" 
    else
       DEB=0
       RH=0
 
-      if [ -f "/etc/debian_version" ]
+      if [[ -f "/etc/debian_version" ]]
       then
          DEB=1
          ischroot && die "Do not run this script inside a chroot"
-         echo "Debian family distribution" >&2
       fi
 
-      if [ -f "/etc/redhat-release" ]
-      then
-         RH=1
-         echo "RedHat family distribution" >&2
-      fi
+      [[ -f "/etc/redhat-release" ]] && RH=1
 
       [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
 
@@ -387,7 +382,7 @@ umountChrootFS()
 
       # there is no --fstab for umount
       # we dont want to abort if not present
-      [ -f "${CHROOT}/etc/fstab" ] && doChroot /usr/bin/umount -a 2> /dev/null
+      [[ -f "${CHROOT}/etc/fstab" ]] && doChroot /usr/bin/umount -a 2> /dev/null
          
       # umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
@@ -503,7 +498,7 @@ showStatus()
 
    # show vpn.conf
    echo
-   [ -f "${CONFFILE}" ] && cat "${CONFFILE}"
+   [[ -f "${CONFFILE}" ]] && cat "${CONFFILE}"
 
    # IP connectivity
    echo
@@ -773,7 +768,7 @@ selfUpdate()
         then
 
            # if script not run for /usr/local/bin, also update it
-           [ "${INSTALLSCRIPT}" != "${SCRIPT}"  ] && cp -f "${vpnsh}" "${SCRIPT}"
+           [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]] && cp -f "${vpnsh}" "${SCRIPT}"
 
            # update the onne in /usr/local/bin
            cp -f "${vpnsh}" "${INSTALLSCRIPT}"
@@ -819,8 +814,6 @@ PreCheck2()
 
          else
             echo "To install the chrooted Checkpoint client software, run:" >&2
-            echo "./${SCRIPTNAME} -i" >&2
-            echo "or" >&2
 
             # appropriate install command
             # wether vpn.conf is present
@@ -1281,7 +1274,7 @@ GnomeAutoRun()
 {
    # directory for starting apps upon X11 login
    # /etc/xdg/autostart/
-   if [ -d "$(dirname ${XDGAUTO})" ]
+   if [[ -d "$(dirname ${XDGAUTO})" ]]
    then
       # XDGAUTO="/etc/xdg/autostart/cshell.desktop"
       cat > "${XDGAUTO}" <<-EOF11
