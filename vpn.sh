@@ -96,6 +96,7 @@ RELEASE="bullseye" # Debian 11
 DEBIANREPO="http://deb.debian.org/debian/" # fastly repo
 
 # github repository for command selfupdate
+# https://github.com/ruyrybeyro/chrootvpn
 GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # used during initial chroot setup
@@ -225,7 +226,7 @@ vpnlookup()
 # optional arguments handling
 needs_arg() 
 { 
-   [ -z "${OPTARG}" ] && die "No arg for --$OPT option"
+   [[ -z "${OPTARG}" ]] && die "No arg for --$OPT option"
 }
 
 
@@ -258,7 +259,7 @@ doGetOpts()
    do
 
       # long option: reformulate OPT and OPTARG
-      if [ "${OPT}" = "-" ] 
+      if [[ "${OPT}" = "-" ]]
       then   
          OPT=${OPTARG%%=*}       # extract long option name
          OPTARG=${OPTARG#"$OPT"}   # extract long option argument (may be empty)
@@ -299,33 +300,21 @@ PreCheck()
    # If not Intel based
    if [[ $(uname -m) != 'x86_64' ]] && [[ $(uname -m) != 'i386' ]]
    then
-      die "This script is for Debian/Ubuntu Linux Intel based flavours only"
+      die "This script is for Debian/RedHat Linux Intel based flavours only"
    fi
 
-   # If not Debian/Ubuntu based
-   if [ ! -f "/etc/debian_version" ] && [ ! -f "/etc/redhat-release" ] 
+   DEB=0
+   RH=0
+
+   if [[ -f "/etc/debian_version" ]]
    then
-      die "This script is only for Debian/Ubuntu or RedHat/CentOS Linux based flavours only" 
-   else
-      DEB=0
-      RH=0
-
-      if [ -f "/etc/debian_version" ]
-      then
-         DEB=1
-         ischroot && die "Do not run this script inside a chroot"
-         echo "Debian family distribution" >&2
-      fi
-
-      if [ -f "/etc/redhat-release" ]
-      then
-         RH=1
-         echo "RedHat family distribution" >&2
-      fi
-
-      [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
-
+      DEB=1
+      ischroot && die "Do not run this script inside a chroot"
    fi
+
+   [[ -f "/etc/redhat-release" ]] && RH=1
+
+   [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
@@ -333,6 +322,7 @@ PreCheck()
    fi
 
    # for using/relaunching
+   # self-promoting script to sudo
    # call the script with sudo
    [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
 }
@@ -387,7 +377,7 @@ umountChrootFS()
 
       # there is no --fstab for umount
       # we dont want to abort if not present
-      [ -f "${CHROOT}/etc/fstab" ] && doChroot /usr/bin/umount -a 2> /dev/null
+      [[ -f "${CHROOT}/etc/fstab" ]] && doChroot /usr/bin/umount -a 2> /dev/null
          
       # umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
@@ -395,6 +385,7 @@ umountChrootFS()
          umount "$i" 2> /dev/null
          umount -l "$i" 2> /dev/null
       done
+
       # force umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
@@ -503,7 +494,7 @@ showStatus()
 
    # show vpn.conf
    echo
-   [ -f "${CONFFILE}" ] && cat "${CONFFILE}"
+   [[ -f "${CONFFILE}" ]] && cat "${CONFFILE}"
 
    # IP connectivity
    echo
@@ -546,11 +537,11 @@ showStatus()
    echo
    echo "VPN signatures"
    echo
-   bash -c "cat ${CHROOT}/etc/snx/"'*.db' 2> /dev/null  # workaround for using * expansion inside sudo
+   bash -c "cat ${CHROOT}/etc/snx/"'*.db' 2> /dev/null  # workaround for * expansion inside sudo
 
    # DNS
    echo
-   #resolvectl status
+   [[ "${RH}" -eq 1 ]] && resolvectl status
    cat /etc/resolv.conf
    echo
     
@@ -571,7 +562,7 @@ killCShell()
    then
 
       # kill all java CShell agents (1)
-      pkill -9 -f CShell
+      pkill -9 -f CShell 
 
       if ! isCShellRunning
       then
@@ -756,24 +747,27 @@ selfUpdate()
 {
     # temporary file for downloading new vpn.sh    
     local vpnsh
+    local VER
 
-    # get latest release version
+    # get this latest script release version
     VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
     echo "current version     : ${VERSION}"
 
     [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] && die "did not find any github release. Something went wrong"
 
+    # if github version greater than this version
     if [[ "${VER}" > "${VERSION}" ]]
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
         vpnsh=$(mktemp) || die "failed creating mktemp file"
 
+        # download github more recent version
         if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
 
            # if script not run for /usr/local/bin, also update it
-           [ "${INSTALLSCRIPT}" != "${SCRIPT}"  ] && cp -f "${vpnsh}" "${SCRIPT}"
+           [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]] && cp -f "${vpnsh}" "${SCRIPT}"
 
            # update the onne in /usr/local/bin
            cp -f "${vpnsh}" "${INSTALLSCRIPT}"
@@ -819,8 +813,6 @@ PreCheck2()
 
          else
             echo "To install the chrooted Checkpoint client software, run:" >&2
-            echo "./${SCRIPTNAME} -i" >&2
-            echo "or" >&2
 
             # appropriate install command
             # wether vpn.conf is present
@@ -896,14 +888,16 @@ needCentOSFix()
    then
       sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-       # we came here because we failed to install epel-release, so trying again
-       dnf -y install epel-release || die "could not install epel-release"
+
+      # we came here because we failed to install epel-release, so trying again
+      dnf -y install epel-release || die "could not install epel-release"
    else
-      # fix for older CentOS9 VMs (osboxes)
+      # fix for older CentOS9 Stream VMs (osboxes)
       if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
       then
          # update repositories (and keys)
          dnf -y install centos-stream-repos
+
          # try to install epel-release again
          dnf -y install epel-release || die "could not install epel-release. Fix it"
       else
@@ -916,9 +910,12 @@ needCentOSFix()
 # system update and package requirements
 installPackages()
 {
+   # if Debian family based
    if [[ ${DEB} -eq 1 ]]
    then
+      # update metadata
       apt -y update
+
       #apt -y upgrade
 
       # install needed packages
@@ -929,6 +926,7 @@ installPackages()
       apt clean
    fi
 
+   # if RedHat family based
    if [[ ${RH} -eq 1 ]]
    then
       #dnf makecache
@@ -941,6 +939,7 @@ installPackages()
 
       dnf -y install ca-certificates jq wget debootstrap
 
+      # xhost should be present
       if [[ ! -f "/usr/bin/xhost" ]]
       then
          dnf -y xorg-x11-server-utils
@@ -956,6 +955,7 @@ fixRHDNS()
 {
    local counter
 
+   # if RedHat and systemd-resolvd not active
    if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
    then
 
@@ -1022,7 +1022,7 @@ checkDNS()
 }
 
 
-# creating the Debian minbase chroot
+# creating the Debian minbase (minimal) chroot
 createChroot()
 {
    echo "please wait..." >&2
@@ -1031,6 +1031,7 @@ createChroot()
 
    mkdir -p "${CHROOT}" || die "could not create directory ${CHROOT}"
 
+   # create and populate minimal Debian chroot
    if ! debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
@@ -1281,7 +1282,7 @@ GnomeAutoRun()
 {
    # directory for starting apps upon X11 login
    # /etc/xdg/autostart/
-   if [ -d "$(dirname ${XDGAUTO})" ]
+   if [[ -d "$(dirname ${XDGAUTO})" ]]
    then
       # XDGAUTO="/etc/xdg/autostart/cshell.desktop"
       cat > "${XDGAUTO}" <<-EOF11
