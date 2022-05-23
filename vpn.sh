@@ -534,11 +534,11 @@ showStatus()
    echo
    echo "VPN signatures"
    echo
-   bash -c "cat ${CHROOT}/etc/snx/"'*.db' 2> /dev/null  # workaround for using * expansion inside sudo
+   bash -c "cat ${CHROOT}/etc/snx/"'*.db' 2> /dev/null  # workaround for * expansion inside sudo
 
    # DNS
    echo
-   #resolvectl status
+   [[ "${RH}" -eq 1 ]] && resolvectl status
    cat /etc/resolv.conf
    echo
     
@@ -559,7 +559,7 @@ killCShell()
    then
 
       # kill all java CShell agents (1)
-      pkill -9 -f CShell
+      pkill -9 -f CShell 
 
       if ! isCShellRunning
       then
@@ -882,8 +882,9 @@ needCentOSFix()
    then
       sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-       # we came here because we failed to install epel-release, so trying again
-       dnf -y install epel-release || die "could not install epel-release"
+
+      # we came here because we failed to install epel-release, so trying again
+      dnf -y install epel-release || die "could not install epel-release"
    else
       # fix for older CentOS9 VMs (osboxes)
       if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
@@ -904,7 +905,9 @@ installPackages()
 {
    if [[ ${DEB} -eq 1 ]]
    then
+      # update metadata
       apt -y update
+
       #apt -y upgrade
 
       # install needed packages
@@ -927,6 +930,7 @@ installPackages()
 
       dnf -y install ca-certificates jq wget debootstrap
 
+      # xhost should be present
       if [[ ! -f "/usr/bin/xhost" ]]
       then
          dnf -y xorg-x11-server-utils
@@ -942,6 +946,7 @@ fixRHDNS()
 {
    local counter
 
+   # if RedHat and systemd-resolvd not active
    if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
    then
 
@@ -1008,7 +1013,7 @@ checkDNS()
 }
 
 
-# creating the Debian minbase chroot
+# creating the Debian minbase (minimal) chroot
 createChroot()
 {
    echo "please wait..." >&2
