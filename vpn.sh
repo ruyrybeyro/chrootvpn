@@ -556,10 +556,10 @@ showStatus()
    # get latest release version
    VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
 
-    echo "current ${SCRIPTNAME} version     : ${VERSION}"
+   echo "current ${SCRIPTNAME} version     : ${VERSION}"
 
-    # full VPN it might not work
-    [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VER}"
+   # full VPN it might not work
+   [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VER}"
 }
 
 
