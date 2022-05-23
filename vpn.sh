@@ -321,6 +321,7 @@ PreCheck()
    fi
 
    # for using/relaunching
+   # self-promoting script to sudo
    # call the script with sudo
    [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
 }
@@ -383,6 +384,7 @@ umountChrootFS()
          umount "$i" 2> /dev/null
          umount -l "$i" 2> /dev/null
       done
+
       # force umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
@@ -746,18 +748,20 @@ selfUpdate()
     local vpnsh
     local VER
 
-    # get latest release version
+    # get this latest script release version
     VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
     echo "current version     : ${VERSION}"
 
     [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] && die "did not find any github release. Something went wrong"
 
+    # if github version greater than this version
     if [[ "${VER}" > "${VERSION}" ]]
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
         vpnsh=$(mktemp) || die "failed creating mktemp file"
 
+        # download github more recent version
         if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
 
@@ -887,11 +891,12 @@ needCentOSFix()
       # we came here because we failed to install epel-release, so trying again
       dnf -y install epel-release || die "could not install epel-release"
    else
-      # fix for older CentOS9 VMs (osboxes)
+      # fix for older CentOS9 Stream VMs (osboxes)
       if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
       then
          # update repositories (and keys)
          dnf -y install centos-stream-repos
+
          # try to install epel-release again
          dnf -y install epel-release || die "could not install epel-release. Fix it"
       else
@@ -904,6 +909,7 @@ needCentOSFix()
 # system update and package requirements
 installPackages()
 {
+   # if Debian family based
    if [[ ${DEB} -eq 1 ]]
    then
       # update metadata
@@ -919,6 +925,7 @@ installPackages()
       apt clean
    fi
 
+   # if RedHat family based
    if [[ ${RH} -eq 1 ]]
    then
       #dnf makecache
@@ -1023,6 +1030,7 @@ createChroot()
 
    mkdir -p "${CHROOT}" || die "could not create directory ${CHROOT}"
 
+   # create and populate minimal Debian chroot
    if ! debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
