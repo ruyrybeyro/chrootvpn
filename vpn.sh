@@ -133,10 +133,10 @@ XDGAUTO="/etc/xdg/autostart/cshell.desktop"
 INSTALLSCRIPT="/usr/local/bin/${SCRIPTNAME}"
 
 # cshell user
-CSHELL_USER=cshell
-CSHELL_UID=9000
-CSHELL_GROUP=${CSHELL_USER}
-CSHELL_GID=9000
+CSHELL_USER="cshell"
+CSHELL_UID="9000"
+CSHELL_GROUP="${CSHELL_USER}"
+CSHELL_GID="9000"
 CSHELL_HOME="/home/${CSHELL_USER}"
 
 # "booleans"
@@ -221,7 +221,7 @@ vpnlookup()
 {
    # resolve IPv4 IP address of DNS name $VPN
    VPNIP=$(getent ahostsv4 "${VPN}" | awk 'NR==1 { print $1 } ' )
-   [[ -z ${VPNIP} ]] && die "could not resolve ${VPN} DNS name"
+   [[ -z "${VPNIP}" ]] && die "could not resolve ${VPN} DNS name"
 }
 
 
@@ -300,7 +300,7 @@ doGetOpts()
 PreCheck()
 {
    # If not Intel based
-   if [[ $(uname -m) != 'x86_64' ]] && [[ $(uname -m) != 'i386' ]]
+   if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
       die "This script is for Debian/RedHat Linux Intel based flavours only"
    fi
@@ -316,7 +316,7 @@ PreCheck()
 
    [[ -f "/etc/redhat-release" ]] && RH=1
 
-   [[ ${DEB} -eq 0 ]] && [[ ${RH} -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
@@ -421,6 +421,7 @@ Split()
       ip route flush table main dev "${TUNSNX}"
 
       # create new VPN routes according to $SPLIT
+      # don't put ""
       for i in ${SPLIT}
       do
          ip route add "$i" dev "${TUNSNX}" src "${IP}"
@@ -510,7 +511,7 @@ showStatus()
    echo
 
    # if $IP not empty
-   if [[ -n ${IP} ]]
+   if [[ -n "${IP}" ]]
    then
       echo "VPN on"
       echo
@@ -599,14 +600,14 @@ doStart()
    # Unless a security update inside chroot damages it
 
    # Debian family - resolvconf
-   if [[ ${DEB} -eq 1 ]]
+   if [[ "${DEB}" -eq 1 ]]
    then
       rm -f "${CHROOT}/etc/resolv.conf"
       ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
    fi
 
    # RH family - systemd-resolved
-   if [[ ${RH} -eq 1 ]]
+   if [[ "${RH}" -eq 1 ]]
    then
       rm -f "${CHROOT}/etc/resolv.conf"
       ln -s ../run/systemd/resolve/stub-resolv.conf "${CHROOT}/etc/resolv.conf"
@@ -648,8 +649,8 @@ doStart()
 fixDNS2()
 {
    # try to restore resolv.conf
-   [[ ${DEB} -eq 1 ]] && resolvconf -u
-   [[ ${RH} -eq 1 ]]  && authselect apply-changes
+   [[ "${DEB}" -eq 1 ]] && resolvconf -u
+   [[ "${RH}" -eq 1 ]]  && authselect apply-changes
 }
 
 
@@ -727,7 +728,7 @@ doUninstall()
       echo "sudo rm -f ${CONFFILE}"
       echo
       echo "cat ${CONFFILE}"
-      cat ${CONFFILE}
+      cat "${CONFFILE}"
       echo
    fi
 
@@ -764,7 +765,7 @@ selfUpdate()
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
-        vpnsh=$(mktemp) || die "failed creating mktemp file"
+        vpnsh="$(mktemp)" || die "failed creating mktemp file"
 
         # download github more recent version
         if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
@@ -864,7 +865,7 @@ argCommands()
 preFlight()
 {
    # if not sudo/root, call the script as root/sudo script
-   if [[ "${EUID}" -ne 0 ]] || [[ ${install} -eq false ]]
+   if [[ "${EUID}" -ne 0 ]] || [[ "${install}" -eq false ]]
    then
       exec sudo "$0" "${args[@]}"
    fi
@@ -915,7 +916,7 @@ needCentOSFix()
 installPackages()
 {
    # if Debian family based
-   if [[ ${DEB} -eq 1 ]]
+   if [[ "${DEB}" -eq 1 ]]
    then
       # update metadata
       apt -y update
@@ -931,12 +932,12 @@ installPackages()
    fi
 
    # if RedHat family based
-   if [[ ${RH} -eq 1 ]]
+   if [[ "${RH}" -eq 1 ]]
    then
       #dnf makecache
      
       # epel-release not needed for Fedora
-      if grep -v ^Fedora /etc/redhat-release &> /dev/null
+      if grep -v "^Fedora" /etc/redhat-release &> /dev/null
       then
          dnf -y install epel-release || needCentOSFix
       fi
@@ -960,11 +961,11 @@ fixRHDNS()
    local counter
 
    # if RedHat and systemd-resolvd not active
-   if [[ ${RH} -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
+   if [[ "${RH}" -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
    then
 
       # CentOS 9 does not install systemd-resolved by default
-      if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
+      if [[ ! -f "/usr/lib/systemd/systemd-resolved" ]]
       then	    
          dnf -y install systemd-resolved 
       fi
@@ -980,10 +981,10 @@ fixRHDNS()
       do
          sleep 2
          (( counter=counter+1 ))
-         [[ $counter -eq 30 ]] && die "systemd-resolved not going live"
+         [[ "$counter" -eq 30 ]] && die "systemd-resolved not going live"
       done
 
-      [[ ! -f /run/systemd/resolve/stub-resolv.conf ]] && die "Something went wrong activating systemd-resolved"
+      [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && die "Something went wrong activating systemd-resolved"
 
       # if any old style interface scripts
       # we need them controlled by NetworkManager
@@ -1004,7 +1005,7 @@ fixRHDNS()
       do 
          sleep 4
          (( counter=counter+1 ))
-         [[ $counter -eq 20 ]] && die "NetworkManager not going live"
+         [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
       done
    fi
 }
@@ -1052,14 +1053,14 @@ createCshellUser()
    # create group 
    if ! getent group | grep -q "^${CSHELL_GROUP}:" 
    then
-      addgroup --quiet --gid ${CSHELL_GID} ${CSHELL_GROUP} 2>/dev/null ||true
+      addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
    fi
    # create user
    if ! getent passwd | grep -q "^${CSHELL_USER}:" 
    then
       adduser --quiet \
-            --uid ${CSHELL_UID} \
-            --gid ${CSHELL_GID} \
+            --uid "${CSHELL_UID}" \
+            --gid "${CSHELL_GID}" \
             --no-create-home \
             --disabled-password \
             --home "${CSHELL_HOME}" \
@@ -1071,7 +1072,7 @@ createCshellUser()
    # adjust file and directory permissions
    # create homedir 
    test -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
-   chown -R ${CSHELL_USER}:${CSHELL_GROUP} "${CSHELL_HOME}"
+   chown -R "${CSHELL_USER}":"${CSHELL_GROUP}" "${CSHELL_HOME}"
    chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
 }
 
@@ -1082,7 +1083,7 @@ buildFS()
    cd "${CHROOT}" >&2 || die "could not chdir to ${CHROOT}" 
 
    # for sharing X11 with the host
-   mkdir -p tmp/.X11-unix
+   mkdir -p "tmp/.X11-unix"
 
    # for leaving cshell_install.sh happy
    mkdir -p "${CHROOT}/${CSHELL_HOME}/.config" || die "couldn not mkdir ${CHROOT}/${CSHELL_HOME}/.config"
@@ -1160,11 +1161,11 @@ buildFS()
 
 	# create cShell user
 	# create group 
-	addgroup --quiet --gid ${CSHELL_GID} ${CSHELL_GROUP} 2>/dev/null ||true
+	addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
 	# create user
 	adduser --quiet \
-	        --uid ${CSHELL_UID} \
-	        --gid ${CSHELL_GID} \
+	        --uid "${CSHELL_UID}" \
+	        --gid "${CSHELL_GID}" \
 	        --no-create-home \
 	        --disabled-password \
 	        --home "${CSHELL_HOME}" \
@@ -1174,7 +1175,7 @@ buildFS()
         # adjust file and directory permissions
         # create homedir 
         test  -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
-        chown -R ${CSHELL_USER}:${CSHELL_GROUP} "${CSHELL_HOME}"
+        chown -R "${CSHELL_USER}":"${CSHELL_GROUP}" "${CSHELL_HOME}"
         chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
 
 	# create a who apt diversion for the fake one not being replaced
@@ -1189,7 +1190,7 @@ buildFS()
 	# install SNX and CShell
 	/root/snx_install.sh
 	echo "Installing CShell" >&2
-	DISPLAY=${DISPLAY} PATH=/nopatch:$PATH /root/cshell_install.sh 
+	DISPLAY="${DISPLAY}" PATH="/nopatch:$PATH" /root/cshell_install.sh 
 	
 	exit 0
 	EOF9
@@ -1218,9 +1219,9 @@ buildFS()
 
    # fake barebones Mozilla/Firefox profile
    # just enough to make cshell_install.sh happy
-   mkdir -p home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release
-   touch home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release/cert9.db
-   cat <<-'EOF23' > home/${CSHELL_USER}/.mozilla/firefox/installs.ini
+   mkdir -p "home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release"
+   touch "home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release/cert9.db"
+   cat <<-'EOF23' > "home/${CSHELL_USER}/.mozilla/firefox/installs.ini"
 	Path=3ui8lv6m.default-release
 	Default=3ui8lv6m.default-release
 	EOF23
@@ -1244,15 +1245,15 @@ FstabMount()
 {
    # fstab for building chroot
    cat <<-EOF10 > etc/fstab
-	/tmp            ${CHROOT}/tmp           none bind 0 0
-	/dev            ${CHROOT}/dev           none bind 0 0
-	/dev/pts        ${CHROOT}/dev/pts       none bind 0 0
-	/sys            ${CHROOT}/sys           none bind 0 0
-	/var/log        ${CHROOT}/var/log       none bind 0 0
-	/run            ${CHROOT}/run           none bind 0 0
-	/proc           ${CHROOT}/proc          proc defaults 0 0
-	/dev/shm        ${CHROOT}/dev/shm       none bind 0 0
-	/tmp/.X11-unix  ${CHROOT}/tmp/.X11-unix none bind 0 0
+	/tmp            "${CHROOT}/tmp"           none bind 0 0
+	/dev            "${CHROOT}/dev"           none bind 0 0
+	/dev/pts        "${CHROOT}/dev/pts"       none bind 0 0
+	/sys            "${CHROOT}/sys"           none bind 0 0
+	/var/log        "${CHROOT}/var/log"       none bind 0 0
+	/run            "${CHROOT}/run"           none bind 0 0
+	/proc           "${CHROOT}/proc"          proc defaults 0 0
+	/dev/shm        "${CHROOT}/dev/shm"       none bind 0 0
+	/tmp/.X11-unix  "${CHROOT}/tmp/.X11-unix" none bind 0 0
 	EOF10
 
    #mount --fstab etc/fstab -a
@@ -1270,10 +1271,10 @@ fixDNS()
    cd etc || die "could not enter ${CHROOT}/etc"
 
    # Debian - resolvconf
-   [[ ${DEB} -eq 1 ]] && ln -s ../run/resolvconf/resolv.conf resolv.conf
+   [[ "${DEB}" -eq 1 ]] && ln -s ../run/resolvconf/resolv.conf resolv.conf
 
    # RH - systemd-resolved
-   [[ ${RH} -eq 1 ]] && ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
+   [[ "${RH}" -eq 1 ]] && ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
 
    cd ..
 }
@@ -1293,7 +1294,7 @@ GnomeAutoRun()
 	[Desktop Entry]
 	Type=Application
 	Name=cshell
-	Exec=sudo ${INSTALLSCRIPT} -s -c ${CHROOT} start
+	Exec=sudo "${INSTALLSCRIPT}" -s -c "${CHROOT}" start
 	Icon=
 	Comment=
 	X-GNOME-Autostart-enabled=true
@@ -1368,7 +1369,7 @@ FirefoxPolicy()
       if [[ -d "${DIR}" ]]
       then
          # if policies file not already installed
-         if [[ ! -f "${DIR}/policies.json" ]] || grep CShell_Certificate ${DIR}/policies.json &> /dev/null
+         if [[ ! -f "${DIR}/policies.json" ]] || grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
          then
 
             # can't be sure for snap
@@ -1404,7 +1405,7 @@ FirefoxPolicy()
    done
 
    # if Firefox policy installed
-   if [[ $PolInstalled -eq 1 ]]
+   if [[ "$PolInstalled" -eq 1 ]]
    then
       # if Firefox running
       pgrep firefox &>/dev/null && echo "Please restart Firefox" >&2
@@ -1500,7 +1501,7 @@ main()
    # after options check, as we want help to work.
    PreCheck "$1"
 
-   if [[ ${install} -eq false ]]
+   if [[ "${install}" -eq false ]]
    then
       # handling of stop/start/status/shell 
       argCommands "$1"
