@@ -1501,7 +1501,7 @@ main()
    # after options check, as we want help to work.
    PreCheck "$1"
 
-   if [[ ${install} -eq false ]]
+   if [[ "${install}" -eq false ]]
    then
       # handling of stop/start/status/shell 
       argCommands "$1"
