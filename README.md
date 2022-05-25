@@ -4,7 +4,7 @@ Checkpoint R80+ VPN client chroot wrapper
 
 VPN client chroot'ed Debian setup/wrapper 
 
-for Debian/Ubuntu/RH/CentOS/Fedora hosts
+for Debian/Ubuntu/RH/CentOS/Fedora based hosts
 
 Checkpoint R80.10 and up
 
@@ -129,16 +129,20 @@ Pop!_OS 22.04 LTS
 
 Kubuntu 22.04 LTS
 
+lubuntu 22.04 LTS
+
+Kali 2022.2
+
 Fedora 23
 
 Fedora 36
 
 CentOS 8
 
-CentOS 9 stream
-
 Rocky 8.6
 
-AlmaLinux 9.0
-
 Oracle 8.6
+
+CentOS 9 stream
+
+AlmaLinux 9.0
