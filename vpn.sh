@@ -765,7 +765,7 @@ selfUpdate()
     then
         echo "Found a new version of ${SCRIPTNAME}, updating myself..."
 
-        vpnsh=$(mktemp) || die "failed creating mktemp file"
+        vpnsh="$(mktemp)" || die "failed creating mktemp file"
 
         # download github more recent version
         if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
@@ -937,7 +937,7 @@ installPackages()
       #dnf makecache
      
       # epel-release not needed for Fedora
-      if grep -v ^Fedora /etc/redhat-release &> /dev/null
+      if grep -v "^Fedora" /etc/redhat-release &> /dev/null
       then
          dnf -y install epel-release || needCentOSFix
       fi
@@ -965,7 +965,7 @@ fixRHDNS()
    then
 
       # CentOS 9 does not install systemd-resolved by default
-      if [[ ! -f /usr/lib/systemd/systemd-resolved ]]
+      if [[ ! -f "/usr/lib/systemd/systemd-resolved" ]]
       then	    
          dnf -y install systemd-resolved 
       fi
@@ -984,7 +984,7 @@ fixRHDNS()
          [[ "$counter" -eq 30 ]] && die "systemd-resolved not going live"
       done
 
-      [[ ! -f /run/systemd/resolve/stub-resolv.conf ]] && die "Something went wrong activating systemd-resolved"
+      [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && die "Something went wrong activating systemd-resolved"
 
       # if any old style interface scripts
       # we need them controlled by NetworkManager
