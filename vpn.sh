@@ -981,7 +981,7 @@ fixRHDNS()
       do
          sleep 2
          (( counter=counter+1 ))
-         [[ $counter -eq 30 ]] && die "systemd-resolved not going live"
+         [[ "$counter" -eq 30 ]] && die "systemd-resolved not going live"
       done
 
       [[ ! -f /run/systemd/resolve/stub-resolv.conf ]] && die "Something went wrong activating systemd-resolved"
@@ -1005,7 +1005,7 @@ fixRHDNS()
       do 
          sleep 4
          (( counter=counter+1 ))
-         [[ $counter -eq 20 ]] && die "NetworkManager not going live"
+         [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
       done
    fi
 }
@@ -1083,7 +1083,7 @@ buildFS()
    cd "${CHROOT}" >&2 || die "could not chdir to ${CHROOT}" 
 
    # for sharing X11 with the host
-   mkdir -p tmp/.X11-unix
+   mkdir -p "tmp/.X11-unix"
 
    # for leaving cshell_install.sh happy
    mkdir -p "${CHROOT}/${CSHELL_HOME}/.config" || die "couldn not mkdir ${CHROOT}/${CSHELL_HOME}/.config"
@@ -1405,7 +1405,7 @@ FirefoxPolicy()
    done
 
    # if Firefox policy installed
-   if [[ $PolInstalled -eq 1 ]]
+   if [[ "$PolInstalled" -eq 1 ]]
    then
       # if Firefox running
       pgrep firefox &>/dev/null && echo "Please restart Firefox" >&2
