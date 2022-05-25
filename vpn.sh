@@ -39,6 +39,8 @@
 #        antiX-21
 #        Pop!_OS 22.04 LTS
 #        Kubuntu 22.04 LTS
+#        lubuntu 22.04 LTS
+#        Kali 2022.2
 #        Fedora 23 
 #        Fedora 36
 #        Rocky  8.6
@@ -542,6 +544,7 @@ showStatus()
    # DNS
    echo
    [[ "${RH}" -eq 1 ]] && resolvectl status
+   echo
    cat /etc/resolv.conf
    echo
     
@@ -701,19 +704,20 @@ doUninstall()
    # stop CShell
    doStop
 
-   # delete autorun file, chroot subdirectory and installed script
+   # delete autorun file, chroot subdirectory, installed script and host user
    rm -f  "${XDGAUTO}"          &>/dev/null
    rm -rf "${CHROOT}"           &>/dev/null
    rm -f  "${INSTALLSCRIPT}"    &>/dev/null
    userdel -rf "${CSHELL_USER}" &>/dev/null
    groupdel "${CSHELL_GROUP}"   &>/dev/null
 
-   for DIR in "/usr/lib/firefox" "/usr/lib64/firefox" "/usr/lib/firefox-esr" "/usr/lib64/firefox-esr"
+   # cycle possible firefox global directories
+   for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies/"
    do
       # delete Firefox policy for accepting localhost CShell certificate
-      if grep CShell_Certificate "${DIR}/distribution/policies.json" &> /dev/null
+      if grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
       then
-         rm -f "${DIR}/distribution/policies.json"
+         rm -f "${DIR}/policies.json"
       fi
    done
 
@@ -769,7 +773,7 @@ selfUpdate()
            # if script not run for /usr/local/bin, also update it
            [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]] && cp -f "${vpnsh}" "${SCRIPT}"
 
-           # update the onne in /usr/local/bin
+           # update the one in /usr/local/bin
            cp -f "${vpnsh}" "${INSTALLSCRIPT}"
 
            chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
@@ -1358,23 +1362,31 @@ FirefoxPolicy()
    PolInstalled=0
 
    # if Firefox installed
-   for DIR in "/usr/lib/firefox" "/usr/lib64/firefox" "/usr/lib/firefox-esr" "/usr/lib64/firefox-esr"
+   # cycle possible firefox global directories
+   for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies"
    do
       if [[ -d "${DIR}" ]]
       then
          # if policies file not already installed
-         if [[ ! -f ${DIR}/distribution/policies.json ]] || grep CShell_Certificate ${DIR}/distribution/policies.json &> /dev/null
+         if [[ ! -f "${DIR}/policies.json" ]] || grep CShell_Certificate ${DIR}/policies.json &> /dev/null
          then
-            # flag as installed
-            PolInstalled=1
+
+            # can't be sure for snap
+            # so don't flag as policy installed
+            # for it to warn for accepting certificate
+            if [[ "${DIR}" != "/etc/firefox/policies/" ]]
+            then
+               # flag as installed
+               PolInstalled=1
+            fi
 
             # aparently present in Debian, nevertheless
-            mkdir -p ${DIR}/distribution 2> /dev/null
+            mkdir -p "${DIR}" 2> /dev/null
 
             # create JSON policy file
             # Accepting CShell certificate
 
-            cat <<-EOF14 > ${DIR}/distribution/policies.json
+            cat <<-EOF14 > "${DIR}/policies.json"
 	    {
 	    "policies": {
 	                  "ImportEnterpriseRoots": true,
