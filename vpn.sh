@@ -300,7 +300,7 @@ doGetOpts()
 PreCheck()
 {
    # If not Intel based
-   if [[ $(uname -m) != 'x86_64' ]] && [[ $(uname -m) != 'i386' ]]
+   if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
       die "This script is for Debian/RedHat Linux Intel based flavours only"
    fi
