@@ -512,14 +512,12 @@ showStatus()
    echo -n "Linux  IP address: "
    # print IP address linked to hostname
    #hostname -I | awk '{print $1}'
-   echo $(
     ip a s |
     sed -ne '
         /127.0.0.1/!{
             s/^[ \t]*inet[ \t]*\([0-9.]\+\)\/.*$/\1/p
         }
     '
-    )
 
    echo
 
@@ -592,6 +590,16 @@ killCShell()
    fi
 }
 
+# fix /etc/resolv.conf links, chroot and host
+fixLinks()
+{
+      ln -sf "$1" "${CHROOT}/etc/resolv.conf"
+      readlink /etc/resolv.conf | grep "$1" 2>/dev/null
+      if [ $? -ne 0  ]
+      then
+         ln -sf "$1" /etc/resolv.conf
+      fi
+}
 
 # start command
 doStart()
@@ -613,37 +621,13 @@ doStart()
    # Unless a security update inside chroot damages it
 
    # Debian family - resolvconf
-   if [[ "${DEB}" -eq 1 ]]
-   then
-      ln -sf ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
-      readlink /etc/resolv.conf | grep '/run/resolvconf/resolv.conf' 2>/dev/null
-      if [ $? -ne 0  ]
-      then
-         ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
-      fi
-   fi
+   [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/resolv.conf
 
    # ArchLinux family - openresolv
-   if [[ "${DEB}" -eq 1 ]]
-   then
-      ln -sf ../run/resolvconf/interfaces/NetworkManager "${CHROOT}/etc/resolv.conf"
-      readlink /etc/resolv.conf | grep '/run/resolvconf/interfaces/NetworkManager' 2>/dev/null
-      if [ $? -ne 0  ]
-      then
-         ln -sf ../run/resolvconf/interfaces/NetworkManager /etc/resolv.conf
-      fi
-   fi
+   [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/interfaces/NetworkManager
 
    # RH family - systemd-resolved
-   if [[ "${RH}" -eq 1 ]] 
-   then
-      ln -sf ../run/systemd/resolve/stub-resolv.conf "${CHROOT}/etc/resolv.conf"
-      readlink /etc/resolv.conf | grep '/run/systemd/resolve/stub-resolv.conf' 2>/dev/null
-      if [ $? -ne 0  ]
-      then
-         ln -sf ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-      fi
-   fi
+   [[ "${RH}" -eq 1 ]] && fixLinks ../run/systemd/resolve/stub-resolv.conf
 
    # mount Chroot file systems
    mountChrootFS
@@ -1013,7 +997,7 @@ fixARCHDNS()
    fi
    if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]]
    then
-      cat <-'EOF33' > /etc/NetworkManager/conf.d/rc-manager.conf
+      cat <<-'EOF33' > /etc/NetworkManager/conf.d/rc-manager.conf
 	[main]
 	rc-manager=resolvconf
 	EOF33
@@ -1602,4 +1586,3 @@ main()
 # main stub will full arguments passing
 main "$@"
 
- 
