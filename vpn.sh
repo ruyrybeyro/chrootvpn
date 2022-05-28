@@ -986,15 +986,16 @@ fixARCHDNS()
 {
    local counter
 
+   # seems not to be needed
    # if ArchLinux and systemd-resolvd active
-   if [[ "${ARCH}" -eq 1 ]] && [[ -f "/run/systemd/resolve/stub-resolv.conf" ]]
-   then
-
-      # stop resolved and configure it to not be active on boot 
-      systemctl stop  systemd-resolved
-      systemctl disable systemd-resolved
-      systemctl mask systemd-resolved 
-   fi
+   #if [[ "${ARCH}" -eq 1 ]] && [[ -f "/run/systemd/resolve/stub-resolv.conf" ]]
+   #then
+   #
+   #  # stop resolved and configure it to not be active on boot 
+   #  systemctl stop  systemd-resolved
+   #   systemctl disable systemd-resolved
+   #   systemctl mask systemd-resolved 
+   #fi
    if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]]
    then
       cat <<-'EOF33' > /etc/NetworkManager/conf.d/rc-manager.conf
