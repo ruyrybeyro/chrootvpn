@@ -730,7 +730,7 @@ doUninstall()
    groupdel "${CSHELL_GROUP}"   &>/dev/null
 
    # cycle possible firefox global directories
-   for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies/"
+   for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies/" "/usr/lib/firefox-developer-edition/distribution" "/usr/lib64/firefox-developer-edition/distribution"
    do
       # delete Firefox policy for accepting localhost CShell certificate
       if grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
