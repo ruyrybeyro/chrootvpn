@@ -330,6 +330,7 @@ PreCheck()
    # for using/relaunching
    # self-promoting script to sudo
    # recursively call the script with sudo
+   # hence no needing sudo before the command
    [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
 }
 
@@ -1398,6 +1399,7 @@ GnomeAutoRun()
 
       # add entry for it to be executed
       # upon graphical login
+      # so it does not need to be started manually
       if ! grep "${INSTALLSCRIPT}" /etc/sudoers &>/dev/null
       then
          echo
