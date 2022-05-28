@@ -1385,7 +1385,7 @@ GnomeAutoRun()
       echo "%sudo	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
       echo "#or: " >&2
       echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
-    
+
       # if sudo, SUDO_USER identifies the non-privileged user 
       if [[ -n "${SUDO_USER}" ]]
       then
@@ -1395,6 +1395,16 @@ GnomeAutoRun()
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
       fi
       echo >&2
+
+      # add entry for it to be executed
+      # upon graphical login
+      if ! grep "${INSTALLSCRIPT}" /etc/sudoers &>/dev/null
+      then
+         echo
+         echo -e "\n%sudo       ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >> /etc/sudoers
+         echo "%sudo       ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
+         echo "added to /etc/sudoers" >&2
+      fi
 
    else
       echo "Was not able to create Gnome autorun desktop entry for CShell" >&2
