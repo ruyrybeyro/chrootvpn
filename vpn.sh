@@ -330,6 +330,7 @@ PreCheck()
    # for using/relaunching
    # self-promoting script to sudo
    # recursively call the script with sudo
+   # hence no needing sudo before the command
    [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
 }
 
