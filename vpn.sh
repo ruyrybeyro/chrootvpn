@@ -1560,7 +1560,6 @@ InstallChroot()
 main()
 {
    # command options handling
-   # dont put inside ""
    doGetOpts "$@"
 
    # clean all the getopts logic from the arguments
