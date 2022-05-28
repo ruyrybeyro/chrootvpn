@@ -511,7 +511,16 @@ showStatus()
 
    echo -n "Linux  IP address: "
    # print IP address linked to hostname
-   hostname -I | awk '{print $1}'
+   #hostname -I | awk '{print $1}'
+   echo $(
+    ip a s |
+    sed -ne '
+        /127.0.0.1/!{
+            s/^[ \t]*inet[ \t]*\([0-9.]\+\)\/.*$/\1/p
+        }
+    '
+    )
+
    echo
 
    # if $IP not empty
