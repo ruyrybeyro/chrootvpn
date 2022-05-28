@@ -971,8 +971,7 @@ installPackages()
       dnf clean all 
    fi
 
-
-
+   # if Arch Linux
    if [[ "${ARCH}" -eq 1 ]]
    then
       # Arch is a rolling distro, should we have an update here?
@@ -1344,6 +1343,7 @@ fixDNS()
 
    # RH - systemd-resolved
    [[ "${RH}" -eq 1 ]] && ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
+
    # ArchLinux
    [[ "${ARCH}" -eq 1 ]] && ln -sf ../run/resolvconf/interfaces/NetworkManager resolv.conf
 
@@ -1585,6 +1585,7 @@ main()
 
    if [[ "${install}" -eq false ]]
    then
+
       # handling of stop/start/status/shell 
       argCommands "$1"
    else
