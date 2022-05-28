@@ -1398,6 +1398,7 @@ GnomeAutoRun()
 
       # add entry for it to be executed
       # upon graphical login
+      # so it does not need to be started manually
       if ! grep "${INSTALLSCRIPT}" /etc/sudoers &>/dev/null
       then
          echo
