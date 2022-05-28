@@ -451,8 +451,8 @@ showStatus()
    echo
    echo -n "System: "
    awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } ' /etc/os-release
-   #uname -m
-   echo -n "$(arch) "
+   #arch
+   echo -n "$(uname -m) "
    uname -r
    echo -n "Chroot: "
 
