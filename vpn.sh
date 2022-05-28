@@ -622,7 +622,7 @@ doStart()
       if [ $? -ne 0  ]
       then
          rm -f /etc/resolv.conf
-         ln -s /run/resolvconf/resolv.conf /etc/resolv.conf
+         ln -s ../run/resolvconf/resolv.conf /etc/resolv.conf
       fi
    fi
 
@@ -634,7 +634,7 @@ doStart()
       if [ $? -ne 0  ]
       then
          rm -f /etc/resolv.conf
-         ln -s /run/resolvconf/interfaces/NetworkManager /etc/resolv.conf
+         ln -s ../run/resolvconf/interfaces/NetworkManager /etc/resolv.conf
       fi
    fi
 
@@ -646,7 +646,7 @@ doStart()
       if [ $? -ne 0  ]
       then
          rm -f /etc/resolv.conf
-         ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+         ln -s ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
       fi
    fi
 
@@ -996,13 +996,13 @@ installPackages()
    if [[ "${ARCH}" -eq 1 ]]
    then
       # update metadata
-	  pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
+      pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
 
       pacman -S openresolv
    fi
 }
 
-
+# fix DNS Arch
 fixARCHDNS()
 {
    local counter
@@ -1022,6 +1022,12 @@ fixARCHDNS()
 	[main]
 	rc-manager=resolvconf
 	EOF33
+
+      # replace /etc/resolv.conf for a resolved link
+      cd /etc || die "was not able to cd /etc"
+
+      rm -f /etc/resolv.conf
+      ln -s ../run/resolvconf/interfaces/NetworkManager resolv.conf
 
       # reload NeworkManager
       systemctl reload NetworkManager
