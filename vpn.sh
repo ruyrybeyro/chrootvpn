@@ -974,9 +974,10 @@ installPackages()
 
    if [[ "${ARCH}" -eq 1 ]]
    then
-      # update metadata
+      # Arch is a rolling distro, should we have an update here?
+      
+      # install packages
       pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
-
       pacman -S openresolv
    fi
 }
