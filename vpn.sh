@@ -48,6 +48,7 @@
 #        CentOS 9 Stream
 #        AlmaLinux 9.0
 #        Oracle Linux 8.6
+#        Arch Linux
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
@@ -307,6 +308,7 @@ PreCheck()
 
    DEB=0
    RH=0
+   ARCH=0
 
    if [[ -f "/etc/debian_version" ]]
    then
@@ -316,7 +318,9 @@ PreCheck()
 
    [[ -f "/etc/redhat-release" ]] && RH=1
 
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && die "Only Debian and RedHat family distributions supported"
+   [[ -f "/etc/arch-release" ]] && ARCH=1
+
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && die "Only Debian, RedHat and ArchLinux family distributions supported"
 
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
@@ -599,18 +603,42 @@ doStart()
    # Checkpoint software seems not mess up with it.
    # Unless a security update inside chroot damages it
 
+   rm -f "${CHROOT}/etc/resolv.conf"
+
    # Debian family - resolvconf
    if [[ "${DEB}" -eq 1 ]]
    then
-      rm -f "${CHROOT}/etc/resolv.conf"
       ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
+      readlink /etc/resolv.conf | grep '/run/resolvconf/resolv.conf' 2>/dev/null
+      if [ $? -ne 0  ]
+      then
+         rm -f /etc/resolv.conf
+         ln -s /run/resolvconf/resolv.conf /etc/resolv.conf
+      fi
+   fi
+
+   # ArchLinux family - openresolv
+   if [[ "${DEB}" -eq 1 ]]
+   then
+      ln -s ../run/resolvconf/interfaces/NetworkManager "${CHROOT}/etc/resolv.conf"
+      readlink /etc/resolv.conf | grep '/run/resolvconf/interfaces/NetworkManager' 2>/dev/null
+      if [ $? -ne 0  ]
+      then
+         rm -f /etc/resolv.conf
+         ln -s /run/resolvconf/interfaces/NetworkManager /etc/resolv.conf
+      fi
    fi
 
    # RH family - systemd-resolved
-   if [[ "${RH}" -eq 1 ]]
+   if [[ "${RH}" -eq 1 ]] 
    then
-      rm -f "${CHROOT}/etc/resolv.conf"
       ln -s ../run/systemd/resolve/stub-resolv.conf "${CHROOT}/etc/resolv.conf"
+      readlink /etc/resolv.conf | grep '/run/systemd/resolve/stub-resolv.conf' 2>/dev/null
+      if [ $? -ne 0  ]
+      then
+         rm -f /etc/resolv.conf
+         ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+      fi
    fi
 
    # mount Chroot file systems
@@ -649,8 +677,9 @@ doStart()
 fixDNS2()
 {
    # try to restore resolv.conf
-   [[ "${DEB}" -eq 1 ]] && resolvconf -u
-   [[ "${RH}" -eq 1 ]]  && authselect apply-changes
+   [[ "${DEB}"  -eq 1 ]] && resolvconf -u
+   [[ "${ARCH}" -eq 1 ]] && resolvconf -u
+   [[ "${RH}"   -eq 1 ]] && authselect apply-changes
 }
 
 
@@ -952,8 +981,52 @@ installPackages()
       fi
       dnf clean all 
    fi
+
+
+
+   if [[ "${ARCH}" -eq 1 ]]
+   then
+      # update metadata
+	  pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
+
+      pacman -S openresolv
+   fi
 }
 
+
+fixARCHDNS()
+{
+   local counter
+
+   # if ArchLinux and systemd-resolvd active
+   if [[ "${ARCH}" -eq 1 ]] && [[ -f "/run/systemd/resolve/stub-resolv.conf" ]]
+   then
+
+      # stop resolved and configure it to not be active on boot 
+      systemctl stop  systemd-resolved
+      systemctl disable systemd-resolved
+      systemctl mask systemd-resolved 
+   fi
+   if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]]
+   then
+      cat <-'EOF33' > /etc/NetworkManager/conf.d/rc-manager.conf
+	[main]
+	rc-manager=resolvconf
+	EOF33
+
+      # reload NeworkManager
+      systemctl reload NetworkManager
+
+      # wait for it to be up
+      counter=0
+      while ! systemctl is-active NetworkManager &> /dev/null
+      do 
+         sleep 4
+         (( counter=counter+1 ))
+         [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
+      done
+   fi
+}
 
 # fix DNS RH family if systemd-resolved not active
 fixRHDNS()
@@ -975,7 +1048,7 @@ fixRHDNS()
       systemctl start  systemd-resolved
       systemctl enable systemd-resolved
 
-      # Possibly waiting for sysstemd service to be active
+      # Possibly waiting for systemd service to be active
       counter=0
       while ! systemctl is-active systemd-resolved &> /dev/null
       do
@@ -1245,15 +1318,15 @@ FstabMount()
 {
    # fstab for building chroot
    cat <<-EOF10 > etc/fstab
-	/tmp            "${CHROOT}/tmp"           none bind 0 0
-	/dev            "${CHROOT}/dev"           none bind 0 0
-	/dev/pts        "${CHROOT}/dev/pts"       none bind 0 0
-	/sys            "${CHROOT}/sys"           none bind 0 0
-	/var/log        "${CHROOT}/var/log"       none bind 0 0
-	/run            "${CHROOT}/run"           none bind 0 0
-	/proc           "${CHROOT}/proc"          proc defaults 0 0
-	/dev/shm        "${CHROOT}/dev/shm"       none bind 0 0
-	/tmp/.X11-unix  "${CHROOT}/tmp/.X11-unix" none bind 0 0
+	/tmp            ${CHROOT}/tmp           none bind 0 0
+	/dev            ${CHROOT}/dev           none bind 0 0
+	/dev/pts        ${CHROOT}/dev/pts       none bind 0 0
+	/sys            ${CHROOT}/sys           none bind 0 0
+	/var/log        ${CHROOT}/var/log       none bind 0 0
+	/run            ${CHROOT}/run           none bind 0 0
+	/proc           ${CHROOT}/proc          proc defaults 0 0
+	/dev/shm        ${CHROOT}/dev/shm       none bind 0 0
+	/tmp/.X11-unix  ${CHROOT}/tmp/.X11-unix none bind 0 0
 	EOF10
 
    #mount --fstab etc/fstab -a
@@ -1275,6 +1348,8 @@ fixDNS()
 
    # RH - systemd-resolved
    [[ "${RH}" -eq 1 ]] && ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
+   # ArchLinux
+   [[ "${ARCH}" -eq 1 ]] && ln -s ../run/resolvconf/interfaces/NetworkManager resolv.conf
 
    cd ..
 }
@@ -1364,7 +1439,7 @@ FirefoxPolicy()
 
    # if Firefox installed
    # cycle possible firefox global directories
-   for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies"
+   for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies" "/usr/lib/firefox-developer-edition/distribution" "/usr/lib64/firefox-developer-edition/distribution"
    do
       if [[ -d "${DIR}" ]]
       then
@@ -1381,7 +1456,7 @@ FirefoxPolicy()
                PolInstalled=1
             fi
 
-            # aparently present in Debian, nevertheless
+            # apparently present in Debian, nevertheless
             mkdir -p "${DIR}" 2> /dev/null
 
             # create JSON policy file
@@ -1407,8 +1482,8 @@ FirefoxPolicy()
    # if Firefox policy installed
    if [[ "$PolInstalled" -eq 1 ]]
    then
-      # if Firefox running
-      pgrep firefox &>/dev/null && echo "Please restart Firefox" >&2
+      # if Firefox running, kill it
+      pgrep -f firefox &>/dev/null && pkill -9 -f firefox
             
       echo "Firefox policy created for accepting https://localhost:14186 certificate" >&2
       echo "If using other browser than Firefox or Firefox is a snap" >&2
@@ -1477,6 +1552,7 @@ InstallChroot()
    preFlight
    installPackages
    fixRHDNS
+   fixARCHDNS
    checkDNS
    createChroot
    createCshellUser
