@@ -612,41 +612,36 @@ doStart()
    # Checkpoint software seems not mess up with it.
    # Unless a security update inside chroot damages it
 
-   rm -f "${CHROOT}/etc/resolv.conf"
-
    # Debian family - resolvconf
    if [[ "${DEB}" -eq 1 ]]
    then
-      ln -s ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
+      ln -sf ../run/resolvconf/resolv.conf "${CHROOT}/etc/resolv.conf"
       readlink /etc/resolv.conf | grep '/run/resolvconf/resolv.conf' 2>/dev/null
       if [ $? -ne 0  ]
       then
-         rm -f /etc/resolv.conf
-         ln -s ../run/resolvconf/resolv.conf /etc/resolv.conf
+         ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
       fi
    fi
 
    # ArchLinux family - openresolv
    if [[ "${DEB}" -eq 1 ]]
    then
-      ln -s ../run/resolvconf/interfaces/NetworkManager "${CHROOT}/etc/resolv.conf"
+      ln -sf ../run/resolvconf/interfaces/NetworkManager "${CHROOT}/etc/resolv.conf"
       readlink /etc/resolv.conf | grep '/run/resolvconf/interfaces/NetworkManager' 2>/dev/null
       if [ $? -ne 0  ]
       then
-         rm -f /etc/resolv.conf
-         ln -s ../run/resolvconf/interfaces/NetworkManager /etc/resolv.conf
+         ln -sf ../run/resolvconf/interfaces/NetworkManager /etc/resolv.conf
       fi
    fi
 
    # RH family - systemd-resolved
    if [[ "${RH}" -eq 1 ]] 
    then
-      ln -s ../run/systemd/resolve/stub-resolv.conf "${CHROOT}/etc/resolv.conf"
+      ln -sf ../run/systemd/resolve/stub-resolv.conf "${CHROOT}/etc/resolv.conf"
       readlink /etc/resolv.conf | grep '/run/systemd/resolve/stub-resolv.conf' 2>/dev/null
       if [ $? -ne 0  ]
       then
-         rm -f /etc/resolv.conf
-         ln -s ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+         ln -sf ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
       fi
    fi
 
@@ -1026,8 +1021,7 @@ fixARCHDNS()
       # replace /etc/resolv.conf for a resolved link
       cd /etc || die "was not able to cd /etc"
 
-      rm -f /etc/resolv.conf
-      ln -s ../run/resolvconf/interfaces/NetworkManager resolv.conf
+      ln -sf ../run/resolvconf/interfaces/NetworkManager resolv.conf
 
       # reload NeworkManager
       systemctl reload NetworkManager
@@ -1081,8 +1075,8 @@ fixRHDNS()
 
       # replace /etc/resolv.conf for a resolved link 
       cd /etc || die "was not able to cd /etc"
-      rm -f /etc/resolv.conf
-      ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
+
+      ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
 
       # reload NeworkManager
       systemctl reload NetworkManager
@@ -1359,12 +1353,12 @@ fixDNS()
    cd etc || die "could not enter ${CHROOT}/etc"
 
    # Debian - resolvconf
-   [[ "${DEB}" -eq 1 ]] && ln -s ../run/resolvconf/resolv.conf resolv.conf
+   [[ "${DEB}" -eq 1 ]] && ln -sf ../run/resolvconf/resolv.conf resolv.conf
 
    # RH - systemd-resolved
-   [[ "${RH}" -eq 1 ]] && ln -s ../run/systemd/resolve/stub-resolv.conf resolv.conf
+   [[ "${RH}" -eq 1 ]] && ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
    # ArchLinux
-   [[ "${ARCH}" -eq 1 ]] && ln -s ../run/resolvconf/interfaces/NetworkManager resolv.conf
+   [[ "${ARCH}" -eq 1 ]] && ln -sf ../run/resolvconf/interfaces/NetworkManager resolv.conf
 
    cd ..
 }
