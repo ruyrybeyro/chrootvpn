@@ -1173,13 +1173,20 @@ buildFS()
    # getting the last version of the agents installation scripts
    # from the firewall
    rm -f snx_install.sh cshell_install.sh
+
+   # download SNX installation scripts from CheckPoint machine
    if wget --no-check-certificate "https://${VPN}/SNX/INSTALL/snx_install.sh"
    then 
+      # download CShell installation scripts from CheckPoint machine
       wget --no-check-certificate "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
+      # register CShell installed version for later
       wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    else
+      # download SNX installation scripts from CheckPoint machine
       wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh"
+      # download CShell installation scripts from CheckPoint machine
       wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
+      # register CShell installed version for later
       wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    fi
 
