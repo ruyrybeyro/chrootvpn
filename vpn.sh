@@ -94,6 +94,7 @@ CONFFILE="/opt/etc/vpn.conf"
 [[ -z "$SSLVPN" ]] && SSLVPN="sslvpn"
 
 # OS to deploy inside 32-bit chroot  
+# minimal Debian
 VARIANT="minbase"
 RELEASE="bullseye" # Debian 11
 DEBIANREPO="http://deb.debian.org/debian/" # fastly repo
@@ -343,7 +344,7 @@ doChroot()
 }
 
 
-# C/Unix convention - 0 success, 1 failed
+# C/Unix convention - 0 success, 1 failure
 isCShellRunning()
 {
    pgrep -f CShell &>/dev/null
@@ -415,7 +416,7 @@ Split()
    if [[ -z "${SPLIT+x}" ]]
    then
       echo "If this does not work, please fill in SPLIT with a network/mask list eg x.x.x.x/x x.x.x.x/x" >&2
-      echo "either in ${CONFFILE} or in ${SCRIPT}"
+      echo "either in ${CONFFILE} or in ${SCRIPTNAME}"
       ip route delete 0.0.0.0/1
       echo "default VPN gateway deleted" >&2
    else 
@@ -423,6 +424,7 @@ Split()
       IP=$(ip -4 addr show "${TUNSNX}" | awk '/inet/ { print $2 } ')
 
       # clean all VPN routes
+      # clean all routes given to tunsnx interface
       ip route flush table main dev "${TUNSNX}"
 
       # create new VPN routes according to $SPLIT
@@ -477,7 +479,8 @@ showStatus()
       wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
 
-   # Mobile Access Portal Agent version
+   # Mobile Access Portal Agent version installed
+   # we kept it earlier when installing
    echo
    if [[ -f "${CHROOT}/root/.cshell_ver.txt" ]]
    then
@@ -592,6 +595,7 @@ killCShell()
 }
 
 # fix /etc/resolv.conf links, chroot and host
+# we need them ok for syncronizing chroot with host
 fixLinks()
 {
       ln -sf "$1" "${CHROOT}/etc/resolv.conf"
@@ -662,7 +666,7 @@ doStart()
    fi
 }
 
-
+# try to fix out of sync resolv.conf
 fixDNS2()
 {
    # try to restore resolv.conf
@@ -678,6 +682,8 @@ doDisconnect()
    # if snx/VPN up, disconnect
    pgrep snx > /dev/null && doChroot /usr/bin/snx -d
 
+   # try to fix resolv.conf having VPN DNS servers 
+   # after tearing down VPN connection
    fixDNS2
 }
 
@@ -740,6 +746,8 @@ doUninstall()
       fi
    done
 
+   # leave /opt/etc/vpn.conf behind
+   # for easing reinstalation
    if [[ -f "${CONFFILE}" ]]
    then
       echo "${CONFFILE} not deleted. If you are not reinstalling do:"
@@ -755,6 +763,7 @@ doUninstall()
 
 
 # upgrade OS inside chroot
+# vpn.sh upgrade
 Upgrade() {
    doChroot /bin/bash --login -pf <<-EOF12
 	apt update
@@ -766,6 +775,7 @@ Upgrade() {
 
 
 # self update this script
+# vpn.sh selfupdate
 selfUpdate() 
 {
     # temporary file for downloading new vpn.sh    
@@ -903,8 +913,9 @@ preFlight()
 }
 
 
-# CentOS 8 changed to upstream
-# make necessary changes to stock image
+# CentOS 8 changed to upstream distribution
+# CentOS Stream beta without epel repository
+# make necessary changes to stock images
 needCentOSFix()
 {
    if grep "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
@@ -930,7 +941,7 @@ needCentOSFix()
 }
 
 
-# system update and package requirements
+# installs package requirements
 installPackages()
 {
    # if Debian family based
@@ -1032,7 +1043,7 @@ fixRHDNS()
    if [[ "${RH}" -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
    then
 
-      # CentOS 9 does not install systemd-resolved by default
+      # CentOS Stream 9 does not install systemd-resolved by default
       if [[ ! -f "/usr/lib/systemd/systemd-resolved" ]]
       then	    
          dnf -y install systemd-resolved 
@@ -1104,7 +1115,7 @@ createChroot()
 
    mkdir -p "${CHROOT}" || die "could not create directory ${CHROOT}"
 
-   # create and populate minimal Debian chroot
+   # create and populate minimal 32-bit Debian chroot
    if ! debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
@@ -1240,16 +1251,16 @@ buildFS()
 	        --gecos "Checkpoint Agent" \
 	        "${CSHELL_USER}" 2>/dev/null || true
 
-        # adjust file and directory permissions
-        # create homedir 
-        test  -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
-        chown -R "${CSHELL_USER}":"${CSHELL_GROUP}" "${CSHELL_HOME}"
-        chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
+	# adjust file and directory permissions
+	# create homedir 
+	test  -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
+	chown -R "${CSHELL_USER}":"${CSHELL_GROUP}" "${CSHELL_HOME}"
+	chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
 
 	# create a who apt diversion for the fake one not being replaced
 	# by security updates inside chroot
 	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
-	
+
 	# needed packages
 	apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools openjdk-11-jre procps net-tools bzip2
 	# clean APT chroot cache
@@ -1264,12 +1275,14 @@ buildFS()
 	EOF9
 
         # directory with stub commands for cshell_install.sh
-	mkdir nopatch
+        mkdir nopatch
 
-        # fake certutil
+	# fake certutil
+	# we are not dealing either with browsers or certificates inside chroot
+	# 
         # -H returns 1 (test installed)
-        # otherwise 0
-   	cat <<-'EOF22' > nopatch/certutil
+	# otherwise 0
+	cat <<-'EOF22' > nopatch/certutil
 	#!/bin/bash
 	if [[ "$1" == "-H" ]]
 	then
@@ -1469,6 +1482,9 @@ FirefoxPolicy()
             # create JSON policy file
             # Accepting CShell certificate
 
+	    # Firefox Policy
+            # add X.509 self-signed CShell certificate
+	    # to the lited of accepted enterprise root certificates
             cat <<-EOF14 > "${DIR}/policies.json"
 	    {
 	    "policies": {
