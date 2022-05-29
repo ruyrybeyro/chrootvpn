@@ -128,7 +128,7 @@ args=("$@")
 # VPN interface
 TUNSNX="tunsnx"
 
-# GNOME autostart X11 file
+# xdg autostart X11 file
 XDGAUTO="/etc/xdg/autostart/cshell.desktop"
 
 # script PATH upon successful setup
@@ -1371,10 +1371,10 @@ fixDNS()
 }
 
 
-# try to create GNOME autorun file similar to CShell
+# try to create xdg autorun file similar to CShell
 # but for all users instead of one user private profile
 # on the host system
-GnomeAutoRun()
+XDGAutoRun()
 {
    # directory for starting apps upon X11 login
    # /etc/xdg/autostart/
@@ -1546,9 +1546,9 @@ chrootEnd()
       # create /etc/vpn.conf
       createConfFile
 
-      # install Gnome autorun file
+      # install xdg autorun file
       # last thing to run
-      GnomeAutoRun
+      XDGAutoRun
 
       echo "chroot setup done." >&2
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
