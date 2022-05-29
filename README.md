@@ -43,7 +43,7 @@ SNX/CShell behave on odd ways ; the chroot is built to counter some of those beh
 CShell CheckPoint Java agent needs Java *and* X11 desktop rights
 binary SNX VPN client needs 32-bits environment.
 
-Recommended having Firefox already installed, for installing a firefox policy for the self-signed Mobile Access Portal Agent X.509 certificate.
+Recommended having Firefox already installed, for deploying a firefox policy for the self-signed Mobile Access Portal Agent X.509 certificate.
 
 Usage:
 
