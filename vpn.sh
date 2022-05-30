@@ -266,7 +266,7 @@ doGetOpts()
       if [[ "${OPT}" = "-" ]]
       then   
          OPT=${OPTARG%%=*}       # extract long option name
-         OPTARG=${OPTARG#"$OPT"}   # extract long option argument (may be empty)
+         OPTARG=${OPTARG#"$OPT"} # extract long option argument (may be empty)
          OPTARG=${OPTARG#=}      # if long option argument, remove assigning `=`
       fi
 
