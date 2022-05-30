@@ -1277,7 +1277,7 @@ buildFS()
 	# install SNX and CShell
 	/root/snx_install.sh
 	echo "Installing CShell" >&2
-	DISPLAY="${DISPLAY}" PATH="/nopatch:$PATH" /root/cshell_install.sh 
+	DISPLAY="${DISPLAY}" PATH=/nopatch:"${PATH}" /root/cshell_install.sh 
 	
 	exit 0
 	EOF9
