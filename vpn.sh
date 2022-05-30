@@ -1010,10 +1010,10 @@ fixARCHDNS()
    #fi
    if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]]
    then
-      cat <<-'EOF33' > /etc/NetworkManager/conf.d/rc-manager.conf
+      cat <<-'EOF17' > /etc/NetworkManager/conf.d/rc-manager.conf
 	[main]
 	rc-manager=resolvconf
-	EOF33
+	EOF17
 
       # replace /etc/resolv.conf for a resolved link
       cd /etc || die "was not able to cd /etc"
@@ -1289,7 +1289,7 @@ buildFS()
 	# 
         # -H returns 1 (test installed)
 	# otherwise 0
-	cat <<-'EOF22' > nopatch/certutil
+	cat <<-'EOF18' > nopatch/certutil
 	#!/bin/bash
 	if [[ "$1" == "-H" ]]
 	then
@@ -1297,7 +1297,7 @@ buildFS()
 	else
 	   exit 0
 	fi
-	EOF22
+	EOF18
 
    # fake xterm and xhost 
    # since they are not needed inside chroot
@@ -1309,10 +1309,10 @@ buildFS()
    # just enough to make cshell_install.sh happy
    mkdir -p "home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release"
    touch "home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release/cert9.db"
-   cat <<-'EOF23' > "home/${CSHELL_USER}/.mozilla/firefox/installs.ini"
+   cat <<-'EOF16' > "home/${CSHELL_USER}/.mozilla/firefox/installs.ini"
 	Path=3ui8lv6m.default-release
 	Default=3ui8lv6m.default-release
-	EOF23
+	EOF16
 
    # creates a subshell
    # to avoid possible pwd complications
@@ -1530,7 +1530,9 @@ chrootEnd()
    local ROOTHOME
 
    # do the last leg of setup inside chroot
-   doChroot /bin/bash --login -pf "/root/chroot_setup.sh"
+   doChroot /bin/bash --login -pf <<-EOF15
+	/root/chroot_setup.sh
+	EOF15
 
    # if sucessful installation
    if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
