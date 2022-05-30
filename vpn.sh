@@ -680,7 +680,7 @@ fixDNS2()
 doDisconnect()
 {
    # if snx/VPN up, disconnect
-   pgrep -f snx > /dev/null && doChroot /usr/bin/snx -d
+   pgrep snx > /dev/null && doChroot /usr/bin/snx -d
 
    # try to fix resolv.conf having VPN DNS servers 
    # after tearing down VPN connection
