@@ -10,7 +10,7 @@ Checkpoint R80.10 and up
 
 Rui Ribeiro 2022
 
-Diogo Paulico - Contributions for Arch Linux 
+Tiago Teles - Contributions for Arch Linux 
 
 Please fill VPN and VPNIP before using this script.
 SPLIT might or not have to be filled, depending on your needs
