@@ -1244,7 +1244,7 @@ buildFS()
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
-        PATH=/sbin:/usr/sbin:/bin:/usr/bin:"${PATH}"
+        PATH=/bin:/sbin:/usr/sbin:/bin:/usr/bin:"${PATH}"
 
 	# create cShell user
 	# create group 
