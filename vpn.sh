@@ -347,7 +347,7 @@ doChroot()
 # C/Unix convention - 0 success, 1 failure
 isCShellRunning()
 {
-   pgrep -qf CShell 
+   pgrep CShell &> /dev/null
    return $?
 }
 
@@ -361,7 +361,7 @@ mountChrootFS()
 
       # mount chroot filesystems
       # if not mounted
-      mount | grep -q "${CHROOT}" &> /dev/null
+      mount | grep "${CHROOT}" &> /dev/null
       if [[ $? -eq 1 ]]
       then
          # consistency checks
@@ -380,7 +380,7 @@ umountChrootFS()
 {
    # unmount chroot filesystems
    # if mounted
-   if mount | grep -q "${CHROOT}" &> /dev/null
+   if mount | grep "${CHROOT}" &> /dev/null
    then
 
       # there is no --fstab for umount
@@ -599,7 +599,7 @@ killCShell()
 fixLinks()
 {
       ln -sf "$1" "${CHROOT}/etc/resolv.conf"
-      readlink /etc/resolv.conf | grep -q "$1" 2>/dev/null
+      readlink /etc/resolv.conf | grep "$1" 2>/dev/null
       if [ $? -ne 0  ]
       then
          ln -sf "$1" /etc/resolv.conf
@@ -680,7 +680,7 @@ fixDNS2()
 doDisconnect()
 {
    # if snx/VPN up, disconnect
-   pgrep -q snx > /dev/null && doChroot /usr/bin/snx -d
+   pgrep snx > /dev/null && doChroot /usr/bin/snx -d
 
    # try to fix resolv.conf having VPN DNS servers 
    # after tearing down VPN connection
@@ -740,7 +740,7 @@ doUninstall()
    for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies/" "/usr/lib/firefox-developer-edition/distribution" "/usr/lib64/firefox-developer-edition/distribution"
    do
       # delete Firefox policy for accepting localhost CShell certificate
-      if grep -q CShell_Certificate "${DIR}/policies.json" &> /dev/null
+      if grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
       then
          rm -f "${DIR}/policies.json"
       fi
@@ -918,7 +918,7 @@ preFlight()
 # make necessary changes to stock images
 needCentOSFix()
 {
-   if grep -q "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
+   if grep "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
    then
       sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
@@ -927,7 +927,7 @@ needCentOSFix()
       dnf -y install epel-release || die "could not install epel-release"
    else
       # fix for older CentOS9 Stream VMs (osboxes)
-      if  grep -q "^CentOS Stream release" /etc/redhat-release &> /dev/null
+      if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
       then
          # update repositories (and keys)
          dnf -y install centos-stream-repos
@@ -966,7 +966,7 @@ installPackages()
       #dnf makecache
      
       # epel-release not needed for Fedora
-      if grep -qv "^Fedora" /etc/redhat-release &> /dev/null
+      if grep -v "^Fedora" /etc/redhat-release &> /dev/null
       then
          dnf -y install epel-release || needCentOSFix
       fi
@@ -1130,12 +1130,12 @@ createChroot()
 createCshellUser()
 {
    # create group 
-   if ! getent group | grep -q "^${CSHELL_GROUP}:" 
+   if ! getent group | grep "^${CSHELL_GROUP}:" &> /dev/null
    then
       addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
    fi
    # create user
-   if ! getent passwd | grep -q "^${CSHELL_USER}:" 
+   if ! getent passwd | grep "^${CSHELL_USER}:" &> /dev/null
    then
       adduser --quiet \
             --uid "${CSHELL_UID}" \
