@@ -146,7 +146,7 @@ true=0
 false=1
 
 # PATH for being called outside the command line (from xdg)
-PATH="bin:/usr/bin:/usr/sbin:/bin/sbin:${PATH}"
+PATH="/bin:/usr/bin:/usr/sbin:/bin/sbin:${PATH}"
 
 #
 # user interface handling
