@@ -146,7 +146,7 @@ true=0
 false=1
 
 # PATH for being called outside the command line (from xdg)
-PATH="/usr/bin:/usr/sbin:/bin/sbin:${PATH}"
+PATH="bin:/usr/bin:/usr/sbin:/bin/sbin:${PATH}"
 
 #
 # user interface handling
@@ -1244,7 +1244,6 @@ buildFS()
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
-        PATH=/bin:/sbin:/usr/sbin:/bin:/usr/bin:"${PATH}"
 
 	# create cShell user
 	# create group 
