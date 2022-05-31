@@ -112,8 +112,12 @@ shell        bash shell inside chroot
 
 upgrade      OS upgrade inside chroot
 
+KNOWN FEATURES
 
-
+. The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?). If the status command of this script shows new versions, uninstall and install it again;
+. The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
+. if using Firefox, is advised to have it installed *before* running this script;
+. if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file be deployed again.
 
 Tested with chroot Debian Bullseye 11 (32 bits)
 
