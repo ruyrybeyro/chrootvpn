@@ -1280,15 +1280,19 @@ buildFS()
 	# create a who apt diversion for the fake one not being replaced
 	# by security updates inside chroot
 	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
-	
+
+	# needed packages
+	apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2
 	if [[ ${JAVA8} -eq true ]]
 	then
 	   # needed packages
+           # update to get metadata of stretch update repository
+           # so we can get OpenJDK 8+dependencies
 	   apt update
-	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2  openjdk-8-jdk 
+	   apt -y install openjdk-8-jdk 
 	else
 	   # needed packages
-	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2 openjdk-11-jre
+	   apt -y install openjdk-11-jre
 	fi
 
 	# clean APT chroot cache
