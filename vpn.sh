@@ -1254,7 +1254,9 @@ buildFS()
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
-
+	# "booleans"
+	true=0
+	false=1
         JAVA8=${JAVA8}
 	# create cShell user
 	# create group 
