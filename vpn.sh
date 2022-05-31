@@ -284,6 +284,7 @@ doGetOpts()
                            CHROOTPROXY="${OPTARG}" ;;
          portalurl )       needs_arg                 # VPN portal URL prefix
                            SSLVPN="${OPTARG}" ;;
+         oldjava )         JAVA8=true ;;
          v | version )     echo "${VERSION}"         # script version
                            exit 0 ;;
          osver)            awk -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2 } ' /etc/os-release
@@ -881,8 +882,7 @@ argCommands()
       shell)        doShell ;;
       uninstall)    doUninstall ;;
       upgrade)      Upgrade ;;
-      selfupdate)   selfUpdate;;
-      oldjava)      JAVA8=true;;
+      selfupdate)   selfUpdate ;;
       *)            do_help ;;
 
    esac
@@ -1246,13 +1246,18 @@ buildFS()
    echo "${CHROOT}" > etc/debian_chroot
 
    # if needing java8
-   echo "deb http://security.debian.org/ stretch/updates main" > etc/apt/sources.list.d/stretch.list
+   if [[ ${JAVA8} -eq true ]]
+   then
+      echo 'deb http://security.debian.org/ stretch/updates main' > etc/apt/sources.list.d/stretch.list
+   fi
 
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
-
-        JAVA8="${JAVA8}"
+	# "booleans"
+	true=0
+	false=1
+        JAVA8=${JAVA8}
 	# create cShell user
 	# create group 
 	addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
@@ -1275,14 +1280,19 @@ buildFS()
 	# create a who apt diversion for the fake one not being replaced
 	# by security updates inside chroot
 	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
-	
-	if [[ "${JAVA8}" -eq true ]]
+
+	# needed packages
+	apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2
+	if [[ ${JAVA8} -eq true ]]
 	then
 	   # needed packages
-	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools openjdk-8-jdk procps net-tools bzip2
+           # update to get metadata of stretch update repository
+           # so we can get OpenJDK 8+dependencies
+	   apt update
+	   apt -y install openjdk-8-jdk 
 	else
 	   # needed packages
-	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools openjdk-11-jre procps net-tools bzip2
+	   apt -y install openjdk-11-jre
 	fi
 
 	# clean APT chroot cache
