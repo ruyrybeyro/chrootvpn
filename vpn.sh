@@ -179,7 +179,7 @@ do_help()
 	-c|--chroot  change default chroot ${CHROOT} directory
 	-h|--help    show this help
 	-v|--version script version
-	--vpn        select another VPN DNS full name
+	--vpn        select VPN DNS full name install time
 	--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019)
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 	--portalurl  custom VPN portal URL prefix (usually sslvpn) ;

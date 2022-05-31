@@ -67,7 +67,7 @@ vpn.sh -v|--version
 
 -v|--version script version
 
---vpn        select another VPN DNS full name
+--vpn        select VPN DNS full name install time
 
 --proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 
