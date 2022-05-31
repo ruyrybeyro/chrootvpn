@@ -122,6 +122,7 @@ KNOWN FEATURES
 
 . if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file be deployed again.
 
+COMPATIBILITY
 
 Tested with chroot Debian Bullseye 11 (32 bits)
 
