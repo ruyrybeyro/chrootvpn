@@ -881,8 +881,8 @@ argCommands()
       shell)        doShell ;;
       uninstall)    doUninstall ;;
       upgrade)      Upgrade ;;
-      selfupdate)   selfUpdate;;
-      oldjava)      JAVA8=true;;
+      selfupdate)   selfUpdate ;;
+      oldjava)      JAVA8=true ;;
       *)            do_help ;;
 
    esac
@@ -1283,10 +1283,10 @@ buildFS()
 	if [[ "${JAVA8}" -eq true ]]
 	then
 	   # needed packages
-	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools openjdk-8-jdk procps net-tools bzip2
+	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2  openjdk-8-jdk 
 	else
 	   # needed packages
-	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools openjdk-11-jre procps net-tools bzip2
+	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2 openjdk-11-jre
 	fi
 
 	# clean APT chroot cache
