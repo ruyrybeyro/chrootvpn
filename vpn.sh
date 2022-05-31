@@ -1299,7 +1299,8 @@ buildFS()
 	   # needed packages
            # update to get metadata of stretch update repository
            # so we can get OpenJDK 8+dependencies
-	   apt update
+           # update intentionally done only after installing other packages
+	   apt -y update
 	   apt -y install openjdk-8-jdk 
 	else
 	   # needed packages
