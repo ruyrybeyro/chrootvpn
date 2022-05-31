@@ -47,7 +47,7 @@ Recommended having Firefox already installed, for deploying a firefox policy for
 
 Usage:
 
-vpn.sh [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
+vpn.sh [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN][--oldjava] -i|--install
 
 vpn.sh [-o FILE|--output=FILE][-c|--chroot=DIR] start|stop|restart|status
 
@@ -70,6 +70,8 @@ vpn.sh -v|--version
 --vpn        select another VPN DNS full name
 
 --proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
+
+--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019)
 
 -o|--output  redirect ALL output for FILE
 
