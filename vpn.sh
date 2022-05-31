@@ -148,7 +148,7 @@ false=1
 # PATH for being called outside the command line (from xdg)
 PATH="/sbin:/usr/sbin:/bin:/usr/sbin:${PATH}"
 
-# Java version (affected by oldjava parameter)
+# Java version (affected by oldjava parameter) 
 # for old CheckPoint VPN servers
 # circa 2019?
 # The web Portal Interface has a far more dated look than in 2022
@@ -180,7 +180,7 @@ do_help()
 	-h|--help    show this help
 	-v|--version script version
 	--vpn        select VPN DNS full name install time
-	--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019)
+	--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental*
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 	--portalurl  custom VPN portal URL prefix (usually sslvpn) ;
                      use it as --portalurl=STRING together with --install
