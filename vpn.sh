@@ -1246,7 +1246,11 @@ buildFS()
    echo "${CHROOT}" > etc/debian_chroot
 
    # if needing java8
-   echo "deb http://security.debian.org/ stretch/updates main" > etc/apt/sources.list.d/stretch.list
+   if [[ "${JAVA8}" -eq true ]]
+   then
+      echo "deb http://security.debian.org/ stretch/updates main" > etc/apt/sources.list.d/stretch.list
+      apt update
+   fi
 
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
