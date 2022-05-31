@@ -1466,7 +1466,7 @@ XDGAutoRun()
       fi
 
    else
-      echo "Was not able to create Gnome autorun desktop entry for CShell" >&2
+      echo "Was not able to create XDG autorun desktop entry for CShell" >&2
    fi
 }
 
