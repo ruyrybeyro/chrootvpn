@@ -284,6 +284,7 @@ doGetOpts()
                            CHROOTPROXY="${OPTARG}" ;;
          portalurl )       needs_arg                 # VPN portal URL prefix
                            SSLVPN="${OPTARG}" ;;
+         oldjava )         JAVA8=true ;;
          v | version )     echo "${VERSION}"         # script version
                            exit 0 ;;
          osver)            awk -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2 } ' /etc/os-release
@@ -882,7 +883,6 @@ argCommands()
       uninstall)    doUninstall ;;
       upgrade)      Upgrade ;;
       selfupdate)   selfUpdate ;;
-      oldjava)      JAVA8=true ;;
       *)            do_help ;;
 
    esac
@@ -1246,17 +1246,16 @@ buildFS()
    echo "${CHROOT}" > etc/debian_chroot
 
    # if needing java8
-   if [[ "${JAVA8}" -eq true ]]
+   if [[ ${JAVA8} -eq true ]]
    then
-      echo "deb http://security.debian.org/ stretch/updates main" > etc/apt/sources.list.d/stretch.list
-      apt update
+      echo 'deb http://security.debian.org/ stretch/updates main' > etc/apt/sources.list.d/stretch.list
    fi
 
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
 
-        JAVA8="${JAVA8}"
+        JAVA8=${JAVA8}
 	# create cShell user
 	# create group 
 	addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
@@ -1280,9 +1279,10 @@ buildFS()
 	# by security updates inside chroot
 	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
 	
-	if [[ "${JAVA8}" -eq true ]]
+	if [[ ${JAVA8} -eq true ]]
 	then
 	   # needed packages
+	   apt update
 	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2  openjdk-8-jdk 
 	else
 	   # needed packages
