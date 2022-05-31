@@ -176,6 +176,7 @@ do_help()
 	-h|--help    show this help
 	-v|--version script version
 	--vpn        select another VPN DNS full name
+	--oldjava    JDK 8 for old Checkpoint softwar
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 	--portalurl  custom VPN portal URL prefix (usually sslvpn) ;
                      use it as --portalurl=STRING together with --install
