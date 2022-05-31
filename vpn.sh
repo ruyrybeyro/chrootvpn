@@ -149,6 +149,10 @@ false=1
 PATH="/sbin:/usr/sbin:/bin:/usr/sbin:${PATH}"
 
 # Java version (affected by oldjava parameter)
+# for old CheckPoint VPN servers
+# circa 2019?
+# The web Portal Interface has a far more dated look than in 2022
+#
 JAVA8=false
 
 #
@@ -285,7 +289,7 @@ doGetOpts()
                            CHROOTPROXY="${OPTARG}" ;;
          portalurl )       needs_arg                 # VPN portal URL prefix
                            SSLVPN="${OPTARG}" ;;
-         oldjava )         JAVA8=true ;;
+         oldjava )         JAVA8=true ;;             # compatibility with older VPN servers
          v | version )     echo "${VERSION}"         # script version
                            exit 0 ;;
          osver)            awk -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2 } ' /etc/os-release
@@ -1247,8 +1251,10 @@ buildFS()
    echo "${CHROOT}" > etc/debian_chroot
 
    # if needing java8
+   # --oldjava
    if [[ ${JAVA8} -eq true ]]
    then
+      # old repository for getting JDK 8 and dependencies
       echo 'deb http://security.debian.org/ stretch/updates main' > etc/apt/sources.list.d/stretch.list
    fi
 
@@ -1258,7 +1264,9 @@ buildFS()
 	# "booleans"
 	true=0
 	false=1
+	# --oldjava
         JAVA8=${JAVA8}
+
 	# create cShell user
 	# create group 
 	addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
@@ -1284,6 +1292,8 @@ buildFS()
 
 	# needed packages
 	apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2
+
+        # --oldjava
 	if [[ ${JAVA8} -eq true ]]
 	then
 	   # needed packages
