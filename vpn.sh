@@ -148,6 +148,9 @@ false=1
 # PATH for being called outside the command line (from xdg)
 PATH="/sbin:/usr/sbin:/bin:/usr/sbin:${PATH}"
 
+# Java version (affected by oldjava parameter)
+JAVA8=false
+
 #
 # user interface handling
 #
@@ -879,6 +882,7 @@ argCommands()
       uninstall)    doUninstall ;;
       upgrade)      Upgrade ;;
       selfupdate)   selfUpdate;;
+      oldjava)      JAVA8=true;;
       *)            do_help ;;
 
    esac
@@ -1241,10 +1245,14 @@ buildFS()
    # including default root prompt
    echo "${CHROOT}" > etc/debian_chroot
 
+   # if needing java8
+   echo "deb http://security.debian.org/ stretch/updates main" > etc/apt/sources.list.d/stretch.list
+
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
 
+        JAVA8="${JAVA8}"
 	# create cShell user
 	# create group 
 	addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
@@ -1267,9 +1275,16 @@ buildFS()
 	# create a who apt diversion for the fake one not being replaced
 	# by security updates inside chroot
 	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
+	
+	if [[ "${JAVA8}" -eq true ]]
+	then
+	   # needed packages
+	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools openjdk-8-jdk procps net-tools bzip2
+	else
+	   # needed packages
+	   apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools openjdk-11-jre procps net-tools bzip2
+	fi
 
-	# needed packages
-	apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools openjdk-11-jre procps net-tools bzip2
 	# clean APT chroot cache
 	apt clean
 	
