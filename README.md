@@ -8,6 +8,8 @@ for Debian/Ubuntu/RH/CentOS/Fedora based hosts
 
 Checkpoint R80.10 and up
 
+https://github.com/ruyrybeyro/chrootvpn
+
 Rui Ribeiro 2022
 
 Tiago Teles - Contributions for Arch Linux 
@@ -114,7 +116,7 @@ upgrade      OS upgrade inside chroot
 
 KNOWN FEATURES
 
-. The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?). If the status command of this script shows new versions, uninstall and install it again;
+. The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-aparently this functionality is not supported for Linux clients. If the status command of this script shows new versions, uninstall and install it again;
 
 . The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
 
