@@ -160,6 +160,8 @@ JAVA8=false
 #
 # user interface handling
 #
+# -h|--help
+#
 
 do_help()
 {
