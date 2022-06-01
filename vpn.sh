@@ -1587,7 +1587,7 @@ FirefoxPolicy()
 }
 
 
-# last leg inside chroot
+# last leg inside/building chroot
 #
 # minimal house keeping and user messages
 # after finishing chroot setup
