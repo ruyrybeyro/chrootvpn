@@ -49,6 +49,7 @@
 #        AlmaLinux 9.0
 #        Oracle Linux 8.6
 #        Arch Linux
+#        Manjaro 21.2.6.1
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf

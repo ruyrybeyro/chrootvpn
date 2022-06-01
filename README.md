@@ -169,3 +169,5 @@ CentOS 9 stream
 AlmaLinux 9.0
 
 Arch Linux
+
+Manjaro 21.2.6.1
