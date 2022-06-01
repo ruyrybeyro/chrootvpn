@@ -126,7 +126,9 @@ KNOWN FEATURES
 
 . if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file be deployed again;
 
-. if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon'.
+. if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon';
+
+. if issues connecting to VPN after first installation/OS upgrade, reboot.
 
 COMPATIBILITY
 
