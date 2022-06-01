@@ -7,13 +7,13 @@
 #
 # Please fill VPN and VPNIP before using this script.
 # SPLIT might or not have to be filled, depending on your needs 
-# and Checkpoint VPN routes.
+# and Checkpoint VPN given routes.
 #
 # if /opt/etc/vpn.conf is present the above script settings will be 
 # ignored. vpn.conf is created upon first instalation.
 #
-# first time run it as ./vpn.sh -i
-# Accept localhost certificate visiting https://localhost:14186/id
+# first time run it as ./vpn.sh -i --vpn=YOUR.VPN.SERVER
+# Accept localhost certificate visiting https://localhost:14186/id if not Firefox
 # Then open VPN URL to login/start the VPN
 #
 # It will get CShell and SNX installations scripts from the firewall,
@@ -52,6 +52,7 @@
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
+# "Arch"   hosts openresolv and /run/resolvconf/interfaces/NetworkManager
 # "RedHat" hosts systemd-resolved and /run/systemd/resolve/stub-resolv.conf
 #
 
@@ -151,6 +152,7 @@ PATH="/sbin:/usr/sbin:/bin:/usr/sbin:${PATH}"
 # Java version (affected by oldjava parameter) 
 # for old CheckPoint VPN servers
 # circa 2019?
+# hint:
 # The web Portal Interface has a far more dated look than in 2022
 #
 JAVA8=false
@@ -270,7 +272,16 @@ doGetOpts()
    while getopts dic:-:o:shv OPT
    do
 
-      # long option: reformulate OPT and OPTARG
+      # long option -- , - handling
+      # reformulate OPT and OPTARG
+      # arguments are
+      # OPT equals name of long options
+      # = separator/delimiter
+      # OPTARG argument
+      # as in --vpn=myvpn.myorg.com
+      # OPT=vpn
+      # OPTARG=myvpn.myorg.com
+      #
       if [[ "${OPT}" = "-" ]]
       then   
          OPT=${OPTARG%%=*}       # extract long option name
@@ -278,7 +289,9 @@ doGetOpts()
          OPTARG=${OPTARG#=}      # if long option argument, remove assigning `=`
       fi
 
+      # handle normal or long option
       case "${OPT}" in
+
          i | install )     install=true ;;           # install chroot
          c | chroot )      needs_arg                 # change location of change on runtime 
                            CHROOT="${OPTARG}" ;;
@@ -301,6 +314,7 @@ doGetOpts()
          h | help )        do_help ;;                # show help
          ??* )             die "Illegal option --${OPT}" ;;  # bad long option
          ? )               exit 2;;                  # bad short option (reported by getopts) 
+
        esac
 
    done
@@ -316,24 +330,27 @@ PreCheck()
       die "This script is for Debian/RedHat/Arch Linux Intel based flavours only"
    fi
 
+   # init distro flags
    DEB=0
    RH=0
    ARCH=0
 
    if [[ -f "/etc/debian_version" ]]
    then
-      DEB=1
+      DEB=1 # is Debian family
       ischroot && die "Do not run this script inside a chroot"
    fi
 
-   [[ -f "/etc/redhat-release" ]] && RH=1
+   [[ -f "/etc/redhat-release" ]] && RH=1 # is RedHat family 
 
-   [[ -f "/etc/arch-release" ]] && ARCH=1
+   [[ -f "/etc/arch-release" ]] && ARCH=1 # is Arch family
 
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && die "Only Debian, RedHat and ArchLinux family distributions supported"
 
+   # if VPN or VPNIP empty
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
+      # and not handling uninstall, abort
       [[ "$1" == "uninstall" ]] || die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
 
@@ -417,9 +434,16 @@ umountChrootFS()
 #
 
 # split command
+#
+# split tunnel, only after VPN is up
+# if VPN is giving "wrong routes"
+# deleting the default VPN gateway mith not be enough
+# so there is a need to fill in routes in the SPLIT variable
+# at /opt/etc/vpn.conf 
+# or if before install it, at the beginning of this script
+#
 Split()
 {
-   # split tunnel, only after VPN is up
 
    # if SPLIT empty
    if [[ -z "${SPLIT+x}" ]]
@@ -466,8 +490,8 @@ showStatus()
    #arch
    echo -n "$(uname -m) "
    uname -r
-   echo -n "Chroot: "
 
+   echo -n "Chroot: "
    doChroot /bin/bash --login -pf <<-EOF2 | awk -v ORS= -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2" " } '
 	cat /etc/os-release
 	EOF2
@@ -535,6 +559,8 @@ showStatus()
    echo
 
    # if $IP not empty
+   # e.g. VPN up
+   #
    if [[ -n "${IP}" ]]
    then
       echo "VPN on"
@@ -560,7 +586,7 @@ showStatus()
       echo "VPN off"
    fi
 
-   # VPN signature(s) - local - outside chroot
+   # VPN signature(s) - /etc/snx inside the chroot 
    echo
    echo "VPN signatures"
    echo
@@ -573,7 +599,7 @@ showStatus()
    cat /etc/resolv.conf
    echo
     
-   # get latest release version
+   # get latest release version of this script
    VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
 
    echo "current ${SCRIPTNAME} version     : ${VERSION}"
@@ -772,7 +798,7 @@ doUninstall()
 
 
 # upgrade OS inside chroot
-# vpn.sh upgrade
+# vpn.sh upgrade option
 Upgrade() {
    doChroot /bin/bash --login -pf <<-EOF12
 	apt update
@@ -789,6 +815,7 @@ selfUpdate()
 {
     # temporary file for downloading new vpn.sh    
     local vpnsh
+    # github release version
     local VER
 
     # get this latest script release version
@@ -888,7 +915,7 @@ argCommands()
       uninstall)    doUninstall ;;
       upgrade)      Upgrade ;;
       selfupdate)   selfUpdate ;;
-      *)            do_help ;;
+      *)            do_help ;;         # default 
 
    esac
 
@@ -927,15 +954,17 @@ preFlight()
 # make necessary changes to stock images
 needCentOSFix()
 {
+   # CentOS 8 no more
    if grep "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
    then
+      # change reposs to CentOS Stream 8
       sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
       # we came here because we failed to install epel-release, so trying again
       dnf -y install epel-release || die "could not install epel-release"
    else
-      # fix for older CentOS9 Stream VMs (osboxes)
+      # fix for older CentOS Stream 9 VMs (osboxes)
       if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
       then
          # update repositories (and keys)
@@ -1296,14 +1325,14 @@ buildFS()
         # --oldjava
 	if [[ ${JAVA8} -eq true ]]
 	then
-	   # needed packages
+	   # needed package
            # update to get metadata of stretch update repository
            # so we can get OpenJDK 8+dependencies
            # update intentionally done only after installing other packages
 	   apt -y update
 	   apt -y install openjdk-8-jdk 
 	else
-	   # needed packages
+	   # needed package
 	   apt -y install openjdk-11-jre
 	fi
 

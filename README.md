@@ -116,13 +116,17 @@ upgrade      OS upgrade inside chroot
 
 KNOWN FEATURES
 
+. The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, start/restart the script using a X11 graphical terminal;
+
 . The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-aparently this functionality is not supported for Linux clients. If the status command of this script shows new versions, uninstall and install it again;
 
 . The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
 
 . if using Firefox, is advised to have it installed *before* running this script;
 
-. if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file be deployed again.
+. if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file be deployed again;
+
+. if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon'.
 
 COMPATIBILITY
 
