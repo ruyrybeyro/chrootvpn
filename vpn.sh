@@ -48,7 +48,7 @@
 #        CentOS 9 Stream
 #        AlmaLinux 9.0
 #        Oracle Linux 8.6
-#        Arch Linux
+#        Arch Linux 2022.05.01
 #        Manjaro 21.2.6.1
 #
 # For DNS sync between host and chroot
