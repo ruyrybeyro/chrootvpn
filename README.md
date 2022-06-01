@@ -116,7 +116,7 @@ upgrade      OS upgrade inside chroot
 
 KNOWN FEATURES
 
-. The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?). If the status command of this script shows new versions, uninstall and install it again;
+. The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-aparently this functionality is not supported for Linux clients. If the status command of this script shows new versions, uninstall and install it again;
 
 . The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
 
