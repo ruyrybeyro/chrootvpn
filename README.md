@@ -116,7 +116,7 @@ upgrade      OS upgrade inside chroot
 
 KNOWN FEATURES
 
-. The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, start/restart the script using a X11 graphical terminal;
+. The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, or afterr logging in, start/restart the script using a X11 graphical terminal;
 
 . The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-aparently this functionality is not supported for Linux clients. If the status command of this script shows new versions, uninstall and install it again;
 
@@ -126,7 +126,12 @@ KNOWN FEATURES
 
 . if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file be deployed again;
 
-. if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon'.
+. if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon';
+
+. if issues connecting to VPN after first installation/OS upgrade, reboot;
+
+. If asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installe or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
+
 
 COMPATIBILITY
 
