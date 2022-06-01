@@ -245,6 +245,9 @@ needs_arg()
 
 
 # Redirect Output
+# -o|--output
+# -s|--silent called with /dev/null
+#
 doOutput()
 {
    LOG_FILE="$1"
