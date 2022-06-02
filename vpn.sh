@@ -333,13 +333,14 @@ PreCheck()
    # If not Intel based
    if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
-      die "This script is for Debian/RedHat/Arch Linux Intel based flavours only"
+      die "This script is for Debian/RedHat/Arch/SUSE Linux Intel based flavours only"
    fi
 
    # init distro flags
    DEB=0
    RH=0
    ARCH=0
+   SUSE=0
 
    if [[ -f "/etc/debian_version" ]]
    then
@@ -348,10 +349,10 @@ PreCheck()
    fi
 
    [[ -f "/etc/redhat-release" ]] && RH=1 # is RedHat family 
-
    [[ -f "/etc/arch-release" ]] && ARCH=1 # is Arch family
+   [[ -f "/etc/SUSE-brand" ]]   && SUSE=1 # is SUSE family
 
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && die "Only Debian, RedHat and ArchLinux family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]]  && die "Only Debian, RedHat ArchLinux, and SUSE family distributions supported"
 
    # if VPN or VPNIP empty
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
@@ -371,8 +372,20 @@ PreCheck()
 # wrapper for chroot
 doChroot()
 {
+   # cache inside chroot gives problems
+   # disable it for creating chroot
+   if [[ ${SUSE} -eq 1 ]]
+   then
+      systemctl stop nscd
+   fi
+
    # setarch i386 lies to uname about being 32 bits
    setarch i386 chroot "${CHROOT}" "$@"
+
+   if [[ ${SUSE} -eq 1 ]]
+   then
+      systemctl start nscd
+   fi
 }
 
 
@@ -640,7 +653,7 @@ killCShell()
 fixLinks()
 {
       ln -sf "$1" "${CHROOT}/etc/resolv.conf"
-      readlink /etc/resolv.conf | grep "$1" 2>/dev/null
+      readlink /etc/resolv.conf | grep "$1" &> /dev/null
       if [ $? -ne 0  ]
       then
          ln -sf "$1" /etc/resolv.conf
@@ -674,6 +687,9 @@ doStart()
 
    # RH family - systemd-resolved
    [[ "${RH}" -eq 1 ]] && fixLinks ../run/systemd/resolve/stub-resolv.conf
+
+   # SUSE - netconfig
+   [[ "${SUSE}" -eq 1 ]] && fixLinks ../run/netconfig/resolv.conf
 
    # mount Chroot file systems
    mountChrootFS
@@ -713,6 +729,7 @@ fixDNS2()
    # try to restore resolv.conf
    [[ "${DEB}"  -eq 1 ]] && resolvconf -u
    [[ "${ARCH}" -eq 1 ]] && resolvconf -u
+   [[ "${SUSE}" -eq 1 ]] && netconfig update -f
    [[ "${RH}"   -eq 1 ]] && authselect apply-changes
 }
 
@@ -1035,9 +1052,18 @@ installPackages()
       pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
       pacman -S openresolv
    fi
+
+   # if SUSE based
+   if [[ "${SUSE}" -eq 1 ]]
+   then
+      zypper ref
+
+      zypper -n install ca-certificates jq wget debootstrap xhost openresolv dnsmasq
+      #zypper clean
+   fi
 }
 
-# fix DNS Arch
+# fix DNS - Arch
 fixARCHDNS()
 {
    local counter
@@ -1130,6 +1156,39 @@ fixRHDNS()
          (( counter=counter+1 ))
          [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
       done
+   fi
+}
+
+# fix DNS - SUSE 
+fixSUSEDNS
+{
+   local counter
+
+   if [[ "${SUSE}" -eq 1 ]] && grep -v ^NETCONFIG_DNS_FORWARDER=\"dnsmasq\" /etc/sysconfig/network/config &> /dev/null
+   then
+
+      # replace DNS line
+      # dnsmasq works well with openresolv
+      #
+      sed -i 's/^NETCONFIG_DNS_FORWARDER=.*/NETCONFIG_DNS_FORWARDER="dnsmasq"/g' /etc/sysconfig/network/config
+
+      # reload NeworkManager
+      systemctl reload NetworkManager
+
+
+      ln -sf ../run/netconfig/resolv.conf resolv.conf
+
+      # wait for it to be up
+      counter=0
+      while ! systemctl is-active NetworkManager &> /dev/null
+      do
+         sleep 4
+         (( counter=counter+1 ))
+         [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
+      done
+
+      # restart network
+      systemctl restart network
    fi
 }
 
@@ -1439,6 +1498,9 @@ fixDNS()
    # ArchLinux
    [[ "${ARCH}" -eq 1 ]] && ln -sf ../run/resolvconf/interfaces/NetworkManager resolv.conf
 
+   # SUSE - resolvconf
+   [[ "${SUSE}" -eq 1 ]] && ln -sf ../run/netconfig/resolv.conf resolv.conf
+
    cd ..
 }
 
@@ -1657,6 +1719,7 @@ InstallChroot()
    installPackages
    fixRHDNS
    fixARCHDNS
+   fixSUSEDNS
    checkDNS
    createChroot
    createCshellUser
