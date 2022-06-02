@@ -1234,22 +1234,21 @@ createChroot()
 createCshellUser()
 {
    # create group 
-   if ! getent group | grep "^${CSHELL_GROUP}:" &> /dev/null
+   getent group | grep "^${CSHELL_GROUP}:" &> /dev/null
+   if [[ $? -ne 0 ]] 
    then
-      addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
+      groupadd --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
    fi
    # create user
-   if ! getent passwd | grep "^${CSHELL_USER}:" &> /dev/null
+   getent passwd | grep "^${CSHELL_USER}:" &> /dev/null
+   if [[ $? -ne 0 ]]
    then
-      adduser --quiet \
+      useradd \
             --uid "${CSHELL_UID}" \
             --gid "${CSHELL_GID}" \
             --no-create-home \
-            --disabled-password \
             --home "${CSHELL_HOME}" \
-            --gecos "Checkpoint Agent" \
             --shell "/bin/false" \
-            --disabled-login \
             "${CSHELL_USER}" 2>/dev/null || true
    fi
    # adjust file and directory permissions
