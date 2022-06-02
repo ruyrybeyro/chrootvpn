@@ -1161,7 +1161,7 @@ fixRHDNS()
 }
 
 # fix DNS - SUSE 
-fixSUSEDNS
+fixSUSEDNS()
 {
    local counter
 
