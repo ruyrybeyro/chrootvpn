@@ -53,9 +53,10 @@
 #        openSUSE Leap 15.3
 #
 # For DNS sync between host and chroot
-# "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
-# "Arch"   hosts openresolv and /run/resolvconf/interfaces/NetworkManager
-# "RedHat" hosts systemd-resolved and /run/systemd/resolve/stub-resolv.conf
+# "Debian" host resolvconf       and /run/resolvconf/resolv.conf
+# "Arch"   host openresolv       and /run/resolvconf/interfaces/NetworkManager
+# "RedHat" host systemd-resolved and /run/systemd/resolve/stub-resolv.conf
+# "SUSE"   host dnsmasq          and /run/netconfig/resolv.conf
 #
 
 # script/deploy version, make the same as deploy
@@ -1059,8 +1060,8 @@ installPackages()
    then
       zypper ref
 
-      zypper -n install ca-certificates jq wget debootstrap xhost openresolv dnsmasq
-      #zypper clean
+      zypper -n install ca-certificates jq wget debootstrap xhost dnsmasq
+      zypper clean
    fi
 }
 
@@ -1169,7 +1170,6 @@ fixSUSEDNS()
    then
 
       # replace DNS line
-      # dnsmasq works well with openresolv
       #
       sed -i 's/^NETCONFIG_DNS_FORWARDER=.*/NETCONFIG_DNS_FORWARDER="dnsmasq"/g' /etc/sysconfig/network/config
 
