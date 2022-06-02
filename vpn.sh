@@ -2,7 +2,7 @@
 #
 # Rui Ribeiro
 #
-# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RH/CentOS/Fedora hosts 
+# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RH/CentOS/Fedora/SUSE hosts 
 # Checkpoint R80.10 and up
 #
 # Please fill VPN and VPNIP before using this script.
@@ -50,6 +50,7 @@
 #        Oracle Linux 8.6
 #        Arch Linux 2022.05.01
 #        Manjaro 21.2.6.1
+#        openSUSE Leap 15.3
 #
 # For DNS sync between host and chroot
 # "Debian" hosts resolvconf and /run/resolvconf/resolv.conf
