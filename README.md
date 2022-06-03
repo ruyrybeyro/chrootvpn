@@ -115,6 +115,7 @@ shell        bash shell inside chroot
 upgrade      OS upgrade inside chroot
 
 KNOWN FEATURES
+==============
 
 . The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, or afterr logging in, start/restart the script using a X11 graphical terminal;
 
@@ -134,10 +135,14 @@ KNOWN FEATURES
 
 
 COMPATIBILITY
+=============
 
 Tested with chroot Debian Bullseye 11 (32 bits)
 
 Tested with hosts:
+
+Debian based
+============ 
 
 Debian 10
 
@@ -159,6 +164,9 @@ lubuntu 22.04 LTS
 
 Kali 2022.2
 
+RedHat based
+============
+
 Fedora 23
 
 Fedora 36
@@ -173,8 +181,14 @@ CentOS 9 stream
 
 AlmaLinux 9.0
 
+Arch based
+==========
+
 Arch Linux 2022.05.01
 
 Manjaro 21.2.6.1
+
+SUSE
+====
 
 openSUSE Leap 15.3
