@@ -60,7 +60,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.00"
+VERSION="v1.01"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -685,7 +685,7 @@ doStart()
    [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/resolv.conf
 
    # ArchLinux family - openresolv
-   [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/interfaces/NetworkManager
+   [[ "${ARCH}" -eq 1 ]] && fixLinks ../run/resolvconf/interfaces/NetworkManager
 
    # RH family - systemd-resolved
    [[ "${RH}" -eq 1 ]] && fixLinks ../run/systemd/resolve/stub-resolv.conf
