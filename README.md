@@ -134,6 +134,7 @@ KNOWN FEATURES
 
 
 COMPATIBILITY
+=============
 
 Tested with chroot Debian Bullseye 11 (32 bits)
 
