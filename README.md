@@ -139,6 +139,9 @@ Tested with chroot Debian Bullseye 11 (32 bits)
 
 Tested with hosts:
 
+Debian based
+============ 
+
 Debian 10
 
 Debian 11
@@ -159,6 +162,9 @@ lubuntu 22.04 LTS
 
 Kali 2022.2
 
+RedHat based
+============
+
 Fedora 23
 
 Fedora 36
@@ -173,8 +179,14 @@ CentOS 9 stream
 
 AlmaLinux 9.0
 
+Arch based
+==========
+
 Arch Linux 2022.05.01
 
 Manjaro 21.2.6.1
+
+SUSE
+====
 
 openSUSE Leap 15.3
