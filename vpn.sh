@@ -1234,14 +1234,10 @@ createChroot()
 createCshellUser()
 {
    # create group 
-   getent group | grep "^${CSHELL_GROUP}:" &> /dev/null
-   if [[ $? -ne 0 ]] 
-   then
-      groupadd --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
-   fi
+   getent group "^${CSHELL_GROUP}:" &> /dev/null || groupadd --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
+
    # create user
-   getent passwd | grep "^${CSHELL_USER}:" &> /dev/null
-   if [[ $? -ne 0 ]]
+   if ! getent passwd "^${CSHELL_USER}:" &> /dev/null 
    then
       useradd \
             --uid "${CSHELL_UID}" \
