@@ -374,20 +374,8 @@ PreCheck()
 # wrapper for chroot
 doChroot()
 {
-   # cache inside chroot gives problems
-   # disable it for creating chroot
-   #if [[ ${SUSE} -eq 1 ]]
-   #then
-   #   systemctl stop nscd
-   #fi
-
    # setarch i386 lies to uname about being 32 bits
    setarch i386 chroot "${CHROOT}" "$@"
-
-   #if [[ ${SUSE} -eq 1 ]]
-   #then
-   #   systemctl start nscd
-   #fi
 }
 
 
