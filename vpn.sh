@@ -350,9 +350,9 @@ PreCheck()
       ischroot && die "Do not run this script inside a chroot"
    fi
 
-   [[ -f "/etc/redhat-release" ]] && RH=1 # is RedHat family 
-   [[ -f "/etc/arch-release" ]] && ARCH=1 # is Arch family
-   [[ -f "/etc/SUSE-brand" ]]   && SUSE=1 # is SUSE family
+   [[ -f "/etc/redhat-release" ]] && RH=1   # is RedHat family 
+   [[ -f "/etc/arch-release" ]]   && ARCH=1 # is Arch family
+   [[ -f "/etc/SUSE-brand" ]]     && SUSE=1 # is SUSE family
 
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]]  && die "Only Debian, RedHat ArchLinux, and SUSE family distributions supported"
 
@@ -376,18 +376,18 @@ doChroot()
 {
    # cache inside chroot gives problems
    # disable it for creating chroot
-   if [[ ${SUSE} -eq 1 ]]
-   then
-      systemctl stop nscd
-   fi
+   #if [[ ${SUSE} -eq 1 ]]
+   #then
+   #   systemctl stop nscd
+   #fi
 
    # setarch i386 lies to uname about being 32 bits
    setarch i386 chroot "${CHROOT}" "$@"
 
-   if [[ ${SUSE} -eq 1 ]]
-   then
-      systemctl start nscd
-   fi
+   #if [[ ${SUSE} -eq 1 ]]
+   #then
+   #   systemctl start nscd
+   #fi
 }
 
 
@@ -1459,6 +1459,7 @@ buildFS()
 FstabMount()
 {
    # fstab for building chroot
+   # run nscd mount is for *not* sharing nscd between host and chroot
    cat <<-EOF10 > etc/fstab
 	/tmp            ${CHROOT}/tmp           none bind 0 0
 	/dev            ${CHROOT}/dev           none bind 0 0
@@ -1466,6 +1467,7 @@ FstabMount()
 	/sys            ${CHROOT}/sys           none bind 0 0
 	/var/log        ${CHROOT}/var/log       none bind 0 0
 	/run            ${CHROOT}/run           none bind 0 0
+        /run/nscd       ${CHROOT}/run           none bind 0 0
 	/proc           ${CHROOT}/proc          proc defaults 0 0
 	/dev/shm        ${CHROOT}/dev/shm       none bind 0 0
 	/tmp/.X11-unix  ${CHROOT}/tmp/.X11-unix none bind 0 0
