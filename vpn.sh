@@ -404,6 +404,13 @@ mountChrootFS()
 
          # mount using fstab inside chroot, all filesystems
          mount --fstab "${CHROOT}/etc/fstab" -a
+
+         # lax double check
+         mount | grep "${CHROOT}" &> /dev/null
+         if [[ $? -ne 0 ]]
+         then
+            die "mount failed"
+         fi
       fi
 
    fi
@@ -427,7 +434,6 @@ umountChrootFS()
       do
          umount "$i" 2> /dev/null
          umount -l "$i" 2> /dev/null
-      done
 
       # force umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
