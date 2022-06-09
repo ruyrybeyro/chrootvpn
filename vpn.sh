@@ -51,6 +51,7 @@
 #        Arch Linux 2022.05.01
 #        Manjaro 21.2.6.1
 #        openSUSE Leap 15.3
+#        openSUSE Leap 15.4
 #
 # For DNS sync between host and chroot
 # "Debian" host resolvconf       and /run/resolvconf/resolv.conf
