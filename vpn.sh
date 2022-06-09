@@ -1171,6 +1171,8 @@ fixSUSEDNS()
       # reload NeworkManager
       systemctl reload NetworkManager
 
+      # replace /etc/resolv.conf for a resolved link
+      cd /etc || die "was not able to cd /etc"
 
       ln -sf ../run/netconfig/resolv.conf resolv.conf
 
