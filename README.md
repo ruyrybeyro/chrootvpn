@@ -192,4 +192,5 @@ SUSE
 ====
 
 openSUSE Leap 15.3
+
 openSUSE Leap 15.4
