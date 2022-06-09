@@ -434,6 +434,7 @@ umountChrootFS()
       do
          umount "$i" 2> /dev/null
          umount -l "$i" 2> /dev/null
+      done
 
       # force umount any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
