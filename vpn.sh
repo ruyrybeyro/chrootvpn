@@ -405,6 +405,14 @@ mountChrootFS()
          # mount using fstab inside chroot, all filesystems
          mount --fstab "${CHROOT}/etc/fstab" -a
 
+        # /run/nscd cant be shared between host and chroot
+        # for it to not share socket
+        if [[ -d /run/nscd ]]
+        then
+           mkdir -p "${CHROOT}/nscd"
+           mount --bind "${CHROOT}/nscd" "${CHROOT}/run/nscd"
+        fi
+
          # lax double check
          mount | grep "${CHROOT}" &> /dev/null
          if [[ $? -ne 0 ]]
@@ -1464,7 +1472,6 @@ FstabMount()
 	/sys            ${CHROOT}/sys           none bind 0 0
 	/var/log        ${CHROOT}/var/log       none bind 0 0
 	/run            ${CHROOT}/run           none bind 0 0
-        /run/nscd       ${CHROOT}/run           none bind 0 0
 	/proc           ${CHROOT}/proc          proc defaults 0 0
 	/dev/shm        ${CHROOT}/dev/shm       none bind 0 0
 	/tmp/.X11-unix  ${CHROOT}/tmp/.X11-unix none bind 0 0
