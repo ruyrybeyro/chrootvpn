@@ -164,6 +164,8 @@ lubuntu 22.04 LTS
 
 Kali 2022.2
 
+Devuan Chimaera 4.0
+
 RedHat based
 ============
 

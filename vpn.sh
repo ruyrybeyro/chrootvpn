@@ -41,6 +41,7 @@
 #        Kubuntu 22.04 LTS
 #        lubuntu 22.04 LTS
 #        Kali 2022.2
+#        Devuan Chimaera 4.0
 #        Fedora 23 
 #        Fedora 36
 #        Rocky  8.6
