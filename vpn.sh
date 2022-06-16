@@ -64,7 +64,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.03"
+VERSION="v1.04"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -1211,7 +1211,9 @@ checkDNS()
    # test, try to fix, test
    if ! getent ahostsv4 "${VPN}" &> /dev/null
    then
+      # at least Parrot and Mint seem to need this
       fixDNS2
+
       # test it now to see if fixed
       if ! getent ahostsv4 "${VPN}" &> /dev/null
       then
