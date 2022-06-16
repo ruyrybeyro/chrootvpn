@@ -42,6 +42,7 @@
 #        Kubuntu 22.04 LTS
 #        lubuntu 22.04 LTS
 #        Kali 2022.2
+#        Parrot 5.0.1 Electro Ara
 #        Elementary OS 6.1 Jolnir
 #        Fedora 23 
 #        Fedora 36
