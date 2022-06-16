@@ -131,6 +131,8 @@ KNOWN FEATURES
 
 . if issues connecting to VPN after first installation/OS upgrade, reboot;
 
+. if DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
+
 . If asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installe or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
 
 
@@ -165,6 +167,8 @@ Kubuntu 22.04 LTS
 lubuntu 22.04 LTS
 
 Kali 2022.2
+
+Parrot 5.0.1 Electro Ara
 
 Elementary OS 6.1 Jolnir
 
