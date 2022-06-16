@@ -148,13 +148,15 @@ Debian 10
 
 Debian 11
 
+antiX-21
+
+Devuan Chimaera 4.0
+
 Ubuntu LTS 18.04
 
 Ubuntu LTS 22.04
 
 Mint   20.2
-
-antiX-21
 
 Pop!_OS 22.04 LTS
 
@@ -164,7 +166,7 @@ lubuntu 22.04 LTS
 
 Kali 2022.2
 
-Devuan Chimaera 4.0
+Elementary OS 6.1 Jolnir
 
 RedHat based
 ============
