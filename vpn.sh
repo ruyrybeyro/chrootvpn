@@ -1037,7 +1037,7 @@ installPackages()
       #dnf makecache
      
       # epel-release not needed for Fedora and Mageia
-      if egrep -v "^Fedora|^Mageia" /etc/redhat-release &> /dev/null
+      if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
       then
          dnf -y install epel-release || needCentOSFix
       else
@@ -1051,6 +1051,11 @@ installPackages()
 
       # not installed in all variants as a debootstrap dependency
       dnf -y install dpkg
+      if [[ $? -ne 0 ]] && grep "OpenMandriva Lx release 4.3" /etc/redhat-release &> /dev/null
+      then
+         dnf -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
+      fi
+      
 
       # xhost should be present
       if [[ ! -f "/usr/bin/xhost" ]]
