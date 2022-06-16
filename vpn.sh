@@ -50,6 +50,7 @@
 #        CentOS 8 Stream
 #        CentOS 9 Stream
 #        AlmaLinux 9.0
+#        Mageia 8
 #        Oracle Linux 8.6
 #        Arch Linux 2022.05.01
 #        Manjaro 21.2.6.1
@@ -1035,19 +1036,27 @@ installPackages()
    then
       #dnf makecache
      
-      # epel-release not needed for Fedora
-      if grep -v "^Fedora" /etc/redhat-release &> /dev/null
+      # epel-release not needed for Fedora and Mageia
+      if egrep -v "^Fedora|^Mageia" /etc/redhat-release &> /dev/null
       then
          dnf -y install epel-release || needCentOSFix
+      else
+         if grep "^Mageia" /etc/redhat-release &> /dev/null
+         then
+            dnf -y install NetworkManager 
+         fi
       fi
 
       dnf -y install ca-certificates jq wget debootstrap
 
+      # not installed in all variants as a debootstrap dependency
+      dnf -y install dpkg
+
       # xhost should be present
       if [[ ! -f "/usr/bin/xhost" ]]
       then
-         dnf -y xorg-x11-server-utils
-         dnf -y xhost
+         dnf -y install xorg-x11-server-utils
+         dnf -y install xhost
       fi
       dnf clean all 
    fi
