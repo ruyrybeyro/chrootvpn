@@ -1202,20 +1202,25 @@ fixSUSEDNS()
    fi
 }
 
-
 # "bug/feature": check DNS health
 checkDNS()
 {
    # ask once for slow systems to fail/cache it
    getent ahostsv4 "${VPN}"  &> /dev/null
-   # test it now
+   
+   # test, try to fix, test
    if ! getent ahostsv4 "${VPN}" &> /dev/null
    then
-      echo "DNS problems after installing resolvconf?" >&2
-      echo "Not resolving ${VPN} DNS" >&2
-      echo "Relaunch ${SCRIPTNAME} for possible timeout issues" >&2
-      die "Otherwise fix or reboot to fix" 
-   fi	   
+      fixDNS2
+      # test it now to see if fixed
+      if ! getent ahostsv4 "${VPN}" &> /dev/null
+      then
+         echo "DNS problems after installing resolvconf?" >&2
+         echo "Not resolving ${VPN} DNS" >&2
+         echo "Relaunch ${SCRIPTNAME} for possible timeout issues" >&2
+         die "Otherwise fix or reboot to fix" 
+      fi	   
+   fi
 }
 
 
