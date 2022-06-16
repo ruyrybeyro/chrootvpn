@@ -189,6 +189,8 @@ CentOS 9 stream
 
 AlmaLinux 9.0
 
+Mageia 8
+
 Arch based
 ==========
 
