@@ -37,6 +37,7 @@
 #        Devuan Chimaera 4.0
 #        Ubuntu LTS 18.04 
 #        Ubuntu LTS 22.04 
+#        Voyager 22.04 LTS
 #        Mint   20.2
 #        Pop!_OS 22.04 LTS
 #        Kubuntu 22.04 LTS
@@ -478,7 +479,7 @@ Split()
    if [[ -z "${SPLIT+x}" ]]
    then
       echo "If this does not work, please fill in SPLIT with a network/mask list eg x.x.x.x/x x.x.x.x/x" >&2
-      echo "either in ${CONFFILE} or in ${SCRIPTNAME}"
+      echo "either in ${CONFFILE} or in ${SCRIPTNAME}" >&2
       ip route delete 0.0.0.0/1
       echo "default VPN gateway deleted" >&2
    else 
@@ -509,7 +510,7 @@ showStatus()
       # chroot/mount down, etc, not showing status
       die "CShell not running"
    else
-      echo "CShell running"
+      echo "CShell running" 
    fi
 
    # host / chroot arquitecture
@@ -1050,11 +1051,7 @@ installPackages()
       dnf -y install ca-certificates jq wget debootstrap
 
       # not installed in all variants as a debootstrap dependency
-      dnf -y install dpkg
-      if [[ $? -ne 0 ]] && grep "OpenMandriva Lx release 4.3" /etc/redhat-release &> /dev/null
-      then
-         dnf -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
-      fi
+      dnf -y install dpkg || grep "OpenMandriva Lx release 4.3" /etc/redhat-release &> /dev/null && dnf -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
       
 
       # xhost should be present
