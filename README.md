@@ -158,6 +158,8 @@ Ubuntu LTS 18.04
 
 Ubuntu LTS 22.04
 
+Voyager 22.04 LTS
+
 Mint   20.2
 
 Pop!_OS 22.04 LTS
