@@ -72,7 +72,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.40"
+VERSION="v1.41"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -1082,7 +1082,7 @@ GetCompileSlack()
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
       wget "${BUILD}"
       tar -zxvf ${NAME}.tar.gz
-      cd "$NAME"
+      cd "$NAME" || die "cannot cd ${NAME}"
       if [[ "${NAME}" == "debootstrap" ]]
       then
          # debootstrap is too old in SlackBuild rules
@@ -1099,11 +1099,12 @@ GetCompileSlack()
       ./${NAME}.SlackBuild
      
       # return saved directory at loop beggining
-      popd
+      popd || die "error restoring pwd [for]"
    done
  
    # return to former saved directory
-   popd
+   popd || die "error restoring pwd"
+
    # and delete temporary directory
    rm -rf "${DIR}"
 
@@ -1673,13 +1674,13 @@ fixDNS()
    [[ "${SUSE}" -eq 1 ]] && ln -sf ../run/netconfig/resolv.conf resolv.conf
 
    # Void - NetworkManager
-   [[ "${VOID}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf
+   [[ "${VOID}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf resolv.conf
 
    # Gentoo - NetworkManager
-   [[ "${GENTOO}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf
+   [[ "${GENTOO}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf resolv.conf
 
    # Slackware - NetworkManager
-   [[ "${SLACKWARE}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf
+   [[ "${SLACKWARE}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf resolv.conf
 
    cd ..
 }
