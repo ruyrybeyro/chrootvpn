@@ -59,6 +59,7 @@
 #        openSUSE Leap 15.3
 #        openSUSE Leap 15.4
 #        Void Linux 
+#        Gentoo 2.8
 #
 # For DNS sync between host and chroot
 # "Debian" host resolvconf       and /run/resolvconf/resolv.conf
@@ -69,7 +70,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.20"
+VERSION="v1.30"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -352,6 +353,7 @@ PreCheck()
    RH=0
    ARCH=0
    SUSE=0
+   GENTOO=0
    VOID=0
    DEEPIN=0
 
@@ -362,14 +364,14 @@ PreCheck()
       [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    fi
 
-   [[ -f "/etc/redhat-release" ]] && RH=1   # is RedHat family 
-   [[ -f "/etc/arch-release" ]]   && ARCH=1 # is Arch family
-   [[ -f "/etc/SUSE-brand" ]]     && SUSE=1 # is SUSE family
-
+   [[ -f "/etc/redhat-release" ]] && RH=1     # is RedHat family 
+   [[ -f "/etc/arch-release" ]]   && ARCH=1   # is Arch family
+   [[ -f "/etc/SUSE-brand" ]]     && SUSE=1   # is SUSE family
+   [[ -f "/etc/gentoo-release" ]] && GENTOO=1 # is GENTOO family
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
    
 
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE and Void family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE, Gentoo and Void family distributions supported"
 
    # if VPN or VPNIP empty
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
@@ -718,6 +720,10 @@ doStart()
 
    # Void
    [[ "${VOID}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+
+   # Gentoo
+   [[ "${GENTOO}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+
 
    # mount Chroot file systems
    mountChrootFS
@@ -1111,7 +1117,13 @@ installPackages()
       # needed packages
       # some of them already installed
       xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
-      xbps-install -yS ca-certificates xhost jq wget debootstap dpkg openresolv
+      xbps-install -yS ca-certificates xhost jq wget debootstrap dpkg openresolv
+   fi
+
+  # if Gentoo based
+   if [[ "${GENTOO}" -eq 1 ]]
+   then
+      emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
    fi
 }
 
@@ -1561,6 +1573,7 @@ fixDNS()
 
    if [[ "${DEEPIN}" -eq 1 ]]
    then	   
+      # Deepin - systemd-resolved
       ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
    else
       # Debian - resolvconf
@@ -1576,8 +1589,11 @@ fixDNS()
    # SUSE - resolvconf
    [[ "${SUSE}" -eq 1 ]] && ln -sf ../run/netconfig/resolv.conf resolv.conf
 
-   # Void - resolvconf
+   # Void - NetworkManager
    [[ "${VOID}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf
+
+   # Gentoo - NetworkManager
+   [[ "${GENTOO}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf
 
    cd ..
 }

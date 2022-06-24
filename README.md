@@ -214,3 +214,8 @@ Void Linux
 
 Void Linux 2021-09-30
 
+Gentoo
+======
+
+Gentoo Base System release 2.8
+
