@@ -174,6 +174,8 @@ Parrot 5.0.1 Electro Ara
 
 Elementary OS 6.1 Jolnir
 
+Deepin 20.6
+
 RedHat based
 ============
 
