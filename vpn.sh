@@ -363,7 +363,7 @@ PreCheck()
    [[ -f "/etc/arch-release" ]]   && ARCH=1 # is Arch family
    [[ -f "/etc/SUSE-brand" ]]     && SUSE=1 # is SUSE family
 
-   [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
    
 
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE and Void family distributions supported"
