@@ -42,6 +42,7 @@
 #        Pop!_OS 22.04 LTS
 #        Kubuntu 22.04 LTS
 #        lubuntu 22.04 LTS
+#        Lite 6.0
 #        Kali 2022.2
 #        Parrot 5.0.1 Electro Ara
 #        Elementary OS 6.1 Jolnir
