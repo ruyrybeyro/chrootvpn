@@ -57,16 +57,18 @@
 #        Manjaro 21.2.6.1
 #        openSUSE Leap 15.3
 #        openSUSE Leap 15.4
+#        Void Linux 
 #
 # For DNS sync between host and chroot
 # "Debian" host resolvconf       and /run/resolvconf/resolv.conf
 # "Arch"   host openresolv       and /run/resolvconf/interfaces/NetworkManager
+# "Void"   host openresolv       and /run/NetworkManager/resolv.conf
 # "RedHat" host systemd-resolved and /run/systemd/resolve/stub-resolv.conf
 # "SUSE"   host dnsmasq          and /run/netconfig/resolv.conf
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.10"
+VERSION="v1.20"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -341,7 +343,7 @@ PreCheck()
    # If not Intel based
    if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
-      die "This script is for Debian/RedHat/Arch/SUSE Linux Intel based flavours only"
+      die "This script is for Debian/RedHat/Arch/SUSE/Void Linux Intel based flavours only"
    fi
 
    # init distro flags
@@ -349,6 +351,7 @@ PreCheck()
    RH=0
    ARCH=0
    SUSE=0
+   VOID=0
 
    if [[ -f "/etc/debian_version" ]]
    then
@@ -360,7 +363,10 @@ PreCheck()
    [[ -f "/etc/arch-release" ]]   && ARCH=1 # is Arch family
    [[ -f "/etc/SUSE-brand" ]]     && SUSE=1 # is SUSE family
 
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]]  && die "Only Debian, RedHat ArchLinux, and SUSE family distributions supported"
+   [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1
+   
+
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE and Void family distributions supported"
 
    # if VPN or VPNIP empty
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
@@ -702,6 +708,9 @@ doStart()
    # SUSE - netconfig
    [[ "${SUSE}" -eq 1 ]] && fixLinks ../run/netconfig/resolv.conf
 
+   # Void
+   [[ "${VOID}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+
    # mount Chroot file systems
    mountChrootFS
 
@@ -740,6 +749,7 @@ fixDNS2()
    # try to restore resolv.conf
    [[ "${DEB}"  -eq 1 ]] && resolvconf -u
    [[ "${ARCH}" -eq 1 ]] && resolvconf -u
+   [[ "${VOID}" -eq 1 ]] && resolvconf -u
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
    [[ "${RH}"   -eq 1 ]] && authselect apply-changes
 }
@@ -1080,6 +1090,20 @@ installPackages()
 
       zypper -n install ca-certificates jq wget debootstrap xhost dnsmasq
       zypper clean
+   fi
+
+   # if Void based
+   if [[ "${VOID}" -eq 1 ]]
+   then
+      # Void is a rolling distro
+      # update
+      xbps-install -yu xbps
+      xbps-install -ySu
+
+      # needed packages
+      # some of them already installed
+      xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
+      xbps-install -yS ca-certificates xhost jq wget debootstap dpkg openresolv
    fi
 }
 
@@ -1525,6 +1549,9 @@ fixDNS()
    # SUSE - resolvconf
    [[ "${SUSE}" -eq 1 ]] && ln -sf ../run/netconfig/resolv.conf resolv.conf
 
+   # Void - resolvconf
+   [[ "${VOID}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf
+
    cd ..
 }
 
@@ -1621,6 +1648,8 @@ FirefoxPolicy()
 
    # flag as not installed
    PolInstalled=0
+
+   [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution"
 
    # if Firefox installed
    # cycle possible firefox global directories
