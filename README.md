@@ -219,3 +219,8 @@ Gentoo
 
 Gentoo Base System release 2.8
 
+Slackware
+=========
+
+Slackware 15.0
+
