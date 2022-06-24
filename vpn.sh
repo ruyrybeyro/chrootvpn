@@ -60,6 +60,7 @@
 #        openSUSE Leap 15.4
 #        Void Linux 
 #        Gentoo 2.8
+#        Slackware 15.0
 #
 # For DNS sync between host and chroot
 # "Debian" host resolvconf       and /run/resolvconf/resolv.conf
@@ -70,7 +71,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.30"
+VERSION="v1.40"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -345,7 +346,7 @@ PreCheck()
    # If not Intel based
    if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
-      die "This script is for Debian/RedHat/Arch/SUSE/Void Linux Intel based flavours only"
+      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/Deepin Linux Intel based flavours only"
    fi
 
    # init distro flags
@@ -354,6 +355,7 @@ PreCheck()
    ARCH=0
    SUSE=0
    GENTOO=0
+   SLACKWARE=0
    VOID=0
    DEEPIN=0
 
@@ -364,14 +366,15 @@ PreCheck()
       [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    fi
 
-   [[ -f "/etc/redhat-release" ]] && RH=1     # is RedHat family 
-   [[ -f "/etc/arch-release" ]]   && ARCH=1   # is Arch family
-   [[ -f "/etc/SUSE-brand" ]]     && SUSE=1   # is SUSE family
-   [[ -f "/etc/gentoo-release" ]] && GENTOO=1 # is GENTOO family
+   [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family 
+   [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
+   [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
+   [[ -f "/etc/gentoo-release" ]]    && GENTOO=1 # is GENTOO family
+   [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
    
 
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE, Gentoo and Void family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
 
    # if VPN or VPNIP empty
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
@@ -724,6 +727,8 @@ doStart()
    # Gentoo
    [[ "${GENTOO}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 
+   # Slackware
+   [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 
    # mount Chroot file systems
    mountChrootFS
@@ -1036,6 +1041,71 @@ needCentOSFix()
    fi
 }
 
+# get, compile and install Slackware SlackBuild packages
+GetCompileSlack()
+{
+   local SLACKBUILDREPOBASE
+   local SLACKVERSION
+   local SLACKBUILDREPO
+   local DIR
+   local pkg
+   local BUILD
+   local NAME
+   local INFO
+   local DOWNLOAD
+
+   SLACKBUILDREPOBASE="https://slackbuilds.org/slackbuilds/"
+   SLACKVERSION=$(awk ' { print $2 } ' /etc/slackware-version )
+   SLACKBUILDREPO="${SLACKBUILDREPOBASE}/${SLACKVERSION}/"
+
+   rm -f /tmp/*tgz
+ 
+   # save current directory
+   pushd .
+
+   DIR=$(mktemp -d -p . )
+   mkdir -p "${DIR}" || die "could not create ${DIR}"
+   cd "${DIR}" || die "could not enter ${DIR}"
+
+   for pkg in "development/dpkg" "system/debootstrap" "system/jq"
+   do
+      NAME=${pkg##*/}
+
+      # if already installed no need to compile again
+      # (might reinstall new versions, not good idea)
+      #which $NAME || continue 
+      
+      BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
+      wget "${BUILD}"
+      tar -zxvf ${NAME}.tar.gz
+      cd "$NAME"
+      if [[ "${NAME}" == "debootstrap" ]]
+      then
+         # debootstrap is too old in SlackBuild rules
+         # replace with a far newer version
+         DOWNLOAD="http://ftp.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123.tar.gz"
+         sed -i 's/^VERSION=.*/VERSION=${VERSION:-1.0.123}/' ./${NAME}.SlackBuild
+         sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./${NAME}.SlackBuild
+      else
+         INFO="${SLACKBUILDREPO}${pkg}/${NAME}.info"
+         wget "$INFO"
+         DOWNLOAD=$(awk -F= ' /DOWNLOAD/ { gsub("\"", ""); print $2 } ' "${NAME}.info")
+      fi
+      wget "$DOWNLOAD"
+      ./${NAME}.SlackBuild
+   done
+ 
+   # return to former saved directory
+   popd
+   # and delete temporary directory
+   rm -rf "${DIR}"
+
+   # install SBo.tgz just compiled/created packages
+   installpkg /tmp/*tgz
+
+   # delete packages
+   rm -f /tmp/*tgz
+}
 
 # installs package requirements
 installPackages()
@@ -1120,10 +1190,16 @@ installPackages()
       xbps-install -yS ca-certificates xhost jq wget debootstrap dpkg openresolv
    fi
 
-  # if Gentoo based
+   # if Gentoo based
    if [[ "${GENTOO}" -eq 1 ]]
    then
       emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
+   fi
+
+   # if Slackware
+   if [[ "${SLACKWARE}" -eq 1 ]]
+   then
+      GetCompileSlack
    fi
 }
 
@@ -1595,6 +1671,9 @@ fixDNS()
    # Gentoo - NetworkManager
    [[ "${GENTOO}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf
 
+   # Slackware - NetworkManager
+   [[ "${SLACKWARE}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf
+
    cd ..
 }
 
@@ -1693,6 +1772,7 @@ FirefoxPolicy()
    PolInstalled=0
 
    [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution"
+   [[ ${SLACKWARE} -eq 1 ]] && mkdir "/usr/lib64/firefox/distribution"
 
    # if Firefox installed
    # cycle possible firefox global directories
