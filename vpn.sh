@@ -1245,6 +1245,20 @@ fixSUSEDNS()
    fi
 }
 
+# fix DNS - DEEPIN
+fixDEEPINDNS()
+{
+   if [[ "${DEEPIN}" -eq 1 ]]
+   then
+      systemctl enable systemd-resolved.service
+
+      # replace /etc/resolv.conf for a resolved link
+      cd /etc || die "was not able to cd /etc"
+
+      ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
+   fi
+}
+
 # "bug/feature": check DNS health
 checkDNS()
 {
@@ -1786,6 +1800,7 @@ InstallChroot()
    fixRHDNS
    fixARCHDNS
    fixSUSEDNS
+   fixDEEPINDNS
    checkDNS
    createChroot
    createCshellUser
