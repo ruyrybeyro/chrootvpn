@@ -45,6 +45,7 @@
 #        Kali 2022.2
 #        Parrot 5.0.1 Electro Ara
 #        Elementary OS 6.1 Jolnir
+#        Deepin 20.6
 #        Fedora 23 
 #        Fedora 36
 #        Rocky  8.6
@@ -352,11 +353,13 @@ PreCheck()
    ARCH=0
    SUSE=0
    VOID=0
+   DEEPIN=0
 
    if [[ -f "/etc/debian_version" ]]
    then
       DEB=1 # is Debian family
       ischroot && die "Do not run this script inside a chroot"
+      [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    fi
 
    [[ -f "/etc/redhat-release" ]] && RH=1   # is RedHat family 
@@ -696,8 +699,13 @@ doStart()
    # Checkpoint software seems not mess up with it.
    # Unless a security update inside chroot damages it
 
-   # Debian family - resolvconf
-   [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/resolv.conf
+   if [[ "${DEEPIN}" -eq 1 ]]
+   then	   
+      fixLinks ../run/systemd/resolve/stub-resolv.conf
+   else
+      # Debian family - resolvconf
+      [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/resolv.conf
+   fi
 
    # ArchLinux family - openresolv
    [[ "${ARCH}" -eq 1 ]] && fixLinks ../run/resolvconf/interfaces/NetworkManager
@@ -747,7 +755,7 @@ doStart()
 fixDNS2()
 {
    # try to restore resolv.conf
-   [[ "${DEB}"  -eq 1 ]] && resolvconf -u
+   [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
    [[ "${ARCH}" -eq 1 ]] && resolvconf -u
    [[ "${VOID}" -eq 1 ]] && resolvconf -u
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
@@ -1037,7 +1045,7 @@ installPackages()
       # install needed packages
       apt -y install ca-certificates x11-xserver-utils jq wget debootstrap
       # we want to make sure resolconf is the last one
-      apt -y install resolvconf
+      [[ ${DEEPIN} -eq 0 ]] && apt -y install resolvconf
       # clean APT host cache
       apt clean
    fi
@@ -1537,8 +1545,13 @@ fixDNS()
    rm -f etc/resolv.conf
    cd etc || die "could not enter ${CHROOT}/etc"
 
-   # Debian - resolvconf
-   [[ "${DEB}" -eq 1 ]] && ln -sf ../run/resolvconf/resolv.conf resolv.conf
+   if [[ "${DEEPIN}" -eq 1 ]]
+   then	   
+      ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
+   else
+      # Debian - resolvconf
+      [[ "${DEB}" -eq 1 ]] && ln -sf ../run/resolvconf/resolv.conf resolv.conf
+   fi
 
    # RH - systemd-resolved
    [[ "${RH}" -eq 1 ]] && ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
