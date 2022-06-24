@@ -133,7 +133,7 @@ KNOWN FEATURES
 
 . if DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
 
-. If asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installe or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
+. If asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
 
 
 COMPATIBILITY
