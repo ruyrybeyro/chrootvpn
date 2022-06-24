@@ -209,3 +209,6 @@ openSUSE Leap 15.4
 
 Void Linux
 ==========
+
+Void Linux 2021-09-30
+
