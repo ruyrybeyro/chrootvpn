@@ -1069,6 +1069,9 @@ GetCompileSlack()
 
    for pkg in "development/dpkg" "system/debootstrap" "system/jq"
    do
+      # save current directory/pwd
+      pushd .
+
       NAME=${pkg##*/}
 
       # if already installed no need to compile again
@@ -1093,6 +1096,9 @@ GetCompileSlack()
       fi
       wget "$DOWNLOAD"
       ./${NAME}.SlackBuild
+     
+      # return saved directory at loop beggining
+      popd
    done
  
    # return to former saved directory
