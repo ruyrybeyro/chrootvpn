@@ -1062,7 +1062,9 @@ GetCompileSlack()
 
    # Build SlackBuild repository base string
    SLACKBUILDREPOBASE="https://slackbuilds.org/slackbuilds/"
+   # version in current can be 15.0+
    SLACKVERSION=$(awk -F" " ' { print $2 } ' /etc/slackware-version | tr -d "+" )
+   # SlackBuilds is organized per version
    SLACKBUILDREPO="${SLACKBUILDREPOBASE}/${SLACKVERSION}/"
 
    # delete packages from /tmp
@@ -1083,6 +1085,7 @@ GetCompileSlack()
       NAME=${pkg##*/}
 
       # if already installed no need to compile again
+      # debootstrap version in SlackWare too old to be useful
       if [[ ${NAME} != "debootstrap" ]]
       then
          which ${NAME} || continue 
@@ -1105,7 +1108,13 @@ GetCompileSlack()
          # debootstrap version is too old in SlackBuild rules
          # replace with a far newer version
          DOWNLOAD="http://ftp.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123.tar.gz"
+
+         # changing version for SBo.tgz too reflect that
          sed -i 's/^VERSION=.*/VERSION=${VERSION:-1.0.123}/' ./${NAME}.SlackBuild
+
+         # the Debian tar.gz only creates a directory by name
+         # contrary to the Ubuntu source repository 
+         # where debootstrap.SlackBuild is fetching the older source version
          sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./${NAME}.SlackBuild
       else
          # get info file frrom SlackBuild package
