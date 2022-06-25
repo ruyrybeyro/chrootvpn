@@ -47,6 +47,7 @@
 #        Parrot 5.0.1 Electro Ara
 #        Elementary OS 6.1 Jolnir
 #        Deepin 20.6
+#        EuroLinux 9
 #        Fedora 23 
 #        Fedora 36
 #        Rocky  8.6
@@ -1137,6 +1138,8 @@ GetCompileSlack()
 # installs package requirements
 installPackages()
 {
+   local VERSION
+
    # if Debian family based
    if [[ "${DEB}" -eq 1 ]]
    then
@@ -1161,7 +1164,15 @@ installPackages()
       # epel-release not needed for Fedora and Mageia
       if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
       then
-         dnf -y install epel-release || needCentOSFix
+         # if not RedHat
+         if ! grep ^REDHAT_SUPPORT_PRODUCT_VERSION /etc/os-release &> /dev/null 
+         then
+            dnf -y install epel-release || needCentOSFix
+         else
+            # if RedHat
+            VERSION=$(awk -F= ' /REDHAT_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release)
+            dnf -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION}.noarch.rpm"
+         fi
       else
          if grep "^Mageia" /etc/redhat-release &> /dev/null
          then
@@ -1172,7 +1183,10 @@ installPackages()
       dnf -y install ca-certificates jq wget debootstrap
 
       # not installed in all variants as a debootstrap dependency
-      dnf -y install dpkg || grep "OpenMandriva Lx release 4.3" /etc/redhat-release &> /dev/null && dnf -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
+      if ! dnf -y install dpkg 
+      then
+         grep "OpenMandriva Lx release 4.3" /etc/redhat-release &> /dev/null && dnf -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
+      fi
       
 
       # xhost should be present
