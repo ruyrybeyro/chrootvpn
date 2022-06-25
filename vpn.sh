@@ -1078,15 +1078,17 @@ GetCompileSlack()
    # cycle packages we want to fetch, compile and install
    for pkg in "development/dpkg" "system/debootstrap" "system/jq"
    do
-      # save current directory/cwd
-      pushd .
-
       # last part of name from $pkg
       NAME=${pkg##*/}
 
       # if already installed no need to compile again
-      # (might reinstall new versions, not good idea)
-      #which $NAME || continue 
+      if [[ ${NAME} != "debootstrap" ]]
+      then
+         which ${NAME} || continue 
+      fi
+
+      # save current directory/cwd
+      pushd .
      
       # get SlackBuild package 
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
