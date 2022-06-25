@@ -1161,23 +1161,27 @@ installPackages()
    if [[ "${RH}" -eq 1 ]]
    then
       #dnf makecache
-     
-      # epel-release not needed for Fedora and Mageia
-      if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
+
+      # attempts to a poor's man detection of not needing to setup EPEL
+      if ! dnf search debootstrap
       then
-         # if not RedHat
-         if egrep "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null  
+         # epel-release not needed for Fedora and Mageia
+         if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
          then
-            # if RedHat
-            VERSION=$(awk -F= ' /_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release | cut -f1 -d. )
-            dnf -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION}.noarch.rpm"
+            # if not RedHat
+            if grep -E "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null  
+            then
+               # if RedHat
+               VERSION=$(awk -F= ' /_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release | cut -f1 -d. )
+               dnf -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION}.noarch.rpm"
+            else
+               dnf -y install epel-release || needCentOSFix
+            fi
          else
-            dnf -y install epel-release || needCentOSFix
-         fi
-      else
-         if grep "^Mageia" /etc/redhat-release &> /dev/null
-         then
-            dnf -y install NetworkManager 
+            if grep "^Mageia" /etc/redhat-release &> /dev/null
+            then
+               dnf -y install NetworkManager 
+            fi
          fi
       fi
 
