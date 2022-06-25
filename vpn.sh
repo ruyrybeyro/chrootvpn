@@ -1220,6 +1220,7 @@ installPackages()
    # if Gentoo based
    if [[ "${GENTOO}" -eq 1 ]]
    then
+      # install/update packages
       emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
    fi
 
