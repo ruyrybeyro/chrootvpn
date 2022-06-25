@@ -59,6 +59,7 @@
 #        Oracle Linux 9.0
 #        Arch Linux 2022.05.01
 #        Manjaro 21.2.6.1
+#        EndeavourOS 2022.06.32
 #        openSUSE Leap 15.3
 #        openSUSE Leap 15.4
 #        Void Linux 

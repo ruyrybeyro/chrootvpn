@@ -208,6 +208,8 @@ Arch Linux 2022.05.01
 
 Manjaro 21.2.6.1
 
+EndeavourOS 2022.06.32
+
 SUSE
 ====
 
