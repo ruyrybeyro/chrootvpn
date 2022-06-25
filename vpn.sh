@@ -119,12 +119,14 @@ VARIANT="minbase"
 RELEASE="bullseye" # Debian 11
 DEBIANREPO="http://deb.debian.org/debian/" # fastly repo
 
-# github repository for command selfupdate
+# github repository for selfupdate command
 # https://github.com/ruyrybeyro/chrootvpn
 GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # used during initial chroot setup
 # for chroot shell correct time
+# if TZ is empty
+# set TZ before first time creating chroot
 [[ -z "${TZ}" ]] && TZ='Europe/Lisbon'
 
 # URL for testing if split or full VPN
@@ -134,6 +136,7 @@ URL_VPN_TEST="https://www.debian.org"
 [[ -z "${DISPLAY}" ]] && export DISPLAY=":0.0"
 
 # dont bother with locales
+# all on plain English
 export LC_ALL=C LANG=C
 
 # script full PATH
@@ -145,7 +148,7 @@ SCRIPTNAME=$(basename "${SCRIPT}")
 #  preserve program passed arguments $@ into a BASH array
 args=("$@")
 
-# VPN interface
+# VPN interface created by SNX
 TUNSNX="tunsnx"
 
 # xdg autostart X11 file
@@ -174,6 +177,7 @@ PATH="/sbin:/usr/sbin:/bin:/usr/sbin:${PATH}"
 # hint:
 # The web Portal Interface has a far more dated look than in 2022
 #
+# seems not to be needed, who will stay here for now
 JAVA8=false
 
 #
@@ -370,18 +374,17 @@ PreCheck()
       ischroot && die "Do not run this script inside a chroot"
       [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    fi
-
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family 
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
    [[ -f "/etc/gentoo-release" ]]    && GENTOO=1 # is GENTOO family
    [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
-   
-
+  
+   # if none of distrubition families above, abort 
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
 
-   # if VPN or VPNIP empty
+   # if VPN or VPNIP empty, abort
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
       # and not handling uninstall, abort
@@ -499,6 +502,8 @@ Split()
    then
       echo "If this does not work, please fill in SPLIT with a network/mask list eg x.x.x.x/x x.x.x.x/x" >&2
       echo "either in ${CONFFILE} or in ${SCRIPTNAME}" >&2
+
+      # delete default gw into VPN
       ip route delete 0.0.0.0/1
       echo "default VPN gateway deleted" >&2
    else 
@@ -682,10 +687,14 @@ killCShell()
 # we need them ok for syncronizing chroot with host
 fixLinks()
 {
+      # fix link inside chroot
       ln -sf "$1" "${CHROOT}/etc/resolv.conf"
+
+      # if link in host deviates from needed
       readlink /etc/resolv.conf | grep "$1" &> /dev/null
       if [ $? -ne 0  ]
       then
+         # fix it
          ln -sf "$1" /etc/resolv.conf
       fi
 }
@@ -771,6 +780,8 @@ doStart()
 fixDNS2()
 {
    # try to restore resolv.conf
+   # not all configurations need action, NetworkManager seems to behave well
+
    [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
    [[ "${ARCH}" -eq 1 ]] && resolvconf -u
    [[ "${VOID}" -eq 1 ]] && resolvconf -u
@@ -1062,7 +1073,9 @@ GetCompileSlack()
 
    # Build SlackBuild repository base string
    SLACKBUILDREPOBASE="https://slackbuilds.org/slackbuilds/"
+   # version in current can be 15.0+
    SLACKVERSION=$(awk -F" " ' { print $2 } ' /etc/slackware-version | tr -d "+" )
+   # SlackBuilds is organized per version
    SLACKBUILDREPO="${SLACKBUILDREPOBASE}/${SLACKVERSION}/"
 
    # delete packages from /tmp
@@ -1083,6 +1096,7 @@ GetCompileSlack()
       NAME=${pkg##*/}
 
       # if already installed no need to compile again
+      # debootstrap version in SlackWare too old to be useful
       if [[ ${NAME} != "debootstrap" ]]
       then
          which ${NAME} || continue 
@@ -1105,7 +1119,13 @@ GetCompileSlack()
          # debootstrap version is too old in SlackBuild rules
          # replace with a far newer version
          DOWNLOAD="http://ftp.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123.tar.gz"
+
+         # changing version for SBo.tgz too reflect that
          sed -i 's/^VERSION=.*/VERSION=${VERSION:-1.0.123}/' ./${NAME}.SlackBuild
+
+         # the Debian tar.gz only creates a directory by name
+         # contrary to the Ubuntu source repository 
+         # where debootstrap.SlackBuild is fetching the older source version
          sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./${NAME}.SlackBuild
       else
          # get info file frrom SlackBuild package
