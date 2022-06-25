@@ -232,3 +232,4 @@ Slackware
 
 Slackware 15.0
 
+Slackware 15.1-current

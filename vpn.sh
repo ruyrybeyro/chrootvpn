@@ -65,6 +65,7 @@
 #        Void Linux 
 #        Gentoo 2.8
 #        Slackware 15.0
+#        Slackware 15.1-current
 #
 # For DNS sync between host and chroot
 # "Debian" host resolvconf       and /run/resolvconf/resolv.conf
@@ -1061,7 +1062,7 @@ GetCompileSlack()
 
    # Build SlackBuild repository base string
    SLACKBUILDREPOBASE="https://slackbuilds.org/slackbuilds/"
-   SLACKVERSION=$(awk ' { print $2 } ' /etc/slackware-version )
+   SLACKVERSION=$(awk -F" " ' { print $2 } ' /etc/slackware-version | tr -d "+" )
    SLACKBUILDREPO="${SLACKBUILDREPOBASE}/${SLACKVERSION}/"
 
    # delete packages from /tmp
