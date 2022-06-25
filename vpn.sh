@@ -1059,6 +1059,7 @@ GetCompileSlack()
    SLACKVERSION=$(awk ' { print $2 } ' /etc/slackware-version )
    SLACKBUILDREPO="${SLACKBUILDREPOBASE}/${SLACKVERSION}/"
 
+   # delete packages from /tmp
    rm -f /tmp/*tgz
  
    # save current directory
@@ -1068,37 +1069,52 @@ GetCompileSlack()
    mkdir -p "${DIR}" || die "could not create ${DIR}"
    cd "${DIR}" || die "could not enter ${DIR}"
 
+   # cycle packages we want to fetch, compile and install
    for pkg in "development/dpkg" "system/debootstrap" "system/jq"
    do
       # save current directory/pwd
       pushd .
 
+      # last part of name from $pkg
       NAME=${pkg##*/}
 
       # if already installed no need to compile again
       # (might reinstall new versions, not good idea)
       #which $NAME || continue 
-      
+     
+      # get SlackBuild package 
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
-      wget "${BUILD}"
+      wget "${BUILD}" || die "could not download ${BUILD}"
+
+      # extract it and enter directory
       tar -zxvf ${NAME}.tar.gz
       cd "$NAME" || die "cannot cd ${NAME}"
+
+      # if debootstrap package
       if [[ "${NAME}" == "debootstrap" ]]
       then
-         # debootstrap is too old in SlackBuild rules
+         # debootstrap version is too old in SlackBuild rules
          # replace with a far newer version
          DOWNLOAD="http://ftp.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123.tar.gz"
          sed -i 's/^VERSION=.*/VERSION=${VERSION:-1.0.123}/' ./${NAME}.SlackBuild
          sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./${NAME}.SlackBuild
       else
+         # get info file frrom SlackBuild package
          INFO="${SLACKBUILDREPO}${pkg}/${NAME}.info"
-         wget "$INFO"
+         wget "${INFO}" || die "could not download ${INFO}"
+
+         # get URL from downloading corresponding package source code
          DOWNLOAD=$(awk -F= ' /DOWNLOAD/ { gsub("\"", ""); print $2 } ' "${NAME}.info")
       fi
-      wget "$DOWNLOAD"
+
+      # Download package source code
+      wget "${DOWNLOAD}" || die "could not download ${DOWNLOAD}"
+
+      # execute SlackBuild script for patching, compiling, 
+      # and generating SBo.tgz instalation package
       ./${NAME}.SlackBuild
      
-      # return saved directory at loop beggining
+      # return saved directory at the loop beggining
       popd || die "error restoring pwd [for]"
    done
  
