@@ -1042,6 +1042,7 @@ needCentOSFix()
    fi
 }
 
+
 # get, compile and install Slackware SlackBuild packages
 GetCompileSlack()
 {
@@ -1055,6 +1056,7 @@ GetCompileSlack()
    local INFO
    local DOWNLOAD
 
+   # Build SlackBuild repository base string
    SLACKBUILDREPOBASE="https://slackbuilds.org/slackbuilds/"
    SLACKVERSION=$(awk ' { print $2 } ' /etc/slackware-version )
    SLACKBUILDREPO="${SLACKBUILDREPOBASE}/${SLACKVERSION}/"
@@ -1065,6 +1067,7 @@ GetCompileSlack()
    # save current directory
    pushd .
 
+   # create temporary directory for downloading SlackBuilds
    DIR=$(mktemp -d -p . )
    mkdir -p "${DIR}" || die "could not create ${DIR}"
    cd "${DIR}" || die "could not enter ${DIR}"
@@ -1217,6 +1220,7 @@ installPackages()
    # if Gentoo based
    if [[ "${GENTOO}" -eq 1 ]]
    then
+      # install/update packages
       emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
    fi
 
