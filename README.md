@@ -193,6 +193,8 @@ Rocky 8.6
 
 Oracle 8.6
 
+Oracle 9.0
+
 CentOS 9 stream
 
 AlmaLinux 9.0

@@ -56,6 +56,7 @@
 #        AlmaLinux 9.0
 #        Mageia 8
 #        Oracle Linux 8.6
+#        Oracle Linux 9.0
 #        Arch Linux 2022.05.01
 #        Manjaro 21.2.6.1
 #        openSUSE Leap 15.3
@@ -73,7 +74,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.41"
+VERSION="v1.50"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -1165,13 +1166,13 @@ installPackages()
       if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
       then
          # if not RedHat
-         if ! grep ^REDHAT_SUPPORT_PRODUCT_VERSION /etc/os-release &> /dev/null 
+         if egrep "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null  
          then
-            dnf -y install epel-release || needCentOSFix
-         else
             # if RedHat
-            VERSION=$(awk -F= ' /REDHAT_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release)
+            VERSION=$(awk -F= ' /_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release | cut -f1 -d. )
             dnf -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION}.noarch.rpm"
+         else
+            dnf -y install epel-release || needCentOSFix
          fi
       else
          if grep "^Mageia" /etc/redhat-release &> /dev/null
