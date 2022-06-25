@@ -1072,7 +1072,7 @@ GetCompileSlack()
    # cycle packages we want to fetch, compile and install
    for pkg in "development/dpkg" "system/debootstrap" "system/jq"
    do
-      # save current directory/pwd
+      # save current directory/cwd
       pushd .
 
       # last part of name from $pkg
@@ -1115,11 +1115,11 @@ GetCompileSlack()
       ./${NAME}.SlackBuild
      
       # return saved directory at the loop beggining
-      popd || die "error restoring pwd [for]"
+      popd || die "error restoring cwd [for]"
    done
  
    # return to former saved directory
-   popd || die "error restoring pwd"
+   popd || die "error restoring cwd"
 
    # and delete temporary directory
    rm -rf "${DIR}"
@@ -1627,7 +1627,7 @@ buildFS()
 	EOF16
 
    # creates a subshell
-   # to avoid possible pwd complications
+   # to avoid possible cwd complications
    # in the case of an error
    ( 
    # add profiles.ini to keep variations of cshell_install.sh happy
