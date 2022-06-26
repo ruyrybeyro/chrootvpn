@@ -1885,7 +1885,8 @@ FirefoxPolicy()
 	               }
 	    }
 	EOF14
-
+         else
+            echo "Another policy already found at ${DIR}." >&2
          fi
       fi
    done
