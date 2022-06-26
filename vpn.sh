@@ -1189,7 +1189,7 @@ installPackages()
       #dnf makecache
 
       # attempts to a poor's man detection of not needing to setup EPEL
-      dnf install debootstrap
+      dnf -y install debootstrap
 
       if ! which debootstrap
       then
