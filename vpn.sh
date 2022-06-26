@@ -1189,8 +1189,10 @@ installPackages()
       #dnf makecache
 
       # attempts to a poor's man detection of not needing to setup EPEL
-      #if ! dnf search debootstrap
-      #then
+      dnf -y install debootstrap
+
+      if ! which debootstrap
+      then
          # epel-release not needed for Fedora and Mageia
          if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
          then
@@ -1209,7 +1211,7 @@ installPackages()
                dnf -y install NetworkManager 
             fi
          fi
-      #fi
+      fi
 
       dnf -y install ca-certificates jq wget debootstrap
 
