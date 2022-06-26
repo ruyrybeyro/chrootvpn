@@ -30,7 +30,7 @@
 # binary SNX VPN client needs 32-bits environment
 #
 # tested with chroot Debian Bullseye 11 (32 bits) and
-# hosts: 
+# 64 bit hosts: 
 #        Debian 10 
 #        Debian 11 
 #        antiX-21
@@ -66,6 +66,7 @@
 #        Gentoo 2.8
 #        Slackware 15.0
 #        Slackware 15.1-current
+#        Salix OS xfce 15.0
 #
 # For DNS sync between host and chroot
 # "Debian" host resolvconf       and /run/resolvconf/resolv.conf

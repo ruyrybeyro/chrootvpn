@@ -141,7 +141,7 @@ COMPATIBILITY
 
 Tested with chroot Debian Bullseye 11 (32 bits)
 
-Tested with hosts:
+Tested with 64-bit hosts:
 
 Debian based
 ============ 
@@ -233,3 +233,6 @@ Slackware
 Slackware 15.0
 
 Slackware 15.1-current
+
+Salix OS xfce 15.0
+
