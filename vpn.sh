@@ -47,7 +47,8 @@
 #        Parrot 5.0.1 Electro Ara
 #        Elementary OS 6.1 Jolnir
 #        Deepin 20.6
-#        EuroLinux 9
+#        RHEL 9.0
+#        EuroLinux 9.0
 #        Fedora 23 
 #        Fedora 36
 #        Rocky  8.6
@@ -1188,8 +1189,8 @@ installPackages()
       #dnf makecache
 
       # attempts to a poor's man detection of not needing to setup EPEL
-      if ! dnf search debootstrap
-      then
+      #if ! dnf search debootstrap
+      #then
          # epel-release not needed for Fedora and Mageia
          if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
          then
@@ -1208,7 +1209,7 @@ installPackages()
                dnf -y install NetworkManager 
             fi
          fi
-      fi
+      #fi
 
       dnf -y install ca-certificates jq wget debootstrap
 
