@@ -851,7 +851,7 @@ doUninstall()
    groupdel "${CSHELL_GROUP}"   &>/dev/null
 
    # cycle possible firefox global directories
-   for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies/" "/usr/lib/firefox-developer-edition/distribution" "/usr/lib64/firefox-developer-edition/distribution"
+   for DIR in "/etc/firefox/policies/" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution -type d 2> /dev/null)
    do
       # delete Firefox policy for accepting localhost CShell certificate
       if grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
@@ -1843,11 +1843,11 @@ FirefoxPolicy()
    PolInstalled=0
 
    [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution"
-   [[ ${SLACKWARE} -eq 1 ]] && mkdir "/usr/lib64/firefox/distribution"
+   [[ ${SLACKWARE} -eq 1 ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
 
    # if Firefox installed
    # cycle possible firefox global directories
-   for DIR in "/usr/lib/firefox/distribution" "/usr/lib64/firefox/distribution" "/usr/lib/firefox-esr/distribution" "/usr/lib64/firefox-esr/distribution" "/etc/firefox/policies" "/usr/lib/firefox-developer-edition/distribution" "/usr/lib64/firefox-developer-edition/distribution"
+   for DIR in "/etc/firefox/policies/" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution -type d 2> /dev/null)
    do
       if [[ -d "${DIR}" ]]
       then
