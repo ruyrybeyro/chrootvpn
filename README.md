@@ -181,7 +181,9 @@ Deepin 20.6
 RedHat based
 ============
 
-EuroLinux 9
+RHEL 9.0
+
+EuroLinux 9.0
 
 Fedora 23
 
