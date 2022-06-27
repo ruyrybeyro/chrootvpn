@@ -33,6 +33,7 @@
 # 64 bits hosts: 
 #        Debian 10 
 #        Debian 11 
+#        Debian Bookworm (future 12)
 #        antiX-21
 #        Devuan Chimaera 4.0
 #        Ubuntu LTS 18.04 
@@ -48,6 +49,8 @@
 #        Elementary OS 6.1 Jolnir
 #        Deepin 20.6
 #        KDE neon 5.25
+#        Zorin OS 16.1
+#        Kaisen Linux 2.1
 #        RHEL 9.0
 #        EuroLinux 9.0
 #        Fedora 23 
