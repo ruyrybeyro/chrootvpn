@@ -150,6 +150,8 @@ Debian 10
 
 Debian 11
 
+Debian Bookworm (future 12)
+
 antiX-21
 
 Devuan Chimaera 4.0
