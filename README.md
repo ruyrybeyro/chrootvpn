@@ -182,6 +182,8 @@ Deepin 20.6
 
 KDE neon 5.25
 
+Zorin OS 16.1
+
 RedHat based
 ============
 

@@ -49,6 +49,7 @@
 #        Elementary OS 6.1 Jolnir
 #        Deepin 20.6
 #        KDE neon 5.25
+#        Zorin OS 16.1
 #        RHEL 9.0
 #        EuroLinux 9.0
 #        Fedora 23 
