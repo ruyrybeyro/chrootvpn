@@ -178,6 +178,8 @@ Elementary OS 6.1 Jolnir
 
 Deepin 20.6
 
+KDE neon 5.25
+
 RedHat based
 ============
 
