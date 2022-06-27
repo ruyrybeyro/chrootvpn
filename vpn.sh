@@ -1249,9 +1249,13 @@ installPackages()
       zypper ref
 
       zypper -n install ca-certificates jq wget dpkg xhost dnsmasq
-      zypper -n install debootstrap
-      zypper clean
+
       which dpkg || die "could not install software"
+
+      # will fail in SLES
+      zypper -n install debootstrap
+
+      zypper clean
 
       # SLES does have dpkg, but not debootstrap in repositories
       # debootstrap is just a set of scripts and files
