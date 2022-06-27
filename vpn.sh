@@ -1391,9 +1391,6 @@ fixRHDNS()
 # fix DNS - SUSE 
 fixSUSEDNS()
 {
-   return 0
-   local counter
-
    if [[ "${SUSE}" -eq 1 ]] && grep -v ^NETCONFIG_DNS_FORWARDER=\"dnsmasq\" /etc/sysconfig/network/config &> /dev/null
    then
 
