@@ -150,7 +150,7 @@ Debian 10
 
 Debian 11
 
-Debian Bookworm (future 12)
+Debian Bookworm (testing 12)
 
 antiX-21
 
