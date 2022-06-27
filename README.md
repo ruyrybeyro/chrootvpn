@@ -184,6 +184,8 @@ KDE neon 5.25
 
 Zorin OS 16.1
 
+Kaisen Linux 2.1
+
 RedHat based
 ============
 

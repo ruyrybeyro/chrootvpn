@@ -50,6 +50,7 @@
 #        Deepin 20.6
 #        KDE neon 5.25
 #        Zorin OS 16.1
+#        Kaisen Linux 2.1
 #        RHEL 9.0
 #        EuroLinux 9.0
 #        Fedora 23 
