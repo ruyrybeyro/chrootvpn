@@ -1121,7 +1121,7 @@ GetCompileSlack()
       then
          # debootstrap version is too old in SlackBuild rules
          # replace with a far newer version
-         DOWNLOAD="http://ftp.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123.tar.gz"
+         DOWNLOAD="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123.tar.gz"
 
          # changing version for SBo.tgz too reflect that
          sed -i 's/^VERSION=.*/VERSION=${VERSION:-1.0.123}/' ./${NAME}.SlackBuild
@@ -1257,7 +1257,7 @@ installPackages()
       # install deb file from debian pool
       if ! which debootstrap
       then
-         FILE="http://ftp.us.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123_all.deb"
+         FILE="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123_all.deb"
 	 wget "${FILE}" || die "could not download ${FILE}"
 	 dpkg -i --force-all debootstrap_1.0.123_all.deb
 	 rm -f debootstrap_1.0.123_all.deb
