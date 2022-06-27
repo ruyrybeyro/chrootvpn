@@ -47,6 +47,7 @@
 #        Parrot 5.0.1 Electro Ara
 #        Elementary OS 6.1 Jolnir
 #        Deepin 20.6
+#        KDE neon 5.25
 #        RHEL 9.0
 #        EuroLinux 9.0
 #        Fedora 23 
