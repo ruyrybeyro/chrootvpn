@@ -1248,7 +1248,8 @@ installPackages()
    then
       zypper ref
 
-      zypper -n install ca-certificates jq wget debootstrap xhost dnsmasq
+      zypper -n install ca-certificates jq wget dpkg xhost dnsmasq
+      zypper -n install debootstrap
       zypper clean
       which dpkg || die "could not install software"
 
