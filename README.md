@@ -220,6 +220,8 @@ Manjaro 21.2.6.1
 
 EndeavourOS 2022.06.32
 
+Arco Linux 22.06.07
+
 SUSE
 ====
 
@@ -238,6 +240,8 @@ Gentoo
 ======
 
 Gentoo Base System release 2.8
+
+Redcore Linux 2102
 
 Slackware
 =========
