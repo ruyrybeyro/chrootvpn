@@ -30,7 +30,7 @@
 # binary SNX VPN client needs 32-bits environment
 #
 # tested with chroot Debian Bullseye 11 (32 bits) and
-# 64 bit hosts: 
+# 64 bits hosts: 
 #        Debian 10 
 #        Debian 11 
 #        antiX-21
