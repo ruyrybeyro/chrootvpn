@@ -219,6 +219,8 @@ openSUSE Leap 15.3
 
 openSUSE Leap 15.4
 
+SLES 15-SP4
+
 Void Linux
 ==========
 

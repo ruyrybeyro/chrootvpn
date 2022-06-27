@@ -63,6 +63,7 @@
 #        EndeavourOS 2022.06.32
 #        openSUSE Leap 15.3
 #        openSUSE Leap 15.4
+#        SLES 15-SP4
 #        Void Linux 
 #        Gentoo 2.8
 #        Slackware 15.0
@@ -1166,6 +1167,7 @@ GetCompileSlack()
 installPackages()
 {
    local VERSION
+   local FILE
 
    # if Debian family based
    if [[ "${DEB}" -eq 1 ]]
@@ -1248,6 +1250,18 @@ installPackages()
 
       zypper -n install ca-certificates jq wget debootstrap xhost dnsmasq
       zypper clean
+      which dpkg || die "could not install software"
+
+      # SLES does have dpkg, but not debootstrap in repositories
+      # debootstrap is just a set of scripts and files
+      # install deb file from debian pool
+      if ! which debootstrap
+      then
+         FILE="http://ftp.us.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123_all.deb"
+	 wget "${FILE}" || die "could not download ${FILE}"
+	 dpkg -i --force-all debootstrap_1.0.123_all.deb
+	 rm -f debootstrap_1.0.123_all.deb
+      fi
    fi
 
    # if Void based
@@ -1377,6 +1391,7 @@ fixRHDNS()
 # fix DNS - SUSE 
 fixSUSEDNS()
 {
+   return 0
    local counter
 
    if [[ "${SUSE}" -eq 1 ]] && grep -v ^NETCONFIG_DNS_FORWARDER=\"dnsmasq\" /etc/sysconfig/network/config &> /dev/null
@@ -1387,7 +1402,7 @@ fixSUSEDNS()
       sed -i 's/^NETCONFIG_DNS_FORWARDER=.*/NETCONFIG_DNS_FORWARDER="dnsmasq"/g' /etc/sysconfig/network/config
 
       # reload NeworkManager
-      systemctl reload NetworkManager
+      #systemctl reload NetworkManager
 
       # replace /etc/resolv.conf for a resolved link
       cd /etc || die "was not able to cd /etc"
@@ -1395,13 +1410,13 @@ fixSUSEDNS()
       ln -sf ../run/netconfig/resolv.conf resolv.conf
 
       # wait for it to be up
-      counter=0
-      while ! systemctl is-active NetworkManager &> /dev/null
-      do
-         sleep 4
-         (( counter=counter+1 ))
-         [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
-      done
+      #counter=0
+      #while ! systemctl is-active NetworkManager &> /dev/null
+      #do
+      #   sleep 4
+      #   (( counter=counter+1 ))
+      #   [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
+      #done
 
       # restart network
       systemctl restart network
