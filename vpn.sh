@@ -65,6 +65,7 @@
 #        Arch Linux 2022.05.01
 #        Manjaro 21.2.6.1
 #        EndeavourOS 2022.06.32
+#        Arco Linux 22.06.07
 #        openSUSE Leap 15.3
 #        openSUSE Leap 15.4
 #        SLES 15-SP4
