@@ -79,7 +79,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.50"
+VERSION="v1.60"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
