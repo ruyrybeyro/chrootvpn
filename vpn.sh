@@ -71,6 +71,7 @@
 #        SLES 15-SP4
 #        Void Linux 
 #        Gentoo 2.8
+#        Redcore Linux 2102
 #        Slackware 15.0
 #        Slackware 15.1-current
 #        Salix OS xfce 15.0
@@ -386,6 +387,7 @@ PreCheck()
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
    [[ -f "/etc/gentoo-release" ]]    && GENTOO=1 # is GENTOO family
+   [[ -f "/etc/redcore-release" ]]    && GENTOO=1 # is GENTOO family
    [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
   
@@ -403,6 +405,8 @@ PreCheck()
    # self-promoting script to sudo
    # recursively call the script with sudo
    # hence no needing sudo before the command
+   which sudo &>/dev/null || die "please install and configure sudo for this user"
+
    [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
 }
 
@@ -1168,6 +1172,22 @@ GetCompileSlack()
    rm -f /tmp/*tgz
 }
 
+
+# debootstrap hack
+# if not present and having dpkg
+# we can "force install it"
+# debootstap just a set of scripts and configuration files
+InstallDebootstrapDeb()
+{
+   if which dpkg && ! which debootstrap
+   then
+      FILE="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123_all.deb"
+      wget "${FILE}" || die "could not download ${FILE}"
+      dpkg -i --force-all debootstrap_1.0.123_all.deb
+      rm -f debootstrap_1.0.123_all.deb
+   fi
+}
+
 # installs package requirements
 installPackages()
 {
@@ -1265,13 +1285,7 @@ installPackages()
       # SLES does have dpkg, but not debootstrap in repositories
       # debootstrap is just a set of scripts and files
       # install deb file from debian pool
-      if ! which debootstrap
-      then
-         FILE="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123_all.deb"
-	 wget "${FILE}" || die "could not download ${FILE}"
-	 dpkg -i --force-all debootstrap_1.0.123_all.deb
-	 rm -f debootstrap_1.0.123_all.deb
-      fi
+      InstallDebootstrapDeb
    fi
 
    # if Void based
@@ -1293,6 +1307,9 @@ installPackages()
    then
       # install/update packages
       emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
+
+      # Redcore Linux has the wrong URL, cant compile debootrap as of June 2022
+      InstallDebootstrapDeb
    fi
 
    # if Slackware

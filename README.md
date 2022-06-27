@@ -241,6 +241,8 @@ Gentoo
 
 Gentoo Base System release 2.8
 
+Redcore Linux 2102
+
 Slackware
 =========
 
