@@ -188,6 +188,8 @@ Kaisen Linux 2.1
 
 Pardus 21.2
 
+MX 21.1 Wildflower
+
 RedHat based
 ============
 
