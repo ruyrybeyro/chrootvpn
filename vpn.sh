@@ -1398,22 +1398,10 @@ fixSUSEDNS()
       #
       sed -i 's/^NETCONFIG_DNS_FORWARDER=.*/NETCONFIG_DNS_FORWARDER="dnsmasq"/g' /etc/sysconfig/network/config
 
-      # reload NeworkManager
-      #systemctl reload NetworkManager
-
       # replace /etc/resolv.conf for a resolved link
       cd /etc || die "was not able to cd /etc"
 
       ln -sf ../run/netconfig/resolv.conf resolv.conf
-
-      # wait for it to be up
-      #counter=0
-      #while ! systemctl is-active NetworkManager &> /dev/null
-      #do
-      #   sleep 4
-      #   (( counter=counter+1 ))
-      #   [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
-      #done
 
       # restart network
       systemctl restart network
