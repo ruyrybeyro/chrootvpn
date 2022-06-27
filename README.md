@@ -186,6 +186,8 @@ Zorin OS 16.1
 
 Kaisen Linux 2.1
 
+Pardus 21.2
+
 RedHat based
 ============
 
