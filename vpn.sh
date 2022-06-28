@@ -501,6 +501,9 @@ umountChrootFS()
 # Firefox Policy
 # add X.509 self-signed CShell certificate
 # to the list of accepted enterprise root certificates
+# 
+# Argument: $1 = Directory for installing policy
+#
 FirefoxJSONpolicy()
 {
    cat <<-EOF14 > "$1/policies.json"
@@ -518,9 +521,15 @@ FirefoxJSONpolicy()
 }
 
 
+#
 # install Firefox policy accepting
 # CShell localhost certificate
 # in the host machine
+#
+# Argument:
+#         $1 == install   : install policy file(s)
+#         $1 == uninstall : remove  policy file(s)
+#
 FirefoxPolicy()
 {
    local DIR
