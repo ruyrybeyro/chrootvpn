@@ -419,7 +419,7 @@ PreCheck()
    fi
 
    # This script needs a user with sudo privileges
-   which sudo &>/dev/null || die "please install and configure sudo for this user"
+   which sudo &>/dev/null || die "please install sudo and configure sudoers/groups for this user"
 
    # for using/relaunching
    # self-promoting script to sudo
