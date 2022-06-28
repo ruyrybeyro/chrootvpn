@@ -389,7 +389,7 @@ PreCheck()
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
    [[ -f "/etc/gentoo-release" ]]    && GENTOO=1 # is GENTOO family
-   [[ -f "/etc/redcore-release" ]]    && GENTOO=1 # is GENTOO family
+   [[ -f "/etc/redcore-release" ]]   && GENTOO=1 # is GENTOO family
    [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
   
@@ -403,12 +403,13 @@ PreCheck()
       [[ "$1" == "uninstall" ]] || die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
 
+   # This script needs a user with sudo privileges
+   which sudo &>/dev/null || die "please install and configure sudo for this user"
+
    # for using/relaunching
    # self-promoting script to sudo
    # recursively call the script with sudo
    # hence no needing sudo before the command
-   which sudo &>/dev/null || die "please install and configure sudo for this user"
-
    [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
 }
 
@@ -701,15 +702,23 @@ killCShell()
 # we need them ok for syncronizing chroot with host
 fixLinks()
 {
-      # fix link inside chroot
-      ln -sf "$1" "${CHROOT}/etc/resolv.conf"
-
-      # if link in host deviates from needed
-      readlink /etc/resolv.conf | grep "$1" &> /dev/null
-      if [ $? -ne 0  ]
+      if [[ -f "$1" ]]
       then
-         # fix it
-         ln -sf "$1" /etc/resolv.conf
+         # fix link inside chroot
+         ln -sf "$1" "${CHROOT}/etc/resolv.conf"
+
+         # if link in host deviates from needed
+         readlink /etc/resolv.conf | grep "$1" &> /dev/null
+         if [ $? -ne 0  ]
+         then
+            # fix it
+            ln -sf "$1" /etc/resolv.conf
+         fi
+      else
+         echo "if $1 does not exist, we cant use it to fix/share resolv.conf file between host and chroot" >&2
+         echo "setting up chroot DNS as a copy of host" >&2
+         rm -f "${CHROOT}/etc/resolv.conf"
+         cat /etc/resolv.conf > "${CHROOT}/etc/resolv.conf"
       fi
 }
 
