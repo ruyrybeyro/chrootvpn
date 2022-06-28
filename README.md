@@ -162,9 +162,9 @@ Ubuntu LTS 20.04 Focal Fossa
 
 Ubuntu LTS 22.04 Jammy Jellyfish
 
-Voyager 22.04 LTS
-
 Mint   20.2 Uma
+
+Voyager 22.04 LTS
 
 Pop!_OS 22.04 LTS
 
@@ -201,6 +201,8 @@ RedHat based
 
 RHEL 9.0 Plow
 
+EuroLinux 8.6
+
 EuroLinux 9.0
 
 Fedora 23
@@ -209,13 +211,13 @@ Fedora 36
 
 CentOS 8
 
+CentOS 9 stream
+
 Rocky 8.6 Green Obsidian
 
 Oracle 8.6
 
 Oracle 9.0
-
-CentOS 9 stream
 
 AlmaLinux 9.0 Emerald Puma
 
