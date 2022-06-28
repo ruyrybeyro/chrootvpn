@@ -190,6 +190,8 @@ Pardus 21.2
 
 MX 21.1 Wildflower
 
+Peppermint OS 2022-05-22
+
 RedHat based
 ============
 
@@ -225,6 +227,8 @@ Manjaro 21.2.6.1
 EndeavourOS 2022.06.32
 
 Arco Linux 22.06.07
+
+Garuda Linux 220614
 
 SUSE
 ====
