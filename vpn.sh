@@ -497,6 +497,7 @@ umountChrootFS()
    fi
 }
 
+
 # Firefox Policy
 # add X.509 self-signed CShell certificate
 # to the list of accepted enterprise root certificates
@@ -582,6 +583,7 @@ FirefoxPolicy()
       echo "If using other browser than Firefox or Firefox is a snap" >&2
    fi
 }
+
 
 #
 # Client wrapper section
@@ -784,6 +786,7 @@ killCShell()
    fi
 }
 
+
 # fix /etc/resolv.conf links, chroot and host
 # we need them ok for syncronizing chroot with host
 fixLinks()
@@ -809,11 +812,11 @@ fixLinks()
 }
 
 
+# fixes potential resolv.conf/DNS issues.
+# Checkpoint software seems not mess up with it.
+# Unless a security update inside chroot damages it
 fixDNS()
 {
-   # fixes potential resolv.conf/DNS issues inside chroot.
-   # Checkpoint software seems not mess up with it.
-   # Unless a security update inside chroot damages it
 
    cd /etc || die "could not enter /etc"
 
@@ -843,6 +846,7 @@ fixDNS()
    # Slackware
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 }
+
 
 # start command
 doStart()
@@ -896,6 +900,7 @@ doStart()
       echo "If it does not work, launch ${SCRIPTNAME} in a terminal from the X11 console" >&2
    fi
 }
+
 
 # try to fix out of sync resolv.conf
 fixDNS2()
@@ -1114,6 +1119,7 @@ argCommands()
 
 }
 
+
 #
 # chroot setup/install section(1st time running script)
 #
@@ -1290,6 +1296,7 @@ InstallDebootstrapDeb()
    fi
 }
 
+
 # installs package requirements
 installPackages()
 {
@@ -1421,6 +1428,7 @@ installPackages()
    fi
 }
 
+
 # fix DNS - Arch
 fixARCHDNS()
 {
@@ -1461,6 +1469,7 @@ fixARCHDNS()
       done
    fi
 }
+
 
 # fix DNS RH family if systemd-resolved not active
 fixRHDNS()
@@ -1517,6 +1526,7 @@ fixRHDNS()
    fi
 }
 
+
 # fix DNS - SUSE 
 fixSUSEDNS()
 {
@@ -1537,6 +1547,7 @@ fixSUSEDNS()
    fi
 }
 
+
 # fix DNS - DEEPIN
 fixDEEPINDNS()
 {
@@ -1550,6 +1561,7 @@ fixDEEPINDNS()
       ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
    fi
 }
+
 
 # "bug/feature": check DNS health
 checkDNS()
