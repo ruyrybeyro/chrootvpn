@@ -704,7 +704,6 @@ killCShell()
 # we need them ok for syncronizing chroot with host
 fixLinks()
 {
-      cd /etc
       if [[ -f "$1" ]]
       then
          # fix link inside chroot
@@ -725,27 +724,17 @@ fixLinks()
       fi
 }
 
-# start command
-doStart()
-{
-   # ${CSHELL_USER} (cshell) apps - X auth
-   if ! su - "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:"
-   then
-      echo "If there are not X11 desktop permissions, VPN won't run" >&2
-      echo "run this while logged in to the graphic console," >&2
-      echo "or in a terminal inside the graphic console" >&2
-      echo 
-      echo "X11 auth not given" >&2
-      echo "Please run as the X11/regular user:" >&2
-      echo "xhost +si:local:" >&2
-   fi
 
-   # fixes potential resolv.conf/DNS issues inside chroot. 
+fixDNS()
+{
+   # fixes potential resolv.conf/DNS issues inside chroot.
    # Checkpoint software seems not mess up with it.
    # Unless a security update inside chroot damages it
 
+   cd /etc
+
    if [[ "${DEEPIN}" -eq 1 ]]
-   then	   
+   then
       fixLinks ../run/systemd/resolve/stub-resolv.conf
    else
       # Debian family - resolvconf
@@ -769,6 +758,28 @@ doStart()
 
    # Slackware
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+}
+
+# start command
+doStart()
+{
+   # ${CSHELL_USER} (cshell) apps - X auth
+   if ! su - "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:"
+   then
+      echo "If there are not X11 desktop permissions, VPN won't run" >&2
+      echo "run this while logged in to the graphic console," >&2
+      echo "or in a terminal inside the graphic console" >&2
+      echo 
+      echo "X11 auth not given" >&2
+      echo "Please run as the X11/regular user:" >&2
+      echo "xhost +si:local:" >&2
+   fi
+
+   # fixes potential resolv.conf/DNS issues inside chroot. 
+   # Checkpoint software seems not mess up with it.
+   # Unless a security update inside chroot damages it
+
+   fixDNS
 
    # mount Chroot file systems
    mountChrootFS
@@ -1751,46 +1762,6 @@ FstabMount()
 
    #mount --fstab etc/fstab -a
    mountChrootFS
-}
-
-
-# change DNS for resolvconf/systemd-resolved /run file
-# for sharing DNS resolver configuration between chroot and host
-fixDNS()
-{
-   # fix resolv.conf for resolvconf
-   # shared resolv.conf between host and chroot via /run/
-   rm -f etc/resolv.conf
-   cd etc || die "could not enter ${CHROOT}/etc"
-
-   if [[ "${DEEPIN}" -eq 1 ]]
-   then	   
-      # Deepin - systemd-resolved
-      ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
-   else
-      # Debian - resolvconf
-      [[ "${DEB}" -eq 1 ]] && ln -sf ../run/resolvconf/resolv.conf resolv.conf
-   fi
-
-   # RH - systemd-resolved
-   [[ "${RH}" -eq 1 ]] && ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
-
-   # ArchLinux
-   [[ "${ARCH}" -eq 1 ]] && ln -sf ../run/resolvconf/interfaces/NetworkManager resolv.conf
-
-   # SUSE - resolvconf
-   [[ "${SUSE}" -eq 1 ]] && ln -sf ../run/netconfig/resolv.conf resolv.conf
-
-   # Void - NetworkManager
-   [[ "${VOID}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf resolv.conf
-
-   # Gentoo - NetworkManager
-   [[ "${GENTOO}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf resolv.conf
-
-   # Slackware - NetworkManager
-   [[ "${SLACKWARE}" -eq 1 ]] && ln -sf ../run/NetworkManager/resolv.conf resolv.conf
-
-   cd ..
 }
 
 
