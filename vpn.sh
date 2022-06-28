@@ -731,7 +731,7 @@ fixDNS()
    # Checkpoint software seems not mess up with it.
    # Unless a security update inside chroot damages it
 
-   cd /etc
+   cd /etc || die "could not enter /etc"
 
    if [[ "${DEEPIN}" -eq 1 ]]
    then
