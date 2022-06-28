@@ -1413,6 +1413,12 @@ installPackages()
    # if Gentoo based
    if [[ "${GENTOO}" -eq 1 ]]
    then
+      # maintance because rolling release
+      # and problems with international repositories connectivity
+      emaint --auto sync
+      #emerge --oneshot sys-apps/portage
+      #emerge --ask --verbose --update --deep --newuse @world
+
       # install/update packages
       emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
 
