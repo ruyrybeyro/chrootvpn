@@ -242,6 +242,8 @@ Garuda Linux 220614
 
 Mabox Linux 22.06
 
+BluestarLinux 5.1
+
 SUSE
 ====
 
