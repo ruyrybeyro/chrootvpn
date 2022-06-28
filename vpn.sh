@@ -716,6 +716,8 @@ fixLinks()
          fi
       else
          echo "if $1 does not exist, we cant use it to fix/share resolv.conf file between host and chroot" >&2
+         echo "setting up chroot DNS as a copy of host" >&2
+         rm -f "${CHROOT}/etc/resolv.conf"
          cat /etc/resolv.conf > "${CHROOT}/etc/resolv.conf"
       fi
 }
