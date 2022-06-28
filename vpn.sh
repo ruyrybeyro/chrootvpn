@@ -30,57 +30,9 @@
 # binary SNX VPN client needs 32-bits environment
 #
 # tested with chroot Debian Bullseye 11 (32 bits) and
-# 64 bits hosts: 
-#        Debian 10 
-#        Debian 11 
-#        Debian Bookworm (testing 12)
-#        antiX-21
-#        Devuan Chimaera 4.0
-#        Ubuntu LTS 18.04 
-#        Ubuntu LTS 20.04
-#        Ubuntu LTS 22.04 
-#        Voyager 22.04 LTS
-#        Mint   20.2
-#        Pop!_OS 22.04 LTS
-#        Kubuntu 22.04 LTS
-#        lubuntu 22.04 LTS
-#        Lite 6.0
-#        Kali 2022.2
-#        Parrot 5.0.1 Electro Ara
-#        Elementary OS 6.1 Jolnir
-#        Deepin 20.6
-#        KDE neon 5.25
-#        Zorin OS 16.1
-#        Kaisen Linux 2.1
-#        Pardus 21.2
-#        MX 21.1 Wildflower
-#        Peppermint OS 2022-05-22
-#        Drauger OS 7.6
-#        RHEL 9.0
-#        EuroLinux 9.0
-#        Fedora 23 
-#        Fedora 36
-#        Rocky  8.6
-#        CentOS 8 Stream
-#        CentOS 9 Stream
-#        AlmaLinux 9.0
-#        Mageia 8
-#        Oracle Linux 8.6
-#        Oracle Linux 9.0
-#        Arch Linux 2022.05.01
-#        Manjaro 21.2.6.1
-#        EndeavourOS 2022.06.32
-#        Arco Linux 22.06.07
-#        Garuda Linux 220614
-#        openSUSE Leap 15.3
-#        openSUSE Leap 15.4
-#        SLES 15-SP4
-#        Void Linux 
-#        Gentoo 2.8
-#        Redcore Linux 2102
-#        Slackware 15.0
-#        Slackware 15.1-current
-#        Salix OS xfce 15.0
+# 64 bits hosts. 
+#
+# see list at https://github.com/ruyrybeyro/chrootvpn/
 #
 # For DNS sync between host and chroot
 # "Debian" host resolvconf       and /run/resolvconf/resolv.conf
