@@ -194,6 +194,8 @@ MX 21.1 Wildflower
 
 Peppermint OS 2022-05-22
 
+Drauger OS 7.6 Strigoi
+
 RedHat based
 ============
 

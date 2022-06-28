@@ -55,6 +55,7 @@
 #        Pardus 21.2
 #        MX 21.1 Wildflower
 #        Peppermint OS 2022-05-22
+#        Drauger OS 7.6
 #        RHEL 9.0
 #        EuroLinux 9.0
 #        Fedora 23 
