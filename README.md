@@ -146,23 +146,25 @@ Tested with 64-bits hosts:
 Debian based
 ============ 
 
-Debian 10
+Debian 10 Buster
 
-Debian 11
+Debian 11 Bullseye
 
 Debian Bookworm (testing 12)
 
-antiX-21
+antiX-21 Grup Yorum
 
 Devuan Chimaera 4.0
 
-Ubuntu LTS 18.04
+Ubuntu LTS 18.04 Bionic Beaver
 
-Ubuntu LTS 22.04
+Ubuntu LTS 20.04 Focal Fossa
+
+Ubuntu LTS 22.04 Jammy Jellyfish
 
 Voyager 22.04 LTS
 
-Mint   20.2
+Mint   20.2 Uma
 
 Pop!_OS 22.04 LTS
 
@@ -186,7 +188,7 @@ Zorin OS 16.1
 
 Kaisen Linux 2.1
 
-Pardus 21.2
+Pardus 21.2 Yazılım Merkezi
 
 MX 21.1 Wildflower
 
@@ -195,7 +197,7 @@ Peppermint OS 2022-05-22
 RedHat based
 ============
 
-RHEL 9.0
+RHEL 9.0 Plow
 
 EuroLinux 9.0
 
@@ -205,7 +207,7 @@ Fedora 36
 
 CentOS 8
 
-Rocky 8.6
+Rocky 8.6 Green Obsidian
 
 Oracle 8.6
 
@@ -213,9 +215,9 @@ Oracle 9.0
 
 CentOS 9 stream
 
-AlmaLinux 9.0
+AlmaLinux 9.0 Emerald Puma
 
-Mageia 8
+Mageia 8 mga8
 
 Arch based
 ==========

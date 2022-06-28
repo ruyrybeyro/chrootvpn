@@ -37,6 +37,7 @@
 #        antiX-21
 #        Devuan Chimaera 4.0
 #        Ubuntu LTS 18.04 
+#        Ubuntu LTS 20.04
 #        Ubuntu LTS 22.04 
 #        Voyager 22.04 LTS
 #        Mint   20.2
