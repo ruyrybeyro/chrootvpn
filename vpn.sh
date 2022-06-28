@@ -1302,6 +1302,7 @@ installPackages()
       # we want to make sure resolconf is the last one
       [[ ${DEEPIN} -eq 0 ]] && apt -y install resolvconf
 
+      # highly unusual, a Debian/Ubuntu machine *without* dpkg
       which dpkg & >/dev/null || die "failed installing dpkg"
 
       if grep '^ID=trisquel' /etc/os-release &>/dev/null
