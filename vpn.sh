@@ -286,6 +286,8 @@ needs_arg()
 # -o|--output
 # -s|--silent called with /dev/null
 #
+# $1 : log file to use
+#
 doOutput()
 {
    LOG_FILE="$1"
@@ -798,6 +800,9 @@ killCShell()
 
 # fix /etc/resolv.conf links, chroot and host
 # we need them ok for syncronizing chroot with host
+#
+# $1 : path of resolv.conf file inside ../run
+#
 fixLinks()
 {
       if [[ -f "$1" ]]
@@ -1066,6 +1071,9 @@ selfUpdate()
 
 
 # check if chroot usage is sane
+#
+# $1 : commands after options are processed and wiped out
+#
 PreCheck2()
 {
    # if setup successfully finished, launcher has to be there
@@ -1105,6 +1113,9 @@ PreCheck2()
 
       
 # arguments - command handling
+#
+# $1 : commands after command options processed and shifted out
+#
 argCommands()
 {
    PreCheck2 "$1"
@@ -1800,7 +1811,7 @@ buildFS()
 	# fake certutil
 	# we are not dealing either with browsers or certificates inside chroot
 	# 
-        # -H returns 1 (test installed)
+        # -H returns 1 (test installed of certutil command)
 	# otherwise 0
 	cat <<-'EOF18' > nopatch/certutil
 	#!/bin/bash
