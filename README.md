@@ -238,6 +238,8 @@ Arco Linux 22.06.07
 
 Garuda Linux 220614
 
+Mabox Linux 22.06
+
 SUSE
 ====
 
