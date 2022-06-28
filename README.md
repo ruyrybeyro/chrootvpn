@@ -198,6 +198,8 @@ Drauger OS 7.6 Strigoi
 
 Trisquel 10.0.1 Nabia
 
+Freespire 82
+
 RedHat based
 ============
 
