@@ -1274,7 +1274,7 @@ GetCompileSlack()
 #
 InstallDebootstrapDeb()
 {
-   if [[ "$1" == "force" ]] || ! which debootstrap &>/dev/null
+   if [[ "$1" == "force" ]] || ! which debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
    then
       wget "${DEB_BOOTSTRAP}" || die "could not download ${DEB_BOOTSTRAP}"
       dpkg -i --force-all "${DEB_FILE}"
