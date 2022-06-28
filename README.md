@@ -198,6 +198,8 @@ Drauger OS 7.6 Strigoi
 
 Trisquel 10.0.1 Nabia
 
+Freespire 82
+
 RedHat based
 ============
 
@@ -237,6 +239,10 @@ EndeavourOS 2022.06.32
 Arco Linux 22.06.07
 
 Garuda Linux 220614
+
+Mabox Linux 22.06
+
+BluestarLinux 5.1
 
 SUSE
 ====
