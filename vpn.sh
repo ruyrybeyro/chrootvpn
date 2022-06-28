@@ -284,7 +284,8 @@ needs_arg()
 
 
 # Redirect Output
-# -o|--output
+#
+# -o|--output FILE
 # -s|--silent called with /dev/null
 #
 # $1 : log file to use

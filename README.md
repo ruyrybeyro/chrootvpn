@@ -172,7 +172,7 @@ Kubuntu 22.04 LTS
 
 lubuntu 22.04 LTS
 
-Lite 6.0
+Lite 6.0 Fluorite
 
 Kali 2022.2
 
