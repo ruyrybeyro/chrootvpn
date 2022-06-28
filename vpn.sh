@@ -1269,9 +1269,12 @@ GetCompileSlack()
 # if not present and having dpkg
 # we can "force install it"
 # debootstap just a set of scripts and configuration files
+#
+# $1 : force - force installation
+#
 InstallDebootstrapDeb()
 {
-   if which dpkg &>/dev/null && ! which debootstrap &>/dev/null
+   if [[ "$1" == "force" ]] || ! which debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
    then
       wget "${DEB_BOOTSTRAP}" || die "could not download ${DEB_BOOTSTRAP}"
       dpkg -i --force-all "${DEB_FILE}"
@@ -1295,9 +1298,21 @@ installPackages()
       #apt -y upgrade
 
       # install needed packages
-      apt -y install ca-certificates x11-xserver-utils jq wget debootstrap
+      apt -y install ca-certificates x11-xserver-utils jq wget dpkg debootstrap
       # we want to make sure resolconf is the last one
       [[ ${DEEPIN} -eq 0 ]] && apt -y install resolvconf
+
+      which dpkg & >/dev/null || die "failed installing dpkg"
+
+      if grep '^ID=trisquel' /etc/os-release &>/dev/null
+      then
+         # Trisquel debootstrap too specific
+         InstallDebootstrapDeb force
+         echo "debootstrap from Trisquel overloaded. If you want it back, delete and reinstall package" >&2
+      else
+         # only will work if debootstrap *too old*
+         InstallDebootstrapDeb
+      fi
       # clean APT host cache
       apt clean
    fi

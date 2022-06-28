@@ -196,12 +196,14 @@ Peppermint OS 2022-05-22
 
 Drauger OS 7.6 Strigoi
 
+Trisquel 10.0.1 Nabia
+
 RedHat based
 ============
 
 RHEL 9.0 Plow
 
-EuroLinux 8.6
+EuroLinux 8.6 Kyiv
 
 EuroLinux 9.0
 
