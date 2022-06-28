@@ -37,6 +37,7 @@
 #        antiX-21
 #        Devuan Chimaera 4.0
 #        Ubuntu LTS 18.04 
+#        Ubuntu LTS 20.04
 #        Ubuntu LTS 22.04 
 #        Voyager 22.04 LTS
 #        Mint   20.2
@@ -283,8 +284,11 @@ needs_arg()
 
 
 # Redirect Output
-# -o|--output
+#
+# -o|--output FILE
 # -s|--silent called with /dev/null
+#
+# $1 : log file to use
 #
 doOutput()
 {
@@ -501,6 +505,9 @@ umountChrootFS()
 # Firefox Policy
 # add X.509 self-signed CShell certificate
 # to the list of accepted enterprise root certificates
+# 
+# Argument: $1 = Directory for installing policy
+#
 FirefoxJSONpolicy()
 {
    cat <<-EOF14 > "$1/policies.json"
@@ -518,9 +525,15 @@ FirefoxJSONpolicy()
 }
 
 
+#
 # install Firefox policy accepting
 # CShell localhost certificate
 # in the host machine
+#
+# Argument:
+#         $1 == install   : install policy file(s)
+#         $1 == uninstall : remove  policy file(s)
+#
 FirefoxPolicy()
 {
    local DIR
@@ -789,6 +802,9 @@ killCShell()
 
 # fix /etc/resolv.conf links, chroot and host
 # we need them ok for syncronizing chroot with host
+#
+# $1 : path of resolv.conf file inside ../run
+#
 fixLinks()
 {
       if [[ -f "$1" ]]
@@ -1057,6 +1073,9 @@ selfUpdate()
 
 
 # check if chroot usage is sane
+#
+# $1 : commands after options are processed and wiped out
+#
 PreCheck2()
 {
    # if setup successfully finished, launcher has to be there
@@ -1096,6 +1115,9 @@ PreCheck2()
 
       
 # arguments - command handling
+#
+# $1 : commands after command options processed and shifted out
+#
 argCommands()
 {
    PreCheck2 "$1"
@@ -1791,7 +1813,7 @@ buildFS()
 	# fake certutil
 	# we are not dealing either with browsers or certificates inside chroot
 	# 
-        # -H returns 1 (test installed)
+        # -H returns 1 (test installed of certutil command)
 	# otherwise 0
 	cat <<-'EOF18' > nopatch/certutil
 	#!/bin/bash
