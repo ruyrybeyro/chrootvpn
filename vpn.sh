@@ -68,6 +68,7 @@
 #        Manjaro 21.2.6.1
 #        EndeavourOS 2022.06.32
 #        Arco Linux 22.06.07
+#        Garuda Linux 220614
 #        openSUSE Leap 15.3
 #        openSUSE Leap 15.4
 #        SLES 15-SP4
@@ -702,6 +703,7 @@ killCShell()
 # we need them ok for syncronizing chroot with host
 fixLinks()
 {
+      cd /etc
       if [[ -f "$1" ]]
       then
          # fix link inside chroot
