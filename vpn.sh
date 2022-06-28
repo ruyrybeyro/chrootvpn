@@ -497,6 +497,90 @@ umountChrootFS()
    fi
 }
 
+# Firefox Policy
+# add X.509 self-signed CShell certificate
+# to the list of accepted enterprise root certificates
+FirefoxJSONpolicy()
+{
+   cat <<-EOF14 > "${DIR}/policies.json"
+	{
+	   "policies": {
+	               "ImportEnterpriseRoots": true,
+	               "Certificates": {
+	               "Install": [
+	                          "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt"
+	                          ]
+	                               }
+	               }
+	}
+	EOF14
+}
+
+
+# install Firefox policy accepting
+# CShell localhost certificate
+# in the host machine
+FirefoxPolicy()
+{
+   local DIR
+   local PolInstalled
+
+   # flag as not installed
+   PolInstalled=0
+
+   if [[ "$1" == "install" ]]
+   then
+      [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution"
+      [[ ${SLACKWARE} -eq 1 ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
+   fi
+
+   # if Firefox installed
+   # cycle possible firefox global directories
+   for DIR in "/etc/firefox/policies/" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution -type d 2> /dev/null)
+   do
+      if  [[ "$1" == "install" ]] && [[ -d "${DIR}" ]]
+      then
+         # if policies file not already installed
+         if [[ ! -f "${DIR}/policies.json" ]] || grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
+         then
+
+            # can't be sure for snap
+            # so don't flag as policy installed
+            # for it to warn for accepting certificate
+            if [[ "${DIR}" != "/etc/firefox/policies/" ]]
+            then
+               # flag as installed
+               PolInstalled=1
+            fi
+
+            # create JSON policy file
+            # Accepting CShell certificate
+            FirefoxJSONpolicy
+
+         else
+            echo "Another policy already found at ${DIR}." >&2
+         fi
+      fi
+
+      # delete Firefox policy for accepting localhost CShell certificate
+      if [[ "$1" == "uninstall" ]] && grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
+      then
+         rm -f "${DIR}/policies.json"
+      fi
+
+   done
+
+   # if Firefox policy installed
+   # "install" implied, Pollinstalled cant be 1 otherwise
+   if [[ "$PolInstalled" -eq 1 ]]
+   then
+      # if Firefox running, kill it
+      pgrep -f firefox &>/dev/null && pkill -9 -f firefox
+
+      echo "Firefox policy created for accepting https://localhost:14186 certificate" >&2
+      echo "If using other browser than Firefox or Firefox is a snap" >&2
+   fi
+}
 
 #
 # Client wrapper section
@@ -513,7 +597,6 @@ umountChrootFS()
 #
 Split()
 {
-
    # if SPLIT empty
    if [[ -z "${SPLIT+x}" ]]
    then
@@ -887,15 +970,8 @@ doUninstall()
    userdel -rf "${CSHELL_USER}" &>/dev/null
    groupdel "${CSHELL_GROUP}"   &>/dev/null
 
-   # cycle possible firefox global directories
-   for DIR in "/etc/firefox/policies/" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution -type d 2> /dev/null)
-   do
-      # delete Firefox policy for accepting localhost CShell certificate
-      if grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
-      then
-         rm -f "${DIR}/policies.json"
-      fi
-   done
+   # delete Firefox policies installed by this script
+   FirefoxPolicy uninstall
 
    # leave /opt/etc/vpn.conf behind
    # for easing reinstalation
@@ -1847,75 +1923,6 @@ createConfFile()
 }
 
 
-# install Firefox policy accepting
-# CShell localhost certificate
-# in the host machine
-FirefoxPolicy()
-{
-   local DIR
-   local PolInstalled
-
-   # flag as not installed
-   PolInstalled=0
-
-   [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution"
-   [[ ${SLACKWARE} -eq 1 ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
-
-   # if Firefox installed
-   # cycle possible firefox global directories
-   for DIR in "/etc/firefox/policies/" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution -type d 2> /dev/null)
-   do
-      if [[ -d "${DIR}" ]]
-      then
-         # if policies file not already installed
-         if [[ ! -f "${DIR}/policies.json" ]] || grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
-         then
-
-            # can't be sure for snap
-            # so don't flag as policy installed
-            # for it to warn for accepting certificate
-            if [[ "${DIR}" != "/etc/firefox/policies/" ]]
-            then
-               # flag as installed
-               PolInstalled=1
-            fi
-
-            # create JSON policy file
-            # Accepting CShell certificate
-
-	    # Firefox Policy
-            # add X.509 self-signed CShell certificate
-	    # to the lited of accepted enterprise root certificates
-            cat <<-EOF14 > "${DIR}/policies.json"
-	    {
-	    "policies": {
-	                  "ImportEnterpriseRoots": true,
-	                  "Certificates": {
-	                    "Install": [
-	                        "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt"
-	                    ]
-	                  }
-	               }
-	    }
-	EOF14
-         else
-            echo "Another policy already found at ${DIR}." >&2
-         fi
-      fi
-   done
-
-   # if Firefox policy installed
-   if [[ "$PolInstalled" -eq 1 ]]
-   then
-      # if Firefox running, kill it
-      pgrep -f firefox &>/dev/null && pkill -9 -f firefox
-            
-      echo "Firefox policy created for accepting https://localhost:14186 certificate" >&2
-      echo "If using other browser than Firefox or Firefox is a snap" >&2
-   fi
-}
-
-
 # last leg inside/building chroot
 #
 # minimal house keeping and user messages
@@ -1952,7 +1959,7 @@ chrootEnd()
       echo >&2
 
       # install Policy for CShell localhost certificate
-      FirefoxPolicy
+      FirefoxPolicy install
 
       # if localhost generated certificate not accepted, VPN auth will fail
       # and will ask to "install" software upon failure
