@@ -145,6 +145,8 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # needed by SLES and Slackware
 # version of debootstrap taken from Debian pool repository
+# 1.0.123 has bullseye rules file
+#
 VER_BOOTSTRAP="1.0.123"
 DEB_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}_all.deb"
 DEB_FILE=$(basename ${DEB_BOOTSTRAP})
