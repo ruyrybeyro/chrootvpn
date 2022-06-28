@@ -127,6 +127,12 @@ CONFFILE="/opt/etc/vpn.conf"
 # Change here for a custom PATH
 [[ -z "$SSLVPN" ]] && SSLVPN="sslvpn"
 
+# used during initial chroot setup
+# for chroot shell correct time
+# if TZ is empty
+# set TZ before first time creating chroot
+[[ -z "${TZ}" ]] && TZ='Europe/Lisbon'
+
 # OS to deploy inside 32-bit chroot  
 # minimal Debian
 VARIANT="minbase"
@@ -136,12 +142,6 @@ DEBIANREPO="http://deb.debian.org/debian/" # fastly repo
 # github repository for selfupdate command
 # https://github.com/ruyrybeyro/chrootvpn
 GITHUB_REPO="ruyrybeyro/chrootvpn"
-
-# used during initial chroot setup
-# for chroot shell correct time
-# if TZ is empty
-# set TZ before first time creating chroot
-[[ -z "${TZ}" ]] && TZ='Europe/Lisbon'
 
 # needed by SLES and Slackware
 # version of debootstrap taken from Debian pool repository
