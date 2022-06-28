@@ -1880,9 +1880,6 @@ FirefoxPolicy()
                PolInstalled=1
             fi
 
-            # apparently present in Debian, nevertheless
-            mkdir -p "${DIR}" 2> /dev/null
-
             # create JSON policy file
             # Accepting CShell certificate
 
