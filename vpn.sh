@@ -502,7 +502,7 @@ umountChrootFS()
 # to the list of accepted enterprise root certificates
 FirefoxJSONpolicy()
 {
-   cat <<-EOF14 > "${DIR}/policies.json"
+   cat <<-EOF14 > "$1/policies.json"
 	{
 	   "policies": {
 	               "ImportEnterpriseRoots": true,
@@ -538,6 +538,7 @@ FirefoxPolicy()
    # cycle possible firefox global directories
    for DIR in "/etc/firefox/policies/" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution -type d 2> /dev/null)
    do
+      # -d ${DIR} double check, mostly redundant check
       if  [[ "$1" == "install" ]] && [[ -d "${DIR}" ]]
       then
          # if policies file not already installed
@@ -555,7 +556,7 @@ FirefoxPolicy()
 
             # create JSON policy file
             # Accepting CShell certificate
-            FirefoxJSONpolicy
+            FirefoxJSONpolicy "${DIR}"
 
          else
             echo "Another policy already found at ${DIR}." >&2
