@@ -190,6 +190,8 @@ Pardus 21.2
 
 MX 21.1 Wildflower
 
+Peppermint OS 2022-05-22
+
 RedHat based
 ============
 
