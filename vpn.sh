@@ -1413,6 +1413,10 @@ installPackages()
    # if Gentoo based
    if [[ "${GENTOO}" -eq 1 ]]
    then
+      emaint --auto sync
+
+      emerge --ask --verbose --update --deep --newuse @world
+
       # install/update packages
       emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
 
