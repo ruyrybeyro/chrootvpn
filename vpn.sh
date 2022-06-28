@@ -144,10 +144,11 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 [[ -z "${TZ}" ]] && TZ='Europe/Lisbon'
 
 # needed by SLES and Slackware
+# version of debootstrap taken from Debian pool repository
 VER_BOOTSTRAP="1.0.123"
-DEB_BOOTSTRAP="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}_all.deb"
+DEB_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}_all.deb"
 DEB_FILE=$(basename ${DEB_BOOTSTRAP})
-SRC_BOOTSTRAP="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}.tar.gz"
+SRC_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}.tar.gz"
 
 # URL for testing if split or full VPN
 URL_VPN_TEST="https://www.debian.org"
