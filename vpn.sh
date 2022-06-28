@@ -1241,7 +1241,7 @@ GetCompileSlack()
       # debootstrap version in SlackWare too old to be useful
       if [[ ${NAME} != "debootstrap" ]]
       then
-         which ${NAME} || continue 
+         which ${NAME} &>/dev/null || continue 
       fi
 
       # save current directory/cwd
@@ -1309,7 +1309,7 @@ GetCompileSlack()
 # debootstap just a set of scripts and configuration files
 InstallDebootstrapDeb()
 {
-   if which dpkg && ! which debootstrap
+   if which dpkg &>/dev/null && ! which debootstrap &>/dev/null
    then
       FILE="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123_all.deb"
       wget "${FILE}" || die "could not download ${FILE}"
@@ -1349,7 +1349,7 @@ installPackages()
       # attempts to a poor's man detection of not needing to setup EPEL
       dnf -y install debootstrap
 
-      if ! which debootstrap
+      if ! which debootstrap &>/dev/null
       then
          # epel-release not needed for Fedora and Mageia
          if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
@@ -1406,7 +1406,7 @@ installPackages()
 
       zypper -n install ca-certificates jq wget dpkg xhost dnsmasq
 
-      which dpkg || die "could not install software"
+      which dpkg &>/dev/null || die "could not install software"
 
       # will fail in SLES
       zypper -n install debootstrap
