@@ -143,6 +143,12 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 # set TZ before first time creating chroot
 [[ -z "${TZ}" ]] && TZ='Europe/Lisbon'
 
+# needed by SLES and Slackware
+VER_BOOTSTRAP="1.0.123"
+DEB_BOOTSTRAP="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}_all.deb"
+DEB_FILE=$(basename ${DEB_BOOTSTRAP})
+SRC_BOOTSTRAP="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}.tar.gz"
+
 # URL for testing if split or full VPN
 URL_VPN_TEST="https://www.debian.org"
 
@@ -1241,7 +1247,7 @@ GetCompileSlack()
       # debootstrap version in SlackWare too old to be useful
       if [[ ${NAME} != "debootstrap" ]]
       then
-         which ${NAME} || continue 
+         which ${NAME} &>/dev/null || continue 
       fi
 
       # save current directory/cwd
@@ -1260,10 +1266,10 @@ GetCompileSlack()
       then
          # debootstrap version is too old in SlackBuild rules
          # replace with a far newer version
-         DOWNLOAD="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123.tar.gz"
+         DOWNLOAD="${SRC_BOOTSTRAP}"
 
          # changing version for SBo.tgz too reflect that
-         sed -i 's/^VERSION=.*/VERSION=${VERSION:-1.0.123}/' ./${NAME}.SlackBuild
+         sed -i "s/^VERSION=.*/VERSION=${VER_BOOTSTRAP}/" ./${NAME}.SlackBuild
 
          # the Debian tar.gz only creates a directory by name
          # contrary to the Ubuntu source repository 
@@ -1309,12 +1315,11 @@ GetCompileSlack()
 # debootstap just a set of scripts and configuration files
 InstallDebootstrapDeb()
 {
-   if which dpkg && ! which debootstrap
+   if which dpkg &>/dev/null && ! which debootstrap &>/dev/null
    then
-      FILE="http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.123_all.deb"
-      wget "${FILE}" || die "could not download ${FILE}"
-      dpkg -i --force-all debootstrap_1.0.123_all.deb
-      rm -f debootstrap_1.0.123_all.deb
+      wget "${DEB_BOOTSTRAP}" || die "could not download ${DEB_BOOTSTRAP}"
+      dpkg -i --force-all "${DEB_FILE}"
+      rm -f "${DEB_FILE}"
    fi
 }
 
@@ -1349,7 +1354,7 @@ installPackages()
       # attempts to a poor's man detection of not needing to setup EPEL
       dnf -y install debootstrap
 
-      if ! which debootstrap
+      if ! which debootstrap &>/dev/null
       then
          # epel-release not needed for Fedora and Mageia
          if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
@@ -1406,7 +1411,7 @@ installPackages()
 
       zypper -n install ca-certificates jq wget dpkg xhost dnsmasq
 
-      which dpkg || die "could not install software"
+      which dpkg &>/dev/null || die "could not install software"
 
       # will fail in SLES
       zypper -n install debootstrap
