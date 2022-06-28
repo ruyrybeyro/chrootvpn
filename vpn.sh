@@ -1308,6 +1308,7 @@ installPackages()
       then
          # Trisquel debootstrap too specific
          InstallDebootstrapDeb force
+         echo "debootstrap from Trisquel overloaded. If you want it back, delete and reinstall package" >&2
       fi
       # clean APT host cache
       apt clean
