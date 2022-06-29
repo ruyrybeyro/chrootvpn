@@ -1416,13 +1416,17 @@ installPackages()
       # maintance because rolling release
       # and problems with international repositories connectivity
       #emaint --auto sync
-      #merge-webrsync
-      #emerge --sync 
-      #emerge --oneshot sys-apps/portage
-      #emerge --ask --verbose --update --deep --changed-use @world
+      #emerge-webrsync
+      #emerge --ask --oneshot --verbose sys-apps/portage
+      
+      # full upgrade
+      emaint --allrepos sync 
+      emerge --ask --verbose --update --deep --changed-use --with-bdeps=y  @world 
 
       # install/update packages
-      emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
+      emerge -atv n ca-certificates xhost app-misc/jq debootstrap dpkg
+
+      emerge --ask --verbose --depclean
 
       # Redcore Linux has the wrong URL, cant compile debootrap as of June 2022
       InstallDebootstrapDeb
