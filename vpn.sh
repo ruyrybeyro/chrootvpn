@@ -1416,13 +1416,20 @@ installPackages()
       # maintance because rolling release
       # and problems with international repositories connectivity
       #emaint --auto sync
-      #merge-webrsync
-      #emerge --sync 
-      #emerge --oneshot sys-apps/portage
-      #emerge --ask --verbose --update --deep --changed-use @world
+      #emerge-webrsync
+      
+      # full upgrade
+
+      emaint --allrepos sync || die "did not sync all repos"
+
+      emerge --ask --verbose --update --deep --changed-use --with-bdeps=y  --keep-going=y --backtrack=100  @world || die "did not manage to update the system. Fix this before calling ${SCRIPTNAME} again. Your image might be too old, or you might to have to use  emerge --deselect <name_of_package> plus emerge -a --depclean"
+
+      emerge --ask --oneshot --verbose sys-apps/portage
 
       # install/update packages
-      emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg
+      emerge -atv ca-certificates xhost app-misc/jq debootstrap dpkg
+
+      emerge --ask --verbose --depclean
 
       # Redcore Linux has the wrong URL, cant compile debootrap as of June 2022
       InstallDebootstrapDeb
