@@ -1417,14 +1417,17 @@ installPackages()
       # and problems with international repositories connectivity
       #emaint --auto sync
       #emerge-webrsync
-      #emerge --ask --oneshot --verbose sys-apps/portage
       
       # full upgrade
-      emaint --allrepos sync 
-      emerge --ask --verbose --update --deep --changed-use --with-bdeps=y  @world 
+
+      emaint --allrepos sync || die "did not sync all repos"
+
+      emerge --ask --verbose --update --deep --changed-use --with-bdeps=y  --keep-going=y --backtrack=100  @world || die "did not manage to update the system. Fix this before calling ${SCRRIPTNAME} again. You might to have to use  emerge --deselect <name_of_package> plus emerge -a --depclean"
+
+      emerge --ask --oneshot --verbose sys-apps/portage
 
       # install/update packages
-      emerge -atv n ca-certificates xhost app-misc/jq debootstrap dpkg
+      emerge -atv ca-certificates xhost app-misc/jq debootstrap dpkg
 
       emerge --ask --verbose --depclean
 
