@@ -1422,7 +1422,7 @@ installPackages()
 
       emaint --allrepos sync || die "did not sync all repos"
 
-      emerge --ask --verbose --update --deep --changed-use --with-bdeps=y  --keep-going=y --backtrack=100  @world || die "did not manage to update the system. Fix this before calling ${SCRRIPTNAME} again. You might to have to use  emerge --deselect <name_of_package> plus emerge -a --depclean"
+      emerge --ask --verbose --update --deep --changed-use --with-bdeps=y  --keep-going=y --backtrack=100  @world || die "did not manage to update the system. Fix this before calling ${SCRIPTNAME} again. Your image might be too old, or you might to have to use  emerge --deselect <name_of_package> plus emerge -a --depclean"
 
       emerge --ask --oneshot --verbose sys-apps/portage
 
