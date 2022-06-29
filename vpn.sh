@@ -1416,8 +1416,10 @@ installPackages()
       # maintance because rolling release
       # and problems with international repositories connectivity
       #emaint --auto sync
+      #merge-webrsync
+      #emerge --sync 
       #emerge --oneshot sys-apps/portage
-      #emerge --ask --verbose --update --deep --newuse @world
+      #emerge --ask --verbose --update --deep --changed-use @world
 
       # install/update packages
       emerge --ask n ca-certificates xhost app-misc/jq debootstrap dpkg

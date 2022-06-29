@@ -135,6 +135,8 @@ KNOWN FEATURES
 
 . If asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
 
+. Linux rolling releases distributions have to be full up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated.
+
 
 COMPATIBILITY
 =============
