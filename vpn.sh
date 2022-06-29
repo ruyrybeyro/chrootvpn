@@ -1415,7 +1415,7 @@ installPackages()
    then
       # maintance because rolling release
       # and problems with international repositories connectivity
-      emaint --auto sync
+      #emaint --auto sync
       #emerge --oneshot sys-apps/portage
       #emerge --ask --verbose --update --deep --newuse @world
 
