@@ -265,6 +265,8 @@ Gentoo Base System release 2.8
 
 Redcore Linux 2102
 
+Calculate Linux 22.0.1
+
 Slackware
 =========
 
