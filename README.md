@@ -176,7 +176,9 @@ Kubuntu 20.04 LTS
 
 Kubuntu 22.04 LTS
 
-lubuntu 22.04 LTS
+Lubuntu 20.04 LTS
+
+Lubuntu 22.04 LTS
 
 Xubuntu 20.04 LTS
 
