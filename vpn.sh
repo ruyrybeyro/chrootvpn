@@ -361,7 +361,7 @@ PreCheck()
    [[ -f "/etc/redcore-release" ]]   && GENTOO=1 # is GENTOO family
    [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID/ { print $2 } ' /etc/os-release) == archcraft ]] && ARCHCRAFT=1 # Archcraft
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == archcraft ]] && ARCHCRAFT=1 # Archcraft
   
    # if none of distrubition families above, abort 
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
@@ -1378,7 +1378,7 @@ installPackages()
       
       # install packages
       pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
-      pacman -S openresolv
+      [[ "${ARCHCRAFT}" -eq 0 ]] && pacman -S openresolv
    fi
 
    # if SUSE based
