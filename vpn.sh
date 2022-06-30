@@ -43,7 +43,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.73"
+VERSION="v1.74"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -892,7 +892,6 @@ fixDNS2()
    # not all configurations need action, NetworkManager seems to behave well
 
    [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
-   [[ "${ARCH}" -eq 1 ]] && [[ "${ARCHCRAFT}" -eq 0 ]] && resolvconf -u
    [[ "${VOID}" -eq 1 ]] && resolvconf -u
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
    [[ "${RH}"   -eq 1 ]] && authselect apply-changes
