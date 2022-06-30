@@ -170,6 +170,8 @@ Voyager 22.04 LTS
 
 Pop!_OS 22.04 LTS
 
+Greenie Linux 20.04
+
 Kubuntu 20.04 LTS
 
 Kubuntu 22.04 LTS
@@ -205,8 +207,6 @@ Trisquel 10.0.1 Nabia
 Freespire 82
 
 SharkLinux
-
-Greenie Linux 20.04
 
 RedHat based
 ============
