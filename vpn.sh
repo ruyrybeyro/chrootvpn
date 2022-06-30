@@ -2,7 +2,7 @@
 #
 # Rui Ribeiro
 #
-# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RH/CentOS/Fedora/SUSE hosts 
+# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RH/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware hosts 
 # Checkpoint R80.10 and up
 #
 # Please fill VPN and VPNIP before using this script.
