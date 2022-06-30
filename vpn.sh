@@ -1386,7 +1386,7 @@ installPackages()
       if systemctl is-active --quiet packagekit
       then
          PACKAGEKIT=true
-         systemctl stop packagekit
+         systemctl stop --quiet packagekit
       fi
 
       zypper ref
@@ -1405,7 +1405,7 @@ installPackages()
       # install deb file from debian pool
       InstallDebootstrapDeb
 
-      [[ ${PACKAGEKIT} -eq true ]] && systemctl start packagekit
+      [[ ${PACKAGEKIT} -eq true ]] && systemctl start --quiet packagekit
    fi
 
    # if Void based
