@@ -141,9 +141,9 @@ KNOWN FEATURES
 COMPATIBILITY
 =============
 
-Tested with chroot Debian Bullseye 11 (32 bits)
+Tested with chroot Debian Bullseye 11 (32 bits - i386)
 
-Tested with 64-bits hosts:
+Tested with 64-bits x86_64 hosts:
 
 Debian based
 ============ 
@@ -177,6 +177,10 @@ Kubuntu 20.04 LTS
 Kubuntu 22.04 LTS
 
 lubuntu 22.04 LTS
+
+Xubuntu 20.04 LTS
+
+Xubuntu 22.04 LTS, Jammy Jellyfish
 
 Lite 6.0 Fluorite
 
@@ -253,6 +257,8 @@ Garuda Linux 220614
 Mabox Linux 22.06
 
 BluestarLinux 5.1
+
+Archcraft 2022.06.08
 
 SUSE
 ====
