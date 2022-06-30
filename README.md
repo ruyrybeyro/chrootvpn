@@ -208,6 +208,8 @@ Freespire 82
 
 SharkLinux
 
+MakuluLinux Shift 2022-06.10
+
 RedHat based
 ============
 
