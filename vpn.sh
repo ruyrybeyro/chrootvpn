@@ -346,6 +346,7 @@ PreCheck()
    SLACKWARE=0
    VOID=0
    DEEPIN=0
+   ARCHCRAFT=0
 
    if [[ -f "/etc/debian_version" ]]
    then
@@ -360,6 +361,7 @@ PreCheck()
    [[ -f "/etc/redcore-release" ]]   && GENTOO=1 # is GENTOO family
    [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == archcraft ]] && ARCHCRAFT=1 # Archcraft
   
    # if none of distrubition families above, abort 
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
@@ -800,16 +802,16 @@ fixDNS()
 
    cd /etc || die "could not enter /etc"
 
-   if [[ "${DEEPIN}" -eq 1 ]]
+   if [[ "${DEEPIN}" -eq 1 ]] || [[ "${ARCHCRAFT}" -eq 1 ]]
    then
       fixLinks ../run/systemd/resolve/stub-resolv.conf
    else
       # Debian family - resolvconf
       [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/resolv.conf
+      # ArchLinux family - openresolv
+      [[ "${ARCH}" -eq 1 ]] && fixLinks ../run/resolvconf/interfaces/NetworkManager
    fi
-
-   # ArchLinux family - openresolv
-   [[ "${ARCH}" -eq 1 ]] && fixLinks ../run/resolvconf/interfaces/NetworkManager
+   
 
    # RH family - systemd-resolved
    [[ "${RH}" -eq 1 ]] && fixLinks ../run/systemd/resolve/stub-resolv.conf
@@ -889,7 +891,7 @@ fixDNS2()
    # not all configurations need action, NetworkManager seems to behave well
 
    [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
-   [[ "${ARCH}" -eq 1 ]] && resolvconf -u
+   [[ "${ARCH}" -eq 1 ]] && [[ "${ARCHCRAFT}" -eq 0 ]] && resolvconf -u
    [[ "${VOID}" -eq 1 ]] && resolvconf -u
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
    [[ "${RH}"   -eq 1 ]] && authselect apply-changes
@@ -1376,7 +1378,7 @@ installPackages()
       
       # install packages
       pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
-      pacman -S openresolv
+      [[ "${ARCHCRAFT}" -eq 0 ]] && pacman -S openresolv
    fi
 
    # if SUSE based
@@ -1472,7 +1474,7 @@ fixARCHDNS()
    #   systemctl disable systemd-resolved
    #   systemctl mask systemd-resolved 
    #fi
-   if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]]
+   if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]] && [[ "${ARCHCRAFT}" -eq 0 ]]
    then
       cat <<-'EOF17' > /etc/NetworkManager/conf.d/rc-manager.conf
 	[main]
