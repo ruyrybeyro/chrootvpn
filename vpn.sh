@@ -891,7 +891,7 @@ fixDNS2()
    # not all configurations need action, NetworkManager seems to behave well
 
    [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
-   [[ "${ARCH}" -eq 1 ]] && resolvconf -u
+   [[ "${ARCH}" -eq 1 ]] && [[ "${ARCHCRAFT}" -eq 0  ]]resolvconf -u
    [[ "${VOID}" -eq 1 ]] && resolvconf -u
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
    [[ "${RH}"   -eq 1 ]] && authselect apply-changes
@@ -1474,7 +1474,7 @@ fixARCHDNS()
    #   systemctl disable systemd-resolved
    #   systemctl mask systemd-resolved 
    #fi
-   if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]]
+   if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]] && [[ "${ARCHCRAFT}" -eq 0 ]]
    then
       cat <<-'EOF17' > /etc/NetworkManager/conf.d/rc-manager.conf
 	[main]
