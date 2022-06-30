@@ -508,6 +508,8 @@ FirefoxPolicy()
    then
       [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution"
       [[ ${SLACKWARE} -eq 1 ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
+      # for Firefox SNAPs
+      [[ -d "/etc/firefox" ]] && mkdir /etc/firefox/policies
    fi
 
    # if Firefox installed
