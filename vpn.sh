@@ -43,7 +43,7 @@
 #
 
 # script/deploy version, make the same as deploy
-VERSION="v1.72"
+VERSION="v1.73"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
@@ -808,8 +808,6 @@ fixDNS()
    else
       # Debian family - resolvconf
       [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/resolv.conf
-      # ArchLinux family - openresolv
-      [[ "${ARCH}" -eq 1 ]] && fixLinks ../run/resolvconf/interfaces/NetworkManager
    fi
    
 
@@ -818,6 +816,9 @@ fixDNS()
 
    # SUSE - netconfig
    [[ "${SUSE}" -eq 1 ]] && fixLinks ../run/netconfig/resolv.conf
+
+   # ArchLinux family 
+   [[ "${ARCH}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 
    # Void
    [[ "${VOID}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
@@ -1378,7 +1379,6 @@ installPackages()
       
       # install packages
       pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
-      [[ "${ARCHCRAFT}" -eq 0 ]] && pacman -S openresolv
    fi
 
    # if SUSE based
@@ -1460,10 +1460,8 @@ installPackages()
 
 
 # fix DNS - Arch
-fixARCHDNS()
-{
-   local counter
-
+#fixARCHDNS()
+#{
    # seems not to be needed
    # if ArchLinux and systemd-resolvd active
    #if [[ "${ARCH}" -eq 1 ]] && [[ -f "/run/systemd/resolve/stub-resolv.conf" ]]
@@ -1474,31 +1472,7 @@ fixARCHDNS()
    #   systemctl disable systemd-resolved
    #   systemctl mask systemd-resolved 
    #fi
-   if [[ "${ARCH}" -eq 1 ]] && [[ ! -f "/run/resolvconf/interfaces/NetworkManager" ]] && [[ "${ARCHCRAFT}" -eq 0 ]]
-   then
-      cat <<-'EOF17' > /etc/NetworkManager/conf.d/rc-manager.conf
-	[main]
-	rc-manager=resolvconf
-	EOF17
-
-      # replace /etc/resolv.conf for a resolved link
-      cd /etc || die "was not able to cd /etc"
-
-      ln -sf ../run/resolvconf/interfaces/NetworkManager resolv.conf
-
-      # reload NeworkManager
-      systemctl reload NetworkManager
-
-      # wait for it to be up
-      counter=0
-      while ! systemctl is-active NetworkManager &> /dev/null
-      do 
-         sleep 4
-         (( counter=counter+1 ))
-         [[ "$counter" -eq 20 ]] && die "NetworkManager not going live"
-      done
-   fi
-}
+#}
 
 
 # fix DNS RH family if systemd-resolved not active
@@ -2029,7 +2003,7 @@ InstallChroot()
    preFlight
    installPackages
    fixRHDNS
-   fixARCHDNS
+#   fixARCHDNS
    fixSUSEDNS
    fixDEEPINDNS
    checkDNS
