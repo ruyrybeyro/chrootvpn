@@ -1288,6 +1288,7 @@ installPackages()
 {
    local VERSION
    local FILE
+   local PACKAGEKIT
 
    # if Debian family based
    if [[ "${DEB}" -eq 1 ]]
@@ -1379,6 +1380,15 @@ installPackages()
    # if SUSE based
    if [[ "${SUSE}" -eq 1 ]]
    then
+      PACKAGEKIT=false
+
+      # packagekit does not let zypper run
+      if systemctl is-active --quiet packagekit
+      then
+         PACKAGEKIT=true
+         systemctl stop packagekit
+      fi
+
       zypper ref
 
       zypper -n install ca-certificates jq wget dpkg xhost dnsmasq
@@ -1394,6 +1404,8 @@ installPackages()
       # debootstrap is just a set of scripts and files
       # install deb file from debian pool
       InstallDebootstrapDeb
+
+      [[ ${PACKAGEKIT} -eq true ]] && systemctl start packagekit
    fi
 
    # if Void based

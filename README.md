@@ -255,11 +255,13 @@ BluestarLinux 5.1
 SUSE
 ====
 
+SLES 15-SP4
+
 openSUSE Leap 15.3
 
 openSUSE Leap 15.4
 
-SLES 15-SP4
+Linux Kamarada 15.3
 
 Void Linux
 ==========
