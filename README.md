@@ -202,6 +202,8 @@ Trisquel 10.0.1 Nabia
 
 Freespire 82
 
+SharkLinux
+
 RedHat based
 ============
 
