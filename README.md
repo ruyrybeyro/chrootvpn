@@ -186,6 +186,8 @@ Xubuntu 20.04 LTS
 
 Xubuntu 22.04 LTS, Jammy Jellyfish
 
+Feren OS 2022.04
+
 Lite 6.0 Fluorite
 
 Kali 2022.2
