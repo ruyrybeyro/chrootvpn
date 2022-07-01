@@ -255,6 +255,8 @@ AlmaLinux 9.0 Emerald Puma
 
 Mageia 8 mga8
 
+ROSA Fresh Desktop 12.2
+
 Arch based
 ==========
 
