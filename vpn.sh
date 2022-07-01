@@ -1455,6 +1455,11 @@ installPackages()
    then
       GetCompileSlack
    fi
+
+   if ! which dpkg || ! which debootstrap 
+   then
+      die "something went wrong installing software"
+   fi
 }
 
 
