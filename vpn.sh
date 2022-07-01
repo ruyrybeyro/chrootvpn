@@ -1604,6 +1604,11 @@ createChroot()
 
    mkdir -p "${CHROOT}" || die "could not create directory ${CHROOT}"
 
+   # needed because of obscure apt bug
+   # error was
+   # W: Download is performed unsandboxed as root as file '/var/cache/apt/archives/partial/xxxxxx.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
+   chmod 755 "${CHROOT}"
+
    # create and populate minimal 32-bit Debian chroot
    if ! debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
@@ -1836,6 +1841,7 @@ buildFS()
    )
 
    chmod a+rx usr/bin/who sbin/modprobe root/chroot_setup.sh root/snx_install.sh root/cshell_install.sh nopatch/certutil
+
 }
 
 

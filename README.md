@@ -224,6 +224,8 @@ MakuluLinux Shift 2022-06.10
 
 Condres OS 1.0
 
+Emmabuntüs DE 4
+
 RedHat based
 ============
 
