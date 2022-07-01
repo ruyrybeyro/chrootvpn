@@ -216,6 +216,8 @@ SharkLinux
 
 MakuluLinux Shift 2022-06.10
 
+Condres OS 1.0
+
 RedHat based
 ============
 
