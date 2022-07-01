@@ -278,6 +278,8 @@ Archcraft 2022.06.08
 
 ArchLabs
 
+ArchMan 2022.07.02
+
 SUSE
 ====
 
