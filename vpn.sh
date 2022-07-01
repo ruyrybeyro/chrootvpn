@@ -1456,7 +1456,7 @@ installPackages()
       GetCompileSlack
    fi
 
-   if ! which dpkg || ! which debootstrap 
+   if ! which dpkg &> /dev/null || ! which debootstrap &> /dev/null
    then
       die "something went wrong installing software"
    fi
