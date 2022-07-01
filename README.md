@@ -216,6 +216,8 @@ Freespire 82
 
 SharkLinux
 
+Bodhi Linux 6.0.0
+
 MakuluLinux Shift 2022-06.10
 
 Condres OS 1.0
