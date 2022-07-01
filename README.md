@@ -276,6 +276,8 @@ BluestarLinux 5.1
 
 Archcraft 2022.06.08
 
+ArchLabs
+
 SUSE
 ====
 

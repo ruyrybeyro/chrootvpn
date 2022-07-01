@@ -1377,7 +1377,7 @@ installPackages()
       # Arch is a rolling distro, should we have an update here?
       
       # install packages
-      pacman --needed -Syu ca-certificates xorg-xhost jq wget debootstrap
+      pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
    fi
 
    # if SUSE based
