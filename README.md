@@ -232,6 +232,8 @@ Emmabuntüs DE 4
 
 Neptune 7 ("Faye")
 
+LinuxFx 11
+
 RedHat based
 ============
 
