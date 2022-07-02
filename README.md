@@ -232,6 +232,8 @@ Emmabuntüs DE 4
 
 Neptune 7 ("Faye")
 
+LinuxFx 11
+
 RedHat based
 ============
 
@@ -298,6 +300,8 @@ openSUSE Leap 15.3
 openSUSE Leap 15.4
 
 Linux Kamarada 15.3
+
+GeckoLinux STATIC Cinnamon 153.x
 
 Void Linux
 ==========
