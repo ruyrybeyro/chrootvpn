@@ -794,7 +794,7 @@ fixDNS()
    cd /etc || die "could not enter /etc"
 
    # Debian family - resolvconf
-   [[ "${DEB}" -eq 1 ]]       && fixLinks ../run/resolvconf/resolv.conf
+   [[ "${DEB}" -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && fixLinks ../run/resolvconf/resolv.conf
 
    # RH family - systemd-resolved
    [[ "${RH}" -eq 1 ]]        && fixLinks ../run/systemd/resolve/stub-resolv.conf
