@@ -228,6 +228,8 @@ Condres OS 1.0
 
 Emmabuntüs DE 4
 
+ExTix Deepin 22.6/20.6
+
 RedHat based
 ============
 
