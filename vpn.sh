@@ -1270,7 +1270,6 @@ InstallDebootstrapDeb()
 installPackages()
 {
    local VERSION
-   local FILE
    local PACKAGEKIT
 
    # if Debian family based
