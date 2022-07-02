@@ -916,7 +916,7 @@ doShell()
    # inside the chrooted environment
    doChroot /bin/bash --login -pf
 
-   # dont need mounted filesystem with CShell agent down
+   # dont need mounted filesystems with CShell agent down
    if ! isCShellRunning
    then
       umountChrootFS
@@ -1082,6 +1082,7 @@ argCommands()
       uninstall)    doUninstall ;;
       upgrade)      Upgrade ;;
       selfupdate)   selfUpdate ;;
+      selfdownload) wget -O /tmp/vpn.sh "https://raw.githubusercontent.com/${GITHUB_REPO}/main/vpn.sh" ;;
       *)            do_help ;;         # default 
 
    esac
