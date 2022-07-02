@@ -869,7 +869,7 @@ doStart()
 fixDNS2()
 {
    # try to restore resolv.conf
-   # not all configurations need action, NetworkManager seems to behave well
+   # not all configurations need actions, NetworkManager seems to behave well
 
    [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
