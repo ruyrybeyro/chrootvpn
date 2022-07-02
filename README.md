@@ -200,6 +200,8 @@ Elementary OS 6.1 Jolnir
 
 Deepin 20.6
 
+ExTix Deepin 22.6/20.6
+
 KDE neon 5.25
 
 Zorin OS 16.1
@@ -227,8 +229,6 @@ MakuluLinux Shift 2022-06.10
 Condres OS 1.0
 
 Emmabuntüs DE 4
-
-ExTix Deepin 22.6/20.6
 
 RedHat based
 ============
