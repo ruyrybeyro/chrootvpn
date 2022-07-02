@@ -34,6 +34,8 @@
 #
 # see list at https://github.com/ruyrybeyro/chrootvpn/
 #
+# This script needs TABs for output/files. 
+# BEWARE of cut&paste or code beautifiers, it will break code.
 
 # script/deploy version, make the same as deploy
 VERSION="v1.78"
