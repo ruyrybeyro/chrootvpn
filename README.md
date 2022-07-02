@@ -299,6 +299,8 @@ openSUSE Leap 15.4
 
 Linux Kamarada 15.3
 
+GeckoLinux STATIC Cinnamon 153.x
+
 Void Linux
 ==========
 
