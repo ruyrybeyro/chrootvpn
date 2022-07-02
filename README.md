@@ -230,6 +230,8 @@ Condres OS 1.0
 
 Emmabuntüs DE 4
 
+Neptune 7 ("Faye")
+
 RedHat based
 ============
 
