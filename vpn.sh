@@ -1358,6 +1358,7 @@ installPackages()
       
       # install packages
       # SalientOS needed archlinux-keyring before installing
+      # ArchBang ended up needing pacman-key --init ; packman-key --populate
       pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
    fi
 
