@@ -420,8 +420,7 @@ mountChrootFS()
         fi
 
          # lax double check
-         mount | grep "${CHROOT}" &> /dev/null
-         if [[ $? -ne 0 ]]
+         if ! mount | grep "${CHROOT}" &> /dev/null
          then
             die "mount failed"
          fi
@@ -772,8 +771,7 @@ fixLinks()
          ln -sf "$1" "${CHROOT}/etc/resolv.conf"
 
          # if link in host deviates from needed
-         readlink /etc/resolv.conf | grep "$1" &> /dev/null
-         if [ $? -ne 0  ]
+         if ! readlink /etc/resolv.conf | grep "$1" &> /dev/null
          then
             # fix it
             ln -sf "$1" /etc/resolv.conf
