@@ -802,7 +802,7 @@ fixDNS()
 
    cd /etc || die "could not enter /etc"
 
-   if [[ "${DEEPIN}" -eq 1 ]] || [[ "${ARCHCRAFT}" -eq 1 ]]
+   if [[ "${ARCHCRAFT}" -eq 1 ]]
    then
       fixLinks ../run/systemd/resolve/stub-resolv.conf
    else
@@ -812,22 +812,16 @@ fixDNS()
    
 
    # RH family - systemd-resolved
-   [[ "${RH}" -eq 1 ]] && fixLinks ../run/systemd/resolve/stub-resolv.conf
+   [[ "${RH}" -eq 1 ]]        && fixLinks ../run/systemd/resolve/stub-resolv.conf
 
    # SUSE - netconfig
-   [[ "${SUSE}" -eq 1 ]] && fixLinks ../run/netconfig/resolv.conf
+   [[ "${SUSE}" -eq 1 ]]      && fixLinks ../run/netconfig/resolv.conf
 
-   # ArchLinux family 
-   [[ "${ARCH}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
-
-   # Void
-   [[ "${VOID}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
-
-   # Gentoo
-   [[ "${GENTOO}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
-
-   # Slackware
+   [[ "${ARCH}" -eq 1 ]]      && fixLinks ../run/NetworkManager/resolv.conf
+   [[ "${GENTOO}" -eq 1 ]]    && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+   [[ "${VOID}" -eq 1 ]]      && fixLinks ../run/NetworkManager/resolv.conf
+   [[ "${DEEPIN}" -eq 1 ]]    && fixLinks ../run/NetworkManager/resolv.conf
 }
 
 
