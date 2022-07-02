@@ -420,8 +420,7 @@ mountChrootFS()
         fi
 
          # lax double check
-         mount | grep "${CHROOT}" &> /dev/null
-         if [[ $? -ne 0 ]]
+         if ! mount | grep "${CHROOT}" &> /dev/null
          then
             die "mount failed"
          fi
@@ -772,8 +771,7 @@ fixLinks()
          ln -sf "$1" "${CHROOT}/etc/resolv.conf"
 
          # if link in host deviates from needed
-         readlink /etc/resolv.conf | grep "$1" &> /dev/null
-         if [ $? -ne 0  ]
+         if ! readlink /etc/resolv.conf | grep "$1" &> /dev/null
          then
             # fix it
             ln -sf "$1" /etc/resolv.conf
@@ -1216,6 +1214,9 @@ GetCompileSlack()
          # the Debian tar.gz only creates a directory by name
          # contrary to the Ubuntu source repository 
          # where debootstrap.SlackBuild is fetching the older source version
+         #
+         # linter is warning against something *we want to do*
+         #
          sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./${NAME}.SlackBuild
       else
          # get info file frrom SlackBuild package
@@ -1315,7 +1316,7 @@ installPackages()
       if ! which debootstrap &>/dev/null
       then
          # epel-release not needed for Fedora and Mageia
-         if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
+         if grep -Ei "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
          then
             # if not RedHat
             if grep -E "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null  
