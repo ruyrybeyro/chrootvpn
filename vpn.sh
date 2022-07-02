@@ -1214,6 +1214,9 @@ GetCompileSlack()
          # the Debian tar.gz only creates a directory by name
          # contrary to the Ubuntu source repository 
          # where debootstrap.SlackBuild is fetching the older source version
+         #
+         # linter is warning against something *we want to do*
+         #
          sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./${NAME}.SlackBuild
       else
          # get info file frrom SlackBuild package
