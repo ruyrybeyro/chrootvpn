@@ -1315,7 +1315,7 @@ installPackages()
       if ! which debootstrap &>/dev/null
       then
          # epel-release not needed for Fedora and Mageia
-         if egrep -vi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
+         if grep -Ei "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
          then
             # if not RedHat
             if grep -E "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null  
