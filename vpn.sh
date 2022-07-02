@@ -34,13 +34,6 @@
 #
 # see list at https://github.com/ruyrybeyro/chrootvpn/
 #
-# For DNS sync between host and chroot
-# "Debian" host resolvconf       and /run/resolvconf/resolv.conf
-# "Arch"   host openresolv       and /run/resolvconf/interfaces/NetworkManager
-# "Void"   host openresolv       and /run/NetworkManager/resolv.conf
-# "RedHat" host systemd-resolved and /run/systemd/resolve/stub-resolv.conf
-# "SUSE"   host dnsmasq          and /run/netconfig/resolv.conf
-#
 
 # script/deploy version, make the same as deploy
 VERSION="v1.76"
@@ -809,6 +802,7 @@ fixDNS()
    # SUSE - netconfig
    [[ "${SUSE}" -eq 1 ]]      && fixLinks ../run/netconfig/resolv.conf
 
+   # several - NetworkManager
    [[ "${ARCH}" -eq 1 ]]      && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${GENTOO}" -eq 1 ]]    && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
