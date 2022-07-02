@@ -507,7 +507,7 @@ FirefoxPolicy()
 
    # if Firefox installed
    # cycle possible firefox global directories
-   for DIR in "/etc/firefox/policies/" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution -type d 2> /dev/null)
+   for DIR in "/etc/firefox/policies" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution -type d 2> /dev/null)
    do
       # -d ${DIR} double check, mostly redundant check
       if  [[ "$1" == "install" ]] && [[ -d "${DIR}" ]]
@@ -519,7 +519,7 @@ FirefoxPolicy()
             # can't be sure for snap
             # so don't flag as policy installed
             # for it to warn for accepting certificate
-            if [[ "${DIR}" != "/etc/firefox/policies/" ]]
+            if [[ "${DIR}" != "/etc/firefox/policies" ]]
             then
                # flag as installed
                PolInstalled=1
