@@ -346,7 +346,6 @@ PreCheck()
    SLACKWARE=0
    VOID=0
    DEEPIN=0
-   ARCHCRAFT=0
 
    if [[ -f "/etc/debian_version" ]]
    then
@@ -361,7 +360,6 @@ PreCheck()
    [[ -f "/etc/redcore-release" ]]   && GENTOO=1 # is GENTOO family
    [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == void ]] && VOID=1 # Void Linux
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == archcraft ]] && ARCHCRAFT=1 # Archcraft
   
    # if none of distrubition families above, abort 
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
@@ -802,14 +800,8 @@ fixDNS()
 
    cd /etc || die "could not enter /etc"
 
-   if [[ "${ARCHCRAFT}" -eq 1 ]]
-   then
-      fixLinks ../run/systemd/resolve/stub-resolv.conf
-   else
-      # Debian family - resolvconf
-      [[ "${DEB}" -eq 1 ]] && fixLinks ../run/resolvconf/resolv.conf
-   fi
-   
+   # Debian family - resolvconf
+   [[ "${DEB}" -eq 1 ]]       && fixLinks ../run/resolvconf/resolv.conf
 
    # RH family - systemd-resolved
    [[ "${RH}" -eq 1 ]]        && fixLinks ../run/systemd/resolve/stub-resolv.conf
