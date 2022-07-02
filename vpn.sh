@@ -1355,7 +1355,8 @@ installPackages()
       # Arch is a rolling distro, should we have an update here?
       
       # install packages
-      pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
+      # SalientOS needed archlinux-keyring
+      pacman --needed -Syu archlinux-keyring ca-certificates xorg-xhost jq wget dpkg debootstrap
    fi
 
    # if SUSE based
