@@ -154,6 +154,8 @@ Debian 10 Buster
 
 Debian 11 Bullseye
 
+Debian Edu 11.3 
+
 Debian Bookworm (testing 12)
 
 antiX-21 Grup Yorum
