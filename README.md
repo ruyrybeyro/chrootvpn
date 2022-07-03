@@ -234,6 +234,8 @@ Neptune 7 ("Faye")
 
 LinuxFx 11
 
+PureOS 10.0 (Byzantium)
+
 RedHat based
 ============
 
