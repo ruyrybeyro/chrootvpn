@@ -243,6 +243,8 @@ EuroLinux 8.6 Kyiv
 
 EuroLinux 9.0
 
+Springale Open Enterprise Linux 9.0 (Parma)
+
 Fedora 23
 
 Fedora 36
