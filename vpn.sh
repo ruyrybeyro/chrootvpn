@@ -16,9 +16,6 @@
 # Accept localhost certificate visiting https://localhost:14186/id if not Firefox
 # Then open VPN URL to login/start the VPN
 #
-# It will get CShell and SNX installations scripts from the firewall,
-# and install them. 
-#
 # vpn.sh selfupdate 
 # might update this script if new version+Internet connectivity available
 #
