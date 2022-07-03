@@ -234,6 +234,8 @@ Neptune 7 ("Faye")
 
 LinuxFx 11
 
+PureOS 10.0 (Byzantium)
+
 RedHat based
 ============
 
@@ -242,6 +244,8 @@ RHEL 9.0 Plow
 EuroLinux 8.6 Kyiv
 
 EuroLinux 9.0
+
+Springale Open Enterprise Linux 9.0 (Parma)
 
 Fedora 23
 
