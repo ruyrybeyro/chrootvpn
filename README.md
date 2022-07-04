@@ -210,6 +210,8 @@ Ubuntu Mate 20.04.4 LTS
 
 Ubuntu Mate 22.04 LTS
 
+Runtu 22.04
+
 Feren OS 2022.04
 
 Lite 6.0 Fluorite
