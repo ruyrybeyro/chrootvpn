@@ -12,33 +12,26 @@ https://github.com/ruyrybeyro/chrootvpn
 
 Rui Ribeiro 2022, Tiago Teles - Contributions for Arch Linux
 
-This script downloads Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the 
-firewall, and installs them.
+This script downloads Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the firewall, and installs them.
 
-Being SNX still a 32-bits binary  and the multiples issues of satisfying cshell_install.sh requirements, a chroot is used
-in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into
-"believing" all the requirements are satisfied; e.g. SNX/CShell behave on odd ways ; furthermore, Fedora and others already dont provide needed packages for SNX ; the chroot is built to counter some of those behaviours.
+Being SNX still a 32-bits binary  and the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. SNX/CShell behave on odd ways ; furthermore, Fedora and others already dont provide needed packages for SNX ; the chroot is built to counter some of those behaviours.
 
 The script supports several Linux distributions as the host OS, still uses Debian 11 for the chroot "light container".
-The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox
-(or other browser). 
+The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
 
 resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and kernel shared with the
 host to the host Linux OS.
 
-The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh usual setup, runs with its own non-privileged user which is different
-than the user logged in.
+The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh usual setup, runs with its own non-privileged user which is different than the user logged in.
 
 
 INSTRUCTIONS
 ============
 
 Please fill VPN and VPNIP before using this script.
-SPLIT might or not have to be filled, depending on your needs
-and Checkpoint VPN routes.
+SPLIT might or not have to be filled, depending on your needs and Checkpoint VPN routes.
 
-if /opt/etc/vpn.conf is present the above script settings will be 
-ignored. vpn.conf is created upon first instalation.
+if /opt/etc/vpn.conf is present the above script settings will be ignored. vpn.conf is created upon first instalation.
 
 - first time, if filled VPN, VPNIP inside the script run it as 
 
