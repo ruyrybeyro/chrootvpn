@@ -206,6 +206,10 @@ Xubuntu 22.04 LTS, Jammy Jellyfish
 
 Ubuntu Budgie 22.04
 
+Ubuntu Mate 20.04.4 LTS
+
+Ubuntu Mate 22.04 LTS
+
 Feren OS 2022.04
 
 Lite 6.0 Fluorite
