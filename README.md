@@ -17,7 +17,7 @@ firewall, and installs them.
 
 Being SNX still a 32-bits binary  and the multiples issues of satisfying cshell_install.sh requirements, a chroot is used
 in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into
-"believing" all the requirements are satisfied; e.g. SNX/CShell behave on odd ways ; furthermore, Fedora and others already dont provide packages needed for SNX ; the chroot is built to counter some of those behaviours.
+"believing" all the requirements are satisfied; e.g. SNX/CShell behave on odd ways ; furthermore, Fedora and others already dont provide needed packages for SNX ; the chroot is built to counter some of those behaviours.
 
 The script supports several Linux distributions as the host OS, still uses Debian 11 for the chroot "light container".
 The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox
