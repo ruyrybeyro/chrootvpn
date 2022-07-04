@@ -253,6 +253,8 @@ LinuxFx 11
 
 PureOS 10.0 (Byzantium)
 
+SolydXK10
+
 RedHat based
 ============
 
