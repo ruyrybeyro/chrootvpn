@@ -10,8 +10,7 @@ Checkpoint R80.10 and up
 
 https://github.com/ruyrybeyro/chrootvpn
 
-Rui Ribeiro 2022
-Tiago Teles - Contributions for Arch Linux
+Rui Ribeiro 2022, Tiago Teles - Contributions for Arch Linux
 
 This script downloads Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the 
 firewall, and installs them.
