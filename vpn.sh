@@ -342,7 +342,8 @@ PreCheck()
    if [[ -f "/etc/debian_version" ]]
    then
       DEB=1 # is Debian family
-      ischroot && die "Do not run this script inside a chroot"
+      # nice to have, but buggy. systemd-detect-virt -r an alternative
+      #ischroot && die "Do not run this script inside a chroot"
       [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    fi
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family 
