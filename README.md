@@ -257,6 +257,8 @@ SolydXK10
 
 HamoniKR 5.0 Hanla
 
+Lliurex 21
+
 RedHat based
 ============
 
