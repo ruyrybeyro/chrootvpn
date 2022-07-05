@@ -313,6 +313,8 @@ ArchBang 2022.07.02
 
 SalientOS 21.06
 
+RebornOS
+
 SUSE
 ====
 
