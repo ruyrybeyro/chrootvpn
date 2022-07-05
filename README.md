@@ -255,6 +255,8 @@ PureOS 10.0 (Byzantium)
 
 SolydXK10
 
+HamoniKR 5.0 Hanla
+
 RedHat based
 ============
 
@@ -314,6 +316,8 @@ ArchBang 2022.07.02
 SalientOS 21.06
 
 RebornOS
+
+ArchEx Build 220206
 
 SUSE
 ====
