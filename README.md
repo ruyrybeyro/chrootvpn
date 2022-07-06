@@ -358,4 +358,16 @@ Slackware 15.1-current
 
 Salix OS xfce 15.0
 
+SCREENS
+
 ![This is an image](/assets/images/01.png)
+![This is an image](/assets/images/02.png)
+![This is an image](/assets/images/03.png)
+![This is an image](/assets/images/04.png)
+![This is an image](/assets/images/05.png)
+![This is an image](/assets/images/06.png)
+![This is an image](/assets/images/07.png)
+![This is an image](/assets/images/08.png)
+![This is an image](/assets/images/09.png)
+![This is an image](/assets/images/10.png)
+![This is an image](/assets/images/11.png)
