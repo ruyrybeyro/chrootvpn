@@ -359,15 +359,45 @@ Slackware 15.1-current
 Salix OS xfce 15.0
 
 SCREENS
+=======
+
+The following screen show grapphically actions to be performed *after* running the script.
+
+1. Accepting localhost certificate in Firefox IF policy not applied.
+   This is done only *once* in the browser. 
 
 ![This is an image](/assets/images/01.png)
 ![This is an image](/assets/images/02.png)
+
+2. Logging in into Mobile Portal VPN. If using a double factor auth PIN, write the regular password followed by the PIN.
+
 ![This is an image](/assets/images/03.png)
+
+Select "Continue sign in" and "Continue" if logged in in other device/software.
+
 ![This is an image](/assets/images/04.png)
+
+First time logging in, select Settings:
+
 ![This is an image](/assets/images/05.png)
+
+And: "automatically" and "Network mode". This only needs to be done ONCE, the first time you login into the Mobile Portal.
+
 ![This is an image](/assets/images/06.png)
+
+Then press Connect to connect to the firewall.
+
 ![This is an image](/assets/images/07.png)
 ![This is an image](/assets/images/08.png)
+
+First and each time after reinstalling the chroot/script, "Trust server" has to be selected.
+
 ![This is an image](/assets/images/09.png)
+
+The signature has to be accepted too. It can happen several times if there is a cluster solution.
+
 ![This is an image](/assets/images/10.png)
+
+Finally the connection is established. The user will be disconnected then upon timeout, closing the tab/browser, or pressing Disconnect.
+
 ![This is an image](/assets/images/11.png)
