@@ -363,8 +363,7 @@ SCREENS
 
 The following screen show grapphically actions to be performed *after* running the script.
 
-1. Accepting localhost certificate in Firefox IF policy not applied.
-   This is done only *once* in the browser after each chroot (re)installation.
+1. Accepting localhost certificate in Firefox at https://localhost:14186/id IF policy not applied. This is done only *once* in the browser after each chroot (re)installation.
 
 ![This is an image](/assets/images/01.png)
 ![This is an image](/assets/images/02.png)
