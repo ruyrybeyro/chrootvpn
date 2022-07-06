@@ -123,11 +123,11 @@ upgrade      OS upgrade inside chroot
 KNOWN FEATURES
 ==============
 
-. For (re)installing newer versions of SNX/CShell delete the chroot with vpn.sh uninstall and vpn -i again ; the configuration are saved in /opt/etc/vpn.conf, vpn -i is enough;
-
 . The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, or after logging in, start/restart the script using a X11 graphical terminal;
 
 . The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-aparently this functionality is not supported for Linux clients. If the status command of this script shows new versions, uninstall and install it again;
+
+. For (re)installing newer versions of SNX/CShell delete the chroot with vpn.sh uninstall and vpn -i again ; the configuration are saved in /opt/etc/vpn.conf, vpn -i is enough;
 
 . The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
 
