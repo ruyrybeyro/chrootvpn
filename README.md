@@ -19,10 +19,9 @@ Being SNX still a 32-bits binary  and the multiples issues of satisfying cshell_
 The script supports several Linux distributions as the host OS, still uses Debian 11 for the chroot "light container".
 The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
 
-resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and kernel shared with the
-host to the host Linux OS.
+resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and kernel shared with the host to the host Linux OS.
 
-The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the user logged in.
+The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user.
 
 
 INSTRUCTIONS
