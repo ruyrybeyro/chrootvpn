@@ -193,7 +193,7 @@ Lubuntu 22.04 LTS
 
 Xubuntu 20.04 LTS
 
-Xubuntu 22.04 LTS, Jammy Jellyfish
+|Xubuntu 22.04 LTS, Jammy Jellyfish |Xubuntu 22.04 LTS, Jammy Jellyfish |
 
 Ubuntu Budgie 22.04
 
