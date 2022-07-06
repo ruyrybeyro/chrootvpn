@@ -358,4 +358,4 @@ Slackware 15.1-current
 
 Salix OS xfce 15.0
 
-![This is an image](/assets/images/01.jpg)
+![This is an image](/assets/images/01.png)
