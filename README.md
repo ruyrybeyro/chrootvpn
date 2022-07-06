@@ -48,10 +48,9 @@ Otherwise, run it as:
 
 - visit VPN page for logging in 
 
-CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights binary SNX VPN client needs 32-bits 
-environment.
+CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights binary SNX VPN client needs a 32-bits environment.
 
-Recommended having Firefox already installed, for deploying a firefox policy for the self-signed Mobile Access Portal Agent X.509 certificate.
+Recommended having Firefox already installed, for deploying via this script a firefox policy for the self-signed Mobile Access Portal Agent X.509 certificate.
 
 Usage:
 
@@ -365,6 +364,8 @@ The following screen show grapphically actions to be performed *after* running t
 
 1. Accepting localhost certificate in Firefox at https://localhost:14186/id IF policy not applied. This is done only *once* in the browser after each chroot (re)installation.
 
+If the certificate is not accepted manually or via policy, Mobile Portal will complain about lack of installed software, whether CShell and SNX are running or not.
+
 ![This is an image](/assets/images/01.png)
 ![This is an image](/assets/images/02.png)
 
@@ -400,3 +401,4 @@ The signature has to be accepted too. It can happen several times if there is a 
 Finally the connection is established. The user will be disconnected then upon timeout, closing the tab/browser, or pressing Disconnect.
 
 ![This is an image](/assets/images/11.png)
+
