@@ -347,7 +347,7 @@ PreCheck()
       # systemd-detect-virt -r an alternative
       ischroot && echo "Inside a chroot?" >&2
 
-      # Debian DEEPIN handed slightly differently 
+      # Debian DEEPIN handled slightly differently 
       [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    fi
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family 
