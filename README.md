@@ -19,10 +19,9 @@ Being SNX still a 32-bits binary  and the multiples issues of satisfying cshell_
 The script supports several Linux distributions as the host OS, still uses Debian 11 for the chroot "light container".
 The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
 
-resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and kernel shared with the
-host to the host Linux OS.
+resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and kernel shared with the host to the host Linux OS.
 
-The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh usual setup, runs with its own non-privileged user which is different than the user logged in.
+The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user.
 
 
 INSTRUCTIONS
@@ -124,11 +123,11 @@ upgrade      OS upgrade inside chroot
 KNOWN FEATURES
 ==============
 
-. For (re)installing newer versions of SNX/CShell delete the chroot with vpn.sh uninstall and vpn -i again ; the configuration are saved in /opt/etc/vpn.conf, vpn -i is enough;
-
 . The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, or after logging in, start/restart the script using a X11 graphical terminal;
 
 . The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-aparently this functionality is not supported for Linux clients. If the status command of this script shows new versions, uninstall and install it again;
+
+. For (re)installing newer versions of SNX/CShell delete the chroot with vpn.sh uninstall and vpn -i again ; the configuration are saved in /opt/etc/vpn.conf, vpn -i is enough;
 
 . The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
 
