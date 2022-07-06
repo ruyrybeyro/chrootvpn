@@ -22,7 +22,7 @@ The SNX binary and the CShell agent/daemon both install and run under chrooted  
 resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and kernel shared with the
 host to the host Linux OS.
 
-The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh usual setup, runs with its own non-privileged user which is different than the user logged in.
+The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the user logged in.
 
 
 INSTRUCTIONS
