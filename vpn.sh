@@ -1647,7 +1647,7 @@ buildFS()
 
    # getting the last version of the agents installation scripts
    # from the firewall
-   rm -f snx_install.sh cshell_install.sh
+   rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
    # download SNX installation scripts from CheckPoint machine
    if wget --no-check-certificate "https://${VPN}/SNX/INSTALL/snx_install.sh"
