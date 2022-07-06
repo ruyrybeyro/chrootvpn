@@ -193,7 +193,7 @@ Lubuntu 22.04 LTS
 
 Xubuntu 20.04 LTS
 
-|Xubuntu 22.04 LTS, Jammy Jellyfish|Xubuntu 22.04 LTS, Jammy Jellyfish|Xubuntu 22.04 LTS, Jammy Jellyfish|
+Xubuntu 22.04 LTS, Jammy Jellyfish
 
 Ubuntu Budgie 22.04
 
@@ -360,7 +360,7 @@ Salix OS xfce 15.0
 SCREENS
 =======
 
-The following screen show grapphically actions to be performed *after* running the script.
+The following screens show actions to be performed *after* running the script.
 
 1. Accepting localhost certificate in Firefox at https://localhost:14186/id IF policy not applied. This is done only *once* in the browser after each chroot (re)installation.
 
