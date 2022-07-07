@@ -81,39 +81,30 @@ vpn.sh -v|--version
 
 (*) (circa 2019) *experimental* -- not sure it is needed 
 
-start        start CShell daemon
-
-stop         stop  CShell daemon
-
-restart      restart CShell daemon
-
-status       check if CShell daemon is running
-
-disconnect   disconnect VPN/SNX session from the command line
-
-split        split tunnel VPN - use only after session is up
-
-uninstall    delete chroot and host file(s)
-
-selfupdate   self update this script if new version available
-
-fixdns       try to fix resolv.conf
-
+|Command      |function                                               |
+|-------------|-------------------------------------------------------|
+|start        |start CShell daemon                                    |
+|stop         |stop  CShell daemon                                    |
+|restart      |restart CShell daemon                                  |
+|status       |check if CShell daemon is running                      |
+|disconnect   |disconnect VPN/SNX session from the command line       |
+|split        |split tunnel VPN - use only after session is up        |
+|uninstall    |delete chroot and host file(s)                         |
+|selfupdate   |self update this script if new version available       |
+|fixdns       |try to fix resolv.conf                                 |
 
 For debugging/maintenance:
-
 
 vpn.sh -d|--debug
 vpn.sh [-c DIR|--chroot=DIR] shell|upgrade
 
 vpn.sh shell
 
-
--d|--debug   bash debug mode on
-
-shell        bash shell inside chroot
-
-upgrade      OS upgrade inside chroot
+|Options      |                                                       |
+|-------------|-------------------------------------------------------|
+|-d|--debug   |bash debug mode on                                     |
+|shell        |bash shell inside chroot                               |
+|upgrade      |OS upgrade inside chroot                               |
 
 KNOWN FEATURES
 ==============
