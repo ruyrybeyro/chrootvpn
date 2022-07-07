@@ -23,6 +23,7 @@ resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and 
 
 The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user.
 
+As long the version of the Debian/RedHat/SUSE/Arch distribution still has support, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. See end of this document for the 80+ recent versions/distributions successfully tested.
 
 INSTRUCTIONS
 ============
@@ -146,6 +147,50 @@ KNOWN FEATURES
 
 . At least Arch after updates seems ocasionally needs a reboot for the VPN to work.
 
+SCREENS
+=======
+
+The following screens show actions to be performed *after* running the script.
+
+1. Accepting localhost certificate in Firefox at https://localhost:14186/id IF policy not applied. This is done only *once* in the browser after each chroot (re)installation.
+
+If the certificate is not accepted manually or via policy, Mobile Portal will complain about lack of installed software, whether CShell and SNX are running or not.
+
+![This is an image](/assets/images/01.png)
+![This is an image](/assets/images/02.png)
+
+2. Logging in into Mobile Portal VPN. If using a double factor auth PIN, write the regular password followed by the PIN.
+
+![This is an image](/assets/images/03.png)
+
+Select "Continue sign in" and "Continue" if logged in in other device/software.
+
+![This is an image](/assets/images/04.png)
+
+First time logging in, select Settings:
+
+![This is an image](/assets/images/05.png)
+
+And: "automatically" and "Network mode". This only needs to be done ONCE, the first time you login into the Mobile Portal.
+
+![This is an image](/assets/images/06.png)
+
+Then press Connect to connect to the firewall.
+
+![This is an image](/assets/images/07.png)
+![This is an image](/assets/images/08.png)
+
+First and each time after reinstalling the chroot/script, "Trust server" has to be selected.
+
+![This is an image](/assets/images/09.png)
+
+The signature has to be accepted too. It can happen several times if there is a cluster solution.
+
+![This is an image](/assets/images/10.png)
+
+Finally the connection is established. The user will be disconnected then upon timeout, closing the tab/browser, or pressing Disconnect.
+
+![This is an image](/assets/images/11.png)
 
 COMPATIBILITY
 =============
@@ -155,13 +200,13 @@ Tested with chroot Debian Bullseye 11 (32 bits - i386)
 Tested with 64-bits x86_64 hosts:
 
 Debian based
-============ 
+============
 
 Debian 10 Buster
 
 Debian 11 Bullseye
 
-Debian Edu 11.3 
+Debian Edu 11.3
 
 Debian Bookworm (testing 12)
 
@@ -356,49 +401,4 @@ Slackware 15.0
 Slackware 15.1-current
 
 Salix OS xfce 15.0
-
-SCREENS
-=======
-
-The following screens show actions to be performed *after* running the script.
-
-1. Accepting localhost certificate in Firefox at https://localhost:14186/id IF policy not applied. This is done only *once* in the browser after each chroot (re)installation.
-
-If the certificate is not accepted manually or via policy, Mobile Portal will complain about lack of installed software, whether CShell and SNX are running or not.
-
-![This is an image](/assets/images/01.png)
-![This is an image](/assets/images/02.png)
-
-2. Logging in into Mobile Portal VPN. If using a double factor auth PIN, write the regular password followed by the PIN.
-
-![This is an image](/assets/images/03.png)
-
-Select "Continue sign in" and "Continue" if logged in in other device/software.
-
-![This is an image](/assets/images/04.png)
-
-First time logging in, select Settings:
-
-![This is an image](/assets/images/05.png)
-
-And: "automatically" and "Network mode". This only needs to be done ONCE, the first time you login into the Mobile Portal.
-
-![This is an image](/assets/images/06.png)
-
-Then press Connect to connect to the firewall.
-
-![This is an image](/assets/images/07.png)
-![This is an image](/assets/images/08.png)
-
-First and each time after reinstalling the chroot/script, "Trust server" has to be selected.
-
-![This is an image](/assets/images/09.png)
-
-The signature has to be accepted too. It can happen several times if there is a cluster solution.
-
-![This is an image](/assets/images/10.png)
-
-Finally the connection is established. The user will be disconnected then upon timeout, closing the tab/browser, or pressing Disconnect.
-
-![This is an image](/assets/images/11.png)
 
