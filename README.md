@@ -67,42 +67,42 @@ vpn.sh -h|--help
 
 vpn.sh -v|--version
 
--i|--install install mode - create chroot
+-i|--install install mode - create chroot
 
--c|--chroot  change default chroot /opt/chroot directory
+-c|--chroot  change default chroot /opt/chroot directory
 
--h|--help    show this help
+-h|--help    show this help
 
--v|--version script version
+-v|--version script version
 
---vpn        select VPN DNS full name install time
+--vpn        select VPN DNS full name install time
 
---proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
+--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 
---oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental* -- not sure it is needed
+--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental* -- not sure it is needed
 
--o|--output  redirect ALL output for FILE
+-o|--output  redirect ALL output for FILE
 
--s|--silent  special case of output, no arguments
+-s|--silent  special case of output, no arguments
 
 
 start        start CShell daemon
 
-stop         stop  CShell daemon
+stop         stop  CShell daemon
 
-restart      restart CShell daemon
+restart      restart CShell daemon
 
-status       check if CShell daemon is running
+status       check if CShell daemon is running
 
-disconnect   disconnect VPN/SNX session from the command line
+disconnect   disconnect VPN/SNX session from the command line
 
-split        split tunnel VPN - use only after session is up
+split        split tunnel VPN - use only after session is up
 
-uninstall    delete chroot and host file(s)
+uninstall    delete chroot and host file(s)
 
-selfupdate   self update this script if new version available
+selfupdate   self update this script if new version available
 
-fixdns       try to fix resolv.conf
+fixdns       try to fix resolv.conf
 
 
 For debugging/maintenance:
@@ -114,11 +114,11 @@ vpn.sh [-c DIR|--chroot=DIR] shell|upgrade
 vpn.sh shell
 
 
--d|--debug   bash debug mode on
+-d|--debug   bash debug mode on
 
-shell        bash shell inside chroot
+shell        bash shell inside chroot
 
-upgrade      OS upgrade inside chroot
+upgrade      OS upgrade inside chroot
 
 KNOWN FEATURES
 ==============
