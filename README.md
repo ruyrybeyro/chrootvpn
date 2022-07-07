@@ -67,7 +67,7 @@ vpn.sh -h|--help
 
 vpn.sh -v|--version
 
-|Option       |function                                               |
+|Option       |Function                                               |
 |-------------|-------------------------------------------------------|
 |-i --install |install mode - create chroot                           |
 |-c --chroot  |change default chroot /opt/chroot directory            |
@@ -81,7 +81,7 @@ vpn.sh -v|--version
 
 (*) (circa 2019) *experimental* -- not sure it is needed 
 
-|Command      |function                                               |
+|Command      |Function                                               |
 |-------------|-------------------------------------------------------|
 |start        |start CShell daemon                                    |
 |stop         |stop  CShell daemon                                    |
@@ -100,9 +100,9 @@ vpn.sh [-c DIR|--chroot=DIR] shell|upgrade
 
 vpn.sh shell
 
-|Options      |                                                       |
+|Options      |Function                                               |
 |-------------|-------------------------------------------------------|
-|-d|--debug   |bash debug mode on                                     |
+|-d --debug   |bash debug mode on                                     |
 |shell        |bash shell inside chroot                               |
 |upgrade      |OS upgrade inside chroot                               |
 
