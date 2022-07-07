@@ -197,7 +197,7 @@ COMPATIBILITY
 
 Tested with chroot Debian Bullseye 11 (32 bits - i386)
 
-Tested with 64-bits x86_64 hosts:
+Tested with 64-bits the following x86_64 hosts:
 
 Debian based
 ============
