@@ -125,7 +125,7 @@ KNOWN FEATURES
 
 . The user installing/running the script has to got sudo rights (for root);
 
-. For the CShell daemon to start automatically upon user XDG login, the user has to be able to sudo /usr/local/bin/vpn.sh *without* a password;
+. For the CShell daemon to start automatically upon the user XDG login, the user has to be able to sudo /usr/local/bin/vpn.sh *without* a password;
 
 . The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, or after logging in, start/restart the script using a X11 graphical terminal;
 
