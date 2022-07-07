@@ -67,24 +67,18 @@ vpn.sh -h|--help
 
 vpn.sh -v|--version
 
--i|--install install mode - create chroot
-
--c|--chroot  change default chroot /opt/chroot directory
-
--h|--help    show this help
-
--v|--version script version
-
---vpn        select VPN DNS full name install time
-
---proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
+|Command      |function                                               |
+|-------------|-------------------------------------------------------|
+|-i|--install |install mode - create chroot                           |
+|-c|--chroot  |change default chroot /opt/chroot directory            |
+|-h|--help    |show this help                                         |
+|-v|--version |script version                                         |
+|--vpn        |select VPN DNS full name install time                  |
+|--proxy      |proxy to use in apt inside chroot 'http://user:pass@IP'|
+|-o|--output  |redirect ALL output for FILE                           |
+|-s|--silent  |special case of output, no arguments                   |
 
 --oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental* -- not sure it is needed
-
--o|--output  redirect ALL output for FILE
-
--s|--silent  special case of output, no arguments
-
 
 start        start CShell daemon
 
