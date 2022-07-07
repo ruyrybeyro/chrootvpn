@@ -86,7 +86,7 @@ vpn.sh -v|--version
 -s|--silent  special case of output, no arguments
 
 
-start        start CShell daemon
+start        start CShell daemon
 
 stop         stop  CShell daemon
 
