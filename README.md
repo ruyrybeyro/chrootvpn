@@ -77,8 +77,8 @@ vpn.sh -v|--version
 |--proxy      |proxy to use in apt inside chroot 'http://user:pass@IP'|
 |-o|--output  |redirect ALL output for FILE                           |
 |-s|--silent  |special case of output, no arguments                   |
-
---oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental* -- not sure it is needed
+|--oldjava    |JDK 8 for connecting to old Checkpoint VPN servers     |
+|             |(circa 2019) *experimental* -- not sure it is needed   |
 
 start        start CShell daemon
 
