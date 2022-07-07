@@ -67,7 +67,7 @@ vpn.sh -h|--help
 
 vpn.sh -v|--version
 
-|Command      |function                                               |
+|Option       |function                                               |
 |-------------|-------------------------------------------------------|
 |-i --install |install mode - create chroot                           |
 |-c --chroot  |change default chroot /opt/chroot directory            |
