@@ -178,6 +178,9 @@ And: "automatically" and "Network mode". This only needs to be done ONCE, the fi
 Then press Connect to connect to the firewall.
 
 ![This is an image](/assets/images/07.png)
+
+The negotiation of a connection can take a (little) while.
+
 ![This is an image](/assets/images/08.png)
 
 First and each time after reinstalling the chroot/script, "Trust server" has to be selected.
