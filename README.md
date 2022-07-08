@@ -297,6 +297,8 @@ HamoniKR 5.0 Hanla
 
 Lliurex 21
 
+Elive 3.8.30
+
 RedHat based
 ============
 
