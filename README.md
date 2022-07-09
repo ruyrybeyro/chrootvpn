@@ -106,6 +106,11 @@ vpn.sh shell
 |shell        |bash shell inside chroot                               |
 |upgrade      |OS upgrade inside chroot                               |
 
+You can download this script doing a:
+- git clone https://github.com/ruyrybeyro/chrootvpn/blob/main/vpn.sh
+- wget https://raw.githubusercontent.com/ruyrybeyro/chrootvpn/main/vpn.sh
+- curl https://raw.githubusercontent.com/ruyrybeyro/chrootvpn/main/vpn.sh -O
+
 KNOWN FEATURES
 ==============
 
@@ -304,6 +309,8 @@ B2D/OB2D 中文 Linux 計劃 2023 1.0.1
 BunsenLabs Linux 10.5 (Lithium)
 
 BOSS 9 (urja)
+
+Netrunner 21.01 (“XOXO”)
 
 RedHat based
 ============
