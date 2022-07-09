@@ -1308,9 +1308,9 @@ installPackages()
          # Trisquel debootstrap too specific
          InstallDebootstrapDeb force
          echo "debootstrap from Trisquel overloaded. If you want it back, delete and reinstall package" >&2
-      else
+      #else
          # only will work if debootstrap *too old*
-         InstallDebootstrapDeb
+         #InstallDebootstrapDeb
       fi
       # clean APT host cache
       apt clean
@@ -1373,6 +1373,9 @@ installPackages()
       # SalientOS needed archlinux-keyring before installing
       # ArchBang ended up needing pacman-key --init ; packman-key --populate
       pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
+
+      # only will work if debootstrap *too old*
+      #InstallDebootstrapDeb
    fi
 
    # if SUSE based
@@ -1442,7 +1445,7 @@ installPackages()
       emerge --ask --verbose --depclean
 
       # Redcore Linux has the wrong URL, cant compile debootrap as of June 2022
-      InstallDebootstrapDeb
+      #InstallDebootstrapDeb
    fi
 
    # if Slackware
@@ -1451,10 +1454,14 @@ installPackages()
       GetCompileSlack
    fi
 
+   # only will work if debootstrap *too old*
+   InstallDebootstrapDeb
+
    if ! which dpkg &> /dev/null || ! which debootstrap &> /dev/null
    then
       die "something went wrong installing software"
    fi
+   
 }
 
 
