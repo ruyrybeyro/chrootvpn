@@ -301,6 +301,8 @@ Elive 3.8.30
 
 B2D/OB2D 中文 Linux 計劃 2023 1.0.1
 
+BunsenLabs Linux 10.5 (Lithium)
+
 RedHat based
 ============
 
