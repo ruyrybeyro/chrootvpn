@@ -373,6 +373,9 @@ PreCheck()
    # This script needs a user with sudo privileges
    which sudo &>/dev/null || die "please install sudo and configure sudoers/groups for this user"
 
+   # The user needs sudo privileges
+   [[ $(sudo -l) !=  *"not allowed"* ]] || die "please configure sudoers/groups for this user"
+
    # for using/relaunching
    # self-promoting script to sudo
    # recursively call the script with sudo
