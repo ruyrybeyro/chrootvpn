@@ -312,6 +312,10 @@ BOSS 9 (urja)
 
 Netrunner 21.01 (“XOXO”)
 
+Q4OS 4.8 Gemini
+
+Kanotix64 Silverfire 
+
 RedHat based
 ============
 
