@@ -106,7 +106,7 @@ vpn.sh shell
 |shell        |bash shell inside chroot                               |
 |upgrade      |OS upgrade inside chroot                               |
 
-You can download this script doing a:
+You can download this script running:
 - git clone https://github.com/ruyrybeyro/chrootvpn/blob/main/vpn.sh
 - wget https://raw.githubusercontent.com/ruyrybeyro/chrootvpn/main/vpn.sh
 - curl https://raw.githubusercontent.com/ruyrybeyro/chrootvpn/main/vpn.sh -O
