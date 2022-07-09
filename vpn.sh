@@ -512,6 +512,9 @@ FirefoxPolicy()
       [[ ${SLACKWARE} -eq 1 ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
       # for Firefox SNAPs
       [[ -d "/etc/firefox" ]] && mkdir /etc/firefox/policies 2> /dev/null
+
+      # BOSS Linux
+      [[ -d "/opt/firefox" ]] && mkdir /opt/firefox/distribution
    fi
 
    # if Firefox installed
