@@ -303,6 +303,8 @@ B2D/OB2D 中文 Linux 計劃 2023 1.0.1
 
 BunsenLabs Linux 10.5 (Lithium)
 
+BOSS 9 (urja)
+
 RedHat based
 ============
 
