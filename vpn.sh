@@ -354,6 +354,7 @@ PreCheck()
    fi
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family 
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID_LIKE=/ { print $2 } ' /etc/os-release) == "arch" ]] && ARCH=1 # Peux
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
    [[ -f "/etc/gentoo-release" ]]    && GENTOO=1 # is GENTOO family
    [[ -f "/etc/redcore-release" ]]   && GENTOO=1 # is GENTOO family
@@ -362,7 +363,7 @@ PreCheck()
 
  
    # if none of distrubition families above, abort 
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
 
    # if VPN or VPNIP empty, abort
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
