@@ -316,6 +316,10 @@ Q4OS 4.8 Gemini
 
 Kanotix64 Silverfire 
 
+cutefishOS
+
+SparkyLinux 7 (Orion-Belt) 2022.7
+
 RedHat based
 ============
 
@@ -377,6 +381,8 @@ SalientOS 21.06
 RebornOS
 
 ArchEx Build 220206
+
+Peux OS 22.06
 
 SUSE
 ====
