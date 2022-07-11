@@ -316,6 +316,8 @@ Q4OS 4.8 Gemini
 
 Kanotix64 Silverfire 
 
+cutefishOS
+
 RedHat based
 ============
 
