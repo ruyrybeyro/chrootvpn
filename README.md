@@ -335,6 +335,8 @@ Fedora 23
 
 Fedora 36
 
+Network Security Toolkit (NST) 36
+
 CentOS 8
 
 CentOS 9 stream
