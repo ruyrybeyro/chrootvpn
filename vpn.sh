@@ -1421,6 +1421,7 @@ installPackages()
       # Void is a rolling distro
       # update
       xbps-install -yu xbps
+      # this took a long time in AgarimOS
       xbps-install -ySu
 
       # needed packages
