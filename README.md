@@ -14,7 +14,7 @@ Rui Ribeiro 2022, Tiago Teles - Contributions for Arch Linux
 
 This script downloads Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the firewall, and installs them.
 
-Being SNX still a 32-bits binary  and the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated needed packages for SNX ; the chroot is built to counter some of those behaviours.
+Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated needed packages for SNX ; the chroot is built to counter some of those behaviours.
 
 The script supports several Linux distributions as the host OS, still uses Debian 11 for the chroot "light container".
 The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
@@ -23,7 +23,7 @@ resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and 
 
 The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user.
 
-As long the version of the Debian/RedHat/SUSE/Arch distribution still has support, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. See end of this document for the 80+ recent versions/distributions successfully tested.
+As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. See end of this document for the more than 100 recent versions/distributions successfully tested.
 
 INSTRUCTIONS
 ============
@@ -85,7 +85,7 @@ vpn.sh -v|--version
 |-------------|-------------------------------------------------------|
 |start        |starts CShell daemon                                   |
 |stop         |stops  CShell daemon                                   |
-|restart      |restart CShell daemon                                  |
+|restart      |restarts CShell daemon                                 |
 |status       |checks if CShell daemon is running                     |
 |disconnect   |disconnects VPN/SNX session from the command line      |
 |split        |split tunnel VPN - use only after session is up        |
@@ -410,6 +410,7 @@ Void Linux
 ==========
 
 Void Linux 2021-09-30
+
 AgarimOS
 
 Gentoo
