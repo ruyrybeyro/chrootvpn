@@ -14,7 +14,7 @@ Rui Ribeiro 2022, Tiago Teles - Contributions for Arch Linux
 
 This script downloads Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the firewall, and installs them.
 
-Being SNX still a 32-bits binary  and the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. SNX/CShell behave on odd ways ; furthermore, Fedora and others already dont provide needed packages for SNX ; the chroot is built to counter some of those behaviours.
+Being SNX still a 32-bits binary  and the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated needed packages for SNX ; the chroot is built to counter some of those behaviours.
 
 The script supports several Linux distributions as the host OS, still uses Debian 11 for the chroot "light container".
 The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
@@ -28,7 +28,7 @@ As long the version of the Debian/RedHat/SUSE/Arch distribution still has suppor
 INSTRUCTIONS
 ============
 
-Please fill VPN and VPNIP before using this script.
+Please fill up VPN and VPNIP before using this script.
 SPLIT might or not have to be filled, depending on your needs and Checkpoint VPN routes.
 
 if /opt/etc/vpn.conf is present the above script settings will be ignored. vpn.conf is created upon first instalation.
@@ -69,13 +69,13 @@ vpn.sh -v|--version
 
 |Option       |Function                                               |
 |-------------|-------------------------------------------------------|
-|-i --install |install mode - create chroot                           |
-|-c --chroot  |change default chroot /opt/chroot directory            |
-|-h --help    |show this help                                         |
+|-i --install |install mode - creates chroot                          |
+|-c --chroot  |changes default chroot /opt/chroot directory           |
+|-h --help    |shows this help                                        |
 |-v --version |script version                                         |
-|--vpn        |select VPN DNS full name install time                  |
+|--vpn        |selects VPN DNS full name at install time              |
 |--proxy      |proxy to use in apt inside chroot 'http://user:pass@IP'|
-|-o --output  |redirect ALL output for FILE                           |
+|-o --output  |redirects ALL output for FILE                          |
 |-s --silent  |special case of output, no arguments                   |
 |--oldjava    |JDK 8 for connecting to old Checkpoint VPN servers (*) |
 
@@ -83,15 +83,15 @@ vpn.sh -v|--version
 
 |Command      |Function                                               |
 |-------------|-------------------------------------------------------|
-|start        |start CShell daemon                                    |
-|stop         |stop  CShell daemon                                    |
+|start        |starts CShell daemon                                   |
+|stop         |stops  CShell daemon                                   |
 |restart      |restart CShell daemon                                  |
-|status       |check if CShell daemon is running                      |
-|disconnect   |disconnect VPN/SNX session from the command line       |
+|status       |checks if CShell daemon is running                     |
+|disconnect   |disconnects VPN/SNX session from the command line      |
 |split        |split tunnel VPN - use only after session is up        |
-|uninstall    |delete chroot and host file(s)                         |
-|selfupdate   |self update this script if new version available       |
-|fixdns       |try to fix resolv.conf                                 |
+|uninstall    |deletes chroot and host file(s)                        |
+|selfupdate   |self updates this script if new version available      |
+|fixdns       |tries to fix resolv.conf                               |
 
 For debugging/maintenance:
 
@@ -106,7 +106,8 @@ vpn.sh shell
 |shell        |bash shell inside chroot                               |
 |upgrade      |OS upgrade inside chroot                               |
 
-You can download this script running:
+This script can be downloaded running:
+
 - git clone https://github.com/ruyrybeyro/chrootvpn/blob/main/vpn.sh
 - wget https://raw.githubusercontent.com/ruyrybeyro/chrootvpn/main/vpn.sh
 - curl https://raw.githubusercontent.com/ruyrybeyro/chrootvpn/main/vpn.sh -O
@@ -195,7 +196,7 @@ COMPATIBILITY
 
 Tested with chroot Debian Bullseye 11 (32 bits - i386)
 
-Tested with 64-bits the following x86_64 hosts:
+Tested the following x86_64 hosts:
 
 Debian based
 ============
