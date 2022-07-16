@@ -221,6 +221,8 @@ Ubuntu LTS 22.04 Jammy Jellyfish
 
 Mint   20.2 Uma
 
+Mint   21 Vanessa
+
 Voyager 22.04 LTS
 
 Pop!_OS 22.04 LTS
@@ -343,6 +345,8 @@ CentOS 8
 CentOS 9 stream
 
 Rocky 8.6 Green Obsidian
+
+Rocky 9.0 Blue Onyx
 
 Oracle 8.6
 
