@@ -391,6 +391,8 @@ ArchEx Build 220206
 
 Peux OS 22.06
 
+AmOs Linux
+
 SUSE
 ====
 
