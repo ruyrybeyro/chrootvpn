@@ -1305,6 +1305,8 @@ installPackages()
    # if Debian family based
    if [[ "${DEB}" -eq 1 ]]
    then
+      echo "Debian family setup" >&2
+
       # update metadata
       apt -y update
 
@@ -1334,6 +1336,8 @@ installPackages()
    # if RedHat family based
    if [[ "${RH}" -eq 1 ]]
    then
+      echo "RedHat family setup" >&2
+
       #dnf makecache
 
       # Mandrake successors/older style RedHat does not have dnf
@@ -1385,6 +1389,8 @@ installPackages()
    # if Arch Linux
    if [[ "${ARCH}" -eq 1 ]]
    then
+      echo "Arch family setup" >&2
+
       # Arch is a rolling distro, should we have an update here?
       
       # install packages
@@ -1404,6 +1410,8 @@ installPackages()
    # if SUSE based
    if [[ "${SUSE}" -eq 1 ]]
    then
+      echo "SUSE family setup" >&2
+
       PACKAGEKIT=false
 
       # packagekit does not let zypper run
@@ -1435,6 +1443,8 @@ installPackages()
    # if Void based
    if [[ "${VOID}" -eq 1 ]]
    then
+      echo "Void family setup" >&2
+
       # Void is a rolling distro
       # update
       xbps-install -yu xbps
@@ -1450,6 +1460,8 @@ installPackages()
    # if Gentoo based
    if [[ "${GENTOO}" -eq 1 ]]
    then
+      echo "Gentoo family setup" >&2
+
       # maintance because rolling release
       # and problems with international repositories connectivity
       #emaint --auto sync
@@ -1475,6 +1487,8 @@ installPackages()
    # if Slackware
    if [[ "${SLACKWARE}" -eq 1 ]]
    then
+      echo "Slackware family setup" >&2
+
       GetCompileSlack
    fi
 
