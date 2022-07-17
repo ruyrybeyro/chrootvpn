@@ -148,6 +148,9 @@ PATH="/sbin:/usr/sbin:/bin:/usr/sbin:${PATH}"
 # seems not to be needed, who will stay here for now
 JAVA8=false
 
+# can be changed for yum
+DNF="dnf"
+
 #
 # user interface handling
 #
@@ -513,8 +516,10 @@ FirefoxPolicy()
 
    if [[ "$1" == "install" ]]
    then
+      # Slackware and ALT Linux
+      [[ -d "/usr/lib64/firefox" ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
+
       [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution" 2> /dev/null
-      [[ ${SLACKWARE} -eq 1 ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
       # for Firefox SNAPs
       [[ -d "/etc/firefox" ]] && mkdir /etc/firefox/policies 2> /dev/null
 
@@ -889,7 +894,7 @@ fixDNS2()
 
    [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
-   [[ "${RH}"   -eq 1 ]] && authselect apply-changes
+   [[ "${RH}"   -eq 1 ]] && which authselect &>/dev/null && authselect apply-changes
 }
 
 
@@ -1145,16 +1150,16 @@ needCentOSFix()
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
       # we came here because we failed to install epel-release, so trying again
-      dnf -y install epel-release || die "could not install epel-release"
+      $DNF -y install epel-release || die "could not install epel-release"
    else
       # fix for older CentOS Stream 9 VMs (osboxes)
       if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
       then
          # update repositories (and keys)
-         dnf -y install centos-stream-repos
+         $DNF -y install centos-stream-repos
 
          # try to install epel-release again
-         dnf -y install epel-release || die "could not install epel-release. Fix it"
+         $DNF -y install epel-release || die "could not install epel-release. Fix it"
       else
          die "could not install epel-release"
       fi
@@ -1326,8 +1331,10 @@ installPackages()
    then
       #dnf makecache
 
+      which dnf &>/dev/null || DNF="yum"
+
       # attempts to a poor's man detection of not needing to setup EPEL
-      dnf -y install debootstrap
+      $DNF -y install debootstrap
 
       if ! which debootstrap &>/dev/null
       then
@@ -1339,34 +1346,34 @@ installPackages()
             then
                # if RedHat
                VERSION=$(awk -F= ' /_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release | sed 's/[^0-9].*//;2,$d' )
-               dnf -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION}.noarch.rpm"
+               $DNF -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION}.noarch.rpm"
             else
-               dnf -y install epel-release || needCentOSFix
+               $DNF -y install epel-release || needCentOSFix
             fi
          else
             if grep "^Mageia" /etc/redhat-release &> /dev/null
             then
-               dnf -y install NetworkManager 
+               $DNF -y install NetworkManager 
             fi
          fi
       fi
 
-      dnf -y install ca-certificates jq wget debootstrap
+      $DNF -y install ca-certificates jq wget debootstrap
 
       # not installed in all variants as a debootstrap dependency
-      if ! dnf -y install dpkg 
+      if ! $DNF -y install dpkg 
       then
-         grep "OpenMandriva Lx release 4.3" /etc/redhat-release &> /dev/null && dnf -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
+         grep "OpenMandriva Lx release 4.3" /etc/redhat-release &> /dev/null && $DNF -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
       fi
       
 
       # xhost should be present
       if [[ ! -f "/usr/bin/xhost" ]]
       then
-         dnf -y install xorg-x11-server-utils
-         dnf -y install xhost
+         $DNF -y install xorg-x11-server-utils
+         $DNF -y install xhost
       fi
-      dnf clean all 
+      $DNF clean all 
    fi
 
    # if Arch Linux
@@ -1504,7 +1511,11 @@ fixRHDNS()
       # CentOS Stream 9 does not install systemd-resolved by default
       if [[ ! -f "/usr/lib/systemd/systemd-resolved" ]]
       then	    
-         dnf -y install systemd-resolved 
+         echo "one of the next dnf will fail. Only is an issue if both fail" >&2
+         # mandrake based
+         $DNF -y install libnss-resolve
+         # RH/Fedora based
+         $DNF -y install systemd-resolved 
       fi
 
       # start it and configure it to be active on boot 
