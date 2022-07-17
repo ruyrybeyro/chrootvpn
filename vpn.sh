@@ -1341,7 +1341,8 @@ installPackages()
       #dnf makecache
 
       # Mandrake successors/older style RedHat does not have dnf
-      which dnf &>/dev/null || DNF="yum"
+      ! which dnf &>/dev/null && which yum &>/dev/null && DNF="yum"
+      ! which dnf &>/dev/null && ! which yum &>/dev/null && which apt &>/dev/null && DNF="apt"
 
       # attempts to a poor's man detection of not needing to setup EPEL
       $DNF -y install debootstrap
@@ -1349,7 +1350,7 @@ installPackages()
       if ! which debootstrap &>/dev/null
       then
          # epel-release not needed for Fedora and Mageia
-         if grep -Evi "^Fedora|^Mageia|Mandriva" /etc/redhat-release &> /dev/null
+         if grep -Evi "^Fedora|^Mageia|Mandriva|^PCLinuxOS" /etc/redhat-release &> /dev/null
          then
             # if RedHat
             if grep -E "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null  
@@ -1525,7 +1526,7 @@ fixRHDNS()
    local counter
 
    # if RedHat and systemd-resolvd not active
-   if [[ "${RH}" -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]]
+   if [[ "${RH}" -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && which systemctl &> /dev/null
    then
 
       # CentOS Stream 9 does not install systemd-resolved by default
