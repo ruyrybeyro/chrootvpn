@@ -375,14 +375,18 @@ PreCheck()
    # This script needs a user with sudo privileges
    which sudo &>/dev/null || die "please install sudo and configure sudoers/groups for this user"
 
-   # The user needs sudo privileges
-   [[ $(sudo -l) !=  *"not allowed"* ]] || die "please configure sudoers/groups for this user"
+   if [[ "${EUID}" -ne 0 ]]
+   then
+      # The user needs sudo privileges
+      [[ $(sudo -l) !=  *"not allowed"* ]] || die "please configure sudoers/groups for this user"
 
-   # for using/relaunching
-   # self-promoting script to sudo
-   # recursively call the script with sudo
-   # hence no needing sudo before the command
-   [[ "${EUID}" -ne 0 ]] && exec sudo "$0" "${args[@]}" 
+      # for using/relaunching
+      # self-promoting script to sudo
+      # recursively call the script with sudo
+      # hence no needing sudo before the command
+      exec sudo "$0" "${args[@]}"
+
+   fi
 }
 
 
