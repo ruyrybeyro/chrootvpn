@@ -2,7 +2,7 @@
 #
 # Rui Ribeiro
 #
-# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RH/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware hosts 
+# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware hosts 
 # Checkpoint R80.10 and up
 #
 # Please fill VPN and VPNIP before using this script.
@@ -817,7 +817,7 @@ fixDNS()
    # Debian family - resolvconf
    [[ "${DEB}" -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && fixLinks ../run/resolvconf/resolv.conf
 
-   # RH family - systemd-resolved
+   # RedHat family - systemd-resolved
    [[ "${RH}" -eq 1 ]]        && fixLinks ../run/systemd/resolve/stub-resolv.conf
 
    # SUSE - netconfig
@@ -1331,6 +1331,7 @@ installPackages()
    then
       #dnf makecache
 
+      # Mandrake successors/older style RedHat does not have dnf
       which dnf &>/dev/null || DNF="yum"
 
       # attempts to a poor's man detection of not needing to setup EPEL
@@ -1499,7 +1500,7 @@ installPackages()
 #}
 
 
-# fix DNS RH family if systemd-resolved not active
+# fix DNS RedHat family if systemd-resolved not active
 fixRHDNS()
 {
    local counter
@@ -1514,7 +1515,7 @@ fixRHDNS()
          echo "one of the next dnf will fail. Only is an issue if both fail" >&2
          # mandrake based
          $DNF -y install libnss-resolve
-         # RH/Fedora based
+         # RedHat/Fedora based
          $DNF -y install systemd-resolved 
       fi
 
