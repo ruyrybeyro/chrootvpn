@@ -415,6 +415,8 @@ Linux Kamarada 15.3
 
 GeckoLinux STATIC Cinnamon 153.x
 
+Regata OS 22 Discovery
+
 Void Linux
 ==========
 
