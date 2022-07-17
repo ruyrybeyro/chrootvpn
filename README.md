@@ -325,6 +325,8 @@ SparkyLinux 7 (Orion-Belt) 2022.7
 
 Septor 2022
 
+Pearl MATE Studio 11
+
 RedHat based
 ============
 
