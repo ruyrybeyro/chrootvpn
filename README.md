@@ -360,10 +360,12 @@ Mageia 8 mga8
 
 ROSA Fresh Desktop 12.2
 
-Mandrake/RedHat based
+Mandrake/Mandriva/RedHat based
 ==============
 
 ALT k Linux 10.0
+
+OpenMandriva Lx 4.3
 
 Arch based
 ==========
