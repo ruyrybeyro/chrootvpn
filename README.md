@@ -325,6 +325,10 @@ SparkyLinux 7 (Orion-Belt) 2022.7
 
 Septor 2022
 
+Pearl MATE Studio 11
+
+MAX-11.5 (MAdrid_linuX)
+
 RedHat based
 ============
 
@@ -414,6 +418,8 @@ openSUSE Leap 15.4
 Linux Kamarada 15.3
 
 GeckoLinux STATIC Cinnamon 153.x
+
+Regata OS 22 Discovery
 
 Void Linux
 ==========
