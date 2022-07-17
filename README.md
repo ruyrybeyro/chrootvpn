@@ -85,7 +85,7 @@ vpn.sh -v|--version
 |-------------|-------------------------------------------------------|
 |start        |starts CShell daemon                                   |
 |stop         |stops  CShell daemon                                   |
-|restart      |restart CShell daemon                                  |
+|restart      |restarts CShell daemon                                 |
 |status       |checks if CShell daemon is running                     |
 |disconnect   |disconnects VPN/SNX session from the command line      |
 |split        |split tunnel VPN - use only after session is up        |
