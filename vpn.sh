@@ -173,27 +173,27 @@ do_help()
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
-	-i|--install install mode - create chroot
-	-c|--chroot  change default chroot ${CHROOT} directory
-	-h|--help    show this help
+	-i|--install install mode - creates chroot
+	-c|--chroot  changes default chroot ${CHROOT} directory
+	-h|--help    shows this help
 	-v|--version script version
-	--vpn        select VPN DNS full name install time
+	--vpn        selects the VPN DNS full name at install time
 	--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental*
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 	--portalurl  custom VPN portal URL prefix (usually sslvpn) ;
                      use it as --portalurl=STRING together with --install
-	-o|--output  redirect ALL output for FILE
+	-o|--output  redirects ALL output for FILE
 	-s|--silent  special case of output, no arguments
 	
-	start        start    CShell daemon
-	stop         stop     CShell daemon
-	restart      restart  CShell daemon
-	status       check if CShell daemon is running
-	disconnect   disconnect VPN/SNX session from the command line
-	split        split tunnel VPN - use only after session is up
-	uninstall    delete chroot and host file(s)
-	selfupdate   self update this script if new version available
-	fixdns       try to fix resolv.conf
+	start        starts    CShell daemon
+	stop         stops     CShell daemon
+	restart      restarts  CShell daemon
+	status       checks if CShell daemon is running
+	disconnect   disconnects VPN/SNX session from the command line
+	split        split tunnel VPN mode - use only after session is up
+	uninstall    deletes chroot and host file(s)
+	selfupdate   self updates this script if new version available
+	fixdns       tries to fix resolv.conf
 	
 	For debugging/maintenance:
 	
