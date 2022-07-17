@@ -365,7 +365,7 @@ PreCheck()
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == "void" ]] && VOID=1 # Void Linux
 
  
-   # if none of distrubition families above, abort 
+   # if none of distribution families above, abort 
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
 
    # if VPN or VPNIP empty, abort
@@ -375,6 +375,7 @@ PreCheck()
       [[ "$1" == "uninstall" ]] || die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
 
+   # if not root/sudo
    if [[ "${EUID}" -ne 0 ]]
    then
       # This script needs a user with sudo privileges
@@ -481,6 +482,9 @@ umountChrootFS()
 # to the list of accepted enterprise root certificates
 # 
 # Argument: $1 = Directory for installing policy
+#
+# CShell localhost certificate accepted automatically using Firefox
+# if this policy installed 
 #
 FirefoxJSONpolicy()
 {
@@ -788,6 +792,7 @@ killCShell()
 #
 fixLinks()
 {
+      # if destination resolv.conf file is there
       if [[ -f "$1" ]]
       then
          # fix link inside chroot
@@ -948,8 +953,6 @@ doShell()
 # uninstall command
 doUninstall()
 {
-   local DIR
-
    # stop CShell
    doStop
 
@@ -1296,7 +1299,7 @@ InstallDebootstrapDeb()
 # installs package requirements
 installPackages()
 {
-   local VERSION
+   local RHVERSION
    local PACKAGEKIT
 
    # if Debian family based
@@ -1348,8 +1351,8 @@ installPackages()
             if grep -E "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null  
             then
                # if RedHat
-               VERSION=$(awk -F= ' /_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release | sed 's/[^0-9].*//;2,$d' )
-               $DNF -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION}.noarch.rpm"
+               RHVERSION=$(awk -F= ' /_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release | sed 's/[^0-9].*//;2,$d' )
+               $DNF -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RHVERSION}.noarch.rpm"
             else
                $DNF -y install epel-release || needCentOSFix
             fi
@@ -1983,6 +1986,7 @@ createConfFile()
 # after finishing chroot setup
 chrootEnd()
 {
+   # /root inside chroot
    local ROOTHOME
 
    # do the last leg of setup inside chroot
