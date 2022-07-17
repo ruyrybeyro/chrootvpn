@@ -323,6 +323,8 @@ cutefishOS
 
 SparkyLinux 7 (Orion-Belt) 2022.7
 
+Septor 2022
+
 RedHat based
 ============
 
