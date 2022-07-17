@@ -1331,6 +1331,7 @@ installPackages()
    then
       #dnf makecache
 
+      # Mandrake successors/older style RedHat does not have dnf
       which dnf &>/dev/null || DNF="yum"
 
       # attempts to a poor's man detection of not needing to setup EPEL
