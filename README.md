@@ -363,7 +363,7 @@ ROSA Fresh Desktop 12.2
 Mandrake/RH based
 ==============
 
-ALT Linux 10.0
+ALT k Linux 10.0
 
 Arch based
 ==========
