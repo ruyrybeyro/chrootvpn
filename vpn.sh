@@ -378,17 +378,19 @@ PreCheck()
    if [[ "${EUID}" -ne 0 ]]
    then
       # This script needs a user with sudo privileges
-      which sudo &>/dev/null || die "please install sudo and configure sudoers/groups for this user"
+      which sudo &>/dev/null || die "install sudo and configure sudoers/groups for this user"
 
       # The user needs sudo privileges
-      [[ $(sudo -l) !=  *"not allowed"* ]] || die "please configure sudoers/groups for this user"
+      [[ $(sudo -l) !=  *"not allowed"* ]] || die "configure sudoers/groups for this user"
 
       # for using/relaunching
       # self-promoting script to sudo
       # recursively call the script with sudo
       # hence no needing sudo before the command
       exec sudo "$0" "${args[@]}"
-
+   else
+      # This script might need a user with sudo privileges
+      which sudo &>/dev/null || echo "you might want to install sudo" >&2
    fi
 }
 
