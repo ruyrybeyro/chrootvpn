@@ -375,11 +375,11 @@ PreCheck()
       [[ "$1" == "uninstall" ]] || die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
 
-   # This script needs a user with sudo privileges
-   which sudo &>/dev/null || die "please install sudo and configure sudoers/groups for this user"
-
    if [[ "${EUID}" -ne 0 ]]
    then
+      # This script needs a user with sudo privileges
+      which sudo &>/dev/null || die "please install sudo and configure sudoers/groups for this user"
+
       # The user needs sudo privileges
       [[ $(sudo -l) !=  *"not allowed"* ]] || die "please configure sudoers/groups for this user"
 
