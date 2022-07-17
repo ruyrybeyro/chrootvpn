@@ -4,7 +4,7 @@ Checkpoint R80+ VPN client chroot wrapper
 
 VPN client chroot'ed Debian setup/wrapper 
 
-for Debian/Ubuntu/RH/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware based hosts
+for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware based hosts
 
 Checkpoint R80.10 and up
 
@@ -360,7 +360,7 @@ Mageia 8 mga8
 
 ROSA Fresh Desktop 12.2
 
-Mandrake/RH based
+Mandrake/RedHat based
 ==============
 
 ALT k Linux 10.0
