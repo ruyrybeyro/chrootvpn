@@ -406,6 +406,8 @@ Peux OS 22.06
 
 AmOs Linux
 
+AaricKDE
+
 SUSE
 ====
 
