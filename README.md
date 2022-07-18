@@ -327,6 +327,8 @@ Septor 2022
 
 Pearl MATE Studio 11
 
+MAX-11.5 (MAdrid_linuX)
+
 RedHat based
 ============
 
