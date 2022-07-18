@@ -813,6 +813,7 @@ fixLinks()
          else
             echo "if $1 does not exist, we cant use it to fix/share resolv.conf file between host and chroot" >&2
             echo "setting up chroot DNS as a copy of host" >&2
+            echo "resolv.conf DNS servers given by VPN wont be mirrored from chroot to the host /etc/resolv.conf" >&2
             rm -f "${CHROOT}/etc/resolv.conf"
             cat /etc/resolv.conf > "${CHROOT}/etc/resolv.conf"
          fi
