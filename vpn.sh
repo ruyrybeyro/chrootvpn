@@ -807,7 +807,7 @@ fixLinks()
       else
          if [[ "$( realpath "/etc/resolv.conf" )" == *"run"* ]]
          then
-            echo -n "Using instead for chroot resolv.conf"
+            echo -n "Using instead for chroot resolv.conf"  >&2
             realpath "/etc/resolv.conf" 
             ln -sf "$( realpath "/etc/resolv.conf" )" "${CHROOT}/etc/resolv.conf"
          else
