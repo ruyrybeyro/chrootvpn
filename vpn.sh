@@ -805,10 +805,17 @@ fixLinks()
             ln -sf "$1" /etc/resolv.conf
          fi
       else
-         echo "if $1 does not exist, we cant use it to fix/share resolv.conf file between host and chroot" >&2
-         echo "setting up chroot DNS as a copy of host" >&2
-         rm -f "${CHROOT}/etc/resolv.conf"
-         cat /etc/resolv.conf > "${CHROOT}/etc/resolv.conf"
+         if [[ "$( realpath "/etc/resolv.conf" )" == *"run"* ]]
+         then
+            echo -n "Using instead for chroot resolv.conf"
+            realpath "/etc/resolv.conf" 
+            ln -sf "$( realpath "/etc/resolv.conf" )" "${CHROOT}/etc/resolv.conf"
+         else
+            echo "if $1 does not exist, we cant use it to fix/share resolv.conf file between host and chroot" >&2
+            echo "setting up chroot DNS as a copy of host" >&2
+            rm -f "${CHROOT}/etc/resolv.conf"
+            cat /etc/resolv.conf > "${CHROOT}/etc/resolv.conf"
+         fi
       fi
 }
 
@@ -1404,6 +1411,7 @@ installPackages()
          packman-key --populate
          pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
       fi
+      pacman --needed -Syu firefox
 
       # only will work if debootstrap *too old*
       #InstallDebootstrapDeb
@@ -1414,7 +1422,6 @@ installPackages()
    then
       echo "SUSE family setup" >&2
 
-      PACKAGEKIT=false
 
       # packagekit does not let zypper run
       if systemctl is-active --quiet packagekit
