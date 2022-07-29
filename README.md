@@ -331,6 +331,8 @@ MAX-11.5 (MAdrid_linuX)
 
 SysLinuxOS for System Integrators 11 filadelfia
 
+Diamond LinuxTT Gen5+
+
 RedHat based
 ============
 
