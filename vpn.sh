@@ -1385,7 +1385,7 @@ installPackages()
       # not installed in all variants as a debootstrap dependency
       if ! $DNF -y install dpkg 
       then
-         grep "OpenMandriva Lx release 4.3" /etc/redhat-release &> /dev/null && $DNF -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
+         grep "OpenMandriva Lx" /etc/redhat-release &> /dev/null && $DNF -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
       fi
       
 
