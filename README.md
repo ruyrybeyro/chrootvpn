@@ -329,6 +329,8 @@ Pearl MATE Studio 11
 
 MAX-11.5 (MAdrid_linuX)
 
+SysLinuxOS for System Integrators 11 filadelfia
+
 RedHat based
 ============
 
