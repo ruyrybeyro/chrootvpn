@@ -370,6 +370,7 @@ Mandrake/Mandriva/RedHat based
 ALT k Linux 10.0
 
 OpenMandriva Lx 4.3
+
 OpenMandriva Lx 5.0
 
 Arch based
