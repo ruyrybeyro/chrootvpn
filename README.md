@@ -67,17 +67,17 @@ vpn.sh -h|--help
 
 vpn.sh -v|--version
 
-|Option      |Function                                               |
+|Option   |. |Function                                               |
 |------------|-------------------------------------------------------|
-|--install -i|install mode - creates chroot                          |
-|--chroot  -c|changes default chroot /opt/chroot directory           |
-|--help    -h|shows this help                                        |
-|--version -v|script version                                         |
-|--vpn       |selects VPN DNS full name at install time              |
-|--proxy     |proxy to use in apt inside chroot 'http://user:pass@IP'|
-|--output  -o|redirects ALL output for FILE                          |
-|--silent  -s|special case of output, no arguments                   |
-|--oldjava   |JDK 8 for connecting to old Checkpoint VPN servers (*) |
+|--install|-i|install mode - creates chroot                          |
+|--chroot |-c|changes default chroot /opt/chroot directory           |
+|--help   |-h|shows this help                                        |
+|--version|-v|script version                                         |
+|--vpn    |  |selects VPN DNS full name at install time              |
+|--proxy  |  |proxy to use in apt inside chroot 'http://user:pass@IP'|
+|--output |-o|redirects ALL output for FILE                          |
+|--silent |-s|special case of output, no arguments                   |
+|--oldjava|  |JDK 8 for connecting to old Checkpoint VPN servers (*) |
 
 (*) (circa 2019) *experimental* -- not sure it is needed 
 
