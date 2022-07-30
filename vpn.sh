@@ -704,7 +704,7 @@ showStatus()
    if [[ -f "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" ]]
    then
       echo
-      echo "CShell self-signed CA certificate"
+      echo "CShell localhost self-signed CA certificate"
       echo
       openssl x509 -in "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" -text | grep -E ", CN = |  Not [BA]"
    fi
@@ -779,6 +779,12 @@ showStatus()
 
    # full VPN it might not work
    [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VER}"
+
+   #  Mobile Access Portal Agent Checkpoint X.509 public certificate
+   echo
+   echo "${VPN} X.509 certificate" 
+   openssl s_client -servername ${VPN} -connect ${VPN}:443 2>/dev/null | \
+   openssl x509 -text | awk '/^-----BEGIN CERTIFICATE/ {exit} {print}'
 }
 
 
