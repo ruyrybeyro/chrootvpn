@@ -23,7 +23,7 @@ resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and 
 
 The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user.
 
-As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. See end of this document for the more than 100 recent versions/distributions successfully tested.
+As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. See end of this document for the more than 110 recent versions/distributions successfully tested.
 
 INSTRUCTIONS
 ============
@@ -67,17 +67,17 @@ vpn.sh -h|--help
 
 vpn.sh -v|--version
 
-|Option      |Function                                               |
-|------------|-------------------------------------------------------|
-|--install -i|install mode - creates chroot                          |
-|--chroot  -c|changes default chroot /opt/chroot directory           |
-|--help    -h|shows this help                                        |
-|--version -v|script version                                         |
-|--vpn       |selects VPN DNS full name at install time              |
-|--proxy     |proxy to use in apt inside chroot 'http://user:pass@IP'|
-|--output  -o|redirects ALL output for FILE                          |
-|--silent  -s|special case of output, no arguments                   |
-|--oldjava   |JDK 8 for connecting to old Checkpoint VPN servers (*) |
+|Option   |  |Function                                               |
+|---------|--|-------------------------------------------------------|
+|--install|-i|install mode - creates chroot                          |
+|--chroot |-c|changes default chroot /opt/chroot directory           |
+|--help   |-h|shows this help                                        |
+|--version|-v|script version                                         |
+|--vpn    |  |selects VPN DNS full name at install time              |
+|--proxy  |  |proxy to use in apt inside chroot 'http://user:pass@IP'|
+|--output |-o|redirects ALL output for FILE                          |
+|--silent |-s|special case of output, no arguments                   |
+|--oldjava|  |JDK 8 for connecting to old Checkpoint VPN servers (*) |
 
 (*) (circa 2019) *experimental* -- not sure it is needed 
 
