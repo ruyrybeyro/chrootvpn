@@ -780,7 +780,7 @@ showStatus()
    # full VPN it might not work
    [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VER}"
 
-   #  Mobile Access Portal Agent Checkpoint X.509 public certificate
+   #  Mobile Access Portal remote Checkpoint X.509 public certificate
    echo
    echo "${VPN} X.509 certificate" 
    openssl s_client -servername "${VPN}" -connect "${VPN}":443 2>/dev/null | \
