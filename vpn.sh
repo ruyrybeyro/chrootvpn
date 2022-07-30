@@ -339,7 +339,6 @@ getDistro()
    SLACKWARE=0
    VOID=0
    DEEPIN=0
-   NIXOS=0
 
    # Debian 
    if [[ -f "/etc/debian_version" ]]
@@ -378,12 +377,8 @@ getDistro()
    # Void
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == "void" ]] && VOID=1 # Void Linux
 
-   # NixOS
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID/ { gsub("\"", ""); print $2 } ' /etc/os-release) == "nixos" ]] && NIXOS=1 # NixOS Linux
-
-
    # if none of distribution families above, abort
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${NIXOS}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void and NixOS family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, and Void family distributions supported"
 }
 
 
@@ -883,7 +878,6 @@ fixDNS()
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${VOID}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${DEEPIN}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
-   [[ "${NIXOS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 }
 
 
@@ -1542,19 +1536,6 @@ installPackages()
       echo "Slackware family setup" >&2
 
       GetCompileSlack
-   fi
-
-   # if NixOS based
-   if [[ "${NixOS}" -eq 1 ]]
-   then
-      echo "NixOS setup" >&2
-
-
-      # install needed packages
-      nix-env -i xhost jq wget dpkg debootstrap openssl
-
-      which dpkg &>/dev/null || die "failed installing dpkg"
-
    fi
 
    # only will work if debootstrap *too old*
