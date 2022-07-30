@@ -1145,7 +1145,7 @@ argCommands()
       disconnect)   doDisconnect ;;
       fixdns)       fixDNS2 ;;
       split)        Split ;;
-      status)       showStatus ;;
+      status)       showStatus | less ;;
       shell)        doShell ;;
       uninstall)    doUninstall ;;
       upgrade)      Upgrade ;;
