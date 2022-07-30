@@ -194,9 +194,9 @@ Finally the connection is established. The user will be disconnected then upon t
 COMPATIBILITY
 =============
 
-Tested with chroot Debian Bullseye 11 (32 bits - i386)
+Tested with chroot'ed Debian Bullseye 11 (32 bits - i386)
 
-Tested the following x86_64 hosts:
+and the following x86_64 hosts:
 
 Debian based
 ============
