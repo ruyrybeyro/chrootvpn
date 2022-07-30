@@ -326,6 +326,7 @@ doGetOpts()
    done
 }
 
+
 # find which distribution we are dealing with
 getDistro()
 {
@@ -380,6 +381,7 @@ getDistro()
    # if none of distribution families above, abort
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
 }
+
 
 # minimal requirements check
 PreCheck()
@@ -1025,7 +1027,8 @@ doUninstall()
 
 # upgrade OS inside chroot
 # vpn.sh upgrade option
-Upgrade() {
+Upgrade() 
+{
    doChroot /bin/bash --login -pf <<-EOF12
 	apt update
 	apt -y upgrade
