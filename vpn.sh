@@ -326,16 +326,9 @@ doGetOpts()
    done
 }
 
-
-# minimal requirements check
-PreCheck()
+# find which distribution we are dealing with
+getDistro()
 {
-   # If not Intel based
-   if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
-   then
-      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/Deepin Linux Intel based flavours only"
-   fi
-
    # init distro flags
    DEB=0
    RH=0
@@ -350,20 +343,20 @@ PreCheck()
    then
       DEB=1 # is Debian family
 
-      # nice to have, but buggy, only warning and not aborting. 
+      # nice to have, but buggy, only warning and not aborting.
       # systemd-detect-virt -r an alternative
       ischroot && echo "Inside a chroot?" >&2
 
-      # Debian / DEEPIN handled slightly differently 
+      # Debian / DEEPIN handled slightly differently
       [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    else
       [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "debian" ]] && DEB=1 # OB2D
    fi
 
    # RedHat
-   [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family 
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "openEuler" ]] && RH=1 
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "Euler" ]] && RH=1 
+   [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "openEuler" ]] && RH=1
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "Euler" ]] && RH=1
 
    # Arch
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
@@ -382,9 +375,22 @@ PreCheck()
    # Void
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == "void" ]] && VOID=1 # Void Linux
 
- 
-   # if none of distribution families above, abort 
+
+   # if none of distribution families above, abort
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware and Void family distributions supported"
+}
+
+# minimal requirements check
+PreCheck()
+{
+   # If not Intel based
+   if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
+   then
+      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/Deepin Linux Intel based flavours only"
+   fi
+
+   # fill in distribution variables
+   getDistro
 
    # if VPN or VPNIP empty, abort
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
