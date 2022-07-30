@@ -339,6 +339,7 @@ getDistro()
    VOID=0
    DEEPIN=0
 
+   # Debian 
    if [[ -f "/etc/debian_version" ]]
    then
       DEB=1 # is Debian family
