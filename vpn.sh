@@ -360,6 +360,7 @@ PreCheck()
       [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "debian" ]] && DEB=1 # OB2D
    fi
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family 
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "openEuler" ]] && RH=1 
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID_LIKE=/ { print $2 } ' /etc/os-release) == "arch" ]] && ARCH=1 # Peux
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
