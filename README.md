@@ -368,6 +368,8 @@ Mageia 8 mga8
 
 ROSA Fresh Desktop 12.2
 
+openEuler 22.03 LTS
+
 Mandrake/Mandriva/RedHat based
 ==============
 

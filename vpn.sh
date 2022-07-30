@@ -354,18 +354,32 @@ PreCheck()
       # systemd-detect-virt -r an alternative
       ischroot && echo "Inside a chroot?" >&2
 
-      # Debian DEEPIN handled slightly differently 
+      # Debian / DEEPIN handled slightly differently 
       [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    else
       [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "debian" ]] && DEB=1 # OB2D
    fi
+
+   # RedHat
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family 
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "openEuler" ]] && RH=1 
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "Euler" ]] && RH=1 
+
+   # Arch
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID_LIKE=/ { print $2 } ' /etc/os-release) == "arch" ]] && ARCH=1 # Peux
+
+   # SUSE
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
+
+   # Gentoo
    [[ -f "/etc/gentoo-release" ]]    && GENTOO=1 # is GENTOO family
    [[ -f "/etc/redcore-release" ]]   && GENTOO=1 # is GENTOO family
+
+   # Slackware
    [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
+
+   # Void
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == "void" ]] && VOID=1 # Void Linux
 
  
