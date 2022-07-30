@@ -23,7 +23,7 @@ resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and 
 
 The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user.
 
-As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. See end of this document for the more than 100 recent versions/distributions successfully tested.
+As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. See end of this document for the more than 110 recent versions/distributions successfully tested.
 
 INSTRUCTIONS
 ============
