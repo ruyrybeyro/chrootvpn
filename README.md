@@ -333,6 +333,9 @@ SysLinuxOS for System Integrators 11 filadelfia
 
 Diamond LinuxTT Gen5+
 
+Nova Escritorio/Desktop 8.0
+
+
 RedHat based
 ============
 
