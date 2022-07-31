@@ -1259,7 +1259,7 @@ GetCompileSlack()
       # debootstrap version in SlackWare too old to be useful
       if [[ ${NAME} != "debootstrap" ]]
       then
-         which ${NAME} &>/dev/null || continue 
+         which ${NAME} &>/dev/null && continue 
       fi
 
       # saves current directory/cwd
