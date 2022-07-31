@@ -1544,22 +1544,22 @@ installPackages()
 {
 
    # if Debian family based
-   [[ "${DEB}" -eq 1 ]] && installDebian
+   [[ "${DEB}"       -eq 1 ]] && installDebian
 
    # if RedHat family based
-   [[ "${RH}"   -eq 1 ]] && installRedHat
+   [[ "${RH}"        -eq 1 ]] && installRedHat
 
    # if Arch Linux
-   [[ "${ARCH}" -eq 1 ]] && installArch
+   [[ "${ARCH}"      -eq 1 ]] && installArch
 
    # if SUSE based
-   [[ "${SUSE}" -eq 1 ]] && installSUSE
+   [[ "${SUSE}"      -eq 1 ]] && installSUSE
 
    # if Void based
-   [[ "${VOID}" -eq 1 ]] && installVoid
+   [[ "${VOID}"      -eq 1 ]] && installVoid
 
    # if Gentoo based
-   [[ "${GENTOO}" -eq 1 ]] && installGentoo
+   [[ "${GENTOO}"    -eq 1 ]] && installGentoo
 
    # if Slackware
    [[ "${SLACKWARE}" -eq 1 ]] && GetCompileSlack
