@@ -1214,6 +1214,7 @@ needCentOSFix()
    fi
 }
 
+## install host requirements for Debootstraping Debian chroot, depending on distribution
 
 # get, compile and install Slackware SlackBuild packages
 GetCompileSlack()
