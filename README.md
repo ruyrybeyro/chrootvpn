@@ -10,9 +10,11 @@ Checkpoint R80.10 and up
 
 https://github.com/ruyrybeyro/chrootvpn
 
-Rui Ribeiro 2022, Tiago Teles - Contributions for Arch Linux
+Rui Ribeiro 2022
 
-This script downloads Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the firewall/VPN we intend to connect, and installs them.
+Tiago Teles - Contributions for Arch Linux
+
+This script downloads the Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the firewall/VPN we intend to connect, and installs them in a chrooted environment.
 
 Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated needed packages for SNX ; the chroot is built to counter some of those behaviours and provide a more secure setup.
 
@@ -21,9 +23,9 @@ The SNX binary and the CShell agent/daemon both install and run under chrooted  
 
 resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and kernel shared with the host to the host Linux OS.
 
-The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user.
+The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user. In addition, instead of adding the localhost self-signed Agent certificate to a user personal profile as the official setup does, this script install a server-wide global Firefox policy file instead.
 
-As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. See end of this document for the more than 110 recent versions/distributions successfully tested.
+As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run sucessfully. Void, Gentoo and Slackware variants are not so throughly tested. Have a look near the end of this document, for the more than 110 recent versions/distributions successfully tested.
 
 INSTRUCTIONS
 ============
@@ -47,11 +49,11 @@ Otherwise, run it as:
 
 	https://localhost:14186/id 
 
-- visit VPN page for logging in 
+- visit web VPN page aka Mobile Access Portal for logging in 
 
-CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights binary SNX VPN client needs a 32-bits environment.
+CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights. The binary SNX VPN client needs a 32-bits environment.
 
-Recommended having Firefox already installed, for deploying via this script a firefox policy for the self-signed Mobile Access Portal Agent X.509 certificate.
+Recommended having Firefox already installed, for deploying via this script a firefox policy for automagically accepting the self-signed Mobile Access Portal Agent X.509 certificate.
 
 Usage:
 
@@ -88,7 +90,7 @@ vpn.sh -v|--version
 |restart      |restarts CShell daemon                                 |
 |status       |checks if CShell daemon is running                     |
 |disconnect   |disconnects VPN/SNX session from the command line      |
-|split        |split tunnel VPN - use only after session is up        |
+|split        |splits tunnel VPN - use only after session is up        |
 |uninstall    |deletes chroot and host file(s)                        |
 |selfupdate   |self updates this script if new version available      |
 |fixdns       |tries to fix resolv.conf                               |
@@ -129,19 +131,19 @@ KNOWN FEATURES
 
 . if using Firefox, is advised to have it installed *before* running this script;
 
-. if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file be deployed again;
+. if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file to be (re)deployed;
 
 . if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon';
 
-. if issues connecting to VPN after first installation/OS upgrade, reboot;
+. if having issues connecting to VPN after first installation/OS upgrade, reboot;
 
-. if DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
+. if having DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
 
-. If asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
+. If after login, the web Mobile Portal is asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
 
-. Linux rolling releases distributions have to be full up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
+. Linux rolling releases distributions have to be fully up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
 
-. At least Arch after kernel(?) updates seems ocasionally needs a reboot for the VPN to work.
+. At least Arch after kernel(?) updates seems to ocasionally need a reboot for the VPN to work.
 
 SCREENS
 =======
@@ -190,6 +192,19 @@ The signature has to be accepted too. It can happen several times if there is a 
 Finally the connection is established. The user will be disconnected then upon timeout, closing the tab/browser, or pressing Disconnect.
 
 ![This is an image](/assets/images/11.png)
+
+Relevant CheckPoint Linux support pages
+=======================================
+
+SSL Network Extender https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk65210#Linux%20Supported%20Platforms
+
+How to install SSL Network Extender (SNX) client on Linux machines https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk114267
+
+Mobile Access Portal Agent Prerequisites for Linux https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk119772
+
+Mobile Access Portal and Java Compatibility https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk113410
+
+Mobile Access Portal Agent for Mozilla Firefox asks to re-install even after it was properly installed https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk122576&partition=Advanced&product=Mobile
 
 COMPATIBILITY
 =============
@@ -291,7 +306,9 @@ MakuluLinux Shift 2022-06.10
 
 Condres OS 1.0
 
-Emmabuntüs DE 4
+Emmabuntüs DE 4 1.01
+
+Emmabuntüs DE 4 1.02
 
 Neptune 7 ("Faye")
 
@@ -316,6 +333,8 @@ BOSS 9 (urja)
 Netrunner 21.01 (“XOXO”)
 
 Q4OS 4.8 Gemini
+
+Q4OS 4.10 Gemini
 
 Kanotix64 Silverfire 
 
@@ -465,17 +484,4 @@ Slackware 15.1-current
 Salix OS xfce 15.0
 
 Slackel Linux Openbox 7.3 (no /etc/resolv.conf from VPN)
-
-Relevant CheckPoint Linux support pages
-=======================================
-
-SSL Network Extender https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk65210#Linux%20Supported%20Platforms
-
-How to install SSL Network Extender (SNX) client on Linux machines https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk114267
-
-Mobile Access Portal Agent Prerequisites for Linux https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk119772
-
-Mobile Access Portal and Java Compatibility https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk113410
-
-Mobile Access Portal Agent for Mozilla Firefox asks to re-install even after it was properly installed https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk122576&partition=Advanced&product=Mobile
 
