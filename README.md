@@ -335,6 +335,7 @@ Diamond LinuxTT Gen5+
 
 Nova Escritorio/Desktop 8.0
 
+Exe GNU/Linux Chimaera 20220306
 
 RedHat based
 ============
