@@ -117,7 +117,7 @@ SCRIPT=$(realpath "${BASH_SOURCE[0]}")
 # script name
 SCRIPTNAME=$(basename "${SCRIPT}")
 
-#  preserve program passed arguments $@ into a BASH array
+# preserves program passed arguments $@ into a BASH array
 args=("$@")
 
 # VPN interface created by SNX
@@ -327,7 +327,7 @@ doGetOpts()
 }
 
 
-# find which distribution we are dealing with
+# finds which distribution we are dealing with
 getDistro()
 {
    # init distro flags
@@ -391,10 +391,10 @@ PreCheck()
       die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/Deepin Linux Intel based flavours only"
    fi
 
-   # fill in distribution variables
+   # fills in distribution variables
    getDistro
 
-   # if VPN or VPNIP empty, abort
+   # if VPN or VPNIP empty, aborts
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
       # and not handling uninstall, abort
@@ -445,7 +445,7 @@ mountChrootFS()
    if ! isCShellRunning
    then
 
-      # mount chroot filesystems
+      # mounts chroot filesystems
       # if not mounted
       mount | grep "${CHROOT}" &> /dev/null
       if [[ $? -eq 1 ]]
@@ -453,7 +453,7 @@ mountChrootFS()
          # consistency checks
          [[ ! -f "${CHROOT}/etc/fstab" ]] && die "no ${CHROOT}/etc/fstab"
 
-         # mount using fstab inside chroot, all filesystems
+         # mounts using fstab inside chroot, all filesystems
          mount --fstab "${CHROOT}/etc/fstab" -a
 
         # /run/nscd cant be shared between host and chroot
@@ -478,7 +478,7 @@ mountChrootFS()
 # umount chroot fs
 umountChrootFS()
 {
-   # unmount chroot filesystems
+   # unmounts chroot filesystems
    # if mounted
    if mount | grep "${CHROOT}" &> /dev/null
    then
@@ -487,14 +487,14 @@ umountChrootFS()
       # we dont want to abort if not present
       [[ -f "${CHROOT}/etc/fstab" ]] && doChroot /usr/bin/umount -a 2> /dev/null
          
-      # umount any leftover mount
+      # umounts any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
          umount "$i" 2> /dev/null
          umount -l "$i" 2> /dev/null
       done
 
-      # force umount any leftover mount
+      # force umounts any leftover mount
       for i in $(mount | grep "${CHROOT}" | awk ' { print  $3 } ' )
       do
          umount -l "$i" 2> /dev/null
@@ -530,7 +530,7 @@ FirefoxJSONpolicy()
 
 
 #
-# install Firefox policy accepting
+# installs Firefox policy accepting
 # CShell localhost certificate
 # in the host machine
 #
@@ -579,7 +579,7 @@ FirefoxPolicy()
                PolInstalled=1
             fi
 
-            # create JSON policy file
+            # creates JSON policy file
             # Accepting CShell certificate
             FirefoxJSONpolicy "${DIR}"
 
@@ -630,18 +630,18 @@ Split()
       echo "If this does not work, please fill in SPLIT with a network/mask list eg x.x.x.x/x x.x.x.x/x" >&2
       echo "either in ${CONFFILE} or in ${SCRIPTNAME}" >&2
 
-      # delete default gw into VPN
+      # deletes default gw into VPN
       ip route delete 0.0.0.0/1
       echo "default VPN gateway deleted" >&2
    else 
-      # get local VPN given IP address
+      # gets local VPN given IP address
       IP=$(ip -4 addr show "${TUNSNX}" | awk '/inet/ { print $2 } ')
 
-      # clean all VPN routes
-      # clean all routes given to tunsnx interface
+      # cleans all VPN routes
+      # cleans all routes given to tunsnx interface
       ip route flush table main dev "${TUNSNX}"
 
-      # create new VPN routes according to $SPLIT
+      # creates new VPN routes according to $SPLIT
       # don't put ""
       for i in ${SPLIT}
       do
@@ -907,7 +907,7 @@ doStart()
 
    # start doubles as restart
 
-   # kill CShell if running
+   # kills CShell if running
    if  isCShellRunning
    then
       # kill CShell if up
@@ -916,7 +916,7 @@ doStart()
       echo "Trying to start it again..." >&2
    fi
 
-   # launch CShell inside chroot
+   # launches CShell inside chroot
    doChroot /bin/bash --login -pf <<-EOF4
 	su -c "DISPLAY=${DISPLAY} /usr/bin/cshell/launcher" ${CSHELL_USER}
 	EOF4
@@ -935,10 +935,10 @@ doStart()
 }
 
 
-# try to fix out of sync resolv.conf
+# tries to fix out of sync resolv.conf
 fixDNS2()
 {
-   # try to restore resolv.conf
+   # tries to restore resolv.conf
    # not all configurations need actions, NetworkManager seems to behave well
 
    [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
@@ -962,13 +962,13 @@ doDisconnect()
 # stop command
 doStop()
 {
-   # disconnect VPN
+   # disconnects VPN
    doDisconnect
 
-   # kill Checkpoint agent
+   # kills Checkpoint agent
    killCShell
   
-   # unmount chroot filesystems 
+   # unmounts chroot filesystems 
    umountChrootFS
 }
 
@@ -976,11 +976,11 @@ doStop()
 # chroot shell command
 doShell()
 {
-   # mount chroot filesystems if not mounted
+   # mounts chroot filesystems if not mounted
    # otherwise shell wont work well
    mountChrootFS
 
-   # open an interactive root command line shell 
+   # opens an interactive root command line shell 
    # inside the chrooted environment
    doChroot /bin/bash --login -pf
 
@@ -995,20 +995,20 @@ doShell()
 # uninstall command
 doUninstall()
 {
-   # stop CShell
+   # stops CShell
    doStop
 
-   # delete autorun file, chroot subdirectory, installed script and host user
+   # deletes autorun file, chroot subdirectory, installed script and host user
    rm -f  "${XDGAUTO}"          &>/dev/null
    rm -rf "${CHROOT}"           &>/dev/null
    rm -f  "${INSTALLSCRIPT}"    &>/dev/null
    userdel -rf "${CSHELL_USER}" &>/dev/null
    groupdel "${CSHELL_GROUP}"   &>/dev/null
 
-   # delete Firefox policies installed by this script
+   # deletes Firefox policies installed by this script
    FirefoxPolicy uninstall
 
-   # leave /opt/etc/vpn.conf behind
+   # leaves /opt/etc/vpn.conf behind
    # for easing reinstalation
    if [[ -f "${CONFFILE}" ]]
    then
@@ -1024,7 +1024,7 @@ doUninstall()
 }
 
 
-# upgrade OS inside chroot
+# upgrades OS inside chroot
 # vpn.sh upgrade option
 Upgrade() 
 {
@@ -1037,7 +1037,7 @@ Upgrade()
 }
 
 
-# self update this script
+# self updates this script
 # vpn.sh selfupdate
 selfUpdate() 
 {
@@ -1063,15 +1063,15 @@ selfUpdate()
         if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
 
-           # if script not run for /usr/local/bin, also update it
+           # if script not run for /usr/local/bin, also updates it
            [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]] && cp -f "${vpnsh}" "${SCRIPT}"
 
-           # update the one in /usr/local/bin
+           # updates the one in /usr/local/bin
            cp -f "${vpnsh}" "${INSTALLSCRIPT}"
 
            chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
            
-           # remove temporary file
+           # removes temporary file
            rm -f "${vpnsh}"
 
            echo "script(s) updated to version ${VER}"
@@ -1086,7 +1086,7 @@ selfUpdate()
 }
 
 
-# check if chroot usage is sane
+# checks if chroot usage is sane
 #
 # $1 : commands after options are processed and wiped out
 #
@@ -1193,7 +1193,7 @@ needCentOSFix()
    # CentOS 8 no more
    if grep "^CentOS Linux release 8" /etc/redhat-release &> /dev/null
    then
-      # change reposs to CentOS Stream 8
+      # changes repos to CentOS Stream 8
       sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
@@ -1203,10 +1203,10 @@ needCentOSFix()
       # fix for older CentOS Stream 9 VMs (osboxes)
       if  grep "^CentOS Stream release" /etc/redhat-release &> /dev/null
       then
-         # update repositories (and keys)
+         # updates repositories (and keys)
          $DNF -y install centos-stream-repos
 
-         # try to install epel-release again
+         # tries to install epel-release again
          $DNF -y install epel-release || die "could not install epel-release. Fix it"
       else
          die "could not install epel-release"
@@ -1216,7 +1216,7 @@ needCentOSFix()
 
 ## install host requirements for Debootstraping Debian chroot, depending on distribution
 
-# get, compile and install Slackware SlackBuild packages
+# gets, compiles and installs Slackware SlackBuild packages
 GetCompileSlack()
 {
    local SLACKBUILDREPOBASE
@@ -1238,13 +1238,13 @@ GetCompileSlack()
    # SlackBuilds is organized per version
    SLACKBUILDREPO="${SLACKBUILDREPOBASE}/${SLACKVERSION}/"
 
-   # delete packages from /tmp
+   # deletes packages from /tmp
    rm -f /tmp/*tgz
  
-   # save current directory
+   # saves current directory
    pushd .
 
-   # create temporary directory for downloading SlackBuilds
+   # creates temporary directory for downloading SlackBuilds
    DIR=$(mktemp -d -p . )
    mkdir -p "${DIR}" || die "could not create ${DIR}"
    cd "${DIR}" || die "could not enter ${DIR}"
@@ -1262,10 +1262,10 @@ GetCompileSlack()
          which ${NAME} &>/dev/null || continue 
       fi
 
-      # save current directory/cwd
+      # saves current directory/cwd
       pushd .
      
-      # get SlackBuild package 
+      # gets SlackBuild package 
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
       wget "${BUILD}" || die "could not download ${BUILD}"
 
@@ -1291,32 +1291,32 @@ GetCompileSlack()
          #
          sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./${NAME}.SlackBuild
       else
-         # get info file frrom SlackBuild package
+         # gets info file frrom SlackBuild package
          INFO="${SLACKBUILDREPO}${pkg}/${NAME}.info"
          wget "${INFO}" || die "could not download ${INFO}"
 
-         # get URL from downloading corresponding package source code
+         # gets URL from downloading corresponding package source code
          DOWNLOAD=$(awk -F= ' /DOWNLOAD/ { gsub("\"", ""); print $2 } ' "${NAME}.info")
       fi
 
       # Download package source code
       wget "${DOWNLOAD}" || die "could not download ${DOWNLOAD}"
 
-      # execute SlackBuild script for patching, compiling, 
+      # executes SlackBuild script for patching, compiling, 
       # and generating SBo.tgz instalation package
       ./${NAME}.SlackBuild
      
-      # return saved directory at the loop beggining
+      # returns saved directory at the loop beggining
       popd || die "error restoring cwd [for]"
    done
  
-   # return to former saved directory
+   # returns to former saved directory
    popd || die "error restoring cwd"
 
-   # and delete temporary directory
+   # and deletes temporary directory
    rm -rf "${DIR}"
 
-   # install SBo.tgz just compiled/created packages
+   # installs SBo.tgz just compiled/created packages
    installpkg /tmp/*tgz
 
    # delete packages
@@ -1347,12 +1347,12 @@ installDebian()
 {
    echo "Debian family setup" >&2
 
-   # update metadata
+   # updates metadata
    apt -y update
 
    #apt -y upgrade
 
-   # install needed packages
+   # installs needed packages
    apt -y install ca-certificates x11-xserver-utils jq wget dpkg debootstrap
    # we want to make sure resolconf is the last one
    [[ ${DEEPIN} -eq 0 ]] && apt -y install resolvconf
@@ -1370,7 +1370,7 @@ installDebian()
       #InstallDebootstrapDeb
    fi
 
-   # clean APT host cache
+   # cleans APT host cache
    apt clean
 }
 
@@ -1441,7 +1441,7 @@ installArch()
 
    # Arch is a rolling distro, should we have an update here?
 
-   # install packages
+   # installs packages
    # SalientOS needed archlinux-keyring before installing
    # ArchBang ended up needing pacman-key --init ; packman-key --populate
 
@@ -1485,7 +1485,7 @@ installSUSE()
 
    # SLES does have dpkg, but not debootstrap in repositories
    # debootstrap is just a set of scripts and files
-   # install deb file from debian pool
+   # installs deb file from debian pool
    InstallDebootstrapDeb
 
    [[ ${PACKAGEKIT} -eq true ]] && systemctl start --quiet packagekit
@@ -1610,7 +1610,7 @@ fixRHDNS()
          $DNF -y install systemd-resolved 
       fi
 
-      # start it and configure it to be active on boot 
+      # starts it and configure it to be active on boot 
       systemctl unmask systemd-resolved &> /dev/null
       systemctl start  systemd-resolved
       systemctl enable systemd-resolved
@@ -1631,7 +1631,7 @@ fixRHDNS()
       sed -i '/NMCONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
       sed -i '$ a NMCONTROLLED="yes"' /etc/sysconfig/network-scripts/ifcfg-*  &>/dev/null
 
-      # replace /etc/resolv.conf for a resolved link 
+      # replaces /etc/resolv.conf for a resolved link 
       cd /etc || die "was not able to cd /etc"
 
       ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
@@ -1639,7 +1639,7 @@ fixRHDNS()
       # reload NeworkManager
       systemctl reload NetworkManager
 
-      # wait for it to be up
+      # waits for it to be up
       counter=0
       while ! systemctl is-active NetworkManager &> /dev/null
       do 
@@ -1657,11 +1657,11 @@ fixSUSEDNS()
    if [[ "${SUSE}" -eq 1 ]] && grep -v ^NETCONFIG_DNS_FORWARDER=\"dnsmasq\" /etc/sysconfig/network/config &> /dev/null
    then
 
-      # replace DNS line
+      # replaces DNS line
       #
       sed -i 's/^NETCONFIG_DNS_FORWARDER=.*/NETCONFIG_DNS_FORWARDER="dnsmasq"/g' /etc/sysconfig/network/config
 
-      # replace /etc/resolv.conf for a resolved link
+      # replaces /etc/resolv.conf for a resolved link
       cd /etc || die "was not able to cd /etc"
 
       ln -sf ../run/netconfig/resolv.conf resolv.conf
@@ -1679,7 +1679,7 @@ fixDEEPINDNS()
    then
       systemctl enable systemd-resolved.service
 
-      # replace /etc/resolv.conf for a resolved link
+      # replaces /etc/resolv.conf for a resolved link
       cd /etc || die "was not able to cd /etc"
 
       ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
@@ -1699,7 +1699,7 @@ checkDNS()
       # at least Parrot and Mint seem to need this
       fixDNS2
 
-      # test it now to see if fixed
+      # tests it now to see if fixed
       if ! getent ahostsv4 "${VPN}" &> /dev/null
       then
          echo "DNS problems after installing resolvconf?" >&2
@@ -1725,7 +1725,7 @@ createChroot()
    # W: Download is performed unsandboxed as root as file '/var/cache/apt/archives/partial/xxxxxx.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
    chmod 755 "${CHROOT}"
 
-   # create and populate minimal 32-bit Debian chroot
+   # creates and populate minimal 32-bit Debian chroot
    if ! debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
@@ -1734,15 +1734,15 @@ createChroot()
 }
 
 
-# create user for running CShell
+# creates user for running CShell
 # to avoid running server as root
 # more secure running as an independent user
 createCshellUser()
 {
-   # create group 
+   # creates group 
    getent group "^${CSHELL_GROUP}:" &> /dev/null || groupadd --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
 
-   # create user
+   # creates user
    if ! getent passwd "^${CSHELL_USER}:" &> /dev/null 
    then
       useradd \
@@ -1753,8 +1753,8 @@ createCshellUser()
             --shell "/bin/false" \
             "${CSHELL_USER}" 2>/dev/null || true
    fi
-   # adjust file and directory permissions
-   # create homedir 
+   # adjusts file and directory permissions
+   # creates homedir 
    test -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
    chown -R "${CSHELL_USER}":"${CSHELL_GROUP}" "${CSHELL_HOME}"
    chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
@@ -1784,14 +1784,14 @@ buildFS()
    then 
       # download CShell installation scripts from CheckPoint machine
       wget --no-check-certificate "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
-      # register CShell installed version for later
+      # registers CShell installed version for later
       wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    else
       # download SNX installation scripts from CheckPoint machine
       wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh"
       # download CShell installation scripts from CheckPoint machine
       wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
-      # register CShell installed version for later
+      # registers CShell installed version for later
       wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    fi
 
@@ -1799,7 +1799,7 @@ buildFS()
    mv snx_install.sh "${CHROOT}/root"
 
    # snx calls modprobe, modprobe is not needed
-   # create a fake one inside chroot returning success
+   # creates a fake one inside chroot returning success
    cat <<-EOF5 > sbin/modprobe
 	#!/bin/bash
 	exit 0
@@ -1863,10 +1863,10 @@ buildFS()
 	# --oldjava
         JAVA8=${JAVA8}
 
-	# create cShell user
-	# create group 
+	# creates cShell user
+	# creates group 
 	addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
-	# create user
+	# creates user
 	adduser --quiet \
 	        --uid "${CSHELL_UID}" \
 	        --gid "${CSHELL_GID}" \
@@ -1876,13 +1876,13 @@ buildFS()
 	        --gecos "Checkpoint Agent" \
 	        "${CSHELL_USER}" 2>/dev/null || true
 
-	# adjust file and directory permissions
-	# create homedir 
+	# adjusts file and directory permissions
+	# creates homedir 
 	test  -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
 	chown -R "${CSHELL_USER}":"${CSHELL_GROUP}" "${CSHELL_HOME}"
 	chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
 
-	# create a who apt diversion for the fake one not being replaced
+	# creates a who apt diversion for the fake one not being replaced
 	# by security updates inside chroot
 	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
 
@@ -1961,7 +1961,7 @@ buildFS()
 }
 
 
-# create chroot fstab for sharing kernel 
+# creates chroot fstab for sharing kernel 
 # internals and directories/files with the host
 FstabMount()
 {
@@ -2030,7 +2030,7 @@ XDGAutoRun()
       fi
       echo >&2
 
-      # add entry for it to be executed
+      # adds entry for it to be executed
       # upon graphical login
       # so it does not need to be started manually
       if ! grep "${INSTALLSCRIPT}" /etc/sudoers &>/dev/null
@@ -2047,7 +2047,7 @@ XDGAutoRun()
 }
 
 
-# create /opt/etc/vpn.conf
+# creates /opt/etc/vpn.conf
 # upon service is running first time successfully
 createConfFile()
 {
@@ -2083,7 +2083,7 @@ chrootEnd()
    # if sucessful installation
    if isCShellRunning && [[ -f "${CHROOT}/usr/bin/snx" ]]
    then
-      # delete temporary setup scripts from chroot's root home
+      # deletes temporary setup scripts from chroot's root home
       ROOTHOME="${CHROOT}/root"
       rm -f "${ROOTHOME}/chroot_setup.sh" "${ROOTHOME}/cshell_install.sh" "${ROOTHOME}/snx_install.sh" 
 
@@ -2091,10 +2091,10 @@ chrootEnd()
       cp "${SCRIPT}" "${INSTALLSCRIPT}"
       chmod a+rx "${INSTALLSCRIPT}"
 
-      # create /etc/vpn.conf
+      # creates /etc/vpn.conf
       createConfFile
 
-      # install xdg autorun file
+      # installs xdg autorun file
       # last thing to run
       XDGAutoRun
 
@@ -2102,7 +2102,7 @@ chrootEnd()
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
       echo >&2
 
-      # install Policy for CShell localhost certificate
+      # installs Policy for CShell localhost certificate
       FirefoxPolicy install
 
       # if localhost generated certificate not accepted, VPN auth will fail
@@ -2149,7 +2149,7 @@ main()
    # command options handling
    doGetOpts "$@"
 
-   # clean all the getopts logic from the arguments
+   # cleans all the getopts logic from the arguments
    # leaving only commands
    shift $((OPTIND-1))
 
