@@ -35,12 +35,12 @@ if /opt/etc/vpn.conf is present the above script settings will be ignored. vpn.c
 
 - first time, if filled VPN, VPNIP inside the script run it as 
 
-	
-	./vpn.sh -i
+
+	vpn.sh -i
 
 Otherwise, run it as:
 
-        ./vnp.sh -i --vpn=FQDN_DNS_name_of_VPN
+        vnp.sh -i --vpn=FQDN_DNS_name_of_VPN
 	
 
 - accept localhost certificate in brower if not Firefox or if Firefox is a snap
@@ -141,7 +141,7 @@ KNOWN FEATURES
 
 . Linux rolling releases distributions have to be full up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
 
-. At least Arch after updates seems ocasionally needs a reboot for the VPN to work.
+. At least Arch after kernel(?) updates seems ocasionally needs a reboot for the VPN to work.
 
 SCREENS
 =======
