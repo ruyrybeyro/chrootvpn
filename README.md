@@ -88,7 +88,7 @@ vpn.sh -v|--version
 |restart      |restarts CShell daemon                                 |
 |status       |checks if CShell daemon is running                     |
 |disconnect   |disconnects VPN/SNX session from the command line      |
-|split        |split tunnel VPN - use only after session is up        |
+|split        |splits tunnel VPN - use only after session is up        |
 |uninstall    |deletes chroot and host file(s)                        |
 |selfupdate   |self updates this script if new version available      |
 |fixdns       |tries to fix resolv.conf                               |
@@ -129,19 +129,19 @@ KNOWN FEATURES
 
 . if using Firefox, is advised to have it installed *before* running this script;
 
-. if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file be deployed again;
+. if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file to be (re)deployed;
 
 . if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon';
 
-. if issues connecting to VPN after first installation/OS upgrade, reboot;
+. if having issues connecting to VPN after first installation/OS upgrade, reboot;
 
-. if DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
+. if having DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
 
-. If asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
+. If after login, the web Mobile Portal is asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
 
-. Linux rolling releases distributions have to be full up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
+. Linux rolling releases distributions have to be fully up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
 
-. At least Arch after kernel(?) updates seems ocasionally needs a reboot for the VPN to work.
+. At least Arch after kernel(?) updates seems to ocasionally need a reboot for the VPN to work.
 
 SCREENS
 =======
