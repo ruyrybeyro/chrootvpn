@@ -141,7 +141,7 @@ KNOWN FEATURES
 
 . Linux rolling releases distributions have to be full up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
 
-. At least Arch after updates seems ocasionally needs a reboot for the VPN to work.
+. At least Arch after kernel(?) updates seems ocasionally needs a reboot for the VPN to work.
 
 SCREENS
 =======
