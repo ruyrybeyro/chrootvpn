@@ -1228,6 +1228,8 @@ GetCompileSlack()
    local INFO
    local DOWNLOAD
 
+   echo "Slackware family setup" >&2
+
    # Build SlackBuild repository base string
    SLACKBUILDREPOBASE="https://slackbuilds.org/slackbuilds/"
    # version in current can be 15.0+
@@ -1339,204 +1341,227 @@ InstallDebootstrapDeb()
 }
 
 
-# installs package requirements
-installPackages()
+# installs Debian
+installDebian()
 {
-   local RHVERSION
-   local PACKAGEKIT
+   echo "Debian family setup" >&2
 
-   # if Debian family based
-   if [[ "${DEB}" -eq 1 ]]
+   # update metadata
+   apt -y update
+
+   #apt -y upgrade
+
+   # install needed packages
+   apt -y install ca-certificates x11-xserver-utils jq wget dpkg debootstrap
+   # we want to make sure resolconf is the last one
+   [[ ${DEEPIN} -eq 0 ]] && apt -y install resolvconf
+
+   # highly unusual, a Debian/Ubuntu machine *without* dpkg
+   which dpkg &>/dev/null || die "failed installing dpkg"
+
+   if grep '^ID=trisquel' /etc/os-release &>/dev/null
    then
-      echo "Debian family setup" >&2
-
-      # update metadata
-      apt -y update
-
-      #apt -y upgrade
-
-      # install needed packages
-      apt -y install ca-certificates x11-xserver-utils jq wget dpkg debootstrap
-      # we want to make sure resolconf is the last one
-      [[ ${DEEPIN} -eq 0 ]] && apt -y install resolvconf
-
-      # highly unusual, a Debian/Ubuntu machine *without* dpkg
-      which dpkg &>/dev/null || die "failed installing dpkg"
-
-      if grep '^ID=trisquel' /etc/os-release &>/dev/null
-      then
-         # Trisquel debootstrap too specific
-         InstallDebootstrapDeb force
-         echo "debootstrap from Trisquel overloaded. If you want it back, delete and reinstall package" >&2
-      #else
-         # only will work if debootstrap *too old*
-         #InstallDebootstrapDeb
-      fi
-      # clean APT host cache
-      apt clean
-   fi
-
-   # if RedHat family based
-   if [[ "${RH}" -eq 1 ]]
-   then
-      echo "RedHat family setup" >&2
-
-      #dnf makecache
-
-      # Mandrake successors/older style RedHat does not have dnf
-      ! which dnf &>/dev/null && which yum &>/dev/null && DNF="yum"
-      # Mandriva variants use apt
-      ! which dnf &>/dev/null && ! which yum &>/dev/null && which apt &>/dev/null && DNF="apt"
-
-      # attempts to a poor's man detection of not needing to setup EPEL
-      $DNF -y install debootstrap
-
-      if ! which debootstrap &>/dev/null
-      then
-         # epel-release not needed for Fedora and Mageia
-         if grep -Evi "^Fedora|^Mageia|Mandriva|^PCLinuxOS" /etc/redhat-release &> /dev/null
-         then
-            # if RedHat
-            if grep -E "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null  
-            then
-               # if RedHat
-               RHVERSION=$(awk -F= ' /_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release | sed 's/[^0-9].*//;2,$d' )
-               $DNF -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RHVERSION}.noarch.rpm"
-            else
-               $DNF -y install epel-release || needCentOSFix
-            fi
-         else
-            if grep "^Mageia" /etc/redhat-release &> /dev/null
-            then
-               $DNF -y install NetworkManager 
-            fi
-         fi
-      fi
-
-      $DNF -y install ca-certificates jq wget debootstrap
-
-      # not installed in all variants as a debootstrap dependency
-      if ! $DNF -y install dpkg 
-      then
-         # works for OpenMandriva Lx 4.3 and 5
-         grep "OpenMandriva Lx" /etc/redhat-release &> /dev/null && $DNF -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
-      fi
-      
-
-      # xhost should be present
-      if [[ ! -f "/usr/bin/xhost" ]]
-      then
-         $DNF -y install xorg-x11-server-utils
-         $DNF -y install xhost
-      fi
-      $DNF clean all 
-   fi
-
-   # if Arch Linux
-   if [[ "${ARCH}" -eq 1 ]]
-   then
-      echo "Arch family setup" >&2
-
-      # Arch is a rolling distro, should we have an update here?
-      
-      # install packages
-      # SalientOS needed archlinux-keyring before installing
-      # ArchBang ended up needing pacman-key --init ; packman-key --populate
-
-      if ! pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
-      then
-         packman-key --populate
-         pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
-      fi
-      pacman --needed -Syu firefox
-
+      # Trisquel debootstrap too specific
+      InstallDebootstrapDeb force
+      echo "debootstrap from Trisquel overloaded. If you want it back, delete and reinstall package" >&2
+   #else
       # only will work if debootstrap *too old*
       #InstallDebootstrapDeb
    fi
 
-   # if SUSE based
-   if [[ "${SUSE}" -eq 1 ]]
+   # clean APT host cache
+   apt clean
+}
+
+
+# installs RedHat family
+installRedHat()
+{
+   local RHVERSION
+
+   echo "RedHat family setup" >&2
+
+   #dnf makecache
+
+   # Mandrake successors/older style RedHat does not have dnf
+   ! which dnf &>/dev/null && which yum &>/dev/null && DNF="yum"
+   # Mandriva variants use apt
+   ! which dnf &>/dev/null && ! which yum &>/dev/null && which apt &>/dev/null && DNF="apt"
+
+   # attempts to a poor's man detection of not needing to setup EPEL
+   $DNF -y install debootstrap
+
+   if ! which debootstrap &>/dev/null
    then
-      echo "SUSE family setup" >&2
-
-
-      # packagekit does not let zypper run
-      if systemctl is-active --quiet packagekit
+      # epel-release not needed for Fedora and Mageia
+      if grep -Evi "^Fedora|^Mageia|Mandriva|^PCLinuxOS" /etc/redhat-release &> /dev/null
       then
-         PACKAGEKIT=true
-         systemctl stop --quiet packagekit
+         # if RedHat
+         if grep -E "^REDHAT_SUPPORT_PRODUCT_VERSION|^ORACLE_SUPPORT_PRODUCT_VERSION" /etc/os-release &> /dev/null
+         then
+            # if RedHat
+            RHVERSION=$(awk -F= ' /_SUPPORT_PRODUCT_VERSION/ { gsub("\"", ""); print $2 } ' /etc/os-release | sed 's/[^0-9].*//;2,$d' )
+            $DNF -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RHVERSION}.noarch.rpm"
+         else
+            $DNF -y install epel-release || needCentOSFix
+         fi
+      else
+         if grep "^Mageia" /etc/redhat-release &> /dev/null
+         then
+            $DNF -y install NetworkManager
+         fi
       fi
-
-      zypper ref
-
-      zypper -n install ca-certificates jq wget dpkg xhost dnsmasq
-
-      which dpkg &>/dev/null || die "could not install software"
-
-      # will fail in SLES
-      zypper -n install debootstrap
-
-      zypper clean
-
-      # SLES does have dpkg, but not debootstrap in repositories
-      # debootstrap is just a set of scripts and files
-      # install deb file from debian pool
-      InstallDebootstrapDeb
-
-      [[ ${PACKAGEKIT} -eq true ]] && systemctl start --quiet packagekit
    fi
+
+   $DNF -y install ca-certificates jq wget debootstrap
+
+   # not installed in all variants as a debootstrap dependency
+   if ! $DNF -y install dpkg
+   then
+      # works for OpenMandriva Lx 4.3 and 5
+      grep "OpenMandriva Lx" /etc/redhat-release &> /dev/null && $DNF -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
+   fi
+
+
+   # xhost should be present
+   if [[ ! -f "/usr/bin/xhost" ]]
+   then
+      $DNF -y install xorg-x11-server-utils
+      $DNF -y install xhost
+   fi
+   $DNF clean all
+}
+
+
+# installs Arch family
+installArch()
+{
+   echo "Arch family setup" >&2
+
+   # Arch is a rolling distro, should we have an update here?
+
+   # install packages
+   # SalientOS needed archlinux-keyring before installing
+   # ArchBang ended up needing pacman-key --init ; packman-key --populate
+
+   if ! pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
+   then
+      packman-key --populate
+      pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
+   fi
+   pacman --needed -Syu firefox
+
+   # only will work if debootstrap *too old*
+   #InstallDebootstrapDeb
+}
+
+
+# installs SUSE family
+installSUSE()
+{
+   local PACKAGEKIT
+
+   echo "SUSE family setup" >&2
+
+
+   # packagekit does not let zypper run
+   if systemctl is-active --quiet packagekit
+   then
+      PACKAGEKIT=true
+      systemctl stop --quiet packagekit
+   fi
+
+   zypper ref
+
+   zypper -n install ca-certificates jq wget dpkg xhost dnsmasq
+
+   which dpkg &>/dev/null || die "could not install software"
+
+   # will fail in SLES
+   zypper -n install debootstrap
+
+   zypper clean
+
+   # SLES does have dpkg, but not debootstrap in repositories
+   # debootstrap is just a set of scripts and files
+   # install deb file from debian pool
+   InstallDebootstrapDeb
+
+   [[ ${PACKAGEKIT} -eq true ]] && systemctl start --quiet packagekit
+
+}
+
+
+# installs Void Linux
+installVoid()
+{
+   echo "Void family setup" >&2
+
+   # Void is a rolling distro
+   # update
+   xbps-install -yu xbps
+   # this took a long time in AgarimOS
+   xbps-install -ySu
+
+   # needed packages
+   # some of them already installed
+   xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
+   xbps-install -yS ca-certificates xhost jq wget debootstrap dpkg openresolv
+}
+
+
+# installs Gentoo
+installGentoo()
+{
+   echo "Gentoo family setup" >&2
+
+   # maintance because rolling release
+   # and problems with international repositories connectivity
+   #emaint --auto sync
+   #emerge-webrsync
+
+   # full upgrade
+
+   emaint --allrepos sync || die "did not sync all repos"
+
+   emerge --ask --verbose --update --deep --changed-use --with-bdeps=y  --keep-going=y --backtrack=100  @world || die "did not manage to update the system. Fix this before calling ${SCRIPTNAME} again. Your image might be too old, or you might to have to use  emerge --deselect <name_of_package> plus emerge -a --depclean"
+
+   emerge --ask --oneshot --verbose sys-apps/portage
+
+   # install/update packages
+   emerge -atv ca-certificates xhost app-misc/jq debootstrap dpkg
+
+   emerge --ask --verbose --depclean
+
+   # Redcore Linux has the wrong URL, cant compile debootrap as of June 2022
+   #InstallDebootstrapDeb
+}
+
+
+# installs package requirements
+installPackages()
+{
+
+   # if Debian family based
+   [[ "${DEB}" -eq 1 ]] && installDebian
+
+   # if RedHat family based
+   [[ "${RH}"   -eq 1 ]] && installRedHat
+
+   # if Arch Linux
+   [[ "${ARCH}" -eq 1 ]] && installArch
+
+   # if SUSE based
+   [[ "${SUSE}" -eq 1 ]] && installSUSE
 
    # if Void based
-   if [[ "${VOID}" -eq 1 ]]
-   then
-      echo "Void family setup" >&2
-
-      # Void is a rolling distro
-      # update
-      xbps-install -yu xbps
-      # this took a long time in AgarimOS
-      xbps-install -ySu
-
-      # needed packages
-      # some of them already installed
-      xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
-      xbps-install -yS ca-certificates xhost jq wget debootstrap dpkg openresolv
-   fi
+   [[ "${VOID}" -eq 1 ]] && installVoid
 
    # if Gentoo based
-   if [[ "${GENTOO}" -eq 1 ]]
-   then
-      echo "Gentoo family setup" >&2
-
-      # maintance because rolling release
-      # and problems with international repositories connectivity
-      #emaint --auto sync
-      #emerge-webrsync
-      
-      # full upgrade
-
-      emaint --allrepos sync || die "did not sync all repos"
-
-      emerge --ask --verbose --update --deep --changed-use --with-bdeps=y  --keep-going=y --backtrack=100  @world || die "did not manage to update the system. Fix this before calling ${SCRIPTNAME} again. Your image might be too old, or you might to have to use  emerge --deselect <name_of_package> plus emerge -a --depclean"
-
-      emerge --ask --oneshot --verbose sys-apps/portage
-
-      # install/update packages
-      emerge -atv ca-certificates xhost app-misc/jq debootstrap dpkg
-
-      emerge --ask --verbose --depclean
-
-      # Redcore Linux has the wrong URL, cant compile debootrap as of June 2022
-      #InstallDebootstrapDeb
-   fi
+   [[ "${GENTOO}" -eq 1 ]] && installGentoo
 
    # if Slackware
-   if [[ "${SLACKWARE}" -eq 1 ]]
-   then
-      echo "Slackware family setup" >&2
-
-      GetCompileSlack
-   fi
+   [[ "${SLACKWARE}" -eq 1 ]] && GetCompileSlack
 
    # only will work if debootstrap *too old*
    InstallDebootstrapDeb
