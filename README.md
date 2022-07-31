@@ -462,6 +462,8 @@ Slackware 15.1-current
 
 Salix OS xfce 15.0
 
+Slackel Linux Openbox 7.3 (no /etc/resolv.conf from VPN)
+
 Relevant CheckPoint Linux support pages
 =======================================
 
