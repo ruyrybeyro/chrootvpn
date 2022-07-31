@@ -100,11 +100,11 @@ vpn.sh [-c DIR|--chroot=DIR] shell|upgrade
 
 vpn.sh shell
 
-|Options      |Function                                               |
-|-------------|-------------------------------------------------------|
-|-d --debug   |bash debug mode on                                     |
-|shell        |bash shell inside chroot                               |
-|upgrade      |OS upgrade inside chroot                               |
+|Options|  |Function                |
+|-------|--|------------------------|
+|--debug|-d|bash debug mode on      |
+|shell  |  |bash shell inside chroot|
+|upgrade|  |OS upgrade inside chroot|
 
 This script can be downloaded running:
 
