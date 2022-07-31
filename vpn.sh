@@ -824,34 +824,34 @@ killCShell()
 #
 fixLinks()
 {
-      # if destination resolv.conf file is there
-      if [[ -f "$1" ]]
-      then
-         # fix link inside chroot
-         ln -sf "$1" "${CHROOT}/etc/resolv.conf"
+   # if destination resolv.conf file is there
+   if [[ -f "$1" ]]
+   then
+      # fix link inside chroot
+      ln -sf "$1" "${CHROOT}/etc/resolv.conf"
 
-         # if link in host deviates from needed
-         if ! readlink /etc/resolv.conf | grep "$1" &> /dev/null
-         then
-            # fix it
-            ln -sf "$1" /etc/resolv.conf
-         fi
-      else
-         # if link needed not present but host /etc/resolv.conf points to /run/...
-         if [[ "$( realpath "/etc/resolv.conf" )" == *"run"* ]]
-         then
-            echo -n "Using instead for chroot resolv.conf"  >&2
-            realpath "/etc/resolv.conf" 
-            ln -sf "$( realpath "/etc/resolv.conf" )" "${CHROOT}/etc/resolv.conf"
-         else
-            # if host /etc/resolv.conf is a single file
-            echo "if $1 does not exist, we cant use it to fix/share resolv.conf file between host and chroot" >&2
-            echo "setting up chroot DNS as a copy of host" >&2
-            echo "resolv.conf DNS servers given by VPN wont be mirrored from chroot to the host /etc/resolv.conf" >&2
-            rm -f "${CHROOT}/etc/resolv.conf"
-            cat /etc/resolv.conf > "${CHROOT}/etc/resolv.conf"
-         fi
+      # if link in host deviates from needed
+      if ! readlink /etc/resolv.conf | grep "$1" &> /dev/null
+      then
+         # fix it
+         ln -sf "$1" /etc/resolv.conf
       fi
+   else
+      # if link needed not present but host /etc/resolv.conf points to /run/...
+      if [[ "$( realpath "/etc/resolv.conf" )" == *"run"* ]]
+      then
+         echo -n "Using instead for chroot resolv.conf"  >&2
+         realpath "/etc/resolv.conf" 
+         ln -sf "$( realpath "/etc/resolv.conf" )" "${CHROOT}/etc/resolv.conf"
+      else
+         # if host /etc/resolv.conf is a single file
+         echo "if $1 does not exist, we cant use it to fix/share resolv.conf file between host and chroot" >&2
+         echo "setting up chroot DNS as a copy of host" >&2
+         echo "resolv.conf DNS servers given by VPN wont be mirrored from chroot to the host /etc/resolv.conf" >&2
+         rm -f "${CHROOT}/etc/resolv.conf"
+         cat /etc/resolv.conf > "${CHROOT}/etc/resolv.conf"
+      fi
+   fi
 }
 
 
