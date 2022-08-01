@@ -51,9 +51,9 @@ Otherwise, run it as:
 
 - visit web VPN page aka Mobile Access Portal for logging in 
 
-CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights binary SNX VPN client needs a 32-bits environment.
+CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights. The binary SNX VPN client needs a 32-bits environment.
 
-Recommended having Firefox already installed, for deploying via this script a firefox policy for the self-signed Mobile Access Portal Agent X.509 certificate.
+Recommended having Firefox already installed, for deploying via this script a firefox policy for automagically accepting the self-signed Mobile Access Portal Agent X.509 certificate.
 
 Usage:
 
