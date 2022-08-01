@@ -47,7 +47,7 @@ Otherwise, run it as:
 
 	https://localhost:14186/id 
 
-- visit VPN page for logging in 
+- visit web VPN page aka Mobile Access Portal for logging in 
 
 CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights binary SNX VPN client needs a 32-bits environment.
 
