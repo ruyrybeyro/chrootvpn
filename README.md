@@ -12,7 +12,7 @@ https://github.com/ruyrybeyro/chrootvpn
 
 Rui Ribeiro 2022, Tiago Teles - Contributions for Arch Linux
 
-This script downloads Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the firewall/VPN we intend to connect, and installs them in a chrooted environment.
+This script downloads the Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installations scripts from the firewall/VPN we intend to connect, and installs them in a chrooted environment.
 
 Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated needed packages for SNX ; the chroot is built to counter some of those behaviours and provide a more secure setup.
 
