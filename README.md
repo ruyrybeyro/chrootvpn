@@ -330,6 +330,8 @@ Netrunner 21.01 (“XOXO”)
 
 Q4OS 4.8 Gemini
 
+Q4OS 4.10 Gemini
+
 Kanotix64 Silverfire 
 
 cutefishOS
