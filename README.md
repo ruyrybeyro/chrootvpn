@@ -304,7 +304,9 @@ MakuluLinux Shift 2022-06.10
 
 Condres OS 1.0
 
-Emmabuntüs DE 4
+Emmabuntüs DE 4 1.01
+
+Emmabuntüs DE 4 1.02
 
 Neptune 7 ("Faye")
 
