@@ -1139,7 +1139,7 @@ argCommands()
    case "$1" in
 
       start)        doStart ;; 
-      restart)      doStart ;;
+      restart)      doStart ;;  # doStart doubles as restart
       stop)         doStop ;;
       disconnect)   doDisconnect ;;
       fixdns)       fixDNS2 ;;
