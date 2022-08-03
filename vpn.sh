@@ -1427,6 +1427,8 @@ installRedHat()
    # xhost should be present
    if [[ ! -f "/usr/bin/xhost" ]]
    then
+      # alternative packages for having xhost.
+      # one of them will give an error, ignore
       $DNF -y install xorg-x11-server-utils
       $DNF -y install xhost
    fi
