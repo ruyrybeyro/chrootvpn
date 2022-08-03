@@ -1414,7 +1414,7 @@ installRedHat()
       fi
    fi
 
-   $DNF -y install ca-certificates jq wget dpkg debootstrap
+   $DNF -y install ca-certificates jq wget debootstrap
 
    # not installed in all variants as a debootstrap dependency
    if ! $DNF -y install dpkg
