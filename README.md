@@ -30,6 +30,8 @@ As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EO
 INSTRUCTIONS
 ============
 
+Download rpm or deb file from last release or vpn.sh.
+
 Please fill up VPN and VPNIP before using this script.
 SPLIT might or not have to be filled, depending on your needs and Checkpoint VPN routes.
 
