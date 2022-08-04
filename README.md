@@ -375,6 +375,8 @@ Fedora 23
 
 Fedora 36
 
+Fedora 37
+
 Network Security Toolkit (NST) 36
 
 CentOS 8
