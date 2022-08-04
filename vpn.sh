@@ -688,9 +688,9 @@ showStatus()
    doChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
    
    echo -n "SNX - available for download "
-   if ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
+   if ! curl -k --output /dev/null --silent --fail "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
    then
-      wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
+      curl -k --output /dev/null --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
 
    # Mobile Access Portal Agent version installed
@@ -703,9 +703,9 @@ showStatus()
    fi
 
    echo -n "CShell - available for download "
-   if ! wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
+   if ! curl -k --output /dev/null --silent --fail "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
    then
-      wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null || echo "Could not get CShell download version" >&2
+      curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null || echo "Could not get CShell download version" >&2
    fi
 
    # Mobile Access Portal Agent X.509 self-signed CA certificate
@@ -754,7 +754,7 @@ showStatus()
       # OS/ca-certificates package needs to be recent
       # or otherwise, the OS CA root certificates chain file needs to be recent
       echo
-      if wget -O /dev/null -o /dev/null --no-proxy "${URL_VPN_TEST}"
+      if curl --output /dev/null --silent --fail --noproxy '*' "${URL_VPN_TEST}"
       then
          # if it works we are talking with the actual site
          echo "split tunnel VPN"
@@ -781,7 +781,7 @@ showStatus()
    echo
     
    # get latest release version of this script
-   VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
+   VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
 
    echo "current ${SCRIPTNAME} version     : ${VERSION}"
 
@@ -1047,7 +1047,7 @@ selfUpdate()
     local VER
 
     # get this latest script release version
-    VER=$(wget -q -O- --no-check-certificate "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
+    VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
     echo "current version     : ${VERSION}"
 
     [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] && die "did not find any github release. Something went wrong"
@@ -1060,7 +1060,7 @@ selfUpdate()
         vpnsh="$(mktemp)" || die "failed creating mktemp file"
 
         # download github more recent version
-        if wget -O "${vpnsh}" -o /dev/null "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
+        if curl -k --output "${vpnsh}" --silent --fail "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
 
            # if script not run for /usr/local/bin, also updates it
@@ -1149,7 +1149,7 @@ argCommands()
       uninstall)    doUninstall ;;
       upgrade)      Upgrade ;;
       selfupdate)   selfUpdate ;;
-      selfdownload) wget -O /tmp/vpn.sh "https://raw.githubusercontent.com/${GITHUB_REPO}/main/vpn.sh" ;;
+      selfdownload) curl -k --output "/tmp/vpn.sh" --silent --fail "https://raw.githubusercontent.com/${GITHUB_REPO}/main/vpn.sh" ;;
       *)            do_help ;;         # default 
 
    esac
@@ -1267,7 +1267,7 @@ GetCompileSlack()
      
       # gets SlackBuild package 
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
-      wget "${BUILD}" || die "could not download ${BUILD}"
+      curl -k --output "${BUILD}" --silent --fail || die "could not download ${BUILD}"
 
       # extract it and enter directory
       tar -zxvf ${NAME}.tar.gz
@@ -1293,14 +1293,14 @@ GetCompileSlack()
       else
          # gets info file frrom SlackBuild package
          INFO="${SLACKBUILDREPO}${pkg}/${NAME}.info"
-         wget "${INFO}" || die "could not download ${INFO}"
+         curl -k --output "${INFO}" --silent --fail || die "could not download ${INFO}"
 
          # gets URL from downloading corresponding package source code
          DOWNLOAD=$(awk -F= ' /DOWNLOAD/ { gsub("\"", ""); print $2 } ' "${NAME}.info")
       fi
 
       # Download package source code
-      wget "${DOWNLOAD}" || die "could not download ${DOWNLOAD}"
+      curl -k --output "${DOWNLOAD}" --silent --fail || die "could not download ${DOWNLOAD}"
 
       # executes SlackBuild script for patching, compiling, 
       # and generating SBo.tgz instalation package
@@ -1335,7 +1335,7 @@ InstallDebootstrapDeb()
 {
    if [[ "$1" == "force" ]] || ! which debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
    then
-      wget "${DEB_BOOTSTRAP}" || die "could not download ${DEB_BOOTSTRAP}"
+      curl -k --output "${DEB_BOOTSTRAP}" --silent --fail || die "could not download ${DEB_BOOTSTRAP}"
       dpkg -i --force-all "${DEB_FILE}"
       rm -f "${DEB_FILE}"
    fi
@@ -1353,7 +1353,7 @@ installDebian()
    #apt -y upgrade
 
    # installs needed packages
-   apt -y install ca-certificates x11-xserver-utils jq wget dpkg debootstrap
+   apt -y install ca-certificates x11-xserver-utils jq curl dpkg debootstrap
    # we want to make sure resolconf is the last one
    [[ ${DEEPIN} -eq 0 ]] && apt -y install resolvconf
 
@@ -1414,7 +1414,7 @@ installRedHat()
       fi
    fi
 
-   $DNF -y install ca-certificates jq wget debootstrap
+   $DNF -y install ca-certificates jq curl debootstrap
 
    # not installed in all variants as a debootstrap dependency
    if ! $DNF -y install dpkg
@@ -1447,10 +1447,10 @@ installArch()
    # SalientOS needed archlinux-keyring before installing
    # ArchBang ended up needing pacman-key --init ; packman-key --populate
 
-   if ! pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
+   if ! pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap
    then
       packman-key --populate
-      pacman --needed -Syu ca-certificates xorg-xhost jq wget dpkg debootstrap
+      pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap
    fi
    pacman --needed -Syu firefox
 
@@ -1476,7 +1476,7 @@ installSUSE()
 
    zypper ref
 
-   zypper -n install ca-certificates jq wget dpkg xhost dnsmasq
+   zypper -n install ca-certificates jq curl dpkg xhost dnsmasq
 
    which dpkg &>/dev/null || die "could not install software"
 
@@ -1509,7 +1509,7 @@ installVoid()
    # needed packages
    # some of them already installed
    xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
-   xbps-install -yS ca-certificates xhost jq wget debootstrap dpkg openresolv
+   xbps-install -yS ca-certificates xhost jq curl debootstrap dpkg openresolv
 }
 
 
@@ -1782,19 +1782,19 @@ buildFS()
    rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
    # download SNX installation scripts from CheckPoint machine
-   if wget --no-check-certificate "https://${VPN}/SNX/INSTALL/snx_install.sh"
+   if curl -k -O --fail --silent "https://${VPN}/SNX/INSTALL/snx_install.sh"
    then 
       # download CShell installation scripts from CheckPoint machine
-      wget --no-check-certificate "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
+      curl -O -k --fail --silent "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
-      wget -q -O- --no-check-certificate "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
+      curl -k --fail --silent "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt 
    else
       # download SNX installation scripts from CheckPoint machine
-      wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh"
+      curl -k -O --silent --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh" 
       # download CShell installation scripts from CheckPoint machine
-      wget --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh"
+      curl -k -O --silent --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
-      wget -q -O- --no-check-certificate "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
+      curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    fi
 
    mv cshell_install.sh "${CHROOT}/root"
