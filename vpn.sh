@@ -709,6 +709,7 @@ showStatus()
    fi
 
    # Mobile Access Portal Agent X.509 self-signed CA certificate
+   # localhost certificate
    if [[ -f "${CHROOT}/usr/bin/cshell/cert/CShell_Certificate.crt" ]]
    then
       echo
@@ -789,6 +790,7 @@ showStatus()
    [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] || echo "GitHub  ${SCRIPTNAME} version     : ${VER}"
 
    #  Mobile Access Portal remote Checkpoint X.509 public certificate
+   # certificate extracted via openssl s_client talking with VPN vhost
    echo
    echo "${VPN} X.509 certificate" 
    echo | \
