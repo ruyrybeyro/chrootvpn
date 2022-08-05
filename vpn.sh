@@ -688,9 +688,9 @@ showStatus()
    doChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
    
    echo -n "SNX - available for download "
-   if ! curl -k --output /dev/null --silent --fail "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
+   if ! curl -k --silent --fail "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
    then
-      curl -k --output /dev/null --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
+      curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
 
    # Mobile Access Portal Agent version installed
@@ -703,7 +703,7 @@ showStatus()
    fi
 
    echo -n "CShell - available for download "
-   if ! curl -k --output /dev/null --silent --fail "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
+   if ! curl -k --silent --fail "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
    then
       curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null || echo "Could not get CShell download version" >&2
    fi
@@ -1335,7 +1335,7 @@ InstallDebootstrapDeb()
 {
    if [[ "$1" == "force" ]] || ! which debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
    then
-      curl -k --output "${DEB_BOOTSTRAP}" --silent --fail || die "could not download ${DEB_BOOTSTRAP}"
+      curl -k --output "${DEB_FILE}" "${DEB_BOOTSTRAP}" --silent --fail || die "could not download ${DEB_BOOTSTRAP}"
       dpkg -i --force-all "${DEB_FILE}"
       rm -f "${DEB_FILE}"
    fi
