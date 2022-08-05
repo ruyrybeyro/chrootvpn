@@ -128,6 +128,8 @@ XDGAUTO="/etc/xdg/autostart/cshell.desktop"
 
 # script PATH upon successful setup
 INSTALLSCRIPT="/usr/local/bin/${SCRIPTNAME}"
+# Debian/RH script PATH
+PKGSCRIPT="/usr/bin/vpn.sh"
 
 # cshell user
 CSHELL_USER="cshell"
@@ -1071,6 +1073,9 @@ selfUpdate()
 
            # updates the one in /usr/local/bin
            cp -f "${vpnsh}" "${INSTALLSCRIPT}"
+
+           # update the one installed by deb/rpm package
+           [[ -f "${PKGSCRIPT}" ]] && cp -f "${vpnsh}" "${PKGSCRIPT}"
 
            chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
            
