@@ -791,6 +791,7 @@ showStatus()
    #  Mobile Access Portal remote Checkpoint X.509 public certificate
    echo
    echo "${VPN} X.509 certificate" 
+   echo | \
    openssl s_client -servername "${VPN}" -connect "${VPN}":443 2>/dev/null | \
    openssl x509 -text | awk '/^-----BEGIN CERTIFICATE/ {exit} {print}'
 }
