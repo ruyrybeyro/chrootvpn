@@ -447,6 +447,8 @@ AaricKDE
 
 BigLinux 2022-07-15
 
+FreedomOS
+
 SUSE
 ====
 
