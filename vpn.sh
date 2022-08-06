@@ -239,6 +239,13 @@ vpnlookup()
 }
 
 
+# tests if user in a group
+ingroup()
+{ 
+   [[ $(id -Gn "${2-}") == *" $1 "*  ]];
+}
+
+
 # optional arguments handling
 needs_arg() 
 { 
@@ -2025,19 +2032,31 @@ XDGAutoRun()
 
       echo "For it to run, modify your /etc/sudoers for not asking for password" >&2
       echo "As in:" >&2
-      echo >&2
-      echo "%sudo	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
-      echo "#or: " >&2
-      echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
 
       # if sudo, SUDO_USER identifies the non-privileged user 
       if [[ -n "${SUDO_USER}" ]]
       then
+         if ingroup sudo "${SUDO_USER}"
+         then
+            echo >&2
+            echo "%sudo	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
+            echo "#or: " >&2
+            echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
+         fi
+         if ingroup wheel "${SUDO_USER}"
+         then
+            echo >&2
+            echo "%wheel	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
+            echo "#or: " >&2
+            echo "%wheel	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
+         fi
+
          echo "#or: " >&2
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
          echo "#or: " >&2
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
       fi
+
       echo >&2
 
       # adds entry for it to be executed
