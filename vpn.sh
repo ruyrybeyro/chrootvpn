@@ -2042,6 +2042,7 @@ XDGAutoRun()
       # if sudo, SUDO_USER identifies the non-privileged user 
       if [[ -n "${SUDO_USER}" ]]
       then
+         # if SUDO_USER belongs to the sudo group
          if ingroup sudo "${SUDO_USER}"
          then
             echo >&2
@@ -2049,6 +2050,7 @@ XDGAutoRun()
             echo "#or: " >&2
             echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
          fi
+         # if SUDO_USER belongs to the wheel group
          if ingroup wheel "${SUDO_USER}"
          then
             echo >&2
