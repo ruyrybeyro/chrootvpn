@@ -1407,7 +1407,7 @@ installRedHat()
 
    # Mandrake successors/older style RedHat does not have dnf
    ! which dnf &>/dev/null && which yum &>/dev/null && DNF="yum"
-   # Mandriva variants use apt
+   # Mandriva variants may use apt
    ! which dnf &>/dev/null && ! which yum &>/dev/null && which apt &>/dev/null && DNF="apt"
 
    # attempts to a poor's man detection of not needing to setup EPEL
