@@ -354,6 +354,8 @@ getDistro()
    SLACKWARE=0
    VOID=0
    DEEPIN=0
+   # installing dpkg damages Solus, commented out
+   #SOLUS=0
 
    # Debian 
    if [[ -f "/etc/debian_version" ]]
@@ -392,8 +394,12 @@ getDistro()
    # Void
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == "void" ]] && VOID=1 # Void Linux
 
+   # Solus
+   #[[ -f "/etc/solus-release" ]]   && SOLUS=1 # is Solus family
+
    # if none of distribution families above, abort
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, and Void family distributions supported"
+   #[[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${SOLUS}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, and Void family distributions supported"
 }
 
 
@@ -896,6 +902,7 @@ fixDNS()
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${VOID}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${DEEPIN}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+   #[[ "${SOLUS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 }
 
 
@@ -1534,6 +1541,17 @@ installVoid()
 }
 
 
+# installs Solus Linux
+#installSolus()
+#{
+#   echo "Solus setup" >&2
+#
+#
+#   # needed packages
+#   eopkg install ca-certificates xhost jq curl debootstrap dpkg
+#}
+
+
 # installs Gentoo
 installGentoo()
 {
@@ -1586,6 +1604,9 @@ installPackages()
 
    # if Slackware
    [[ "${SLACKWARE}" -eq 1 ]] && GetCompileSlack
+
+   # if Solus based
+   #[[ "${SOLUS}"    -eq 1 ]] && installSolus
 
    # only will work if debootstrap *too old*
    InstallDebootstrapDeb
