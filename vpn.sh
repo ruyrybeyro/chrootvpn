@@ -240,6 +240,12 @@ vpnlookup()
 
 
 # tests if user in a group
+#
+# $1 = group
+# $2 = user
+#
+# $2 is optional
+#
 ingroup()
 { 
    [[ $(id -Gn "${2-}") == *" $1 "*  ]];
