@@ -240,6 +240,12 @@ vpnlookup()
 
 
 # tests if user in a group
+#
+# $1 = group
+# $2 = user
+#
+# $2 is optional
+#
 ingroup()
 { 
    [[ $(id -Gn "${2-}") == *" $1 "*  ]];
@@ -1401,7 +1407,7 @@ installRedHat()
 
    # Mandrake successors/older style RedHat does not have dnf
    ! which dnf &>/dev/null && which yum &>/dev/null && DNF="yum"
-   # Mandriva variants use apt
+   # Mandriva variants may use apt
    ! which dnf &>/dev/null && ! which yum &>/dev/null && which apt &>/dev/null && DNF="apt"
 
    # attempts to a poor's man detection of not needing to setup EPEL
@@ -2036,6 +2042,7 @@ XDGAutoRun()
       # if sudo, SUDO_USER identifies the non-privileged user 
       if [[ -n "${SUDO_USER}" ]]
       then
+         # if SUDO_USER belongs to the sudo group
          if ingroup sudo "${SUDO_USER}"
          then
             echo >&2
@@ -2043,6 +2050,7 @@ XDGAutoRun()
             echo "#or: " >&2
             echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
          fi
+         # if SUDO_USER belongs to the wheel group
          if ingroup wheel "${SUDO_USER}"
          then
             echo >&2
