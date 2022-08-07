@@ -577,15 +577,19 @@ FirefoxPolicy()
       [[ -d "/etc/firefox" ]] && mkdir /etc/firefox/policies 2> /dev/null
 
       # BOSS Linux
-      [[ -d "/opt/firefox" ]] && mkdir /opt/firefox/distribution
+      [[ -d "/opt/firefox" ]] && mkdir /opt/firefox/distribution 2> /dev/null
 
       # PakOS
-      [[ -d "/opt/moz/firefox" ]] && mkdir /opt/moz/firefox/distribution
+      [[ -d "/opt/moz/firefox" ]] && mkdir /opt/moz/firefox/distribution 2> /dev/null
+
+      # NavyLinux
+      [[ -d "/usr/lib64/mozilla" ]] && mkdir "/usr/lib64/mozilla/distribution" 2> /dev/null
+
    fi
 
    # if Firefox installed
    # cycle possible firefox global directories
-   for DIR in "/etc/firefox/policies" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution /opt/moz/*firefox*/distribution -type d 2> /dev/null)
+   for DIR in "/etc/firefox/policies" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution /opt/moz/*firefox*/distribution /usr/lib64/*mozilla* -type d 2> /dev/null)
    do
       # -d ${DIR} double check, mostly redundant check
       if  [[ "$1" == "install" ]] && [[ -d "${DIR}" ]]
