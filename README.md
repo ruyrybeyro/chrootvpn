@@ -362,6 +362,10 @@ Refracta GNU/Linux 11.0 Chimaera
 
 RoboLinux R12.07
 
+Zentyal Server 7.0
+
+PakOS 2021-05 (Debian 10)
+
 RedHat based
 ============
 
