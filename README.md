@@ -429,6 +429,8 @@ Arco Linux 22.06.07
 
 Garuda Linux 220614
 
+Garuda Linux 220717
+
 Mabox Linux 22.06
 
 BluestarLinux 5.1
