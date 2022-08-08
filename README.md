@@ -407,6 +407,8 @@ openEuler 22.03 LTS
 
 Navy Linux Enterprise 8.6 r1
 
+Miracle Linux 8.4 (Peony)
+
 Mandrake/Mandriva/RedHat based
 ==============
 
