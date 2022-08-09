@@ -1096,16 +1096,14 @@ selfUpdate()
         then
 
            # if script not run for /usr/local/bin, also updates it
-           [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]] && cp -f "${vpnsh}" "${SCRIPT}"
+           [[ "${INSTALLSCRIPT}" != "${SCRIPT}"  ]] && cp -f "${vpnsh}" "${SCRIPT}" && chmod a+rx "${SCRIPT}"
 
            # updates the one in /usr/local/bin
-           cp -f "${vpnsh}" "${INSTALLSCRIPT}"
+           [[ -f "${INSTALLSCRIPT}" ]] && cp -f "${vpnsh}" "${INSTALLSCRIPT}" && chmod a+rx "${INSTALLSCRIPT}"
 
            # update the one installed by deb/rpm package
-           [[ -f "${PKGSCRIPT}" ]] && cp -f "${vpnsh}" "${PKGSCRIPT}"
+           [[ -f "${PKGSCRIPT}" ]] && cp -f "${vpnsh}" "${PKGSCRIPT}" && chmod a+rx "${PKGSCRIPT}"
 
-           chmod a+rx "${INSTALLSCRIPT}" "${SCRIPT}"
-           
            # removes temporary file
            rm -f "${vpnsh}"
 
