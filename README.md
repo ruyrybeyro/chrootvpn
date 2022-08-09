@@ -274,6 +274,8 @@ Lite 6.0 Fluorite
 
 Kali 2022.2
 
+Kali 2022.3
+
 Parrot 5.0.1 Electro Ara
 
 Elementary OS 6.1 Jolnir
