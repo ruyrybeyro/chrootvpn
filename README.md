@@ -366,6 +366,10 @@ Zentyal Server 7.0
 
 PakOS 2021-05 (Debian 10)
 
+Zevenet CE v5.12.2
+
+Enso OS 0.4
+
 RedHat based
 ============
 
