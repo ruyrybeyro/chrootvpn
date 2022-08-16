@@ -433,6 +433,8 @@ Manjaro 21.2.6.1
 
 EndeavourOS 2022.06.32
 
+EndeavourOS Artemis neo 22.7
+
 Arco Linux 22.06.07
 
 Garuda Linux 220614
