@@ -366,11 +366,15 @@ getDistro()
       # systemd-detect-virt -r an alternative
       ischroot && echo "Inside a chroot?" >&2
 
-      # Debian / DEEPIN handled slightly differently
-      [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1
    else
       [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "debian" ]] && DEB=1 # OB2D
    fi
+
+
+   # Debian / DEEPIN handled slightly differently
+   # Deeping
+   # forces DEBIAN=1 because as of Deepin 23, /etc/debian_version no longer there
+   [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1 && DEBIAN=1
 
    # RedHat
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family
@@ -1722,18 +1726,18 @@ fixSUSEDNS()
 
 
 # fix DNS - DEEPIN
-fixDEEPINDNS()
-{
-   if [[ "${DEEPIN}" -eq 1 ]]
-   then
-      systemctl enable systemd-resolved.service
-
-      # replaces /etc/resolv.conf for a resolved link
-      cd /etc || die "was not able to cd /etc"
-
-      ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
-   fi
-}
+#fixDEEPINDNS()
+#{
+#   if [[ "${DEEPIN}" -eq 1 ]]
+#   then
+#      systemctl enable systemd-resolved.service
+#
+#      # replaces /etc/resolv.conf for a resolved link
+#      cd /etc || die "was not able to cd /etc"
+#
+#      ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
+#   fi
+#}
 
 
 # "bug/feature": check DNS health
@@ -2195,7 +2199,7 @@ InstallChroot()
    fixRHDNS
 #   fixARCHDNS
    fixSUSEDNS
-   fixDEEPINDNS
+#   fixDEEPINDNS
    checkDNS
    createChroot
    createCshellUser

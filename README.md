@@ -282,6 +282,8 @@ Elementary OS 6.1 Jolnir
 
 Deepin 20.6
 
+Deepin 23
+
 ExTix Deepin 22.6/20.6
 
 KDE neon 5.25
@@ -432,6 +434,8 @@ Arch Linux 2022.05.01
 Manjaro 21.2.6.1
 
 EndeavourOS 2022.06.32
+
+EndeavourOS Artemis neo 22.7
 
 Arco Linux 22.06.07
 
