@@ -282,6 +282,8 @@ Elementary OS 6.1 Jolnir
 
 Deepin 20.6
 
+Deepin 23
+
 ExTix Deepin 22.6/20.6
 
 KDE neon 5.25
