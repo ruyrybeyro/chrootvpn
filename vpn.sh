@@ -1157,7 +1157,7 @@ PreCheck2()
             then
                die  "./${SCRIPTNAME} -i"
             else
-               die  "./${SCRIPTNAME} -i --vpn FQDN"
+               die  "./${SCRIPTNAME} -i --vpn=FQDN"
             fi
          fi
       fi
