@@ -1304,10 +1304,10 @@ GetCompileSlack()
      
       # gets SlackBuild package 
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
-      curl -k --output "${BUILD}" --silent --fail || die "could not download ${BUILD}"
+      curl -k -O "${BUILD}" --silent --fail || die "could not download ${BUILD}"
 
       # extract it and enter directory
-      tar -zxvf ${NAME}.tar.gz
+      tar -zxvf "${NAME}.tar.gz"
       cd "$NAME" || die "cannot cd ${NAME}"
 
       # if debootstrap package
@@ -1330,14 +1330,14 @@ GetCompileSlack()
       else
          # gets info file frrom SlackBuild package
          INFO="${SLACKBUILDREPO}${pkg}/${NAME}.info"
-         curl -k --output "${INFO}" --silent --fail || die "could not download ${INFO}"
+         curl -k -O "${INFO}" --silent --fail || die "could not download ${INFO}"
 
          # gets URL from downloading corresponding package source code
          DOWNLOAD=$(awk -F= ' /DOWNLOAD/ { gsub("\"", ""); print $2 } ' "${NAME}.info")
       fi
 
       # Download package source code
-      curl -k --output "${DOWNLOAD}" --silent --fail || die "could not download ${DOWNLOAD}"
+      curl -k -O "${DOWNLOAD}" --silent --fail || die "could not download ${DOWNLOAD}"
 
       # executes SlackBuild script for patching, compiling, 
       # and generating SBo.tgz instalation package
