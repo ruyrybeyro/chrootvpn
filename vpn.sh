@@ -1779,6 +1779,13 @@ createChroot()
    chmod 755 "${CHROOT}"
 
    # creates and populate minimal 32-bit Debian chroot
+   #
+   # --no-check-gpg for issues with old/expired Debian keys
+   #
+   # another possible solution is
+   # wget https://ftp-master.debian.org/keys/release-11.asc -qO- | gpg --import --no-default-keyring --keyring ./debian-release-11.gpg
+   # debootstrap --keyring=./debian-release-11.gpg 
+
    if ! debootstrap --no-check-gpg --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
