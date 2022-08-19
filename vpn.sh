@@ -423,7 +423,7 @@ PreCheck()
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
       # and not handling uninstall, abort
-      [[ "$1" == "uninstall" ]] || die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
+      [[ "$1" != "uninstall" ]] && [[ "$1" != "selfupdate" ]] && die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
 
    # if not root/sudo
