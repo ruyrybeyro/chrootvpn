@@ -141,11 +141,13 @@ KNOWN FEATURES
 
 . if having DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
 
-. If after login, the web Mobile Portal is asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do ./vpn.sh start *and* visit https://localhost:14186/id
+. If after login, the web Mobile Portal is asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do vpn.sh start *and* visit https://localhost:14186/id
 
 . Linux rolling releases distributions have to be fully up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
 
-. At least Arch after kernel(?) updates seems to ocasionally need a reboot for the VPN to work.
+. At least Arch after kernel(?) updates seems to ocasionally need a reboot for the VPN to work;
+
+. If having the error "Check Point Deployment Shell internal error" run vpn.sh uninstall *and* install again with vpn.sh -i
 
 SCREENS
 =======
