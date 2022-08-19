@@ -1779,7 +1779,7 @@ createChroot()
    chmod 755 "${CHROOT}"
 
    # creates and populate minimal 32-bit Debian chroot
-   if ! debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
+   if ! debootstrap --no-check-gpg --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
       die "run\nsudo rm -rf ${CHROOT}\n and do it again" 
