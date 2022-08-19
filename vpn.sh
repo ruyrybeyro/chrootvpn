@@ -35,7 +35,7 @@
 # BEWARE of cut&paste or code beautifiers, it will break code.
 
 # script/deploy version, make the same as deploy
-VERSION="v1.91"
+VERSION="v1.92"
 
 # default chroot location (700 MB needed - 1.5GB while installing)
 CHROOT="/opt/chroot"
