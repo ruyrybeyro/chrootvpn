@@ -1782,7 +1782,7 @@ createChroot()
    if ! debootstrap --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
-      die "run sudo rm -rf ${CHROOT} and do it again" 
+      die "run\nsudo rm -rf ${CHROOT}\n and do it again" 
    fi
 }
 
