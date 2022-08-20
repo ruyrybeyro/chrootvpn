@@ -456,7 +456,7 @@ Archcraft 2022.06.08
 
 ArchLabs
 
-ArchMan 2022.07.02
+ArchMan 2022.07.02 2022.08.20
 
 ArchBang 2022.07.02
 
