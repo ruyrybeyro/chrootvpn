@@ -198,7 +198,7 @@ do_help()
 	disconnect   disconnects VPN/SNX session from the command line
 	split        split tunnel VPN mode - use only after session is up
 	uninstall    deletes chroot and host file(s)
-        rmchroot     deletes chroot
+	rmchroot     deletes chroot
 	selfupdate   self updates this script if new version available
 	fixdns       tries to fix resolv.conf
 	
