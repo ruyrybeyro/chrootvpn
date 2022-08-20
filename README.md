@@ -63,7 +63,7 @@ vpn.sh [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN][--oldjava] -i|--i
 
 vpn.sh [-o FILE|--output=FILE][-c|--chroot=DIR] start|stop|restart|status
 
-vpn.sh [-c DIR|--chroot=DIR] uninstall
+vpn.sh [-c DIR|--chroot=DIR] [uninstall|rmchroot]
 
 vpn.sh [-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
 
@@ -92,8 +92,9 @@ vpn.sh -v|--version
 |restart      |restarts CShell daemon                                 |
 |status       |checks if CShell daemon is running                     |
 |disconnect   |disconnects VPN/SNX session from the command line      |
-|split        |splits tunnel VPN - use only after session is up        |
+|split        |splits tunnel VPN - use only after session is up       |
 |uninstall    |deletes chroot and host file(s)                        |
+|rmchroot     |deletes chroot                                         |
 |selfupdate   |self updates this script if new version available      |
 |fixdns       |tries to fix resolv.conf                               |
 
@@ -319,6 +320,8 @@ Emmabuntüs DE 4 1.01
 Emmabuntüs DE 4 1.02
 
 Neptune 7 ("Faye")
+
+Neptune 7.5
 
 LinuxFx 11
 

@@ -174,7 +174,7 @@ do_help()
 
 	${SCRIPTNAME} [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
 	${SCRIPTNAME} [-o FILE|--output=FILE][-c DIR|--chroot=DIR] start|stop|restart|status
-	${SCRIPTNAME} [-c DIR|--chroot=DIR] uninstall
+	${SCRIPTNAME} [-c DIR|--chroot=DIR] [uninstall|rmchroot]
 	${SCRIPTNAME} [-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
@@ -198,6 +198,7 @@ do_help()
 	disconnect   disconnects VPN/SNX session from the command line
 	split        split tunnel VPN mode - use only after session is up
 	uninstall    deletes chroot and host file(s)
+        rmchroot     deletes chroot
 	selfupdate   self updates this script if new version available
 	fixdns       tries to fix resolv.conf
 	
@@ -423,7 +424,7 @@ PreCheck()
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
    then
       # and not handling uninstall or selfupdate, abort
-      [[ "$1" != "uninstall" ]] && [[ "$1" != "selfupdate" ]] && die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
+      [[ "$1" != "uninstall" ]] && [[ "$1" != "selfupdate" ]] && [[ "$1" != "rmchroot" ]] && die "Run vpn.sh -i --vpn=FQDN or fill in VPN and VPNIP with the DNS FQDN and the IP address of your Checkpoint VPN server"
    fi
 
    # if not root/sudo
@@ -1027,6 +1028,15 @@ doShell()
    fi
 }
 
+# remove command
+doRemoveChroot()
+{
+   # stops CShell
+   doStop
+
+   rm -rf "${CHROOT}"           &>/dev/null
+   echo "${CHROOT} deleted"  >&2
+}
 
 # uninstall command
 doUninstall()
@@ -1048,12 +1058,12 @@ doUninstall()
    # for easing reinstalation
    if [[ -f "${CONFFILE}" ]]
    then
-      echo "${CONFFILE} not deleted. If you are not reinstalling do:"
-      echo "sudo rm -f ${CONFFILE}"
-      echo
-      echo "cat ${CONFFILE}"
-      cat "${CONFFILE}"
-      echo
+      echo "${CONFFILE} not deleted. If you are not reinstalling do:" >&2
+      echo "sudo rm -f ${CONFFILE}" >&2
+      echo >&2
+      echo "cat ${CONFFILE}" >&2
+      cat "${CONFFILE}" >&2
+      echo >&2
    fi
 
    echo "chroot+checkpoint software deleted" >&2
@@ -1143,7 +1153,7 @@ PreCheck2()
             umountChrootFS
 
             # does not abort if uninstall
-            if [[ "$1" != "uninstall" ]]
+            if [[ "$1" != "uninstall" ]] && [[ "$1" != "rmchroot" ]]
             then
                die "Something went wrong. Correct or to reinstall, run: ./${SCRIPTNAME} uninstall ; ./${SCRIPTNAME} -i"
             fi
@@ -1184,6 +1194,7 @@ argCommands()
       status)       showStatus ;;
       shell)        doShell ;;
       uninstall)    doUninstall ;;
+      rmchroot)     doRemoveChroot ;;
       upgrade)      Upgrade ;;
       selfupdate)   selfUpdate ;;
       selfdownload) curl -k --output "/tmp/vpn.sh" --silent --fail "https://raw.githubusercontent.com/${GITHUB_REPO}/main/vpn.sh" ;;
