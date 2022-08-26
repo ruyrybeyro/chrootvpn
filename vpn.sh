@@ -37,9 +37,6 @@
 # script/deploy version, make the same as deploy
 VERSION="v1.93"
 
-# default chroot location (700 MB needed - 1.5GB while installing)
-CHROOT="/opt/chroot"
-
 # default configuration file
 # created first time upon successful setup/run
 # so vpn.sh can be successfuly replaced by new versions
@@ -59,6 +56,8 @@ CONFFILE="/opt/etc/vpn.conf"
 # otherwise /opt/etc/vpn.conf overrides them
 [[ -z "$VPN" ]] && VPN=""
 [[ -z "$VPNIP" ]] && VPNIP=""
+# default chroot location (700 MB needed - 1.5GB while installing)
+[[ -z "$CHROOT" ]] && CHROOT="/opt/chroot"
 
 # split VPN routing table if deleting VPN gateway is not enough
 # selfupdate brings it from the older version
@@ -2144,6 +2143,7 @@ createConfFile()
 	VPN="${VPN}"
 	VPNIP="${VPNIP}"
 	SPLIT="${SPLIT}"
+        CHROOT="${CHROOT}"
 	EOF13
 
     # if not default, save it
