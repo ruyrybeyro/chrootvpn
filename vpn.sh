@@ -171,10 +171,10 @@ do_help()
 	VPN client setup for Debian/Ubuntu
 	Checkpoint R80.10+	${VERSION}
 
-	${SCRIPTNAME} [-f FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
-	${SCRIPTNAME} [-f FILE][-o FILE|--output=FILE][-c DIR|--chroot=DIR] start|stop|restart|status
-	${SCRIPTNAME} [-f FILE][-c DIR|--chroot=DIR] [uninstall|rmchroot]
-	${SCRIPTNAME} [-f FILE][-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
+	${SCRIPTNAME} [-f FILE|--file=FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
+	${SCRIPTNAME} [-f FILE|--file=FILE][-o FILE|--output=FILE][-c DIR|--chroot=DIR] start|stop|restart|status
+	${SCRIPTNAME} [-f FILE|--file=FILE][-c DIR|--chroot=DIR] [uninstall|rmchroot]
+	${SCRIPTNAME} [-f FILE|--file=FILE][-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
