@@ -171,10 +171,10 @@ do_help()
 	VPN client setup for Debian/Ubuntu
 	Checkpoint R80.10+	${VERSION}
 
-	${SCRIPTNAME} [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
-	${SCRIPTNAME} [-o FILE|--output=FILE][-c DIR|--chroot=DIR] start|stop|restart|status
-	${SCRIPTNAME} [-c DIR|--chroot=DIR] [uninstall|rmchroot]
-	${SCRIPTNAME} [-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
+	${SCRIPTNAME} [-f FILE|--file=FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
+	${SCRIPTNAME} [-f FILE|--file=FILE][-o FILE|--output=FILE][-c DIR|--chroot=DIR] start|stop|restart|status
+	${SCRIPTNAME} [-f FILE|--file=FILE][-c DIR|--chroot=DIR] [uninstall|rmchroot]
+	${SCRIPTNAME} [-f FILE|--file=FILE][-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
 	${SCRIPTNAME} -h|--help
 	${SCRIPTNAME} -v|--version
 	
@@ -182,6 +182,7 @@ do_help()
 	-c|--chroot  changes default chroot ${CHROOT} directory
 	-h|--help    shows this help
 	-v|--version script version
+	-f|--file    alternate conf file. Default /opt/etc/vpn.conf
 	--vpn        selects the VPN DNS full name at install time
 	--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental*
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
@@ -290,7 +291,7 @@ doGetOpts()
    install=false
 
    # process command line options
-   while getopts dic:-:o:shv OPT
+   while getopts dic:-:o:shvf: OPT
    do
 
       # long option -- , - handling
@@ -333,6 +334,10 @@ doGetOpts()
          s | silent )      doOutput "/dev/null" ;;
          d | debug )       set -x ;;                 # bash debug on
          h | help )        do_help ;;                # show help
+         f | file )        needs_arg                 # alternate configuration file
+                           CONFFILE="${OPTARG}"
+                           [[ -e $CONFFILE ]] || die "no configuration file $CONFFILE"
+                           . "${CONFFILE}" ;; 
          ??* )             die "Illegal option --${OPT}" ;;  # bad long option
          ? )               exit 2;;                  # bad short option (reported by getopts) 
 

@@ -59,13 +59,13 @@ Recommended having Firefox already installed, for deploying via this script a fi
 
 Usage:
 
-vpn.sh [-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN][--oldjava] -i|--install
+vpn.sh [-f FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN][--oldjava] -i|--install
 
-vpn.sh [-o FILE|--output=FILE][-c|--chroot=DIR] start|stop|restart|status
+vpn.sh [-f FILE][-o FILE|--output=FILE][-c|--chroot=DIR] start|stop|restart|status
 
-vpn.sh [-c DIR|--chroot=DIR] [uninstall|rmchroot]
+vpn.sh [-f FILE][-c DIR|--chroot=DIR] [uninstall|rmchroot]
 
-vpn.sh [-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
+vpn.sh [-f FILE][-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
 
 vpn.sh -h|--help
 
@@ -77,6 +77,7 @@ vpn.sh -v|--version
 |--chroot |-c|changes default chroot /opt/chroot directory           |
 |--help   |-h|shows this help                                        |
 |--version|-v|script version                                         |
+|--file   |-f|alternate conf file. Default /opt/etc/vpn.conf         |
 |--vpn    |  |selects VPN DNS full name at install time              |
 |--proxy  |  |proxy to use in apt inside chroot 'http://user:pass@IP'|
 |--output |-o|redirects ALL output for FILE                          |
