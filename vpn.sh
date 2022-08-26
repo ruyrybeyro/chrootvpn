@@ -335,6 +335,7 @@ doGetOpts()
          d | debug )       set -x ;;                 # bash debug on
          h | help )        do_help ;;                # show help
          f | file )        needs_arg                 # alternate configuration file
+                                                     # support for multiple clients/VPNs
                            CONFFILE="${OPTARG}"
                            [[ -e $CONFFILE ]] || die "no configuration file $CONFFILE"
                            . "${CONFFILE}" ;; 
