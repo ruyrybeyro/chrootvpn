@@ -295,6 +295,8 @@ Zorin OS 16.1
 
 Kaisen Linux 2.1
 
+Kaisen Linux 2.2
+
 Pardus 21.2 Yazılım Merkezi
 
 MX 21.1 Wildflower
@@ -396,6 +398,8 @@ Fedora 36
 
 Fedora 37
 
+Fedora 38
+
 Network Security Toolkit (NST) 36
 
 CentOS 8
@@ -448,7 +452,7 @@ Garuda Linux 220614
 
 Garuda Linux 220717
 
-Mabox Linux 22.06
+Mabox Linux 22.06 22.08
 
 BluestarLinux 5.1
 
