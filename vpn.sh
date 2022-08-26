@@ -182,7 +182,7 @@ do_help()
 	-c|--chroot  changes default chroot ${CHROOT} directory
 	-h|--help    shows this help
 	-v|--version script version
-	-f           alternate conf file. Default /opt/etc/vpn.conf
+	-f|--file    alternate conf file. Default /opt/etc/vpn.conf
 	--vpn        selects the VPN DNS full name at install time
 	--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental*
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
@@ -334,7 +334,7 @@ doGetOpts()
          s | silent )      doOutput "/dev/null" ;;
          d | debug )       set -x ;;                 # bash debug on
          h | help )        do_help ;;                # show help
-         f )               needs_arg                 # alternate configuration file
+         f | file )        needs_arg                 # alternate configuration file
                            CONFFILE="${OPTARG}"
                            [[ -e $CONFFILE ]] || die "no configuration file $CONFFILE"
                            . "${CONFFILE}" ;; 
