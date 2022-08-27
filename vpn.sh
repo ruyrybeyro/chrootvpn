@@ -675,15 +675,45 @@ Split()
       # gets local VPN given IP address
       IP=$(ip -4 addr show "${TUNSNX}" | awk '/inet/ { print $2 } ')
 
+      # not hardcoded anymore
+      #
       # cleans all VPN routes
       # cleans all routes given to tunsnx interface
-      ip route flush table main dev "${TUNSNX}"
+      #ip route flush table main dev "${TUNSNX}"
 
       # creates new VPN routes according to $SPLIT
       # don't put ""
       for i in ${SPLIT}
       do
-         ip route add "$i" dev "${TUNSNX}" src "${IP}"
+         case ${i::1} in
+
+            flush)
+               # cleans all VPN routes
+               # cleans all routes given to tunsnx interface
+               # beware that cleaning all routes you have a limited time
+               # to restore communication with the CheckPoint
+               # before tunnel tears down
+               # e.g. SPLIT better restore a equivalent route
+               ip route flush table main dev "${TUNSNX}"
+               ;;
+
+            +)
+               # for adding a route
+               ip route add "${i:1}" dev "${TUNSNX}" src "${IP}"
+               ;;
+
+            -)
+               # for deleting a route
+               # for deleting default gw given by VPN
+               # -0.0.0.0/1
+               ip route delete "${i:1}" dev "${TUNSNX}" src "${IP}"
+               ;;
+
+            *)
+               die "error in SPLIT format. If working in a previous version, SPLIT behaviour changed"
+               ;;
+
+         esac
       done
    fi
 }
