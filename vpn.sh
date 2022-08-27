@@ -675,6 +675,8 @@ Split()
       # gets local VPN given IP address
       IP=$(ip -4 addr show "${TUNSNX}" | awk '/inet/ { print $2 } ')
 
+      [ -z "$IP" ] && die "do split only after VPN tunnel is up"
+
       # not hardcoded anymore
       #
       # cleans all VPN routes
