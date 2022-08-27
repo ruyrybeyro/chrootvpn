@@ -665,7 +665,7 @@ Split()
    # if SPLIT empty
    if [[ -z "${SPLIT+x}" ]]
    then
-      echo "If this does not work, please fill in SPLIT with a network/mask list eg x.x.x.x/x x.x.x.x/x" >&2
+      echo "If this does not work, please fill in SPLIT with a network/mask list eg "flush +x.x.x.x/x -x.x.x.x/x" >&2
       echo "either in ${CONFFILE} or in ${SCRIPTNAME}" >&2
 
       # deletes default gw into VPN
