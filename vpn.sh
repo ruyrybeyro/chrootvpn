@@ -687,7 +687,10 @@ Split()
       do
          case ${i::1} in
 
-            flush)
+            f)
+               # flush
+               # can be written flush instead of f in SPLIT for clarity
+               #
                # cleans all VPN routes
                # cleans all routes given to tunsnx interface
                # beware that cleaning all routes you have a limited time
