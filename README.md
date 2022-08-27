@@ -212,6 +212,41 @@ Mobile Access Portal and Java Compatibility https://supportcenter.checkpoint.com
 
 Mobile Access Portal Agent for Mozilla Firefox asks to re-install even after it was properly installed https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk122576&partition=Advanced&product=Mobile
 
+SPLIT TUNNEL
+============
+
+For creating *temporarily* a split tunnel on the client side, only after VPN is up: 
+
+vpn.sh split
+
+If VPN is giving "wrong routes" deleting the default VPN gateway mith not be enough, so there is a need to fill in routes in the SPLIT variable, by default at /opt/etc/vpn.conf, or if before install it, at the beginning of this script.
+
+The SPLIT variable accepts the following directives:
+
+|Command      |Function                                               |
+|-------------|-------------------------------------------------------|
+|flush        |cleans all routes given to tunsnx interface            |
+|+ROUTE       |for adding a route                                     |
+|-ROUTE       |restarts CShell daemon                                 |
+
+For instance for a split VPN with Internet access, and private addresses via VPN, doing:
+
+      . dropping all VPN routes
+
+      . add route to 10.0.0.0/8 via VPN
+
+      . add route to 192.168.0.0/16 via VPN
+
+      . add route to 172.16.0.0/12 via VPN
+      
+           SPLIT="flush +10.0.0.0/8 +192.168.0.0/16 +172.16.0.0/12"
+
+Delete default gw given by VPN, and add a new route:
+
+           SPLIT="-0.0.0.0/1 10.0.0.0/8"
+
+Beware of NDAs and policies around manipulating VPN routes.
+
 COMPATIBILITY
 =============
 
