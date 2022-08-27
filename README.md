@@ -212,9 +212,9 @@ The SPLIT variable accepts the following directives:
 
 |Command      |Function                                    |
 |-------------|--------------------------------------------|
-|flush        |cleans all routes given to tunsnx interface |
-|+ROUTE       |for adding a route                          |
-|-ROUTE       |for deleting a route                        |
+|flush        |cleans all routes given the VPN interface   |
+|+ROUTE       |for adding a route via VPN                  |
+|-ROUTE       |for deleting a route via VPN                |
 
 For instance for a split VPN with Internet access, and private addresses via VPN, doing:
 
