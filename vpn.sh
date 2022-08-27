@@ -2197,7 +2197,7 @@ createConfFile()
 	VPN="${VPN}"
 	VPNIP="${VPNIP}"
 	SPLIT="${SPLIT}"
-        CHROOT="${CHROOT}"
+	CHROOT="${CHROOT}"
 	EOF13
 
     # if not default, save it
