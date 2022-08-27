@@ -665,7 +665,7 @@ Split()
    # if SPLIT empty
    if [[ -z "${SPLIT+x}" ]]
    then
-      echo "If this does not work, please fill in SPLIT with a network/mask list eg "flush +x.x.x.x/x -x.x.x.x/x" >&2
+      echo "If this does not work, please fill in SPLIT with a network/mask list eg flush +x.x.x.x/x -x.x.x.x/x" >&2
       echo "either in ${CONFFILE} or in ${SCRIPTNAME}" >&2
 
       # deletes default gw into VPN
@@ -965,7 +965,7 @@ fixDNS()
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${VOID}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${DEEPIN}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
-   #[[ "${SOLUS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+   # [[ "${SOLUS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 }
 
 
@@ -975,7 +975,7 @@ doStart()
    # ${CSHELL_USER} (cshell) apps - X auth
    if ! su - "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:"
    then
-      echo "If there are not X11 desktop permissions, VPN won't run" >&2
+      echo "If there are not X11 desktop permissions, the VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2
       echo "or in a terminal inside the graphic console" >&2
       echo 
@@ -2188,7 +2188,7 @@ XDGAutoRun()
 createConfFile()
 {
     # create /opt/etc if not there
-    mkdir -p "$(dirname ${CONFFILE})" 2> /dev/null
+    mkdir -p "$(dirname "${CONFFILE}")" 2> /dev/null
 
     # save VPN, VPNIP
     cat <<-EOF13 > "${CONFFILE}"
