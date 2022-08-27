@@ -693,15 +693,18 @@ Split()
                #
                # cleans all VPN routes
                # cleans all routes given to tunsnx interface
+               #
                # beware that cleaning all routes you have a limited time
                # to restore communication with the CheckPoint
                # before tunnel tears down
-               # e.g. SPLIT better restore a equivalent route
+               # e.g. SPLIT better have a rule to restore a equivalent route
+               #
                ip route flush table main dev "${TUNSNX}"
                ;;
 
             +)
                # for adding a route
+               #
                ip route add "${i:1}" dev "${TUNSNX}" src "${IP}"
                ;;
 
@@ -709,6 +712,7 @@ Split()
                # for deleting a route
                # for deleting default gw given by VPN
                # -0.0.0.0/1
+               #
                ip route delete "${i:1}" dev "${TUNSNX}" src "${IP}"
                ;;
 
