@@ -210,11 +210,11 @@ If VPN is giving "wrong routes" deleting the default VPN gateway mith not be eno
 
 The SPLIT variable accepts the following directives:
 
-|Command      |Function                                               |
-|-------------|-------------------------------------------------------|
-|flush        |cleans all routes given to tunsnx interface            |
-|+ROUTE       |for adding a route                                     |
-|-ROUTE       |restarts CShell daemon                                 |
+|Command      |Function                                    |
+|-------------|--------------------------------------------|
+|flush        |cleans all routes given to tunsnx interface |
+|+ROUTE       |for adding a route                          |
+|-ROUTE       |for deleting a route                        |
 
 For instance for a split VPN with Internet access, and private addresses via VPN, doing:
 
