@@ -199,6 +199,41 @@ Finally the connection is established. The user will be disconnected then upon t
 
 ![This is an image](/assets/images/11.png)
 
+Split tunneling
+===============
+
+For creating *temporarily* a split tunnel on the client side, only after VPN is up: 
+
+           vpn.sh split
+
+If VPN is giving "wrong routes" deleting the default VPN gateway mith not be enough, so there is a need to fill in routes in the SPLIT variable, by default at /opt/etc/vpn.conf, or if before install it, at the beginning of this script.
+
+The SPLIT variable accepts the following directives:
+
+|Command      |Function                                    |
+|-------------|--------------------------------------------|
+|flush        |cleans all routes given the VPN interface   |
+|+ROUTE       |for adding a route via VPN                  |
+|-ROUTE       |for deleting a route via VPN                |
+
+For instance for a split VPN with Internet access, and private addresses via VPN, doing:
+
+ . dropping all VPN routes
+
+ . adding route to 10.0.0.0/8 via VPN
+
+ . adding route to 192.168.0.0/16 via VPN
+
+ . adding route to 172.16.0.0/12 via VPN
+      
+           SPLIT="flush +10.0.0.0/8 +192.168.0.0/16 +172.16.0.0/12"
+
+Deleting default gw given by VPN, and adding a new route:
+
+           SPLIT="-0.0.0.0/1 +10.0.0.0/8"
+
+Beware of NDAs and policies around manipulating VPN routes.
+
 Relevant CheckPoint Linux support pages
 =======================================
 
