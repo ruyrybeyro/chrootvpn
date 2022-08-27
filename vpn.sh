@@ -683,6 +683,15 @@ Split()
 
       # creates new VPN routes according to $SPLIT
       # don't put ""
+      # new format
+      # for instance for split VPN with Internet access
+      #
+      #     dropping all VPN routes
+      #     add route to 100.1.1.0/24 PUBLIC network address of VPN
+      #     add route to 10.0.0.0/8 via VPN
+      #
+      #     SPLIT="flush +100.1.1.0/24 +10.0.0.0/8"
+      #
       for i in ${SPLIT}
       do
          case ${i::1} in
