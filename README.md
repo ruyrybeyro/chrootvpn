@@ -212,8 +212,8 @@ Mobile Access Portal and Java Compatibility https://supportcenter.checkpoint.com
 
 Mobile Access Portal Agent for Mozilla Firefox asks to re-install even after it was properly installed https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk122576&partition=Advanced&product=Mobile
 
-SPLIT TUNNEL
-============
+Split tunneling
+===============
 
 For creating *temporarily* a split tunnel on the client side, only after VPN is up: 
 
