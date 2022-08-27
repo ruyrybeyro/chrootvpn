@@ -665,7 +665,7 @@ Split()
    # if SPLIT empty
    if [[ -z "${SPLIT+x}" ]]
    then
-      echo "If this does not work, please fill in SPLIT with a network/mask list eg x.x.x.x/x x.x.x.x/x" >&2
+      echo "If this does not work, please fill in SPLIT with a network/mask list eg "flush +x.x.x.x/x -x.x.x.x/x" >&2
       echo "either in ${CONFFILE} or in ${SCRIPTNAME}" >&2
 
       # deletes default gw into VPN
@@ -683,6 +683,15 @@ Split()
 
       # creates new VPN routes according to $SPLIT
       # don't put ""
+      # new format
+      # for instance for split VPN with Internet access
+      #
+      #     dropping all VPN routes
+      #     add route to 100.1.1.0/24 PUBLIC network address of VPN
+      #     add route to 10.0.0.0/8 via VPN
+      #
+      #     SPLIT="flush +100.1.1.0/24 +10.0.0.0/8"
+      #
       for i in ${SPLIT}
       do
          case ${i::1} in
