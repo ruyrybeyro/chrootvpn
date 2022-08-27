@@ -243,7 +243,7 @@ For instance for a split VPN with Internet access, and private addresses via VPN
 
 Delete default gw given by VPN, and add a new route:
 
-           SPLIT="-0.0.0.0/1 10.0.0.0/8"
+           SPLIT="-0.0.0.0/1 +10.0.0.0/8"
 
 Beware of NDAs and policies around manipulating VPN routes.
 
