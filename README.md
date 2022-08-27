@@ -231,13 +231,13 @@ The SPLIT variable accepts the following directives:
 
 For instance for a split VPN with Internet access, and private addresses via VPN, doing:
 
-      . dropping all VPN routes
+ . dropping all VPN routes
 
-      . add route to 10.0.0.0/8 via VPN
+ . adding route to 10.0.0.0/8 via VPN
 
-      . add route to 192.168.0.0/16 via VPN
+ . adding route to 192.168.0.0/16 via VPN
 
-      . add route to 172.16.0.0/12 via VPN
+ . adding route to 172.16.0.0/12 via VPN
       
            SPLIT="flush +10.0.0.0/8 +192.168.0.0/16 +172.16.0.0/12"
 
