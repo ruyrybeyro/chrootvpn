@@ -206,7 +206,7 @@ For creating *temporarily* a split tunnel on the client side, only after VPN is 
 
            vpn.sh split
 
-If VPN is giving "wrong routes" deleting the default VPN gateway mith not be enough, so there is a need to fill in routes in the SPLIT variable, by default at /opt/etc/vpn.conf, or if before install it, at the beginning of this script.
+If the VPN is giving "wrong routes", deleting the default VPN gateway mith not be enough, so there is a need to fill in routes in the SPLIT variable, by default at /opt/etc/vpn.conf, or if before installing it, at the beginning of this script.
 
 The SPLIT variable accepts the following directives:
 
@@ -216,7 +216,7 @@ The SPLIT variable accepts the following directives:
 |+ROUTE       |for adding a route via VPN                  |
 |-ROUTE       |for deleting a route via VPN                |
 
-For instance for a split VPN with Internet access, and private addresses via VPN, doing:
+Example: split VPN with Internet access, and private addresses via VPN
 
  . dropping all VPN routes
 
