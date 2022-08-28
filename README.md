@@ -436,6 +436,8 @@ Fedora 37
 
 Fedora 38
 
+risiOS 36
+
 Network Security Toolkit (NST) 36
 
 CentOS 8
