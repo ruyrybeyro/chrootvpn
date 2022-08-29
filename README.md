@@ -337,6 +337,8 @@ Pardus 21.2 Yazılım Merkezi
 
 MX 21.1 Wildflower
 
+MX 21.2
+
 Peppermint OS 2022-05-22
 
 Drauger OS 7.6 Strigoi
@@ -530,6 +532,8 @@ openSUSE Leap 15.4
 Linux Kamarada 15.3
 
 GeckoLinux STATIC Cinnamon 153.x
+
+GeckoLinux STATIC Cinnamon 154.x
 
 Regata OS 22 Discovery
 
