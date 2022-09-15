@@ -275,6 +275,8 @@ Ubuntu LTS 20.04 Focal Fossa
 
 Ubuntu LTS 22.04 Jammy Jellyfish
 
+Ubuntu Unity LTS 22.04.1 
+
 Mint   20.2 Uma
 
 Mint   21 Vanessa
@@ -419,6 +421,8 @@ Zevenet CE v5.12.2
 
 Enso OS 0.4
 
+Armbian 22.08 Jammy
+
 RedHat based
 ============
 
@@ -486,6 +490,8 @@ EndeavourOS 2022.06.32
 
 EndeavourOS Artemis neo 22.7
 
+EndeavourOS 22.9
+
 Arco Linux 22.06.07
 
 Garuda Linux 220614
@@ -494,7 +500,7 @@ Garuda Linux 220717
 
 Mabox Linux 22.06 22.08
 
-BluestarLinux 5.1
+BluestarLinux 
 
 Archcraft 2022.06.08
 
