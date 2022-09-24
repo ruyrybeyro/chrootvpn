@@ -16,7 +16,7 @@ Tiago Teles - Contributions for Arch Linux
 
 This script downloads the Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installation scripts from the firewall/VPN we intend to connect to, and installs them in a chrooted environment.
 
-Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated needed packages for SNX ; the chroot is built to counter some of those behaviours and provide a more secure setup.
+Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated 32-bit packages necessary for SNX ; the chroot is built to counter some of those behaviours and provide a more secure setup.
 
 The script supports several Linux distributions as the host OS, still uses Debian 11 for the chroot "light container".
 The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
