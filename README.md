@@ -423,6 +423,8 @@ Enso OS 0.4
 
 Armbian 22.08 Jammy
 
+Spiral Linux 11
+
 RedHat based
 ============
 
