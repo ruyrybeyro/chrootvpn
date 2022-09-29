@@ -929,7 +929,7 @@ fixLinks()
       # if link needed not present but host /etc/resolv.conf points to /run/...
       if [[ "$( realpath "/etc/resolv.conf" )" == *"run"* ]]
       then
-         echo -n "Using instead for chroot resolv.conf"  >&2
+         echo -n "Using instead for chroot resolv.conf "  >&2
          realpath "/etc/resolv.conf" 
          ln -sf "$( realpath "/etc/resolv.conf" )" "${CHROOT}/etc/resolv.conf"
       else
@@ -953,7 +953,16 @@ fixDNS()
    cd /etc || die "could not enter /etc"
 
    # Debian family - resolvconf
-   [[ "${DEB}" -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && fixLinks ../run/resolvconf/resolv.conf
+
+   if [[ "${DEB}" -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] 
+   then
+     if [[ -f "/run/resolvconf/resolv.conf" ]] 
+     then
+        fixLinks ../run/resolvconf/resolv.conf
+     else
+        fixLinks ../run/systemd/resolve/stub-resolv.conf
+     fi
+   fi
 
    # RedHat family - systemd-resolved
    [[ "${RH}"        -eq 1 ]] && fixLinks ../run/systemd/resolve/stub-resolv.conf
@@ -1031,7 +1040,7 @@ fixDNS2()
    # tries to restore resolv.conf
    # not all configurations need actions, NetworkManager seems to behave well
 
-   [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && resolvconf -u
+   [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && [[ -f "/run/resolvconf/resolv.conf" ]] && resolvconf -u &> /dev/null
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
    [[ "${RH}"   -eq 1 ]] && which authselect &>/dev/null && authselect apply-changes
 }
@@ -1455,8 +1464,10 @@ installDebian()
 
    # installs needed packages
    apt -y install ca-certificates x11-xserver-utils jq curl dpkg debootstrap
+
+   
    # we want to make sure resolconf is the last one
-   [[ ${DEEPIN} -eq 0 ]] && apt -y install resolvconf
+   [[ ${DEEPIN} -eq 0 ]] && [[ ! -f /run/systemd/resolve/stub-resolv.conf ]] && apt -y install resolvconf
 
    # highly unusual, a Debian/Ubuntu machine *without* dpkg
    which dpkg &>/dev/null || die "failed installing dpkg"
@@ -1819,7 +1830,7 @@ checkDNS()
       # tests it now to see if fixed
       if ! getent ahostsv4 "${VPN}" &> /dev/null
       then
-         echo "DNS problems after installing resolvconf?" >&2
+         echo "DNS problems after installing packages?" >&2
          echo "Not resolving ${VPN} DNS" >&2
          echo "Relaunch ${SCRIPTNAME} for possible timeout issues" >&2
          die "Otherwise fix or reboot to fix" 
