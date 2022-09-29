@@ -277,6 +277,8 @@ Ubuntu LTS 22.04 Jammy Jellyfish
 
 Ubuntu Unity LTS 22.04.1 
 
+Ubuntu 22.10 Kinetic
+
 Mint   20.2 Uma
 
 Mint   21 Vanessa
