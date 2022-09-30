@@ -428,6 +428,8 @@ Armbian 22.08 Jammy
 
 Spiral Linux 11
 
+Loc-OS Linux 22
+
 RedHat based
 ============
 
