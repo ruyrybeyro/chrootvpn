@@ -98,6 +98,7 @@ vpn.sh -v|--version
 |rmchroot     |deletes chroot                                         |
 |selfupdate   |self updates this script if new version available      |
 |fixdns       |tries to fix resolv.conf                               |
+|policy       |tries to install a firefox policy                      |
 
 For debugging/maintenance:
 
