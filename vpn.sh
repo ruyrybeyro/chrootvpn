@@ -201,6 +201,7 @@ do_help()
 	rmchroot     deletes chroot
 	selfupdate   self updates this script if new version available
 	fixdns       tries to fix resolv.conf
+	policy	     tries to install firefox policy
 	
 	For debugging/maintenance:
 	
@@ -1260,6 +1261,7 @@ argCommands()
       upgrade)      Upgrade ;;
       selfupdate)   selfUpdate ;;
       selfdownload) curl -k --output "/tmp/vpn.sh" --silent --fail "https://raw.githubusercontent.com/${GITHUB_REPO}/main/vpn.sh" ;;
+      policy)       FirefoxPolicy install ;;
       *)            do_help ;;         # default 
 
    esac
@@ -1466,7 +1468,7 @@ installDebian()
    apt -y install ca-certificates x11-xserver-utils jq curl dpkg debootstrap
 
    
-   # we want to make sure resolconf is the last one
+   # we want to make sure resolvconf is the last one
    [[ ${DEEPIN} -eq 0 ]] && [[ ! -f /run/systemd/resolve/stub-resolv.conf ]] && apt -y install resolvconf
 
    # highly unusual, a Debian/Ubuntu machine *without* dpkg
