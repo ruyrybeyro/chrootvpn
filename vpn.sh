@@ -957,7 +957,7 @@ fixDNS()
 
    if [[ "${DEB}" -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] 
    then
-      if [[ -f "/run/connman/resolv.conf" ]] 
+      if readlink /etc/resolv.conf | grep "/run/connman/resolv.conf" &> /dev/null
       then
          fixLinks ../run/connman/resolv.conf
       else
