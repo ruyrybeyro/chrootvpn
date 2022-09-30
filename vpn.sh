@@ -957,12 +957,17 @@ fixDNS()
 
    if [[ "${DEB}" -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] 
    then
-     if [[ -f "/run/resolvconf/resolv.conf" ]] 
-     then
-        fixLinks ../run/resolvconf/resolv.conf
-     else
-        fixLinks ../run/systemd/resolve/stub-resolv.conf
-     fi
+      if [[ -f "/run/connman/resolv.conf" ]] 
+      then
+         fixLinks ../run/connman/resolv.conf
+      else
+         if [[ -f "/run/resolvconf/resolv.conf" ]] 
+         then
+            fixLinks ../run/resolvconf/resolv.conf
+         else
+            fixLinks ../run/systemd/resolve/stub-resolv.conf
+         fi
+      fi
    fi
 
    # RedHat family - systemd-resolved
@@ -1469,7 +1474,7 @@ installDebian()
 
    
    # we want to make sure resolvconf is the last one
-   [[ ${DEEPIN} -eq 0 ]] && [[ ! -f /run/systemd/resolve/stub-resolv.conf ]] && apt -y install resolvconf
+   [[ ${DEEPIN} -eq 0 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && [[ ! -f "/run/connman/resolv.conf" ]] && apt -y install resolvconf
 
    # highly unusual, a Debian/Ubuntu machine *without* dpkg
    which dpkg &>/dev/null || die "failed installing dpkg"
