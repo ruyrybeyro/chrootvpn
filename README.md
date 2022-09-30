@@ -477,6 +477,8 @@ Navy Linux Enterprise 8.6 r1
 
 Miracle Linux 8.4 (Peony)
 
+Nobara 36
+
 Mandrake/Mandriva/RedHat based
 ==============
 
