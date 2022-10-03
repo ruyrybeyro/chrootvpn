@@ -379,9 +379,9 @@ getDistro()
 
 
    # Debian / DEEPIN handled slightly differently
-   # Deeping
+   # Deepin
    # forces DEBIAN=1 because as of Deepin 23, /etc/debian_version no longer there
-   [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1 && DEBIAN=1
+   [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1 && DEB=1
 
    # RedHat
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family
