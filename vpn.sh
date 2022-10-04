@@ -380,7 +380,7 @@ getDistro()
 
    # Debian / DEEPIN handled slightly differently
    # Deepin
-   # forces DEBIAN=1 because as of Deepin 23, /etc/debian_version no longer there
+   # forces DEB=1 because as of Deepin 23, /etc/debian_version no longer there
    [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1 && DEB=1
 
    # RedHat
@@ -976,8 +976,17 @@ fixDNS()
    # SUSE - netconfig
    [[ "${SUSE}"      -eq 1 ]] && fixLinks ../run/netconfig/resolv.conf
 
-   # several - NetworkManager
-   [[ "${ARCH}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+   # Arch either systemd-resolved or Network Manager
+   if [[ "${ARCH}"      -eq 1 ]] 
+   then
+      if [[ -f "/run/systemd/resolve/stub-resolv.conf" ]]
+      then
+         fixLinks ../run/systemd/resolve/stub-resolv.conf
+      else
+         fixLinks ../run/NetworkManager/resolv.conf
+      fi
+   fi
+
    [[ "${GENTOO}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${VOID}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
