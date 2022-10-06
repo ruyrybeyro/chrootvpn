@@ -1575,10 +1575,10 @@ installArch()
    # SalientOS needed archlinux-keyring before installing
    # ArchBang ended up needing pacman-key --init ; packman-key --populate
 
-   if ! pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap
+   if ! pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap xorg-xauth
    then
       packman-key --populate
-      pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap
+      pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap xorg-xauth
    fi
    pacman --needed -Syu firefox
 
