@@ -96,7 +96,7 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 # http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.127.tar.gz
 #
 VER_BOOTSTRAP="1.0.127"
-DEB_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}_all.deb"
+DEB_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}+nmu1_all.deb"
 DEB_FILE=$(basename ${DEB_BOOTSTRAP})
 SRC_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}.tar.gz"
 
