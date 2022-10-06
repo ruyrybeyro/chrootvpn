@@ -437,7 +437,7 @@ PreCheck()
    if [[ "${EUID}" -ne 0 ]]
    then
       # This script needs a user with sudo privileges
-      which sudo &>/dev/null || die "install sudo and configure sudoers/groups for this user"
+      command -v sudo &>/dev/null || die "install sudo and configure sudoers/groups for this user"
 
       # The user needs sudo privileges
       [[ $(sudo -l) !=  *"not allowed"* ]] || die "configure sudoers/groups for this user"
@@ -449,7 +449,7 @@ PreCheck()
       exec sudo "$0" "${args[@]}"
    else
       # This script might need a user with sudo privileges
-      which sudo &>/dev/null || echo "you might want to install sudo" >&2
+      command -v sudo &>/dev/null || echo "you might want to install sudo" >&2
    fi
 }
 
@@ -1057,7 +1057,7 @@ fixDNS2()
 
    [[ "${DEB}"  -eq 1 ]] && [[ "${DEEPIN}" -eq 0 ]] && [[ -f "/run/resolvconf/resolv.conf" ]] && resolvconf -u &> /dev/null
    [[ "${SUSE}" -eq 1 ]] && netconfig update -f
-   [[ "${RH}"   -eq 1 ]] && which authselect &>/dev/null && authselect apply-changes
+   [[ "${RH}"   -eq 1 ]] && command -v authselect &>/dev/null && authselect apply-changes
 }
 
 
@@ -1385,7 +1385,7 @@ GetCompileSlack()
       # debootstrap version in SlackWare too old to be useful
       if [[ ${NAME} != "debootstrap" ]]
       then
-         which ${NAME} &>/dev/null && continue 
+         command -v ${NAME} &>/dev/null && continue 
       fi
 
       # saves current directory/cwd
@@ -1459,7 +1459,7 @@ GetCompileSlack()
 #
 InstallDebootstrapDeb()
 {
-   if [[ "$1" == "force" ]] || ! which debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
+   if [[ "$1" == "force" ]] || ! command -v debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
    then
       curl -k --output "${DEB_FILE}" "${DEB_BOOTSTRAP}" --silent --fail || die "could not download ${DEB_BOOTSTRAP}"
       dpkg -i --force-all "${DEB_FILE}"
@@ -1486,7 +1486,7 @@ installDebian()
    [[ ${DEEPIN} -eq 0 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && [[ ! -f "/run/connman/resolv.conf" ]] && apt -y install resolvconf
 
    # highly unusual, a Debian/Ubuntu machine *without* dpkg
-   which dpkg &>/dev/null || die "failed installing dpkg"
+   command -v dpkg &>/dev/null || die "failed installing dpkg"
 
    if grep '^ID=trisquel' /etc/os-release &>/dev/null
    then
@@ -1513,14 +1513,14 @@ installRedHat()
    #dnf makecache
 
    # Mandrake successors/older style RedHat does not have dnf
-   ! which dnf &>/dev/null && which yum &>/dev/null && DNF="yum"
+   ! command -v dnf &>/dev/null && command -v yum &>/dev/null && DNF="yum"
    # Mandriva variants may use apt
-   ! which dnf &>/dev/null && ! which yum &>/dev/null && which apt &>/dev/null && DNF="apt"
+   ! command -v dnf &>/dev/null && ! command -v yum &>/dev/null && command -v apt &>/dev/null && DNF="apt"
 
    # attempts to a poor's man detection of not needing to setup EPEL
    $DNF -y install debootstrap
 
-   if ! which debootstrap &>/dev/null
+   if ! command -v debootstrap &>/dev/null
    then
       # epel-release not needed for Fedora and Mageia
       if grep -Evi "^Fedora|^Mageia|Mandriva|^PCLinuxOS" /etc/redhat-release &> /dev/null
@@ -1606,7 +1606,7 @@ installSUSE()
 
    zypper -n install ca-certificates jq curl dpkg xhost dnsmasq
 
-   which dpkg &>/dev/null || die "could not install software"
+   command -v dpkg &>/dev/null || die "could not install software"
 
    # will fail in SLES
    zypper -n install debootstrap
@@ -1711,7 +1711,7 @@ installPackages()
    # only will work if debootstrap *too old*
    InstallDebootstrapDeb
 
-   if ! which dpkg &> /dev/null || ! which debootstrap &> /dev/null
+   if ! commmand dpkg &> /dev/null || ! command debootstrap &> /dev/null
    then
       die "something went wrong installing software"
    fi
@@ -1741,7 +1741,7 @@ fixRHDNS()
    local counter
 
    # if RedHat and systemd-resolvd not active
-   if [[ "${RH}" -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && which systemctl &> /dev/null
+   if [[ "${RH}" -eq 1 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && command -v systemctl &> /dev/null
    then
 
       # CentOS Stream 9 does not install systemd-resolved by default
