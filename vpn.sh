@@ -1711,7 +1711,7 @@ installPackages()
    # only will work if debootstrap *too old*
    InstallDebootstrapDeb
 
-   if ! commmand -v dpkg &> /dev/null || ! command -v debootstrap &> /dev/null
+   if ! command -v dpkg &> /dev/null || ! command -v debootstrap &> /dev/null
    then
       die "something went wrong installing software"
    fi
