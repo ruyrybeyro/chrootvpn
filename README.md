@@ -566,6 +566,8 @@ Gentoo Base System release 2.8
 
 Redcore Linux 2102
 
+Redcore Linux Hardened 2201 (Rastaban)
+
 Calculate Linux 22.0.1
 
 Slackware
