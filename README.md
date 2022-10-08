@@ -4,7 +4,7 @@ Checkpoint R80+ VPN client chroot wrapper
 
 VPN client chroot'ed Debian setup/wrapper 
 
-for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS based hosts
+for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Kwort based hosts
 
 Checkpoint R80.10 and up
 
@@ -586,3 +586,7 @@ Salix OS xfce 15.0
 
 Slackel Linux Openbox 7.3 (no /etc/resolv.conf from VPN)
 
+Kwort
+=====
+
+Kwort Linux 4.4
