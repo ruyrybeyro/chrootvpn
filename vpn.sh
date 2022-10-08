@@ -584,6 +584,8 @@ FirefoxPolicy()
       [[ -d "/usr/lib64/firefox" ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
 
       [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution" 2> /dev/null
+      [[ ${ARCH} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution" 2> /dev/null
+
       # for Firefox SNAPs
       [[ -d "/etc/firefox" ]] && mkdir /etc/firefox/policies 2> /dev/null
 
