@@ -1473,15 +1473,18 @@ InstallDebootstrapDeb()
          rm -f "${DEB_FILE}" &>/dev/null
       fi
 
-      # if still not installed
+      # if debootstrap still not installed
+      # install it from tar.gz source file
       if ! command -v debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
       then
+         # get tar.gz from debian pool
          curl -k --output debootstrap.tar.gz "${SRC_BOOTSTRAP}" --silent --fail || die "could not download ${SRC_BOOTSTRAP}"
-         tar -zxvf debootstrap.tar.gz
-         pushd .
+         # gz untar it
+	 tar -zxvf debootstrap.tar.gz
+	 
          cd debootstrap || die "was not able to cd debootstrap"
          make install
-         popd || die "was not able to restore cwd"
+         cd .. || die "was not able to restore cwd"
          rm -rf debootstrap &>/dev/null 
       fi
    fi
