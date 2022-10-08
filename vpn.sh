@@ -2,7 +2,7 @@
 #
 # Rui Ribeiro
 #
-# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS hosts 
+# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/Kwort/KaOS hosts 
 # Checkpoint R80.10 and up
 #
 # Please fill VPN and VPNIP before using this script.
@@ -361,6 +361,7 @@ getDistro()
    SLACKWARE=0
    VOID=0
    DEEPIN=0
+   KWORT=0
    # installing dpkg damages Solus, commented out
    #SOLUS=0
 
@@ -406,12 +407,15 @@ getDistro()
    # Void
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == "void" ]] && VOID=1 # Void Linux
 
+   #[[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "crux" ]] && CRUX=1
+   # KWORT
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "kwort" ]] && KWORT=1
+
    # Solus
    #[[ -f "/etc/solus-release" ]]   && SOLUS=1 # is Solus family
 
    # if none of distribution families above, abort
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin and KaOS family distributions supported"
-   #[[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${SOLUS}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin and KaOS family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort and KaOS family distributions supported"
 }
 
 
@@ -421,7 +425,7 @@ PreCheck()
    # If not Intel based
    if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
-      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/KaOS/Deepin Linux Intel based flavours only"
+      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/KaOS/Deepin/Kwort Linux Intel based flavours only"
    fi
 
    # fills in distribution variables
@@ -1485,7 +1489,7 @@ InstallDebootstrapDeb()
          cd debootstrap || die "was not able to cd debootstrap"
          make install
          cd .. || die "was not able to restore cwd"
-         rm -rf debootstrap &>/dev/null 
+         rm -rf debootstrap debootstrap.tar.gz  &>/dev/null 
       fi
    fi
 }
@@ -1702,6 +1706,18 @@ installGentoo()
    #InstallDebootstrapDeb
 }
 
+# installs Kwort
+installKwort()
+{
+   echo "Kwort setup" >&2
+
+   kpkg update
+
+   # needed packages
+   kpkg install ca-certificates xorg-xhost xorg-xauth curl dpkg make
+
+   InstallDebootstrapDeb
+}
 
 # installs package requirements
 installPackages()
@@ -1727,6 +1743,9 @@ installPackages()
 
    # if Slackware
    [[ "${SLACKWARE}" -eq 1 ]] && GetCompileSlack
+
+   # if KWORT based
+   [[ "${KWORT}"    -eq 1 ]] && installKwort
 
    # if Solus based
    #[[ "${SOLUS}"    -eq 1 ]] && installSolus
