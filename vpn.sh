@@ -878,7 +878,8 @@ showStatus()
    echo
     
    # get latest release version of this script
-   VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
+   # do away with jq -r ".tag_name" - jq not available in some distributions
+   VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
 
    echo "current ${SCRIPTNAME} version     : ${VERSION}"
 
@@ -1179,7 +1180,7 @@ selfUpdate()
     local VER
 
     # get this latest script release version
-    VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r ".tag_name")
+    VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
     echo "current version     : ${VERSION}"
 
     [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] && die "did not find any github release. Something went wrong"
@@ -1385,7 +1386,7 @@ GetCompileSlack()
    cd "${DIR}" || die "could not enter ${DIR}"
 
    # cycle packages we want to fetch, compile and install
-   for pkg in "development/dpkg" "system/debootstrap" "system/jq"
+   for pkg in "development/dpkg" "system/debootstrap"
    do
       # last part of name from $pkg
       NAME=${pkg##*/}
@@ -1506,7 +1507,7 @@ installDebian()
    #apt -y upgrade
 
    # installs needed packages
-   apt -y install ca-certificates x11-xserver-utils jq curl dpkg debootstrap make
+   apt -y install ca-certificates x11-xserver-utils curl dpkg debootstrap make
 
    
    # we want to make sure resolvconf is the last one
@@ -1569,7 +1570,7 @@ installRedHat()
       fi
    fi
 
-   $DNF -y install ca-certificates jq curl debootstrap make
+   $DNF -y install ca-certificates curl debootstrap make
 
    # not installed in all variants as a debootstrap dependency
    if ! $DNF -y install dpkg
@@ -1602,10 +1603,10 @@ installArch()
    # SalientOS needed archlinux-keyring before installing
    # ArchBang ended up needing pacman-key --init ; packman-key --populate
 
-   if ! pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap xorg-xauth make
+   if ! pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make
    then
       packman-key --populate
-      pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap xorg-xauth make
+      pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make
    fi
    pacman --needed -Syu firefox
 
@@ -1631,7 +1632,7 @@ installSUSE()
 
    zypper ref
 
-   zypper -n install ca-certificates jq curl dpkg xhost dnsmasq
+   zypper -n install ca-certificates curl dpkg xhost dnsmasq
 
    command -v dpkg &>/dev/null || die "could not install software"
 
@@ -1664,7 +1665,7 @@ installVoid()
    # needed packages
    # some of them already installed
    xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
-   xbps-install -yS ca-certificates xhost jq curl debootstrap dpkg openresolv make
+   xbps-install -yS ca-certificates xhost curl debootstrap dpkg openresolv make
 }
 
 
@@ -1675,7 +1676,7 @@ installVoid()
 #
 #
 #   # needed packages
-#   eopkg install ca-certificates xhost jq curl debootstrap dpkg make
+#   eopkg install ca-certificates xhost curl debootstrap dpkg make
 #}
 
 
@@ -1698,7 +1699,7 @@ installGentoo()
    emerge --ask --oneshot --verbose sys-apps/portage
 
    # install/update packages
-   emerge -atv ca-certificates xhost app-misc/jq debootstrap dpkg
+   emerge -atv ca-certificates xhost debootstrap dpkg
 
    emerge --ask --verbose --depclean
 
