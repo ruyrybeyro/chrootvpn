@@ -92,13 +92,13 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 # 1.0.123 has bullseye rules file
 #
 #
-# http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.127_all.deb
-# http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.127.tar.gz
+# http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.127+nmu1_all.deb
+# http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.127+nmu1.tar.gz
 #
 VER_BOOTSTRAP="1.0.127"
 DEB_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}+nmu1_all.deb"
 DEB_FILE=$(basename ${DEB_BOOTSTRAP})
-SRC_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}.tar.gz"
+SRC_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}+nmu1.tar.gz"
 
 # URL for testing if split or full VPN
 URL_VPN_TEST="https://www.debian.org"
