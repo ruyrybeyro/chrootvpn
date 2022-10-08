@@ -1499,7 +1499,7 @@ installDebian()
    #apt -y upgrade
 
    # installs needed packages
-   apt -y install ca-certificates x11-xserver-utils jq curl dpkg debootstrap
+   apt -y install ca-certificates x11-xserver-utils jq curl dpkg debootstrap make
 
    
    # we want to make sure resolvconf is the last one
@@ -1562,7 +1562,7 @@ installRedHat()
       fi
    fi
 
-   $DNF -y install ca-certificates jq curl debootstrap
+   $DNF -y install ca-certificates jq curl debootstrap make
 
    # not installed in all variants as a debootstrap dependency
    if ! $DNF -y install dpkg
@@ -1595,10 +1595,10 @@ installArch()
    # SalientOS needed archlinux-keyring before installing
    # ArchBang ended up needing pacman-key --init ; packman-key --populate
 
-   if ! pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap xorg-xauth
+   if ! pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap xorg-xauth make
    then
       packman-key --populate
-      pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap xorg-xauth
+      pacman --needed -Syu ca-certificates xorg-xhost jq curl dpkg debootstrap xorg-xauth make
    fi
    pacman --needed -Syu firefox
 
@@ -1657,7 +1657,7 @@ installVoid()
    # needed packages
    # some of them already installed
    xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
-   xbps-install -yS ca-certificates xhost jq curl debootstrap dpkg openresolv
+   xbps-install -yS ca-certificates xhost jq curl debootstrap dpkg openresolv make
 }
 
 
@@ -1668,7 +1668,7 @@ installVoid()
 #
 #
 #   # needed packages
-#   eopkg install ca-certificates xhost jq curl debootstrap dpkg
+#   eopkg install ca-certificates xhost jq curl debootstrap dpkg make
 #}
 
 
