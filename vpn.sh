@@ -1479,9 +1479,9 @@ InstallDebootstrapDeb()
          curl -k --output debootstrap.tar.gz "${SRC_BOOTSTRAP}" --silent --fail || die "could not download ${SRC_BOOTSTRAP}"
          tar -zxvf debootstrap.tar.gz
          pushd .
-         cd debootstrap
+         cd debootstrap || die "was not able to cd debootstrap"
          make install
-         popd
+         popd || die "was not able to restore cwd"
          rm -rf debootstrap &>/dev/null 
       fi
    fi
