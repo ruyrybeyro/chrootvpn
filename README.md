@@ -535,6 +535,11 @@ BigLinux 2022-07-15
 
 FreedomOS
 
+KaOS
+====
+
+KaOS 2022.10
+
 SUSE
 ====
 
