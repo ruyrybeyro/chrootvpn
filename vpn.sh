@@ -1180,6 +1180,7 @@ selfUpdate()
     local VER
 
     # get this latest script release version
+    # do away with jq -r ".tag_name" - jq not available in some distributions
     VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
     echo "current version     : ${VERSION}"
 
