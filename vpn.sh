@@ -391,6 +391,7 @@ getDistro()
    # Arch
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID_LIKE=/ { print $2 } ' /etc/os-release) == "arch" ]] && ARCH=1 # Peux
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "kaos" ]] && ARCH=1
 
    # SUSE
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
@@ -584,6 +585,8 @@ FirefoxPolicy()
       [[ -d "/usr/lib64/firefox" ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
 
       [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution" 2> /dev/null
+
+      # KaOS, possibly others
       [[ ${ARCH} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution" 2> /dev/null
 
       # for Firefox SNAPs
@@ -1455,7 +1458,7 @@ GetCompileSlack()
 # debootstrap hack
 # if not present and having dpkg
 # we can "force install it"
-# debootstap just a set of scripts and configuration files
+# debootstrap just a set of scripts and configuration files
 #
 # $1 : force - force installation
 #
@@ -1463,9 +1466,24 @@ InstallDebootstrapDeb()
 {
    if [[ "$1" == "force" ]] || ! command -v debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
    then
-      curl -k --output "${DEB_FILE}" "${DEB_BOOTSTRAP}" --silent --fail || die "could not download ${DEB_BOOTSTRAP}"
-      dpkg -i --force-all "${DEB_FILE}"
-      rm -f "${DEB_FILE}"
+      if command -v dpkg &>/dev/null
+      then
+         curl -k --output "${DEB_FILE}" "${DEB_BOOTSTRAP}" --silent --fail || die "could not download ${DEB_BOOTSTRAP}"
+         dpkg -i --force-all "${DEB_FILE}"
+         rm -f "${DEB_FILE}" &>/dev/null
+      fi
+
+      # if still not installed
+      if ! command -v debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
+      then
+         curl -k --output debootstrap.tar.gz "${SRC_BOOTSTRAP}" --silent --fail || die "could not download ${SRC_BOOTSTRAP}"
+         tar -zxvf debootstrap.tar.gz
+         pushd .
+         cd debootstrap
+         make install
+         popd
+         rm -rf debootstrap &>/dev/null 
+      fi
    fi
 }
 
@@ -1713,7 +1731,7 @@ installPackages()
    # only will work if debootstrap *too old*
    InstallDebootstrapDeb
 
-   if ! command -v dpkg &> /dev/null || ! command -v debootstrap &> /dev/null
+   if ! command -v debootstrap &> /dev/null
    then
       die "something went wrong installing software"
    fi
