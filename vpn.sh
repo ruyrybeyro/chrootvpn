@@ -35,7 +35,7 @@
 # BEWARE of cut&paste or code beautifiers, it will break code.
 
 # script/deploy version, make the same as deploy
-VERSION="v1.93"
+VERSION="v1.94"
 
 # default configuration file
 # created first time upon successful setup/run
