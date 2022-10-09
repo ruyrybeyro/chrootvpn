@@ -1002,6 +1002,8 @@ fixDNS()
    [[ "${VOID}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${DEEPIN}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    # [[ "${SOLUS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+
+   [[ ${KWORT}       -eq 1 ]] && fixLinks "../run/dhcpcd/hook-state/resolv.conf/"$(ls /run/dhcpcd/hook-state/resolv.conf/ | head -1)
 }
 
 
