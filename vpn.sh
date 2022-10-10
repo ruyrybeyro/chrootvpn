@@ -19,7 +19,7 @@
 # vpn.sh selfupdate 
 # might update this script if new version+Internet connectivity available
 #
-# non-chroot version not written intencionally. 
+# non-chroot version not written intentionally. 
 # SNX/CShell behave on odd ways ;
 # the chroot is built to counter some of those behaviours
 #
@@ -29,7 +29,7 @@
 # tested with chroot Debian Bullseye 11 (32 bits) and
 # 64 bits hosts. 
 #
-# see list at https://github.com/ruyrybeyro/chrootvpn/
+# see list and instructions at https://github.com/ruyrybeyro/chrootvpn/
 #
 # This script uses TABs for output/files. 
 # BEWARE of cut&paste or code beautifiers, it will break code.
