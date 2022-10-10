@@ -12,7 +12,7 @@ https://github.com/ruyrybeyro/chrootvpn
 
 Rui Ribeiro 2022
 
-Tiago Teles - Contributions for Arch Linux
+Tiago Teles @ttmx - Contributions for Arch Linux
 
 This script downloads the Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installation scripts from the firewall/VPN we intend to connect to, and installs them in a chrooted environment.
 
@@ -55,7 +55,9 @@ Otherwise, run it as:
 
 CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights. The binary SNX VPN client needs a 32-bits environment.
 
-Recommended having Firefox already installed, for deploying via this script a firefox policy for automagically accepting the self-signed Mobile Access Portal Agent X.509 certificate.
+Whilst it is recommended having Firefox already installed, for deploying via this script a firefox policy for automagically accepting the self-signed Mobile Access Portal Agent X.509 certificate, if it is not present a already a policy, you can install a Firefox anytime doing:
+
+    vpn.sh policy
 
 Usage:
 
