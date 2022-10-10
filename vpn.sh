@@ -1575,12 +1575,7 @@ installRedHat()
 
    $DNF -y install ca-certificates curl debootstrap make
 
-   # not installed in all variants as a debootstrap dependency
-   if ! $DNF -y install dpkg
-   then
-      # works for OpenMandriva Lx 4.3 and 5
-      grep "OpenMandriva Lx" /etc/redhat-release &> /dev/null && $DNF -y install http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/dpkg-1.21.1-1-omv4050.x86_64.rpm http://abf-downloads.openmandriva.org/4.3/repository/x86_64/unsupported/release/perl-Dpkg-1.21.1-1-omv4050.noarch.rpm
-   fi
+   $DNF -y install dpkg
 
 
    # xhost should be present
@@ -1612,9 +1607,6 @@ installArch()
       pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make
    fi
    pacman --needed -Syu firefox
-
-   # only will work if debootstrap *too old*
-   #InstallDebootstrapDeb
 }
 
 
@@ -1643,11 +1635,6 @@ installSUSE()
    zypper -n install debootstrap
 
    zypper clean
-
-   # SLES does have dpkg, but not debootstrap in repositories
-   # debootstrap is just a set of scripts and files
-   # installs deb file from debian pool
-   InstallDebootstrapDeb
 
    [[ ${PACKAGEKIT} -eq true ]] && systemctl start --quiet packagekit
 
@@ -1705,9 +1692,6 @@ installGentoo()
    emerge -atv ca-certificates xhost debootstrap dpkg
 
    emerge --ask --verbose --depclean
-
-   # Redcore Linux has the wrong URL, cant compile debootrap as of June 2022
-   #InstallDebootstrapDeb
 }
 
 # installs Kwort
@@ -1719,8 +1703,6 @@ installKwort()
 
    # needed packages
    kpkg install ca-certificates xorg-xhost xorg-xauth curl dpkg make
-
-   InstallDebootstrapDeb
 }
 
 # installs package requirements
