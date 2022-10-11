@@ -632,7 +632,7 @@ FirefoxPolicy()
             FirefoxJSONpolicy "${DIR}"
 
          else
-            echo "Another policy already found at ${DIR}." >&2
+            echo "Another policy already found: ${DIR}/policies.json" >&2
          fi
       fi
 
