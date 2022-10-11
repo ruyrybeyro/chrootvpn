@@ -636,7 +636,7 @@ FirefoxPolicy()
          fi
       fi
 
-      # delete Firefox policy for accepting localhost CShell certificate
+      # delete previous installed Firefox policy for accepting localhost CShell certificate
       if [[ "$1" == "uninstall" ]] && grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
       then
          rm -f "${DIR}/policies.json"
