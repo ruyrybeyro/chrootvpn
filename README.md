@@ -19,9 +19,10 @@ This script downloads the Mobile Access Portal Agent (CShell) and SSL Network Ex
 Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated 32-bit packages necessary for SNX ; the chroot is built to counter some of those behaviours and provide a more secure setup.
 
 Whilst the script supports several Linux distributions as the host OS, it still uses Debian 11 for the chroot "light container".
-The SNX binary and the CShell agent/daemon both install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
 
-resolv.conf, VPN IP address and  routes "bleed" from the chroot directories and kernel shared with the host to the host Linux OS.
+CShell CheckPoint Java agent needs Java (already in the chroot) and X11 desktop rights. The binary SNX VPN client needs a 32-bits environment. The SNX binary, the CShell agent/daemon (and Java) install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
+
+resolv.conf, VPN IP address, routes and X11 "rights" "bleed" from the chroot directories and kernel shared with the host to the host Linux OS.
 
 The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user. In addition, instead of adding the localhost self-signed Agent certificate to a user personal profile as the official setup does, this script install a server-wide global Firefox policy file instead when possible. Notably when Firefox is a snap, or the distribution already has a default policy file, a new policy won't be installed.
 
@@ -30,19 +31,9 @@ As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EO
 INSTRUCTIONS
 ============
 
-Download rpm or deb file from last release or vpn.sh.
+For the stable release, download rpm or deb file from the last release.
 
-Please fill up VPN and VPNIP before using this script.
-SPLIT might or not have to be filled, depending on your needs and Checkpoint VPN routes.
-
-if /opt/etc/vpn.conf is present the above script settings will be ignored. vpn.conf is created upon first instalation.
-
-- first time, if filled VPN, VPNIP inside the script run it as 
-
-
-	vpn.sh -i
-
-Otherwise, run it as:
+- First time installing, run it as:
 
         vnp.sh -i --vpn=FQDN_DNS_name_of_VPN
 	
@@ -53,13 +44,28 @@ Otherwise, run it as:
 
 - visit web VPN page aka Mobile Access Portal for logging in 
 
-CShell CheckPoint Java agent needs Java (already in the chroot)  *and* X11 desktop rights. The binary SNX VPN client needs a 32-bits environment.
+- To launch it anytime after installation or a reboot
 
-Whilst it is recommended having Firefox already installed, for deploying via this script a firefox policy for automagically accepting the self-signed Mobile Access Portal Agent X.509 certificate, if it is not present a already a policy, you can install a Firefox anytime doing:
+        vnp.sh start
 
-    vpn.sh policy
+- the script tries to launch itself upon user xorg login via XDG. To have an automatic launch, if vpn.sh was installed via rpm or deb, add to */etc/sudoers*
 
-Usage:
+        your_user ALL=(ALL:ALL) NOPASSWD: /usr/bin/vpn.sh
+
+- Whilst it is recommended having Firefox already installed, for deploying via this script a firefox policy for automagically accepting the self-signed Mobile Access Portal Agent X.509 certificate, if it is not present a already a policy, you can install a Firefox anytime doing:
+
+        vpn.sh policy
+
+- If /opt/etc/vpn.conf is present the above script settings will be ignored. vpn.conf is created upon first instalation. Thus, for reinstalling, you can run:
+
+        vpn.sh -i
+
+- For delivering the script to other users, you can fill up VPN and VPNIP variables at the beggining of the script. They can then install it as:
+
+        vpn.sh -i
+
+USAGE
+=====
 
 vpn.sh [-f FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN][--oldjava] -i|--install
 
@@ -126,13 +132,13 @@ KNOWN FEATURES
 
 . The user installing/running the script has to got sudo rights (for root);
 
-. For the CShell daemon to start automatically upon the user XDG login, the user has to be able to sudo /usr/local/bin/vpn.sh *without* a password;
+. For the CShell daemon to start automatically upon the user XDG login, the user has to be able to sudo /usr/bin/vpn.sh or /usr/local/bin/vpn.sh *without* a password;
 
 . The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, or after logging in, start/restart the script using a X11 graphical terminal;
 
 . The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-aparently this functionality is not supported for Linux clients. If the status command of this script shows new versions, uninstall and install it again;
 
-. For (re)installing newer versions of SNX/CShell delete the chroot with vpn.sh uninstall and vpn -i again ; the configuration are saved in /opt/etc/vpn.conf, vpn -i is enough;
+. For (re)installing newer versions of SNX/CShell delete the chroot with vpn.sh uninstall and vpn -i again ; afterr the configurations are saved in /opt/etc/vpn.conf, vpn -i is enough;
 
 . The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
 
@@ -209,7 +215,7 @@ For creating *temporarily* a split tunnel on the client side, only after VPN is 
 
            vpn.sh split
 
-If the VPN is giving "wrong routes", deleting the default VPN gateway mith not be enough, so there is a need to fill in routes in the SPLIT variable, by default at /opt/etc/vpn.conf, or if before installing it, at the beginning of this script.
+If the VPN is giving "wrong routes", deleting the default VPN gateway mith not be enough, so there is a need to fill in routes in the SPLIT variable, by default at /opt/etc/vpn.conf, or if before installing for the first time, at the beginning of the vpn.sh script.
 
 The SPLIT variable accepts the following directives:
 
