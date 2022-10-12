@@ -14,19 +14,19 @@ Rui Ribeiro 2022
 
 Tiago Teles @ttmx - Contributions for Arch Linux
 
-This script downloads the Mobile Access Portal Agent (CShell) and SSL Network Extender (SNX) installation scripts from the firewall/VPN we intend to connect to, and installs them in a chrooted environment.
+This script downloads the Mobile Access Portal Agent (CShell) and the SSL Network Extender (SNX) CheckPoint installation scripts from the firewall/VPN we intend to connect to, and installs them in a chrooted environment.
 
-Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux desktop of the user, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated 32-bit packages necessary for SNX ; the chroot is built to counter some of those behaviours and provide a more secure setup.
+Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux user desktop, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated 32-bit packages necessary for SNX ; the chroot setup is built to counter some of those behaviours and provide a more secure setup.
 
 Whilst the script supports several Linux distributions as the host OS, it still uses Debian 11 for the chroot "light container".
 
-CShell CheckPoint Java agent needs Java (already in the chroot) and X11 desktop rights. The binary SNX VPN client needs a 32-bits environment. The SNX binary, the CShell agent/daemon (and Java) install and run under chrooted  Debian. The Linux host runs firefox (or other browser). 
+CShell CheckPoint Java agent needs Java (already in the chroot) and X11 desktop rights. The binary SNX VPN client needs a 32-bits environment. The SNX binary, the CShell agent/daemon (and Java) install and run under chrooted  Debian. The Linux host runs Firefox (or another browser).
 
 resolv.conf, VPN IP address, routes and X11 "rights" "bleed" from the chroot directories and kernel shared with the host to the host Linux OS.
 
-The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user. In addition, instead of adding the localhost self-signed Agent certificate to a user personal profile as the official setup does, this script install a server-wide global Firefox policy file instead when possible. Notably when Firefox is a snap, or the distribution already has a default policy file, a new policy won't be installed.
+The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user. In addition, instead of adding the localhost self-signed Agent certificate to a user personal profile as the official setup does, this script install a server-wide global Firefox policy file instead when possible. Notably when Firefox is a snap, or the distribution already has a default Firefox policy file, a new policy won't be installed.
 
-As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run sucessfully. Void, Gentoo, Slackware, Deepin and KaOS variants are not so throughly tested. Have a look near the end of this document, for the more than 110 recent versions/distributions successfully tested.
+As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run successfully. Void, Gentoo, Slackware, Deepin and KaOS variants are not so thoroughly tested. Have a look near the end of this document, for the more than 110 recent versions/distributions successfully tested.
 
 INSTRUCTIONS
 ============
@@ -44,7 +44,7 @@ For the stable release, download rpm or deb file from the last release.
 
 - visit web VPN page aka Mobile Access Portal for logging in 
 
-- To launch it anytime after installation or a reboot
+- To launch it any time after installation or a reboot
 
         vnp.sh start
 
@@ -52,15 +52,15 @@ For the stable release, download rpm or deb file from the last release.
 
         your_user ALL=(ALL:ALL) NOPASSWD: /usr/bin/vpn.sh
 
-- Whilst it is recommended having Firefox already installed, for deploying via this script a firefox policy for automagically accepting the self-signed Mobile Access Portal Agent X.509 certificate, if it is not present a already a policy, you can install a Firefox anytime doing:
+- Whilst it is recommended having Firefox already installed, for deploying via this script a Firefox policy for automagically accepting the self-signed Mobile Access Portal Agent X.509 certificate, if it is not present a already a policy, you can install a Firefox policy any time doing:
 
         vpn.sh policy
 
-- If /opt/etc/vpn.conf is present the above script settings will be ignored. vpn.conf is created upon first instalation. Thus, for reinstalling, you can run:
+- If /opt/etc/vpn.conf is present the above script settings will be ignored. vpn.conf is created upon first installation. Thus, for reinstalling, you can run:
 
         vpn.sh -i
 
-- For delivering the script to other users, you can fill up VPN and VPNIP variables at the beggining of the script. They can then install it as:
+- For delivering the script to other users, you can fill up VPN and VPNIP variables at the beginning of the script. They can then install it as:
 
         vpn.sh -i
 
@@ -104,9 +104,9 @@ vpn.sh -v|--version
 |split        |splits tunnel VPN - use only after session is up       |
 |uninstall    |deletes chroot and host file(s)                        |
 |rmchroot     |deletes chroot                                         |
-|selfupdate   |self updates this script if new version available      |
+|selfupdate   |self-updates this script if new version available      |
 |fixdns       |tries to fix resolv.conf                               |
-|policy       |tries to install a firefox policy                      |
+|policy       |tries to install a Firefox policy                      |
 
 For debugging/maintenance:
 
@@ -130,35 +130,37 @@ This script can be downloaded running:
 KNOWN FEATURES
 ==============
 
-. The user installing/running the script has to got sudo rights (for root);
+- The user installing/running the script has to got sudo rights (for root);
 
-. For the CShell daemon to start automatically upon the user XDG login, the user has to be able to sudo /usr/bin/vpn.sh or /usr/local/bin/vpn.sh *without* a password;
+- For the CShell daemon to start automatically upon the user XDG login, the user must be able to sudo /usr/bin/vpn.sh or /usr/local/bin/vpn.sh *without* a password;
 
-. The CShell daemon writes over X11; if VPN is not working when called/installed from an ssh session, or after logging in, start/restart the script using a X11 graphical terminal;
+- The CShell daemon writes over X11; if VPN is not working when called/installed from a ssh session, or after logging in, start/restart the script using a X11 graphical terminal;
 
-. The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-aparently this functionality is not supported for Linux clients. If the status command of this script shows new versions, uninstall and install it again;
+- The script/chroot is not designed to allow automatic remote deploying of new versions of both CShell (or SNX?)-apparently this functionality is not supported for Linux clients. If the status command of this script shows CShell or SNX new versions remotely, uninstall, and install the chroot setup again;
 
-. For (re)installing newer versions of SNX/CShell delete the chroot with vpn.sh uninstall and vpn -i again ; afterr the configurations are saved in /opt/etc/vpn.conf, vpn -i is enough;
+- For (re)installing newer versions of SNX/CShell delete the chroot with vpn.sh uninstall and vpn -i again; after the configurations are saved in /opt/etc/vpn.conf, vpn -i is enough;
 
-. The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
+- The CShell daemon runs with a separate non-privileged user, and not using the logged in user;
 
-. if using Firefox, is advised to have it installed *before* running this script;
+- if using Firefox, is advised to have it installed *before* running this script;
 
-. if Firefox is reinstalled, better uninstall and (re)install it, for the certificate policy file to be (re)deployed;
+- if Firefox is reinstalled, better uninstall and (re)install vpn.sh, for the certificate policy file to be (re)deployed, or run:
 
-. if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon';
+        vpn.sh policy
 
-. if having issues connecting to VPN after first installation/OS upgrade, reboot;
+- if TZ is not set before the script or edited, default time is TZ='Europe/Lisbon';
 
-. if having DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
+- if having issues connecting to VPN after first installation/OS upgrade, reboot;
 
-. If after login, the web Mobile Portal is asking to install software, most of the time, either CShell daemon is not up, or firefox policy was not installed or Firefox is a snap. do vpn.sh start *and* visit https://localhost:14186/id
+- if having DNS issues in Debian/Ubuntu/Parrot right at the start of the install, reboot and (re)start installation;
 
-. Linux rolling releases distributions have to be fully up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
+- If after login, the web Mobile Portal is asking to install software, most of the time, either the CShell daemon is not up, or the Firefox policy was not installed or Firefox is a snap. do vpn.sh start *and* visit https://localhost:14186/id
 
-. At least Arch after kernel(?) updates seems to ocasionally need a reboot for the VPN to work;
+- Linux rolling releases distributions must be fully up to date before installing any new packages. Bad things can happen and will happen running this script if packages are outdated;
 
-. If having the error "Check Point Deployment Shell internal error" run vpn.sh uninstall *and* install again with vpn.sh -i
+- At least Arch after kernel(?) updates seem to occasionally need a reboot for the VPN to work;
+
+- If having the error "Check Point Deployment Shell internal error" run vpn.sh uninstall *and* install again with vpn.sh -i
 
 SCREENS
 =======
@@ -167,7 +169,7 @@ The following screens show actions to be performed *after* running the script.
 
 1. Accepting localhost certificate in Firefox at https://localhost:14186/id IF a policy not applied. This is done only *once* in the browser after each chroot (re)installation.
 
-If the certificate is not accepted manually or via a policy, Mobile Portal will complain about lack of installed software, whether CShell and SNX are running or not.
+If the certificate is not accepted manually or via a policy installed by vpn.sh, Mobile Portal will complain about lack of installed software, whether CShell and SNX are running or not.
 
 ![This is an image](/assets/images/01.png)
 ![This is an image](/assets/images/02.png)
@@ -192,7 +194,7 @@ Then press Connect to connect to the firewall.
 
 ![This is an image](/assets/images/07.png)
 
-The negotiation of a connection can take a (little) while.
+The negotiation of a connection takes a (little) while.
 
 ![This is an image](/assets/images/08.png)
 
@@ -200,22 +202,22 @@ First and each time after reinstalling the chroot/script, "Trust server" has to 
 
 ![This is an image](/assets/images/09.png)
 
-The signature has to be accepted too. It can happen several times if there is a cluster solution.
+The signature must be accepted too. It will happen several times if there is a cluster solution.
 
 ![This is an image](/assets/images/10.png)
 
-Finally the connection is established. The user will be disconnected then upon timeout, closing the tab/browser, or pressing Disconnect.
+Finally, the connection is established. The user will be disconnected then upon timeout, closing the tab/browser, or pressing Disconnect.
 
 ![This is an image](/assets/images/11.png)
 
 Split tunneling
 ===============
 
-For creating *temporarily* a split tunnel on the client side, only after VPN is up: 
+For creating *temporarily* a split tunnel on the client side, only after the VPN is up: 
 
            vpn.sh split
 
-If the VPN is giving "wrong routes", deleting the default VPN gateway mith not be enough, so there is a need to fill in routes in the SPLIT variable, by default at /opt/etc/vpn.conf, or if before installing for the first time, at the beginning of the vpn.sh script.
+If the VPN is giving "wrong routes", deleting the default VPN gateway might not be enough, so there is a need to fill in routes in the SPLIT variable, by default at /opt/etc/vpn.conf, or if before installing for the first time, at the beginning of the vpn.sh script.
 
 The SPLIT variable accepts the following directives:
 
@@ -227,17 +229,21 @@ The SPLIT variable accepts the following directives:
 
 Example: split VPN with Internet access, and private addresses via VPN
 
- . dropping all VPN routes
+- dropping all VPN routes
 
- . adding route to 10.0.0.0/8 via VPN
+- adding a route to 10.0.0.0/8 via the VPN
 
- . adding route to 192.168.0.0/16 via VPN
+- adding a route to 192.168.0.0/16 via the VPN
 
- . adding route to 172.16.0.0/12 via VPN
+- adding a route to 172.16.0.0/12 via the VPN
       
            SPLIT="flush +10.0.0.0/8 +192.168.0.0/16 +172.16.0.0/12"
 
-Deleting default gw given by VPN, and adding a new route:
+Example: Deleting default gateway given by the VPN, and adding a new route:
+
+- dropping the VPN default gateway
+
+- adding a route to 10.0.0.0/8 via the VPN
 
            SPLIT="-0.0.0.0/1 +10.0.0.0/8"
 

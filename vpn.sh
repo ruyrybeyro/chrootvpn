@@ -10,7 +10,7 @@
 # and Checkpoint VPN given routes.
 #
 # if /opt/etc/vpn.conf is present the above script settings will be 
-# ignored. vpn.conf is created upon first instalation.
+# ignored. vpn.conf is created upon first installation.
 #
 # first time run it as ./vpn.sh -i --vpn=YOUR.VPN.SERVER
 # Accept localhost certificate visiting https://localhost:14186/id if not Firefox
@@ -20,7 +20,7 @@
 # might update this script if new version+Internet connectivity available
 #
 # non-chroot version not written intentionally. 
-# SNX/CShell behave on odd ways ;
+# SNX/CShell behave on odd ways;
 # the chroot is built to counter some of those behaviours
 #
 # CShell CheckPoint Java agent needs Java *and* X11 desktop rights
@@ -199,9 +199,9 @@ do_help()
 	split        split tunnel VPN mode - use only after session is up
 	uninstall    deletes chroot and host file(s)
 	rmchroot     deletes chroot
-	selfupdate   self updates this script if new version available
+	selfupdate   self-updates this script if new version available
 	fixdns       tries to fix resolv.conf
-	policy	     tries to install firefox policy
+	policy	     tries to install Firefox policy
 	
 	For debugging/maintenance:
 	
@@ -222,7 +222,7 @@ do_help()
 }
 
 
-# complain to STDERR and exit with error
+# complains to STDERR and exit with error
 die() 
 {
    # calling function name: message 
@@ -235,7 +235,7 @@ die()
 # DNS lookup: getent is installed by default
 vpnlookup()
 {
-   # resolve IPv4 IP address of DNS name $VPN
+   # resolves IPv4 IP address of DNS name $VPN
    VPNIP=$(getent ahostsv4 "${VPN}" | awk 'NR==1 { print $1 } ' )
    [[ -z "${VPNIP}" ]] && die "could not resolve ${VPN} DNS name"
 }
@@ -541,7 +541,7 @@ umountChrootFS()
 
 
 # Firefox Policy
-# add X.509 self-signed CShell certificate
+# adds X.509 self-signed CShell certificate
 # to the list of accepted enterprise root certificates
 # 
 # Argument: $1 = Directory for installing policy
@@ -636,7 +636,7 @@ FirefoxPolicy()
          fi
       fi
 
-      # delete previous installed Firefox policy for accepting localhost CShell certificate
+      # deletes previous installed Firefox policy for accepting localhost CShell certificate
       if [[ "$1" == "uninstall" ]] && grep CShell_Certificate "${DIR}/policies.json" &> /dev/null
       then
          rm -f "${DIR}/policies.json"
@@ -896,13 +896,13 @@ showStatus()
 }
 
 
-# kill Java daemon agent
+# kills Java daemon agent
 killCShell()
 {
    if isCShellRunning
    then
 
-      # kill all java CShell agents (1)
+      # kills all java CShell agents (1)
       pkill -9 -f CShell 
 
       if ! isCShellRunning
@@ -1073,10 +1073,10 @@ fixDNS2()
 }
 
 
-# disconnect SNX/VPN session
+# disconnects SNX/VPN session
 doDisconnect()
 {
-   # if snx/VPN up, disconnect
+   # if snx/VPN up, disconnects
    pgrep snx > /dev/null && doChroot /usr/bin/snx -d
 
    # try to fix resolv.conf having VPN DNS servers 
@@ -1408,7 +1408,7 @@ GetCompileSlack()
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
       curl -k -O "${BUILD}" --silent --fail || die "could not download ${BUILD}"
 
-      # extract it and enter directory
+      # extracts it and enter directory
       tar -zxvf "${NAME}.tar.gz"
       cd "$NAME" || die "cannot cd ${NAME}"
 
@@ -1445,7 +1445,7 @@ GetCompileSlack()
       # and generating SBo.tgz instalation package
       ./${NAME}.SlackBuild
      
-      # returns saved directory at the loop beggining
+      # returns saved directory at the loop beginning
       popd || die "error restoring cwd [for]"
    done
  
@@ -1458,7 +1458,7 @@ GetCompileSlack()
    # installs SBo.tgz just compiled/created packages
    installpkg /tmp/*tgz
 
-   # delete packages
+   # deletes packages
    rm -f /tmp/*tgz
 }
 
@@ -1485,7 +1485,7 @@ InstallDebootstrapDeb()
       # install it from tar.gz source file
       if ! command -v debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
       then
-         # get tar.gz from debian pool
+         # gets tar.gz from debian pool
          curl -k --output debootstrap.tar.gz "${SRC_BOOTSTRAP}" --silent --fail || die "could not download ${SRC_BOOTSTRAP}"
          # gz untar it
 	 tar -zxvf debootstrap.tar.gz
@@ -1675,7 +1675,7 @@ installGentoo()
 {
    echo "Gentoo family setup" >&2
 
-   # maintance because rolling release
+   # maintenance because rolling release
    # and problems with international repositories connectivity
    #emaint --auto sync
    #emerge-webrsync
@@ -1736,7 +1736,7 @@ installPackages()
    # if Solus based
    #[[ "${SOLUS}"    -eq 1 ]] && installSolus
 
-   # only will work if debootstrap *too old*
+   # will work only if debootstrap *too old*
    InstallDebootstrapDeb
 
    if ! command -v debootstrap &> /dev/null
@@ -1747,7 +1747,7 @@ installPackages()
 }
 
 
-# fix DNS - Arch
+# fixes DNS - Arch
 #fixARCHDNS()
 #{
    # seems not to be needed
@@ -1763,7 +1763,7 @@ installPackages()
 #}
 
 
-# fix DNS RedHat family if systemd-resolved not active
+# fixes DNS RedHat family if systemd-resolved not active
 fixRHDNS()
 {
    local counter
@@ -1808,7 +1808,7 @@ fixRHDNS()
 
       ln -sf ../run/systemd/resolve/stub-resolv.conf resolv.conf
 
-      # reload NeworkManager
+      # reloads NeworkManager
       systemctl reload NetworkManager
 
       # waits for it to be up
@@ -1823,7 +1823,7 @@ fixRHDNS()
 }
 
 
-# fix DNS - SUSE 
+# fixes DNS - SUSE 
 fixSUSEDNS()
 {
    if [[ "${SUSE}" -eq 1 ]] && grep -v ^NETCONFIG_DNS_FORWARDER=\"dnsmasq\" /etc/sysconfig/network/config &> /dev/null
@@ -1838,13 +1838,13 @@ fixSUSEDNS()
 
       ln -sf ../run/netconfig/resolv.conf resolv.conf
 
-      # restart network
+      # restarts network
       systemctl restart network
    fi
 }
 
 
-# fix DNS - DEEPIN
+# fixes DNS - DEEPIN
 #fixDEEPINDNS()
 #{
 #   if [[ "${DEEPIN}" -eq 1 ]]
@@ -1859,7 +1859,7 @@ fixSUSEDNS()
 #}
 
 
-# "bug/feature": check DNS health
+# "bug/feature": checks DNS health
 checkDNS()
 {
    # ask once for slow systems to fail/cache it
@@ -1940,7 +1940,7 @@ createCshellUser()
 }
 
 
-# build required chroot file system structure + scripts
+# builds required chroot file system structure + scripts
 buildFS()
 {
    cd "${CHROOT}" >&2 || die "could not chdir to ${CHROOT}" 
@@ -1958,17 +1958,17 @@ buildFS()
    # from the firewall
    rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
-   # download SNX installation scripts from CheckPoint machine
+   # downloads SNX installation scripts from CheckPoint machine
    if curl -k -O --fail --silent "https://${VPN}/SNX/INSTALL/snx_install.sh"
    then 
-      # download CShell installation scripts from CheckPoint machine
+      # downloads CShell installation scripts from CheckPoint machine
       curl -O -k --fail --silent "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
       curl -k --fail --silent "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt 
    else
-      # download SNX installation scripts from CheckPoint machine
+      # downloads SNX installation scripts from CheckPoint machine
       curl -k -O --silent --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh" 
-      # download CShell installation scripts from CheckPoint machine
+      # downloads CShell installation scripts from CheckPoint machine
       curl -k -O --silent --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
       curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
@@ -1998,13 +1998,13 @@ buildFS()
 	${VPNIP} ${VPN}
 	EOF7
 
-   # add host hostname to hosts 
+   # adds host hostname to hosts 
    if [[ -n "${HOSTNAME}" ]]
    then
       # inside chroot
       echo -e "\n127.0.0.1 ${HOSTNAME}" >> etc/hosts
 
-      # add hostname to host /etc/hosts
+      # adds hostname to host /etc/hosts
       if ! grep "${HOSTNAME}" /etc/hosts &> /dev/null
       then
          echo -e "\n127.0.0.1 ${HOSTNAME}" >> /etc/hosts
@@ -2082,10 +2082,10 @@ buildFS()
 	   apt -y install openjdk-11-jre
 	fi
 
-	# clean APT chroot cache
+	# cleans APT chroot cache
 	apt clean
 	
-	# install SNX and CShell
+	# installs SNX and CShell
 	/root/snx_install.sh
 	echo "Installing CShell" >&2
 	DISPLAY="${DISPLAY}" PATH=/nopatch:"${PATH}" /root/cshell_install.sh 
@@ -2163,7 +2163,7 @@ FstabMount()
 }
 
 
-# try to create xdg autorun file similar to CShell
+# tries to create xdg autorun file similar to CShell
 # but for all users instead of one user private profile
 # on the host system
 XDGAutoRun()
@@ -2241,7 +2241,7 @@ XDGAutoRun()
 
 
 # creates /opt/etc/vpn.conf
-# upon service is running first time successfully
+# when the service runs a first time successfully
 createConfFile()
 {
     # create /opt/etc if not there
