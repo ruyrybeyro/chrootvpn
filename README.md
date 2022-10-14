@@ -67,7 +67,7 @@ For the stable release, download rpm or deb file from the last release.
 USAGE
 =====
 
-vpn.sh [-f FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN][--oldjava] -i|--install
+vpn.sh [-l][-f FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN][--oldjava] -i|--install
 
 vpn.sh [-f FILE][-o FILE|--output=FILE][-c|--chroot=DIR] start|stop|restart|status
 
@@ -79,18 +79,19 @@ vpn.sh -h|--help
 
 vpn.sh -v|--version
 
-|Option   |  |Function                                               |
-|---------|--|-------------------------------------------------------|
-|--install|-i|install mode - creates chroot                          |
-|--chroot |-c|changes default chroot /opt/chroot directory           |
-|--help   |-h|shows this help                                        |
-|--version|-v|script version                                         |
-|--file   |-f|alternate conf file. Default /opt/etc/vpn.conf         |
-|--vpn    |  |selects VPN DNS full name at install time              |
-|--proxy  |  |proxy to use in apt inside chroot 'http://user:pass@IP'|
-|--output |-o|redirects ALL output for FILE                          |
-|--silent |-s|special case of output, no arguments                   |
-|--oldjava|  |JDK 8 for connecting to old Checkpoint VPN servers (*) |
+|Option   |  |Function                                                 |
+|---------|--|---------------------------------------------------------|
+|--install|-i|install mode - creates chroot                            |
+|--chroot |-c|changes default chroot /opt/chroot directory             |
+|--help   |-h|shows this help                                          |
+|--version|-v|script version                                           |
+|--file   |-f|alternate conf file. Default /opt/etc/vpn.conf           |
+|--vpn    |  |selects VPN DNS full name at install time                |
+|--proxy  |  |proxy to use in apt inside chroot 'http://user:pass@IP'  |
+|--output |-o|redirects ALL output for FILE                            |
+|--silent |-s|special case of output, no arguments                     |
+|         |-l|gets snx/cshell_install.sh from cwd directory, if present|
+|--oldjava|  |JDK 8 for connecting to old Checkpoint VPN servers (*)   |
 
 (*) (circa 2019) *experimental* -- not sure it is needed 
 

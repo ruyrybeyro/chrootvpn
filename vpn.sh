@@ -110,6 +110,9 @@ URL_VPN_TEST="https://www.debian.org"
 # all on plain English
 export LC_ALL=C LANG=C
 
+# save local current working directory
+LOCALCWD="$(pwd)"
+
 # script full PATH
 SCRIPT=$(realpath "${BASH_SOURCE[0]}")
 
@@ -144,6 +147,10 @@ false=1
 # PATH for being called outside the command line (from xdg)
 PATH="/sbin:/usr/sbin:/bin:/usr/sbin:${PATH}"
 
+# if true, cwd cshell_install.sh and/or snx_install.sh will be used
+# if present 
+LOCALINSTALL=false
+
 # Java version (affected by oldjava parameter) 
 # for old CheckPoint VPN servers
 # circa 2019?
@@ -171,7 +178,7 @@ do_help()
 	VPN client setup for Debian/Ubuntu
 	Checkpoint R80.10+	${VERSION}
 
-	${SCRIPTNAME} [-f FILE|--file=FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
+	${SCRIPTNAME} [-l][-f FILE|--file=FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
 	${SCRIPTNAME} [-f FILE|--file=FILE][-o FILE|--output=FILE][-c DIR|--chroot=DIR] start|stop|restart|status
 	${SCRIPTNAME} [-f FILE|--file=FILE][-c DIR|--chroot=DIR] [uninstall|rmchroot]
 	${SCRIPTNAME} [-f FILE|--file=FILE][-o FILE|--output=FILE] disconnect|split|selfupdate|fixdns
@@ -183,6 +190,7 @@ do_help()
 	-h|--help    shows this help
 	-v|--version script version
 	-f|--file    alternate conf file. Default /opt/etc/vpn.conf
+        -l           gets snx_install.sh and/or cshell_install.sh from cwd directory, if present
 	--vpn        selects the VPN DNS full name at install time
 	--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental*
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
@@ -292,7 +300,7 @@ doGetOpts()
    install=false
 
    # process command line options
-   while getopts dic:-:o:shvf: OPT
+   while getopts dic:-:o:shvf:l OPT
    do
 
       # long option -- , - handling
@@ -340,6 +348,7 @@ doGetOpts()
                            CONFFILE="${OPTARG}"
                            [[ -e $CONFFILE ]] || die "no configuration file $CONFFILE"
                            . "${CONFFILE}" ;; 
+         l)                LOCALINSTALL=true ;;      # if cwd snx/cshell_install.sh, uses it
          ??* )             die "Illegal option --${OPT}" ;;  # bad long option
          ? )               exit 2;;                  # bad short option (reported by getopts) 
 
@@ -1956,7 +1965,7 @@ buildFS()
 
    # getting the last version of the agents installation scripts
    # from the firewall
-   rm -f snx_install.sh cshell_install.sh 2> /dev/null
+   # rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
    # downloads SNX installation scripts from CheckPoint machine
    if curl -k --output "${CHROOT}/root/snx_install.sh" --fail --silent "https://${VPN}/SNX/INSTALL/snx_install.sh"
@@ -1972,6 +1981,23 @@ buildFS()
       curl -k --output "${CHROOT}/root/cshell_install.sh" --silent --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
       curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
+   fi
+
+   # replace cshell_install.sh or snx_install.sh with local files for newer versions than the firewall provided
+   # get them from the current working directory of when this script was called
+
+   if [[ $LOCALINSTALL -eq true ]]
+   then
+      if [[ -e "${LOCALCWD}/snx_install.sh" ]]  
+      then
+         echo "Replacing snx_install.sh with local copy at ${LOCALCWD}/snx_install.sh"
+         cp "${LOCALCWD}/snx_install.sh" "${CHROOT}/root/snx_install.sh"
+      fi
+      if [[ -e "${LOCALCWD}/cshell_install.sh" ]] 
+      then
+         echo "Replacing cshell_install.sh with local copy at ${LOCALCWD}/cshell_install.sh"
+         cp "${LOCALCWD}/cshell_install.sh" "${CHROOT}/root/cshell_install.sh"   
+   fi
    fi
 
    # snx calls modprobe, modprobe is not needed
