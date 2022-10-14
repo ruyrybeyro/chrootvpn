@@ -453,6 +453,8 @@ RHEL 9.0 Plow
 
 EuroLinux 8.6 Kyiv
 
+EuroLinux 8.7 Brussels
+
 EuroLinux 9.0
 
 Springale Open Enterprise Linux 9.0 (Parma)

@@ -1959,23 +1959,20 @@ buildFS()
    rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
    # downloads SNX installation scripts from CheckPoint machine
-   if curl -k -O --fail --silent "https://${VPN}/SNX/INSTALL/snx_install.sh"
+   if curl -k --output "${CHROOT}/root/snx_install.sh" --fail --silent "https://${VPN}/SNX/INSTALL/snx_install.sh"
    then 
       # downloads CShell installation scripts from CheckPoint machine
-      curl -O -k --fail --silent "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
+      curl -k --output "${CHROOT}/root/cshell_install.sh" --silent "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
       curl -k --fail --silent "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt 
    else
       # downloads SNX installation scripts from CheckPoint machine
-      curl -k -O --silent --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh" 
+      curl -k --output "${CHROOT}/root/snx_install.sh" --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh" 
       # downloads CShell installation scripts from CheckPoint machine
-      curl -k -O --silent --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
+      curl -k --output "${CHROOT}/root/cshell_install.sh" --silent --fail "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
       curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    fi
-
-   mv cshell_install.sh "${CHROOT}/root"
-   mv snx_install.sh "${CHROOT}/root"
 
    # snx calls modprobe, modprobe is not needed
    # creates a fake one inside chroot returning success
