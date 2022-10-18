@@ -2,7 +2,7 @@
 #
 # Rui Ribeiro
 #
-# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/Kwort/KaOS hosts 
+# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/Kwort/Pisi/KaOS hosts 
 # Checkpoint R80.10 and up
 #
 # Please fill VPN and VPNIP before using this script.
@@ -371,6 +371,7 @@ getDistro()
    VOID=0
    DEEPIN=0
    KWORT=0
+   PISI=0
    # installing dpkg damages Solus, commented out
    #SOLUS=0
 
@@ -423,8 +424,11 @@ getDistro()
    # Solus
    #[[ -f "/etc/solus-release" ]]   && SOLUS=1 # is Solus family
 
+   # Pisi
+   [[ -f "/etc/pisilinux-release" ]]    && PISI=1 # is PISI
+
    # if none of distribution families above, abort
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort and KaOS family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi and KaOS family distributions supported"
 }
 
 
@@ -1010,6 +1014,7 @@ fixDNS()
    [[ "${SLACKWARE}" -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${VOID}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${DEEPIN}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+   [[ "${PISI}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    # [[ "${SOLUS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 
    [[ ${KWORT}       -eq 1 ]] && fixLinks "..$(find /run/dhcpcd/hook-state/resolv.conf/ -type f | head -1)"
@@ -1714,6 +1719,23 @@ installKwort()
    kpkg install ca-certificates xorg-xhost xorg-xauth curl dpkg make
 }
 
+# installs Pisi
+installPisi()
+{
+   echo "Pisi setup" >&2
+
+   pisi -y update-repo
+
+   # update packages
+   pisi -y up -dvs
+
+   # needed packages
+   for pkg in ca-certificates curl make xorg-app firefox
+   do
+      pisi -y install "${pkg}"
+   done
+}
+
 # installs package requirements
 installPackages()
 {
@@ -1741,6 +1763,9 @@ installPackages()
 
    # if KWORT based
    [[ "${KWORT}"    -eq 1 ]] && installKwort
+
+   # if Pisi based
+   [[ "${PISI}"     -eq 1 ]] && installPisi
 
    # if Solus based
    #[[ "${SOLUS}"    -eq 1 ]] && installSolus
@@ -1914,6 +1939,17 @@ createChroot()
    # wget https://ftp-master.debian.org/keys/release-11.asc -qO- | gpg --import --no-default-keyring --keyring ./debian-release-11.gpg
    # debootstrap --keyring=./debian-release-11.gpg 
 
+   # elfutils changed ar name to eu-ar?
+   # ar and dpkg-deb are debootstrap deb files extractors
+   if ! command -v ar &> /dev/null && ! command -v dpkg-deb &> /dev/null && command -v which &> /dev/null
+   then
+      if command -v eu-ar &> /dev/null 
+      then
+         ln -s $(which eu-ar) /usr/local/bin/ar
+      fi
+   fi
+
+   # bootstrap initial chroot
    if ! debootstrap --no-check-gpg --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2

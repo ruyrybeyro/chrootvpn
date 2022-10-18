@@ -4,7 +4,7 @@ Checkpoint R80+ VPN client chroot wrapper
 
 VPN client chroot'ed Debian setup/wrapper 
 
-for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Kwort based hosts
+for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Pisi/Kwort based hosts
 
 Checkpoint R80.10 and up
 
@@ -526,6 +526,8 @@ Garuda Linux 220614
 
 Garuda Linux 220717
 
+Garuda Linux 221017
+
 Mabox Linux 22.06 22.08
 
 BluestarLinux 
@@ -583,6 +585,8 @@ Void Linux
 
 Void Linux 2021-09-30
 
+Void Linux 2022-10-01
+
 AgarimOS
 
 Gentoo
@@ -611,3 +615,9 @@ Kwort
 =====
 
 Kwort Linux 4.4
+
+Pisi
+====
+
+PisiLinux 2.3.1 (Nar)
+
