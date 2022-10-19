@@ -643,7 +643,8 @@ FirefoxPolicy()
             # creates JSON policy file
             # Accepting CShell certificate
             FirefoxJSONpolicy "${DIR}"
-
+            
+            echo "Policy installed: ${DIR}/policies.json" >&2
          else
             echo "Another policy already found: ${DIR}/policies.json" >&2
          fi
@@ -1939,8 +1940,11 @@ createChroot()
    # wget https://ftp-master.debian.org/keys/release-11.asc -qO- | gpg --import --no-default-keyring --keyring ./debian-release-11.gpg
    # debootstrap --keyring=./debian-release-11.gpg 
 
-   # elfutils changed ar name to eu-ar?
    # ar and dpkg-deb are debootstrap deb files extractors
+   # this should not happen if package management is well configured
+   # it is a failsafe of last measure
+   # ar is provided by binutils
+   #
    if ! command -v ar &> /dev/null && ! command -v dpkg-deb &> /dev/null && command -v which &> /dev/null
    then
       if command -v eu-ar &> /dev/null 

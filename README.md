@@ -283,6 +283,8 @@ Debian Bookworm (testing 12)
 
 antiX-21 Grup Yorum
 
+antiX-22 Grup Yorum
+
 Devuan Chimaera 4.0
 
 Ubuntu LTS 18.04 Bionic Beaver
