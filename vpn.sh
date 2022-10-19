@@ -1524,7 +1524,7 @@ installDebian()
    #apt -y upgrade
 
    # installs needed packages
-   apt -y install ca-certificates x11-xserver-utils curl dpkg debootstrap make
+   apt -y install ca-certificates x11-xserver-utils curl dpkg debootstrap make binutils firefox
 
    
    # we want to make sure resolvconf is the last one
@@ -1587,7 +1587,7 @@ installRedHat()
       fi
    fi
 
-   $DNF -y install ca-certificates curl debootstrap make
+   $DNF -y install ca-certificates curl debootstrap make binutils firefox
 
    $DNF -y install dpkg
 
@@ -1618,7 +1618,7 @@ installArch()
    if ! pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make
    then
       packman-key --populate
-      pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make
+      pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make binutils
    fi
    pacman --needed -Syu firefox
 }
@@ -1641,7 +1641,7 @@ installSUSE()
 
    zypper ref
 
-   zypper -n install ca-certificates curl dpkg xhost dnsmasq
+   zypper -n install ca-certificates curl dpkg xhost dnsmasq binutils 
 
    command -v dpkg &>/dev/null || die "could not install software"
 
@@ -1669,7 +1669,7 @@ installVoid()
    # needed packages
    # some of them already installed
    xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
-   xbps-install -yS ca-certificates xhost curl debootstrap dpkg openresolv make
+   xbps-install -yS ca-certificates xhost curl debootstrap dpkg openresolv make binutils firefox
 }
 
 
@@ -1703,7 +1703,7 @@ installGentoo()
    emerge --ask --oneshot --verbose sys-apps/portage
 
    # install/update packages
-   emerge -atv ca-certificates xhost debootstrap dpkg
+   emerge -atv ca-certificates xhost debootstrap dpkg binutils firefox
 
    emerge --ask --verbose --depclean
 }
@@ -1716,7 +1716,7 @@ installKwort()
    kpkg update
 
    # needed packages
-   kpkg install ca-certificates xorg-xhost xorg-xauth curl dpkg make
+   kpkg install ca-certificates xorg-xhost xorg-xauth curl dpkg make binutils firefox
 }
 
 # installs Pisi
@@ -1730,7 +1730,7 @@ installPisi()
    pisi -y up -dvs
 
    # needed packages
-   for pkg in ca-certificates curl make xorg-app firefox
+   for pkg in ca-certificates curl make xorg-app binutils firefox 
    do
       pisi -y install "${pkg}"
    done
