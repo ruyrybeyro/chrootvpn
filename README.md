@@ -112,15 +112,17 @@ vpn.sh -v|--version
 For debugging/maintenance:
 
 vpn.sh -d|--debug
+vpn.sh sudoers
 vpn.sh [-c DIR|--chroot=DIR] shell|upgrade
 
 vpn.sh shell
 
-|Options|  |Function                |
-|-------|--|------------------------|
-|--debug|-d|bash debug mode on      |
-|shell  |  |bash shell inside chroot|
-|upgrade|  |OS upgrade inside chroot|
+|Options|  |Function                                             |
+|-------|--|-----------------------------------------------------|
+|--debug|-d|bash debug mode on                                   |
+|shell  |  |bash shell inside chroot                             |
+|upgrade|  |OS upgrade inside chroot                             |
+|sudoers|  |installs in /etc/sudoers sudo permission for the user|
 
 This script can be downloaded running:
 

@@ -219,6 +219,7 @@ do_help()
 	-d|--debug   bash debug mode on
 	shell        bash shell inside chroot
 	upgrade      OS upgrade inside chroot
+	sudoers      installs in /etc/sudoers sudo permission for the user
 	
 	URL for accepting CShell localhost certificate 
 	https://localhost:14186/id
@@ -293,6 +294,31 @@ doOutput()
 }
 
 
+# write /etc/sudoers
+# giving sudo permission for script
+doSudoers()
+{
+   if [[ -e /etc/sudoers ]]
+   then
+      if [[ -z "${SUDO_USER}" ]]
+      then
+         die "running script as root, sudoers no written"
+      else
+         if [[ -e "/usr/bin/vpn.sh" ]]
+         then
+            echo "${SUDO_USER} ALL=(ALL:ALL) NOPASSWD: /usr/bin/vpn.sh" >> /etc/sudoers >&2
+         fi
+         if [[ "${INSTALLSCRIPT}" != "/usr/bin/vpn.sh" ]]
+         then
+            echo "${SUDO_USER} ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >> /etc/sudoers >&2
+         fi
+      fi
+   else
+      die "no /etc/sudoers. Install sudo package"
+   fi
+}
+
+
 # arguments - script getopts options handling
 doGetOpts()
 {
@@ -349,6 +375,8 @@ doGetOpts()
                            [[ -e $CONFFILE ]] || die "no configuration file $CONFFILE"
                            . "${CONFFILE}" ;; 
          l)                LOCALINSTALL=true ;;      # if cwd snx/cshell_install.sh, uses it
+         sudoers)          doSudoers 
+                           exit 0 ;;
          ??* )             die "Illegal option --${OPT}" ;;  # bad long option
          ? )               exit 2;;                  # bad short option (reported by getopts) 
 
