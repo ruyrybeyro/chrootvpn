@@ -625,3 +625,8 @@ Pisi
 
 PisiLinux 2.3.1 (Nar)
 
+Clear Linux
+===========
+
+Clear Linux OS Desktop 36010
+

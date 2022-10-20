@@ -2,7 +2,7 @@
 #
 # Rui Ribeiro
 #
-# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/Kwort/Pisi/KaOS hosts 
+# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/Kwort/Pisi/KaOS/ClearLinux hosts 
 # Checkpoint R80.10 and up
 #
 # Please fill VPN and VPNIP before using this script.
@@ -400,6 +400,7 @@ getDistro()
    DEEPIN=0
    KWORT=0
    PISI=0
+   CLEAR=0
    # installing dpkg damages Solus, commented out
    #SOLUS=0
 
@@ -455,8 +456,11 @@ getDistro()
    # Pisi
    [[ -f "/etc/pisilinux-release" ]]    && PISI=1 # is PISI
 
+   # Clear
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "clear-linux-os" ]] && CLEAR=1
+
    # if none of distribution families above, abort
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi and KaOS family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS and Clear Linux family distributions supported"
 }
 
 
@@ -1047,6 +1051,8 @@ fixDNS()
    # [[ "${SOLUS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 
    [[ ${KWORT}       -eq 1 ]] && fixLinks "..$(find /run/dhcpcd/hook-state/resolv.conf/ -type f | head -1)"
+
+   [[ "${CLEAR}"        -eq 1 ]] && fixLinks ../run/systemd/resolve/resolv.conf
 }
 
 
@@ -1553,7 +1559,7 @@ installDebian()
    #apt -y upgrade
 
    # installs needed packages
-   apt -y install ca-certificates x11-xserver-utils curl dpkg debootstrap make binutils firefox
+   apt -y install ca-certificates x11-xserver-utils wget curl dpkg debootstrap make binutils firefox
 
    
    # we want to make sure resolvconf is the last one
@@ -1616,7 +1622,7 @@ installRedHat()
       fi
    fi
 
-   $DNF -y install ca-certificates curl debootstrap make binutils firefox
+   $DNF -y install ca-certificates wget curl debootstrap make binutils firefox
 
    $DNF -y install dpkg
 
@@ -1647,7 +1653,7 @@ installArch()
    if ! pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make
    then
       packman-key --populate
-      pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make binutils
+      pacman --needed -Syu ca-certificates xorg-xhost wget curl dpkg debootstrap xorg-xauth make binutils
    fi
    pacman --needed -Syu firefox
 }
@@ -1670,7 +1676,7 @@ installSUSE()
 
    zypper ref
 
-   zypper -n install ca-certificates curl dpkg xhost dnsmasq binutils 
+   zypper -n install ca-certificates wget curl dpkg xhost dnsmasq binutils 
 
    command -v dpkg &>/dev/null || die "could not install software"
 
@@ -1698,7 +1704,7 @@ installVoid()
    # needed packages
    # some of them already installed
    xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
-   xbps-install -yS ca-certificates xhost curl debootstrap dpkg openresolv make binutils firefox
+   xbps-install -yS ca-certificates xhost wget curl debootstrap dpkg openresolv make binutils firefox
 }
 
 
@@ -1732,7 +1738,7 @@ installGentoo()
    emerge --ask --oneshot --verbose sys-apps/portage
 
    # install/update packages
-   emerge -atv ca-certificates xhost debootstrap dpkg binutils firefox
+   emerge -atv ca-certificates wget curl xhost debootstrap dpkg binutils firefox
 
    emerge --ask --verbose --depclean
 }
@@ -1745,7 +1751,7 @@ installKwort()
    kpkg update
 
    # needed packages
-   kpkg install ca-certificates xorg-xhost xorg-xauth curl dpkg make binutils firefox
+   kpkg install ca-certificates xorg-xhost xorg-xauth wget curl dpkg make binutils firefox
 }
 
 # installs Pisi
@@ -1759,10 +1765,17 @@ installPisi()
    pisi -y up -dvs
 
    # needed packages
-   for pkg in ca-certificates curl make xorg-app binutils firefox 
+   for pkg in ca-certificates wget curl make xorg-app binutils firefox 
    do
       pisi -y install "${pkg}"
    done
+}
+
+# installs Clear Linux
+installClear()
+{
+   killall -9 swupd
+   swupd bundle-add wget curl make binutils firefox
 }
 
 # installs package requirements
@@ -1795,6 +1808,9 @@ installPackages()
 
    # if Pisi based
    [[ "${PISI}"     -eq 1 ]] && installPisi
+
+   # if Clear based
+   [[ "${CLEAR}"     -eq 1 ]] && installClear
 
    # if Solus based
    #[[ "${SOLUS}"    -eq 1 ]] && installSolus
@@ -1985,7 +2001,7 @@ createChroot()
    if ! debootstrap --no-check-gpg --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
    then
       echo "chroot ${CHROOT} unsucessful creation" >&2
-      die "run\nsudo rm -rf ${CHROOT}\n and do it again" 
+      die "run sudo rm -rf ${CHROOT} and do it again" 
    fi
 }
 
