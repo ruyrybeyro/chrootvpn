@@ -4,7 +4,7 @@ Checkpoint R80+ VPN client chroot wrapper
 
 VPN client chroot'ed Debian setup/wrapper 
 
-for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Pisi/Kwort based hosts
+for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Pisi/Kwort/Clear Linux based hosts
 
 Checkpoint R80.10 and up
 

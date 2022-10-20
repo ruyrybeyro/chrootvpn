@@ -654,7 +654,7 @@ FirefoxPolicy()
 
    # if Firefox installed
    # cycle possible firefox global directories
-   for DIR in "/etc/firefox/policies" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution /opt/moz/*firefox*/distribution /usr/lib64/*mozilla* -type d 2> /dev/null)
+   for DIR in "/etc/firefox/policies" $(find /usr/lib/*firefox*/distribution /usr/lib64/*firefox*/distribution /usr/share/*firefox*/distribution /opt/*firefox*/distribution /opt/moz/*firefox*/distribution /usr/lib64/*mozilla* -type d -maxdepth 0 2> /dev/null)
    do
       # -d ${DIR} double check, mostly redundant check
       if  [[ "$1" == "install" ]] && [[ -d "${DIR}" ]]
