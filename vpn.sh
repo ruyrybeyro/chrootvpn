@@ -1774,8 +1774,10 @@ installPisi()
 # installs Clear Linux
 installClear()
 {
-   killall -9 swupd
-   swupd bundle-add wget curl make binutils firefox
+   if ! swupd bundle-add wget curl make binutils firefox
+   then
+      die "could not install. If locked try after a while"
+   fi
 }
 
 # installs package requirements
