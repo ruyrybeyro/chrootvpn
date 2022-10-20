@@ -165,6 +165,8 @@ KNOWN FEATURES
 
 - If having the error "Check Point Deployment Shell internal error" run vpn.sh uninstall *and* install again with vpn.sh -i
 
+- When installing in Clear Linux, if Error: cannot aquire lock file persists, kill swupd
+
 SCREENS
 =======
 
