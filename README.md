@@ -301,6 +301,8 @@ Ubuntu Unity LTS 22.04.1
 
 Ubuntu 22.10 Kinetic
 
+Ubuntu Studio 22.10
+
 Mint   20.2 Uma
 
 Mint   21 Vanessa

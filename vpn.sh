@@ -699,6 +699,8 @@ FirefoxPolicy()
 
       echo "Firefox policy created for accepting https://localhost:14186 certificate" >&2
       echo "If using other browser than Firefox or Firefox is a snap" >&2
+   else
+      [[ "$1" == "install" ]] && echo "No Firefox policy installed" >&2
    fi
 }
 
