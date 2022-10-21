@@ -274,363 +274,226 @@ Tested with chroot'ed Debian Bullseye 11 (32 bits - i386)
 
 and the following x86_64 hosts:
 
-Debian based
-============
 
-Debian 10 Buster
-
-Debian 11 Bullseye
-
-Debian Edu 11.3
-
-Debian Bookworm (testing 12)
-
-antiX-21 Grup Yorum
-
-antiX-22 Grup Yorum
-
-Devuan Chimaera 4.0
-
-Ubuntu LTS 18.04 Bionic Beaver
-
-Ubuntu LTS 20.04 Focal Fossa
-
-Ubuntu LTS 22.04 Jammy Jellyfish
-
-Ubuntu Unity LTS 22.04.1 
-
-Ubuntu 22.10 Kinetic
-
-Ubuntu Studio 22.10
-
-Mint   20.2 Uma
-
-Mint   21 Vanessa
-
-Voyager 22.04 LTS
-
-Pop!_OS 22.04 LTS
-
-Greenie Linux 20.04
-
-Kubuntu 20.04 LTS
-
-Kubuntu 22.04 LTS
-
-Lubuntu 20.04 LTS
-
-Lubuntu 22.04 LTS
-
-Xubuntu 20.04 LTS
-
-Xubuntu 22.04 LTS, Jammy Jellyfish
-
-Ubuntu Budgie 22.04
-
-Ubuntu Mate 20.04.4 LTS
-
-Ubuntu Mate 22.04 LTS
-
-Runtu 20.04.1
-
-Runtu 22.04
-
-Feren OS 2022.04
-
-Lite 6.0 Fluorite
-
-Kali 2022.2
-
-Kali 2022.3
-
-Parrot 5.0.1 Electro Ara
-
-Elementary OS 6.1 Jolnir
-
-Deepin 20.6
-
-Deepin 23
-
-ExTix Deepin 22.6/20.6
-
-KDE neon 5.25
-
-Zorin OS 16.1
-
-Kaisen Linux 2.1
-
-Kaisen Linux 2.2
-
-Pardus 21.2 Yazılım Merkezi
-
-MX 21.1 Wildflower
-
-MX 21.2
-
-Peppermint OS 2022-05-22
-
-Drauger OS 7.6 Strigoi
-
-Trisquel 10.0.1 Nabia
-
-Freespire 82
-
-SharkLinux
-
-Bodhi Linux 6.0.0
-
-MakuluLinux Shift 2022-06.10
-
-Condres OS 1.0
-
-Emmabuntüs DE 4 1.01
-
-Emmabuntüs DE 4 1.02
-
-Neptune 7 ("Faye")
-
-Neptune 7.5
-
-LinuxFx 11
-
-PureOS 10.0 (Byzantium)
-
-SolydXK10
-
-HamoniKR 5.0 Hanla
-
-Lliurex 21
-
-Elive 3.8.30
-
-B2D/OB2D 中文 Linux 計劃 2023 1.0.1
-
-BunsenLabs Linux 10.5 (Lithium)
-
-BOSS 9 (urja)
-
-Netrunner 21.01 (“XOXO”)
-
-Q4OS 4.8 Gemini
-
-Q4OS 4.10 Gemini
-
-Kanotix64 Silverfire 
-
-cutefishOS
-
-SparkyLinux 7 (Orion-Belt) 2022.7
-
-Septor 2022
-
-Pearl MATE Studio 11
-
-MAX-11.5 (MAdrid_linuX)
-
-SysLinuxOS for System Integrators 11 filadelfia
-
-Diamond LinuxTT Gen5+
-
-Nova Escritorio/Desktop 8.0
-
-Exe GNU/Linux Chimaera 20220306
-
-Refracta GNU/Linux 11.0 Chimaera
-
-RoboLinux R12.07
-
-RoboLinux R12.08
-
-Zentyal Server 7.0
-
-PakOS 2021-05 (Debian 10)
-
-Zevenet CE v5.12.2
-
-Enso OS 0.4
-
-Armbian 22.08 Jammy
-
-Spiral Linux 11
-
-Loc-OS Linux 22
-
-RedHat based
-============
-
-RHEL 9.0 Plow
-
-EuroLinux 8.6 Kyiv
-
-EuroLinux 8.7 Brussels
-
-EuroLinux 9.0
-
-Springale Open Enterprise Linux 9.0 (Parma)
-
-Fedora 23
-
-Fedora 36
-
-Fedora 37
-
-Fedora 38
-
-risiOS 36
-
-Network Security Toolkit (NST) 36
-
-CentOS 8
-
-CentOS 9 stream
-
-Rocky 8.6 Green Obsidian
-
-Rocky 9.0 Blue Onyx
-
-Oracle 8.6
-
-Oracle 9.0
-
-AlmaLinux 9.0 Emerald Puma
-
-Mageia 8 mga8
-
-ROSA Fresh Desktop 12.2
-
-openEuler 22.03 LTS
-
-Navy Linux Enterprise 8.6 r1
-
-Miracle Linux 8.4 (Peony)
-
-Nobara 36
-
-Mandrake/Mandriva/RedHat based
-==============
-
-ALT k Linux 10.0
-
-OpenMandriva Lx 4.3
-
-OpenMandriva Lx 5.0
-
-Arch based
-==========
-
-Arch Linux 2022.05.01
-
-Manjaro 21.2.6.1
-
-EndeavourOS 2022.06.32
-
-EndeavourOS Artemis neo 22.7
-
-EndeavourOS 22.9
-
-Arco Linux 22.06.07
-
-Garuda Linux 220614
-
-Garuda Linux 220717
-
-Garuda Linux 221017
-
-Mabox Linux 22.06 22.08
-
-BluestarLinux 
-
-Archcraft 2022.06.08
-
-ArchLabs
-
-ArchMan 2022.07.02 2022.08.20
-
-ArchBang 2022.07.02
-
-SalientOS 21.06
-
-RebornOS
-
-ArchEx Build 220206
-
-Peux OS 22.06
-
-AmOs Linux
-
-AaricKDE
-
-BigLinux 2022-07-15
-
-FreedomOS
-
-cachyOS
-
-KaOS
-====
-
-KaOS 2022.10
-
-SUSE
-====
-
-SLES 15-SP4
-
-openSUSE Leap 15.3
-
-openSUSE Leap 15.4
-
-Linux Kamarada 15.3
-
-GeckoLinux STATIC Cinnamon 153.x
-
-GeckoLinux STATIC Cinnamon 154.x
-
-Regata OS 22 Discovery
-
-Void Linux
-==========
-
-Void Linux 2021-09-30
-
-Void Linux 2022-10-01
-
-AgarimOS
-
-Gentoo
-======
-
-Gentoo Base System release 2.8
-
-Redcore Linux 2102
-
-Redcore Linux Hardened 2201 (Rastaban)
-
-Calculate Linux 22.0.1
-
-Slackware
-=========
-
-Slackware 15.0
-
-Slackware 15.1-current
-
-Salix OS xfce 15.0
-
-Slackel Linux Openbox 7.3 (no /etc/resolv.conf from VPN)
-
-Kwort
-=====
-
-Kwort Linux 4.4
-
-Pisi
-====
-
-PisiLinux 2.3.1 (Nar)
-
-Clear Linux
-===========
-
-Clear Linux OS Desktop 36010
+|Arch based   |version         |
+|-------------|----------------|
+|AaricKDE     |                |
+|AmOs         |                |
+|Arch         |                |
+|ArchBang     |2022.07.02      |
+|Archcraft    |2022.06.08      |
+|ArchEx       |220206          |
+|ArchLabs     |                |
+|ArchMan      |2022.07.02      |
+|ArchMan      |2022.08.20      |
+|Arco         |22.06.07        |
+|BigLinux     |2022-07-15      |
+|BluestarLinux|                |
+|cachyOS      |                |
+|EndeavourOS  |2022.06.32      |
+|EndeavourOS  |22.7 Artemis neo|
+|EndeavourOS  |22.9            |
+|FreedomOS    |                |
+|Garuda       |220614          |
+|Garuda       |220717          |
+|Garuda       |221017          |
+|Mabox        |22.06           |
+|Mabox        |22.08           |
+|Manjaro      |21.2.6.1        |
+|Peux OS      |22.06           |
+|RebornOS     |                |
+|SalientOS    |21.06           |
+
+
+|Clear          |version                 |
+|---------------|------------------------|
+|Clear OS       |Desktop 36010           |
+
+
+|Debian based   |version                  |
+|---------------|-------------------------|
+|antiX          |21 Grup Yorum            |
+|antiX          |22 Grup Yorum            |
+|Armbian        |22.08 Jammy              |
+|B2D/OB2D       |2023 1.0.1               |
+|Bodhi          |6.0.0                    |
+|BOSS           |9 (urja)                 |
+|BunsenLabs     |10.5 (Lithium)           |
+|Condres OS     |1.0                      |
+|cutefishOS     |                         |
+|Debian         |10 Buster                |
+|Debian         |11 Bullseye              |
+|Debian         |12 Bookworm              |
+|Debian Edu     |11.3                     |
+|Deepin         |20.6                     |
+|Deepin         |23                       |
+|Devuan         |4.0 Chimaera             |
+|Diamond LinuxTT|Gen5+                    |
+|Drauger OS     |7.6 Strigoi              |
+|Elementary OS  |6.1 Jolnir               |
+|Elive          |3.8.30                   |
+|Emmabuntüs DE  |4 1.01                   |
+|Emmabuntüs DE  |4 1.02                   |
+|Enso OS        |0.4                      |
+|Exe            |20220306 Chimaera        |
+|ExTix Deepin   |20.6                     |
+|ExTix Deepin   |22.6                     |
+|Feren OS       |2022.04                  |
+|Freespire      |82                       |
+|Greenie        |20.04                    |
+|HamoniKR       |5.0 Hanla                |
+|Kaisen         |2.1                      |
+|Kaisen         |2.2                      |
+|Kali           |2022.2                   |
+|Kali           |2022.3                   |
+|Kanotix64      |Silverfire               |
+|KDE neon       |5.25                     |
+|Kubuntu        |20.04 LTS                |
+|Kubuntu        |22.04 LTS                |
+|Kubuntu        |22.10                    |
+|LinuxFx        |11                       |
+|Lite           |6.0 Fluorite             |
+|Lliurex        |21                       |
+|Loc-OS         |22                       |
+|Lubuntu        |20.04 LTS                |
+|Lubuntu        |22.04 LTS                |
+|Lubuntu        |22.10                    |
+|MakuluLinux    |2022-06.10 Shift         |
+|MAX            |11.5                     |
+|Mint           |20.2 Uma                 |
+|Mint           |21 Vanessa               |
+|MX             |21.1 Wildflower          |
+|MX             |21.2                     |
+|Neptune        |7 ("Faye")               |
+|Neptune        |7.5                      |
+|Netrunner      |21.01 (“XOXO”)           |
+|Nova           |Desktop 8.0              |
+|PakOS          |2021-05                  |
+|Pardus         |21.2 Yazılım Merkezi     |
+|Parrot         |5.0.1 Electro Ara        |
+|Pearl          |MATE Studio 11           |
+|Peppermint OS  |2022-05-22               |
+|Pop!_OS        |22.04 LTS                |
+|PureOS         |10.0 (Byzantium)         |
+|Q4OS           |4.10 Gemini              |
+|Q4OS           |4.8 Gemini               |
+|Refracta       |11.0 Chimaera            |
+|RoboLinux      |R12.07                   |
+|RoboLinux      |R12.08                   |
+|Runtu          |20.04.1                  |
+|Runtu          |22.04                    |
+|Septor         |2022                     |
+|SharkLinux     |                         |
+|SolydXK10      |                         |
+|SparkyLinux    |7 (Orion-Belt) 2022.7    |
+|Spiral         |11                       |
+|SysLinuxOS     |11 filadelfia            |
+|Trisquel       |10.0.1 Nabia             |
+|Ubuntu         |18.04 Bionic Beaver LTS  |
+|Ubuntu         |20.04 Focal Fossa LTS    |
+|Ubuntu         |22.04 Jammy Jellyfish LTS|
+|Ubuntu         |22.10 Kinetic Kudu       |
+|Ubuntu Budgie  |22.04                    |
+|Ubuntu Budgie  |22.10                    |
+|Ubuntu Mate    |20.04.4 LTS              |
+|Ubuntu Mate    |22.04 LTS                |
+|Ubuntu Mate    |22.10                    |
+|Ubuntu Studio  |22.10                    |
+|Ubuntu Unity   |22.04.1 LTS              |
+|Ubuntu Unity   |22.10                    |
+|Voyager        |22.04 LTS                |
+|Voyager        |22.10                    |
+|Xubuntu        |20.04 LTS                |
+|Xubuntu        |22.04 Jammy Jellyfish LTS|
+|Xubuntu        |22.10                    |
+|Zentyal Server |7.0                      |
+|Zevenet CE     |v5.12.2                  |
+|Zorin OS       |16.1                     |
+
+
+|Gentoo based|version                 |
+|------------|------------------------|
+|Gentoo      |2.8                     |
+|Redcore     |2102                    |
+|Redcore     |Hardened 2201 (Rastaban)|
+|Calculate   |22.0.1                  |
+
+
+|Mandriva based |version|
+|---------------|-------|
+|ALT k          | 10.0  |
+|OpenMandriva Lx|4.3    |
+|OpenMandriva Lx|5.0    |
+
+
+|Pisi           |version                 |
+|---------------|------------------------|
+|Pisi           |2.3.1 (Nar)             |
+
+
+|KaOS      |version              |
+|----------|---------------------|
+|KaOS      |2022.10              |
+
+
+|Kwort          |version                 |
+|---------------|------------------------|
+|Kwort          |4.4                     |
+
+
+|RedHat based|version           |
+|------------|------------------|
+|AlmaLinux   |9.0 Emerald Puma  |
+|CentOS      |8                 |
+|CentOS      |9 stream          |
+|EuroLinux   |8.6 Kyiv          |
+|EuroLinux   |8.7 Brussels      |
+|EuroLinux   |9.0               |
+|Fedora      |23                |
+|Fedora      |36                |
+|Fedora      |37                |
+|Fedora      |38                |
+|Mageia      |8 mga8            |
+|Miracle     |8.4 (Peony)       |
+|Navy        |Enterprise 8.6 r1 |
+|Nobara      |36                |
+|NST         |36                |
+|openEuler   |22.03 LTS         | 
+|Oracle      |8.6               |
+|Oracle      |9.0               |
+|PCLinuxOS   |2022.07.10        |
+|RHEL        |9.0 Plow          |
+|risiOS      |36                |
+|Rocky       |8.6 Green Obsidian|
+|Rocky       |9.0 Blue Onyx     |
+|ROSA        |Fresh Desktop 12.2|
+|Springale   |9.0 (Parma)       |
+
+
+|Slackware based|version                 |
+|---------------|------------------------|
+|Slackware      |15.0                    |
+|Slackware      |15.1-current            |
+|Salix OS       |xfce 15.0               |
+|Slackel        |Openbox 7.3 *           |
+
+* (no /etc/resolv.conf from VPN)
+
+
+|SUSE based|version              |
+|----------|---------------------|
+|SLES      |15-SP4               |
+|openSUSE  |Leap 15.3            |
+|openSUSE  |Leap 15.4            |
+|GeckoLinux|STATIC Cinnamon 153.x|
+|GeckoLinux|STATIC Cinnamon 154.x|
+|Kamarada  |15.3                 |
+|Regata OS |22 Discovery         |
+
+
+|Void based|version   |
+|----------|----------|
+|AgarimOS  |          |
+|Void      |2021-09-30|
+|Void      |2022-10-01|
 
