@@ -508,7 +508,9 @@ PreCheck()
 doChroot()
 {
    # setarch i386 lies to uname about being 32 bits
-   setarch i386 chroot "${CHROOT}" "$@"
+   # clean LD_PRELOAD (PCLinuxOS bug)
+   # you dont want to inherit it inside the chroot
+   LD_PRELOAD="" setarch i386 chroot "${CHROOT}" "$@"
 }
 
 

@@ -443,6 +443,7 @@ and the following x86_64 hosts:
 
 |RedHat based|version           |
 |------------|------------------|
+|AlmaLinux   |8.6 Tiger         |
 |AlmaLinux   |9.0 Emerald Puma  |
 |CentOS      |8                 |
 |CentOS      |9 stream          |
@@ -461,7 +462,7 @@ and the following x86_64 hosts:
 |openEuler   |22.03 LTS         | 
 |Oracle      |8.6               |
 |Oracle      |9.0               |
-|PCLinuxOS   |2022.07.10        |
+|PCLinuxOS   |2022.07.10 *      |
 |RHEL        |9.0 Plow          |
 |risiOS      |36                |
 |Rocky       |8.6 Green Obsidian|
