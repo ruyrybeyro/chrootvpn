@@ -89,13 +89,13 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # needed by SLES and Slackware
 # version of debootstrap taken from Debian pool repository
-# 1.0.127 has bullseye rules file
+# 1.0.128 has bullseye rules file
 #
 #
-# http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.127+nmu1_all.deb
-# http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.127+nmu1.tar.gz
+# http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.128+nmu1_all.deb
+# http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.128+nmu1.tar.gz
 #
-VER_BOOTSTRAP="1.0.127"
+VER_BOOTSTRAP="1.0.128"
 DEB_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}+nmu1_all.deb"
 DEB_FILE=$(basename ${DEB_BOOTSTRAP})
 SRC_BOOTSTRAP="${DEBIANREPO}pool/main/d/debootstrap/debootstrap_${VER_BOOTSTRAP}+nmu1.tar.gz"
