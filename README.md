@@ -367,6 +367,7 @@ and the following x86_64 hosts:
 |Neptune        |7 ("Faye")               |
 |Neptune        |7.5                      |
 |Netrunner      |21.01 (“XOXO”)           |
+|Nitrux         |2.4.1                    |
 |Nova           |Desktop 8.0              |
 |PakOS          |2021-05                  |
 |Pardus         |21.2 Yazılım Merkezi     |
