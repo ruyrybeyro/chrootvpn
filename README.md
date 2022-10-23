@@ -341,6 +341,7 @@ and the following x86_64 hosts:
 |ExTix Deepin   |22.6                     |
 |Feren OS       |2022.04                  |
 |Freespire      |82                       |
+|Gnuinos        |4.0 Chimaera             |
 |Greenie        |20.04                    |
 |HamoniKR       |5.0 Hanla                |
 |Kaisen         |2.1                      |
