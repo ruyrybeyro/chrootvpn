@@ -1064,7 +1064,7 @@ fixDNS()
 doStart()
 {
    # ${CSHELL_USER} (cshell) apps - X auth
-   if ! su - "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:"
+   if [[ ! -z "$SUDO_USER" ]] && ! su - "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:"
    then
       echo "If there are not X11 desktop permissions, the VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2
@@ -1563,9 +1563,10 @@ installDebian()
    #apt -y upgrade
 
    # installs needed packages
-   apt -y install ca-certificates x11-xserver-utils wget curl dpkg debootstrap make binutils firefox
+   apt -y install ca-certificates x11-xserver-utils wget curl dpkg debootstrap make binutils
+   # one of them can fail
+   apt -y install firefox || apt -y install firefox-esr
 
-   
    # we want to make sure resolvconf is the last one
    [[ ${DEEPIN} -eq 0 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && [[ ! -f "/run/connman/resolv.conf" ]] && apt -y install resolvconf
 

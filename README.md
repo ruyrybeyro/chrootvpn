@@ -328,6 +328,7 @@ and the following x86_64 hosts:
 |Deepin         |20.6                     |
 |Deepin         |23                       |
 |Devuan         |4.0 Chimaera             |
+|Devuan         |5.0 Daedalus             |
 |Diamond LinuxTT|Gen5+                    |
 |Drauger OS     |7.6 Strigoi              |
 |Elementary OS  |6.1 Jolnir               |
