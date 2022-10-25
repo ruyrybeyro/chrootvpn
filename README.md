@@ -167,6 +167,8 @@ KNOWN FEATURES
 
 - When installing in Clear Linux, if Error: cannot aquire lock file persists, kill swupd
 
+- CShell runs an https server at localhost:14186, so in a minimalist distribution such as Alpine, you shan't forget to setup the lo interface.
+
 SCREENS
 =======
 
@@ -383,6 +385,7 @@ and the following x86_64 hosts:
 |Refracta       |11.0 Chimaera            |
 |Robo           |R12.07                   |
 |Robo           |R12.08                   |
+|Rhino Remix    |                         |
 |Runtu          |20.04.1                  |
 |Runtu          |22.04                    |
 |Septor         |2022                     |
@@ -398,6 +401,7 @@ and the following x86_64 hosts:
 |Ubuntu         |22.10 Kinetic Kudu       |
 |Ubuntu Budgie  |22.04                    |
 |Ubuntu Budgie  |22.10                    |
+|Ubuntu Kylin   |22.04.1                  |
 |Ubuntu Mate    |20.04.4 LTS              |
 |Ubuntu Mate    |22.04 LTS                |
 |Ubuntu Mate    |22.10                    |

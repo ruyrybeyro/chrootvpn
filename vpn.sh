@@ -401,6 +401,7 @@ getDistro()
    KWORT=0
    PISI=0
    CLEAR=0
+   ALPINE=0
    # installing dpkg damages Solus, commented out
    #SOLUS=0
 
@@ -459,8 +460,11 @@ getDistro()
    # Clear
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "clear-linux-os" ]] && CLEAR=1
 
+   # Alpine
+   [[ -f "/etc/alpine-release" ]]    && ALPINE=1 # is Alpine
+
    # if none of distribution families above, abort
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS and Clear Linux family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && [[ "${ALPINE}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS and Clear Linux family distributions supported"
 }
 
 
@@ -521,6 +525,19 @@ isCShellRunning()
    return $?
 }
 
+# no mount --fstab
+#mountChroot()
+#{
+#   local line
+#   local mtpoint
+#   local trash 
+#   local fsoptions
+#
+#   while read -r fs mtpoint trash fsoptions trash trash;
+#   do
+#      [[ -e "$fs" ]] && mount -o $fsoptions "$fs" "$mtpoint"
+#   done < "${CHROOT}/etc/fstab"
+#}
 
 # mount Chroot filesystems
 mountChrootFS()
@@ -536,8 +553,10 @@ mountChrootFS()
       then
          # consistency checks
          [[ ! -f "${CHROOT}/etc/fstab" ]] && die "no ${CHROOT}/etc/fstab"
-
+  
          # mounts using fstab inside chroot, all filesystems
+         # [[ ${ALPINE} -eq 0 ]] &&  mount --fstab "${CHROOT}/etc/fstab" -a
+         # [[ ${ALPINE} -eq 1 ]] && mountChroot
          mount --fstab "${CHROOT}/etc/fstab" -a
 
         # /run/nscd cant be shared between host and chroot
@@ -1057,6 +1076,8 @@ fixDNS()
    [[ ${KWORT}       -eq 1 ]] && fixLinks "..$(find /run/dhcpcd/hook-state/resolv.conf/ -type f | head -1)"
 
    [[ "${CLEAR}"        -eq 1 ]] && fixLinks ../run/systemd/resolve/resolv.conf
+
+    [[ "${ALPINE}"        -eq 1 ]] && fixLinks ../run/dummy.conf
 }
 
 
@@ -1785,6 +1806,15 @@ installClear()
    fi
 }
 
+# installs Alpine
+installAlpine()
+{
+   # binutils, make, wget and perl for debootstrap
+   # util-linux full mount and setarch
+   # curl for this script
+   apk add wget curl make binutils perl util-linux --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/
+}
+
 # installs package requirements
 installPackages()
 {
@@ -1818,6 +1848,9 @@ installPackages()
 
    # if Clear based
    [[ "${CLEAR}"     -eq 1 ]] && installClear
+
+   # if Alpine based
+   [[ "${ALPINE}"     -eq 1 ]] && installAlpine
 
    # if Solus based
    #[[ "${SOLUS}"    -eq 1 ]] && installSolus
