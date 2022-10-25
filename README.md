@@ -287,8 +287,8 @@ and the following x86_64 hosts:
 |ArchMan      |2022.07.02      |
 |ArchMan      |2022.08.20      |
 |Arco         |22.06.07        |
-|BigLinux     |2022-07-15      |
-|BluestarLinux|                |
+|Big          |2022-07-15      |
+|Bluestar     |                |
 |cachyOS      |                |
 |EndeavourOS  |2022.06.32      |
 |EndeavourOS  |22.7 Artemis neo|
@@ -303,7 +303,7 @@ and the following x86_64 hosts:
 |Peux OS      |22.06           |
 |RebornOS     |                |
 |SalientOS    |21.06           |
-
+|Xero         |2022.09         |
 
 |Clear          |version                 |
 |---------------|------------------------|
@@ -360,7 +360,7 @@ and the following x86_64 hosts:
 |Lubuntu        |20.04 LTS                |
 |Lubuntu        |22.04 LTS                |
 |Lubuntu        |22.10                    |
-|MakuluLinux    |2022-06.10 Shift         |
+|Makulu         |2022-06.10 Shift         |
 |MAX            |11.5                     |
 |Mint           |20.2 Uma                 |
 |Mint           |21 Vanessa               |
@@ -381,14 +381,14 @@ and the following x86_64 hosts:
 |Q4OS           |4.10 Gemini              |
 |Q4OS           |4.8 Gemini               |
 |Refracta       |11.0 Chimaera            |
-|RoboLinux      |R12.07                   |
-|RoboLinux      |R12.08                   |
+|Robo           |R12.07                   |
+|Robo           |R12.08                   |
 |Runtu          |20.04.1                  |
 |Runtu          |22.04                    |
 |Septor         |2022                     |
-|SharkLinux     |                         |
+|Shark          |                         |
 |SolydXK10      |                         |
-|SparkyLinux    |7 (Orion-Belt) 2022.7    |
+|Sparky         |7 (Orion-Belt) 2022.7    |
 |Spiral         |11                       |
 |SysLinuxOS     |11 filadelfia            |
 |Trisquel       |10.0.1 Nabia             |
@@ -446,13 +446,13 @@ and the following x86_64 hosts:
 
 |RedHat based|version           |
 |------------|------------------|
-|AlmaLinux   |8.6 Tiger         |
-|AlmaLinux   |9.0 Emerald Puma  |
+|Alma        |8.6 Tiger         |
+|Alma        |9.0 Emerald Puma  |
 |CentOS      |8                 |
 |CentOS      |9 stream          |
-|EuroLinux   |8.6 Kyiv          |
-|EuroLinux   |8.7 Brussels      |
-|EuroLinux   |9.0               |
+|Euro        |8.6 Kyiv          |
+|Euro        |8.7 Brussels      |
+|Euro        |9.0               |
 |Fedora      |23                |
 |Fedora      |36                |
 |Fedora      |37                |
@@ -489,8 +489,8 @@ and the following x86_64 hosts:
 |SLES      |15-SP4               |
 |openSUSE  |Leap 15.3            |
 |openSUSE  |Leap 15.4            |
-|GeckoLinux|STATIC Cinnamon 153.x|
-|GeckoLinux|STATIC Cinnamon 154.x|
+|Gecko     |STATIC Cinnamon 153.x|
+|Gecko     |STATIC Cinnamon 154.x|
 |Kamarada  |15.3                 |
 |Regata OS |22 Discovery         |
 
