@@ -276,6 +276,10 @@ Tested with chroot'ed Debian Bullseye 11 (32 bits - i386)
 
 and the following x86_64 hosts:
 
+|Alpine        |version      |
+|--------------|-------------|
+|Alpine **(1)**|3.16.2       |
+
 
 |Arch based   |version         |
 |-------------|----------------|
@@ -335,8 +339,8 @@ and the following x86_64 hosts:
 |Drauger OS     |7.6 Strigoi              |
 |Elementary OS  |6.1 Jolnir               |
 |Elive          |3.8.30                   |
-|Emmabuntüs DE  |4 1.01                   |
-|Emmabuntüs DE  |4 1.02                   |
+|Emmabuntüs DE4 |1.01                     |
+|Emmabuntüs DE4 |1.02                     |
 |Enso OS        |0.4                      |
 |Exe            |20220306 Chimaera        |
 |ExTix Deepin   |20.6                     |
@@ -469,7 +473,7 @@ and the following x86_64 hosts:
 |openEuler   |22.03 LTS         | 
 |Oracle      |8.6               |
 |Oracle      |9.0               |
-|PCLinuxOS   |2022.07.10 *      |
+|PCLinuxOS   |2022.07.10 **(2)**|
 |RHEL        |9.0 Plow          |
 |risiOS      |36                |
 |Rocky       |8.6 Green Obsidian|
@@ -483,9 +487,7 @@ and the following x86_64 hosts:
 |Slackware      |15.0                    |
 |Slackware      |15.1-current            |
 |Salix OS       |xfce 15.0               |
-|Slackel        |Openbox 7.3 *           |
-
-* (no /etc/resolv.conf from VPN)
+|Slackel        |Openbox 7.3 **(2)**     |
 
 
 |SUSE based|version              |
@@ -505,3 +507,6 @@ and the following x86_64 hosts:
 |Void      |2021-09-30|
 |Void      |2022-10-01|
 
+**(1)** - implementation for advanced users/VMs
+
+**(2)** - no /etc/resolv.conf from VPN
