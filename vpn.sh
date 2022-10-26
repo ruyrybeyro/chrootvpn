@@ -2033,7 +2033,7 @@ createChroot()
    then
       if command -v eu-ar &> /dev/null 
       then
-         ln -s $(which eu-ar) /usr/local/bin/ar
+         ln -s "$(which eu-ar)" "/usr/local/bin/ar"
       fi
    fi
 
