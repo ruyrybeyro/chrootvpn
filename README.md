@@ -455,6 +455,7 @@ and the following x86_64 hosts:
 |RedHat based|version           |
 |------------|------------------|
 |Alma        |8.6 Tiger         |
+|Alma        |8.7               |
 |Alma        |9.0 Emerald Puma  |
 |CentOS      |8                 |
 |CentOS      |9 stream          |
