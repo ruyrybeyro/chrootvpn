@@ -1584,11 +1584,20 @@ installDebian()
    #apt -y upgrade
 
    # installs needed packages
+   # binutils, make, wget for debootstrap
+   # curl for this script
+   # x11-server-utils/xhost for CShell/SNX
+   #                  xauth for sshd
+   # dpkg for installing debootstrap from deb
+   # debootstrap for creating Debian chroot
    apt -y install ca-certificates x11-xserver-utils wget curl dpkg debootstrap make binutils
+
    # one of them can fail
+   # firefox for installing policy afterwards
    apt -y install firefox || apt -y install firefox-esr
 
    # we want to make sure resolvconf is the last one
+   # resolvconf for sharing /run/.../resolv.conf
    [[ ${DEEPIN} -eq 0 ]] && [[ ! -f "/run/systemd/resolve/stub-resolv.conf" ]] && [[ ! -f "/run/connman/resolv.conf" ]] && apt -y install resolvconf
 
    # highly unusual, a Debian/Ubuntu machine *without* dpkg
@@ -1648,6 +1657,12 @@ installRedHat()
       fi
    fi
 
+   # binutils, make, wget for debootstrap
+   # curl for this script
+   # xauth for sshd
+   # dpkg for installing debootstrap from deb
+   # debootstrap for creating Debian chroot
+   # firefox for installing policy afterwards
    $DNF -y install ca-certificates wget curl debootstrap make binutils firefox
 
    $DNF -y install dpkg
@@ -1658,6 +1673,7 @@ installRedHat()
    then
       # alternative packages for having xhost.
       # one of them will give an error, ignore
+      # xhost for CShell/SNX
       $DNF -y install xorg-x11-server-utils
       $DNF -y install xhost
    fi
@@ -1679,8 +1695,17 @@ installArch()
    if ! pacman --needed -Syu ca-certificates xorg-xhost curl dpkg debootstrap xorg-xauth make
    then
       packman-key --populate
+
+      # binutils, make, wget for debootstrap
+      # curl for this script
+      # xhost for CShell/SNX
+      # xauth for sshd
+      # dpkg for installing debootstrap from deb
+      # debootstrap for creating Debian chroot
       pacman --needed -Syu ca-certificates xorg-xhost wget curl dpkg debootstrap xorg-xauth make binutils
    fi
+
+   # firefox for installing policy afterwards
    pacman --needed -Syu firefox
 }
 
@@ -1702,11 +1727,17 @@ installSUSE()
 
    zypper ref
 
+   # binutils, make, wget for debootstrap
+   # curl for this script
+   # xhost for CShell/SNX
+   # dpkg for installing debootstrap from deb
+   # dnsmasq for sharing /run/.../resolv.conf
    zypper -n install ca-certificates wget curl dpkg xhost dnsmasq binutils 
 
    command -v dpkg &>/dev/null || die "could not install software"
 
-   # will fail in SLES
+   # will fail in SLES?
+   # debootstrap for creating Debian chroot
    zypper -n install debootstrap
 
    zypper clean
@@ -1730,6 +1761,14 @@ installVoid()
    # needed packages
    # some of them already installed
    xbps-install -yS void-repo-nonfree void-repo-multilib-nonfree
+
+   # binutils, make, wget for debootstrap
+   # curl for this script
+   # xhost for CShell/SNX
+   # dpkg for installing debootstrap from deb
+   # openresolv for sharing /run/.../resolv.conf
+   # debootstrap for creating Debian chroot
+   # firefox for installing policy afterwards
    xbps-install -yS ca-certificates xhost wget curl debootstrap dpkg openresolv make binutils firefox
 }
 
@@ -1764,8 +1803,15 @@ installGentoo()
    emerge --ask --oneshot --verbose sys-apps/portage
 
    # install/update packages
+   # binutils, make, wget for debootstrap
+   # curl for this script
+   # xhost for CShell/SNX
+   # dpkg for installing debootstrap from deb
+   # debootstrap for creating Debian chroot
+   # firefox for installing policy afterwards
    emerge -atv ca-certificates wget curl xhost debootstrap dpkg binutils firefox
 
+   # clean caches
    emerge --ask --verbose --depclean
 }
 
@@ -1777,6 +1823,11 @@ installKwort()
    kpkg update
 
    # needed packages
+   # binutils, make, wget for debootstrap
+   # curl for this script
+   # xhost for CShell/SNX
+   # dpkg for installing debootstrap from deb
+   # firefox for installing policy afterwards
    kpkg install ca-certificates xorg-xhost xorg-xauth wget curl dpkg make binutils firefox
 }
 
@@ -1791,6 +1842,10 @@ installPisi()
    pisi -y up -dvs
 
    # needed packages
+   # binutils, make, wget for debootstrap
+   # curl for this script
+   # xhost for CShell/SNX
+   # firefox for installing policy afterwards
    for pkg in ca-certificates wget curl make xorg-app binutils firefox 
    do
       pisi -y install "${pkg}"
@@ -1800,6 +1855,9 @@ installPisi()
 # installs Clear Linux
 installClear()
 {
+   # binutils, make, wget for debootstrap
+   # curl for this script
+   # firefox for installing policy afterwards
    if ! swupd bundle-add wget curl make binutils firefox
    then
       die "could not install. If locked try after a while"
@@ -1812,6 +1870,7 @@ installAlpine()
    # binutils, make, wget and perl for debootstrap
    # util-linux full mount and setarch
    # curl for this script
+   # util-linux and binutils needed for having saner utils than the busybox "command" symlinks
    apk add wget curl make binutils perl util-linux --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/
 }
 
