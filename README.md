@@ -1,4 +1,4 @@
-# chrootvpn  
+# chrootVPN
 
 Checkpoint R80+ VPN client chroot wrapper
 
@@ -269,12 +269,21 @@ Mobile Access Portal and Java Compatibility https://supportcenter.checkpoint.com
 
 Mobile Access Portal Agent for Mozilla Firefox asks to re-install even after it was properly installed https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk122576&partition=Advanced&product=Mobile
 
+Unable to connect with SSL Network Extender on Linux machine https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk114521
+
+see also Unix SE post: VPN SSL Network Extender in Firefox https://unix.stackexchange.com/questions/450131/vpn-ssl-network-extender-in-firefox
+
 COMPATIBILITY
 =============
 
-Tested with chroot'ed Debian Bullseye 11 (32 bits - i386)
+Tested with: 
 
-and the following x86_64 hosts:
+|chroot'ed|ver|release |arch|
+|---------|---|--------|----|
+|Debian   |11 |Bullseye|i386|
+|Debian   |12 |Bookworm|i386|
+
+with the following x86_64 hosts:
 
 |Alpine        |version      |
 |--------------|-------------|
@@ -294,7 +303,7 @@ and the following x86_64 hosts:
 |ArchMan      |2022.08.20      |
 |Arco         |22.06.07        |
 |Big          |2022-07-15      |
-|Bluestar     |                |
+|Bluestar     |6.0.5           |
 |cachyOS      |                |
 |EndeavourOS  |2022.06.32      |
 |EndeavourOS  |22.7 Artemis neo|
@@ -313,7 +322,7 @@ and the following x86_64 hosts:
 
 |Clear          |version                 |
 |---------------|------------------------|
-|Clear OS       |Desktop 36010           |
+|Clear OS       |36010 Desktop           |
 
 
 |Debian based   |version                  |
@@ -342,6 +351,7 @@ and the following x86_64 hosts:
 |Emmabuntüs DE4 |1.01                     |
 |Emmabuntüs DE4 |1.02                     |
 |Enso OS        |0.4                      |
+|Escuelas       |7.6                      |
 |Exe            |20220306 Chimaera        |
 |ExTix Deepin   |20.6                     |
 |ExTix Deepin   |22.6                     |
@@ -380,15 +390,16 @@ and the following x86_64 hosts:
 |PakOS          |2021-05                  |
 |Pardus         |21.2 Yazılım Merkezi     |
 |Parrot         |5.0.1 Electro Ara        |
-|Pearl          |MATE Studio 11           |
+|Pearl          |11 MATE Studio           |
 |Peppermint OS  |2022-05-22               |
 |Pop!_OS        |22.04 LTS                |
+|Primtux        |7                        |
 |PureOS         |10.0 (Byzantium)         |
 |Q4OS           |4.10 Gemini              |
 |Q4OS           |4.8 Gemini               |
 |Refracta       |11.0 Chimaera            |
-|Robo           |R12.07                   |
-|Robo           |R12.08                   |
+|Robo           |12.07                    |
+|Robo           |12.08                    |
 |Rhino Remix    |                         |
 |Runtu          |20.04.1                  |
 |Runtu          |22.04                    |
@@ -412,27 +423,29 @@ and the following x86_64 hosts:
 |Ubuntu Studio  |22.10                    |
 |Ubuntu Unity   |22.04.1 LTS              |
 |Ubuntu Unity   |22.10                    |
+|Uruk           |3 (Nannar)               |
 |Voyager        |22.04 LTS                |
 |Voyager        |22.10                    |
 |Xubuntu        |20.04 LTS                |
 |Xubuntu        |22.04 Jammy Jellyfish LTS|
 |Xubuntu        |22.10                    |
 |Zentyal Server |7.0                      |
-|Zevenet CE     |v5.12.2                  |
+|Zevenet CE     |5.12.2                   |
 |Zorin OS       |16.1                     |
+|Zorin OS       |16.2                     |
 
 
 |Gentoo based|version                 |
 |------------|------------------------|
 |Gentoo      |2.8                     |
 |Redcore     |2102                    |
-|Redcore     |Hardened 2201 (Rastaban)|
+|Redcore     |2201 Hardened (Rastaban)|
 |Calculate   |22.0.1                  |
 
 
 |Mandriva based |version|
 |---------------|-------|
-|ALT k          | 10.0  |
+|ALT k          |10.0   |
 |OpenMandriva Lx|4.3    |
 |OpenMandriva Lx|5.0    |
 
@@ -457,6 +470,7 @@ and the following x86_64 hosts:
 |Alma        |8.6 Tiger         |
 |Alma        |8.7               |
 |Alma        |9.0 Emerald Puma  |
+|Alma        |9.1               |
 |CentOS      |8                 |
 |CentOS      |9 stream          |
 |Euro        |8.6 Kyiv          |
@@ -468,6 +482,7 @@ and the following x86_64 hosts:
 |Fedora      |38                |
 |Mageia      |8 mga8            |
 |Miracle     |8.4 (Peony)       |
+|Miracle     |9.0               |
 |Navy        |Enterprise 8.6 r1 |
 |Nobara      |36                |
 |NST         |36                |
@@ -479,7 +494,7 @@ and the following x86_64 hosts:
 |risiOS      |36                |
 |Rocky       |8.6 Green Obsidian|
 |Rocky       |9.0 Blue Onyx     |
-|ROSA        |Fresh Desktop 12.2|
+|ROSA        |12.2 Fresh Desktop|
 |Springale   |9.0 (Parma)       |
 
 
@@ -487,17 +502,17 @@ and the following x86_64 hosts:
 |---------------|------------------------|
 |Slackware      |15.0                    |
 |Slackware      |15.1-current            |
-|Salix OS       |xfce 15.0               |
-|Slackel        |Openbox 7.3 **(2)**     |
+|Salix OS       |15.0 xfce               |
+|Slackel        |7.3 Openbox **(2)**     |
 
 
 |SUSE based|version              |
 |----------|---------------------|
 |SLES      |15-SP4               |
-|openSUSE  |Leap 15.3            |
-|openSUSE  |Leap 15.4            |
-|Gecko     |STATIC Cinnamon 153.x|
-|Gecko     |STATIC Cinnamon 154.x|
+|openSUSE  |15.3 Leap            |
+|openSUSE  |15.4 Leap            |
+|Gecko     |153.x STATIC Cinnamon|
+|Gecko     |154.x STATIC Cinnamon|
 |Kamarada  |15.3                 |
 |Regata OS |22 Discovery         |
 
