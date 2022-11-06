@@ -2,7 +2,8 @@
 #
 # Rui Ribeiro
 #
-# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/Kwort/Pisi/KaOS/ClearLinux hosts 
+# VPN client chroot'ed setup/wrapper for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/Kwort/Pisi/KaOS/Clear/NuTyx hosts 
+#
 # Checkpoint R80.10 and up
 #
 # Please fill VPN and VPNIP before using this script.
@@ -402,6 +403,7 @@ getDistro()
    PISI=0
    CLEAR=0
    ALPINE=0
+   NUTYX=0
    # installing dpkg damages Solus, commented out
    #SOLUS=0
 
@@ -463,8 +465,11 @@ getDistro()
    # Alpine
    [[ -f "/etc/alpine-release" ]]    && ALPINE=1 # is Alpine
 
+   # NuTyx
+   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "nutyx" ]] && NUTYX=1
+
    # if none of distribution families above, abort
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && [[ "${ALPINE}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS and Clear Linux family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && [[ "${ALPINE}" -eq 0 ]] && [[ "${NUTYX}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS,NuTyx and Clear Linux family distributions supported"
 }
 
 
@@ -474,7 +479,7 @@ PreCheck()
    # If not Intel based
    if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
-      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/KaOS/Deepin/Kwort Linux Intel based flavours only"
+      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/KaOS/Deepin/Kwort/Pisi/NuTyx/Clear Linux Intel based flavours only"
    fi
 
    # fills in distribution variables
@@ -514,7 +519,14 @@ doChroot()
    # setarch i386 lies to uname about being 32 bits
    # clean LD_PRELOAD (PCLinuxOS bug)
    # you dont want to inherit it inside the chroot
-   LD_PRELOAD="" setarch i386 chroot "${CHROOT}" "$@"
+
+   # NuTyx bug? conflits with BusyBox
+   if [[ ${NUTYX} -eq 1 ]]
+   then
+      LD_PRELOAD="" /usr/bin/setarch i386 chroot "${CHROOT}" "$@"
+   else
+      LD_PRELOAD="" setarch i386 chroot "${CHROOT}" "$@"
+   fi
 }
 
 
@@ -557,7 +569,14 @@ mountChrootFS()
          # mounts using fstab inside chroot, all filesystems
          # [[ ${ALPINE} -eq 0 ]] &&  mount --fstab "${CHROOT}/etc/fstab" -a
          # [[ ${ALPINE} -eq 1 ]] && mountChroot
-         mount --fstab "${CHROOT}/etc/fstab" -a
+
+         # NuTyx bug? Conflits with BusyBox
+         if [[ ${NUTYX} -eq 1 ]] 
+         then 
+            /bin/mount --fstab "${CHROOT}/etc/fstab" -a
+         else
+            mount --fstab "${CHROOT}/etc/fstab" -a
+         fi
 
         # /run/nscd cant be shared between host and chroot
         # for it to not share socket
@@ -1071,13 +1090,14 @@ fixDNS()
    [[ "${VOID}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${DEEPIN}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${PISI}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+   [[ "${NUTYX}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    # [[ "${SOLUS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 
    [[ ${KWORT}       -eq 1 ]] && fixLinks "..$(find /run/dhcpcd/hook-state/resolv.conf/ -type f | head -1)"
 
    [[ "${CLEAR}"        -eq 1 ]] && fixLinks ../run/systemd/resolve/resolv.conf
 
-    [[ "${ALPINE}"        -eq 1 ]] && fixLinks ../run/dummy.conf
+   [[ "${ALPINE}"       -eq 1 ]] && fixLinks ../run/dummy.conf
 }
 
 
@@ -1855,6 +1875,8 @@ installPisi()
 # installs Clear Linux
 installClear()
 {
+   echo "Clear Linux setup" >&2
+
    # binutils, make, wget for debootstrap
    # curl for this script
    # firefox for installing policy afterwards
@@ -1867,11 +1889,22 @@ installClear()
 # installs Alpine
 installAlpine()
 {
+   echo "Alpine setup" >&2
+
    # binutils, make, wget and perl for debootstrap
    # util-linux full mount and setarch
    # curl for this script
    # util-linux and binutils needed for having saner utils than the busybox "command" symlinks
    apk add wget curl make binutils perl util-linux --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/
+}
+
+# installs NuTyx
+installNuTyx()
+{
+   echo "NuTyx setup" >&2
+
+   cards upgrade
+   cards install wget curl binutils firefox make xorg-xhost
 }
 
 # installs package requirements
@@ -1910,6 +1943,9 @@ installPackages()
 
    # if Alpine based
    [[ "${ALPINE}"     -eq 1 ]] && installAlpine
+
+   # if NuTyx based
+   [[ "${NUTYX}"     -eq 1 ]] && installNuTyx
 
    # if Solus based
    #[[ "${SOLUS}"    -eq 1 ]] && installSolus

@@ -4,7 +4,7 @@ Checkpoint R80+ VPN client chroot wrapper
 
 VPN client chroot'ed Debian setup/wrapper 
 
-for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Pisi/Kwort/Clear Linux based hosts
+for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Pisi/Kwort/Clear/NuTyx Linux based hosts
 
 Checkpoint R80.10 and up
 
@@ -26,7 +26,7 @@ resolv.conf, VPN IP address, routes and X11 "rights" "bleed" from the chroot dir
 
 The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user. In addition, instead of adding the localhost self-signed Agent certificate to a user personal profile as the official setup does, this script install a server-wide global Firefox policy file instead when possible. Notably when Firefox is a snap, or the distribution already has a default Firefox policy file, a new policy won't be installed.
 
-As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run successfully. Void, Gentoo, Slackware, Deepin and KaOS variants are not so thoroughly tested. Have a look near the end of this document, for the more than 110 recent versions/distributions successfully tested.
+As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run successfully. Void, Gentoo, Slackware, Deepin,NuTyx,Pisi/Kwort and KaOS variants are not so thoroughly tested. Have a look near the end of this document, for the more than 110 recent versions/distributions successfully tested.
 
 INSTRUCTIONS
 ============
@@ -448,6 +448,11 @@ with the following x86_64 hosts:
 |ALT k          |10.0   |
 |OpenMandriva Lx|4.3    |
 |OpenMandriva Lx|5.0    |
+
+
+|NuTyx     |version              |
+|----------|---------------------|
+|NuTyx     |22.10                |
 
 
 |Pisi           |version                 |
