@@ -332,6 +332,7 @@ with the following x86_64 hosts:
 |Armbian        |22.08 Jammy              |
 |B2D/OB2D       |2023 1.0.1               |
 |Bodhi          |6.0.0                    |
+|Bodhi          |7.0.0                    |
 |BOSS           |9 (urja)                 |
 |BunsenLabs     |10.5 (Lithium)           |
 |Condres OS     |1.0                      |
@@ -509,6 +510,7 @@ with the following x86_64 hosts:
 |Slackware      |15.1-current            |
 |Salix OS       |15.0 xfce               |
 |Slackel        |7.3 Openbox **(2)**     |
+|Zenwalk        |221106                  |
 
 
 |SUSE based|version              |
