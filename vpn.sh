@@ -1136,6 +1136,9 @@ doStart()
       echo "Trying to start it again..." >&2
    fi
 
+   # old bug? or if launcher was run as root?
+   rm -f "${CHROOT}/tmp/cshell.fifo" &> /dev/null
+
    # launches CShell inside chroot
    doChroot /bin/bash --login -pf <<-EOF4
 	su -c "DISPLAY=${DISPLAY} /usr/bin/cshell/launcher" ${CSHELL_USER}
