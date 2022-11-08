@@ -133,6 +133,8 @@ This script can be downloaded running:
 KNOWN FEATURES
 ==============
 
+- The Web page of Mobile access portal has to open in a browser and allow login with or without this script/SNX/CShell installed;
+
 - The user installing/running the script has to got sudo rights (for root);
 
 - For the CShell daemon to start automatically upon the user XDG login, the user must be able to sudo /usr/bin/vpn.sh or /usr/local/bin/vpn.sh *without* a password;
@@ -174,7 +176,7 @@ SCREENS
 
 The following screens show actions to be performed *after* running the script.
 
-1. Accepting localhost certificate in Firefox at https://localhost:14186/id IF a policy not applied. This is done only *once* in the browser after each chroot (re)installation.
+1. Accepting localhost certificate in Firefox at https://localhost:14186/id IF a policy not applied or Firefox is installed as a snap. This is done only *once* in the browser after each chroot (re)installation.
 
 If the certificate is not accepted manually or via a policy installed by vpn.sh, Mobile Portal will complain about lack of installed software, whether CShell and SNX are running or not.
 
@@ -270,6 +272,8 @@ Mobile Access Portal and Java Compatibility https://supportcenter.checkpoint.com
 Mobile Access Portal Agent for Mozilla Firefox asks to re-install even after it was properly installed https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk122576&partition=Advanced&product=Mobile
 
 Unable to connect with SSL Network Extender on Linux machine https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk114521
+
+Check Point Remote Access Solutions - Gateway-Based Access https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk67820
 
 see also Unix SE post: VPN SSL Network Extender in Firefox https://unix.stackexchange.com/questions/450131/vpn-ssl-network-extender-in-firefox
 
