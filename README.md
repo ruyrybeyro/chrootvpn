@@ -67,7 +67,7 @@ For the stable release, download rpm or deb file from the last release.
 USAGE
 =====
 
-vpn.sh [-l][-f FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN][--oldjava] -i|--install
+vpn.sh [-l][-f FILE][-c DIR|--chroot=DIR][--proxy=proxy_string][--vpn=FQDN] -i|--install
 
 vpn.sh [-f FILE][-o FILE|--output=FILE][-c|--chroot=DIR] start|stop|restart|status
 
@@ -91,9 +91,7 @@ vpn.sh -v|--version
 |--output |-o|redirects ALL output for FILE                            |
 |--silent |-s|special case of output, no arguments                     |
 |         |-l|gets snx/cshell_install.sh from cwd directory, if present|
-|--oldjava|  |JDK 8 for connecting to old Checkpoint VPN servers (*)   |
 
-(*) (circa 2019) *experimental* -- not sure it is needed 
 
 |Command      |Function                                               |
 |-------------|-------------------------------------------------------|
@@ -500,11 +498,13 @@ with the following x86_64 hosts:
 |Oracle      |8.6               |
 |Oracle      |9.0               |
 |PCLinuxOS   |2022.07.10 **(2)**|
+|RHEL        |8                 |
 |RHEL        |9.0 Plow          |
 |risiOS      |36                |
 |Rocky       |8.6 Green Obsidian|
 |Rocky       |9.0 Blue Onyx     |
 |ROSA        |12.2 Fresh Desktop|
+|Springale   |8                 |
 |Springale   |9.0 (Parma)       |
 
 

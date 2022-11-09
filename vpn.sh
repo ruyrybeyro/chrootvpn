@@ -152,15 +152,6 @@ PATH="/sbin:/bin:/usr/sbin:/usr/bin:${PATH}"
 # if present 
 LOCALINSTALL=false
 
-# Java version (affected by oldjava parameter) 
-# for old CheckPoint VPN servers
-# circa 2019?
-# hint:
-# The web Portal Interface has a far more dated look than in 2022
-#
-# seems not to be needed, who will stay here for now
-JAVA8=false
-
 # can be changed for yum
 DNF="dnf"
 
@@ -193,7 +184,6 @@ do_help()
 	-f|--file    alternate conf file. Default /opt/etc/vpn.conf
         -l           gets snx_install.sh and/or cshell_install.sh from cwd directory, if present
 	--vpn        selects the VPN DNS full name at install time
-	--oldjava    JDK 8 for connecting to old Checkpoint VPN servers (circa 2019) *experimental*
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 	--portalurl  custom VPN portal URL prefix (usually sslvpn) ;
                      use it as --portalurl=STRING together with --install
@@ -360,7 +350,6 @@ doGetOpts()
                            CHROOTPROXY="${OPTARG}" ;;
          portalurl )       needs_arg                 # VPN portal URL prefix
                            SSLVPN="${OPTARG}" ;;
-         oldjava )         JAVA8=true ;;             # compatibility with older VPN servers
          v | version )     echo "${VERSION}"         # script version
                            exit 0 ;;
          osver)            awk -F"=" '/^PRETTY_NAME/ { gsub("\"","");print $2 } ' /etc/os-release
@@ -2270,24 +2259,28 @@ buildFS()
    # including default root prompt
    echo "${CHROOT}" > etc/debian_chroot
 
-   # if needing java8
-   # --oldjava
-   if [[ ${JAVA8} -eq true ]]
-   then
-      # old repository for getting JDK 8 and dependencies
-      echo 'deb http://security.debian.org/ stretch/updates main' > etc/apt/sources.list.d/stretch.list
-   fi
-
    # script for finishing chroot setup already inside chroot
    cat <<-EOF9 > root/chroot_setup.sh
 	#!/bin/bash
 	# "booleans"
 	true=0
 	false=1
-	# --oldjava
-        JAVA8=${JAVA8}
 
-	# creates cShell user
+	# creates a who apt diversion for the fake one not being replaced
+	# by security updates inside chroot
+	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
+
+	# needed packages
+	# adduser needed for Bookworm/Debian 12
+	apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2 adduser
+
+	# needed package
+	apt -y install openjdk-11-jre
+
+	# cleans APT chroot cache
+	apt clean
+	
+	# creates cShell user inside chroot
 	# creates group 
 	addgroup --quiet --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
 	# creates user
@@ -2305,31 +2298,6 @@ buildFS()
 	test  -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
 	chown -R "${CSHELL_USER}":"${CSHELL_GROUP}" "${CSHELL_HOME}"
 	chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
-
-	# creates a who apt diversion for the fake one not being replaced
-	# by security updates inside chroot
-	dpkg-divert --divert /usr/bin/who.old --no-rename /usr/bin/who
-
-	# needed packages
-	apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2
-
-        # --oldjava
-	if [[ ${JAVA8} -eq true ]]
-	then
-	   # needed package
-           # update to get metadata of stretch update repository
-           # so we can get OpenJDK 8+dependencies
-           # update intentionally done only after installing other packages
-	   apt -y update
-	   apt -y install openjdk-8-jdk 
-	else
-	   # needed package
-	   apt -y install openjdk-11-jre
-	fi
-
-	# cleans APT chroot cache
-	apt clean
-	
 	# installs SNX and CShell
 	/root/snx_install.sh
 	echo "Installing CShell" >&2
