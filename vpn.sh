@@ -2381,6 +2381,8 @@ FstabMount()
 # on the host system
 XDGAutoRun()
 {
+   local SUDOGRP
+
    # directory for starting apps upon X11 login
    # /etc/xdg/autostart/
    if [[ -d "$(dirname ${XDGAUTO})" ]]
@@ -2411,6 +2413,10 @@ XDGAutoRun()
       # if sudo, SUDO_USER identifies the non-privileged user 
       if [[ -n "${SUDO_USER}" ]]
       then
+         # initialize it as the non-privileged user
+         # for using further ahead
+         SUDOGRP="${SUDO_USER}"
+         
          # if SUDO_USER belongs to the sudo group
          if ingroup sudo "${SUDO_USER}"
          then
@@ -2418,6 +2424,8 @@ XDGAutoRun()
             echo "%sudo	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
             echo "#or: " >&2
             echo "%sudo	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
+            # replace SUDO_USER with sudo
+            SUDOGRP="%sudo"
          fi
          # if SUDO_USER belongs to the wheel group
          if ingroup wheel "${SUDO_USER}"
@@ -2426,25 +2434,28 @@ XDGAutoRun()
             echo "%wheel	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
             echo "#or: " >&2
             echo "%wheel	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
+            # replace SUDO_USER or sudo with wheel
+            SUDOGRP="%wheel"
          fi
 
          echo "#or: " >&2
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD:ALL" >&2
          echo "#or: " >&2
          echo "${SUDO_USER}	ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
-      fi
 
-      echo >&2
+         echo >&2
 
-      # adds entry for it to be executed
-      # upon graphical login
-      # so it does not need to be started manually
-      if ! grep "${INSTALLSCRIPT}" /etc/sudoers &>/dev/null
-      then
-         echo
-         echo -e "\n%sudo       ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >> /etc/sudoers
-         echo "%sudo       ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
-         echo "added to /etc/sudoers" >&2
+         # adds entry for it to be executed
+         # upon graphical login
+         # so it does not need to be started manually
+         if ! grep "${INSTALLSCRIPT}" /etc/sudoers &>/dev/null
+         then
+            echo
+            echo -e "\n${SUDOGRP}      ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >> /etc/sudoers
+            echo "${SUDOGRP}      ALL=(ALL:ALL) NOPASSWD: ${INSTALLSCRIPT}" >&2
+            echo "added to /etc/sudoers" >&2
+         fi
+
       fi
 
    else
