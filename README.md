@@ -489,6 +489,7 @@ with the following x86_64 hosts:
 |Fedora      |37                |
 |Fedora      |38                |
 |Mageia      |8 mga8            |
+|Mageia      |9                 |
 |Miracle     |8.4 (Peony)       |
 |Miracle     |9.0               |
 |Navy        |Enterprise 8.6 r1 |
