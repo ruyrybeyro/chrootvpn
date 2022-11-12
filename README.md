@@ -481,6 +481,8 @@ with the following x86_64 hosts:
 |Alma        |9.1               |
 |CentOS      |8                 |
 |CentOS      |9 stream          |
+|EulixOS     |1.0.1             |
+|EulixOS     |1.1               |
 |Euro        |8.6 Kyiv          |
 |Euro        |8.7 Brussels      |
 |Euro        |9.0               |
@@ -496,6 +498,7 @@ with the following x86_64 hosts:
 |Nobara      |36                |
 |NST         |36                |
 |openEuler   |22.03 LTS         | 
+|openEuler   |22.09             | 
 |Oracle      |8.6               |
 |Oracle      |9.0               |
 |PCLinuxOS   |2022.07.10 **(2)**|

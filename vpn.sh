@@ -419,6 +419,7 @@ getDistro()
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "openEuler" ]] && RH=1
    [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "Euler" ]] && RH=1
+   [[ -f "/etc/openEuler-release" ]]  && RH=1
 
    # Arch
    [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
