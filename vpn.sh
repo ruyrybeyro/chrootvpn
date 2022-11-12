@@ -1125,6 +1125,10 @@ doStart()
       echo "Trying to start it again..." >&2
    fi
 
+   # while tun seems to go up
+   # you cannot invoke modprobe inside a chroot 
+   /sbin/modprobe tun &> /dev/null
+
    # old bug? or if launcher was run as root?
    rm -f "${CHROOT}/tmp/cshell.fifo" &> /dev/null
 
@@ -2211,8 +2215,11 @@ buildFS()
    fi
    fi
 
-   # snx calls modprobe, modprobe is not needed
+   # snx calls modprobe
+   # snx cannot be called inside a chroot
+   # much less a 32-bit chroot in a 64-bit host
    # creates a fake one inside chroot returning success
+   # snx calls system("/sbin/modprobe tun");
    cat <<-EOF5 > sbin/modprobe
 	#!/bin/bash
 	exit 0
