@@ -182,7 +182,7 @@ do_help()
 	-h|--help    shows this help
 	-v|--version script version
 	-f|--file    alternate conf file. Default /opt/etc/vpn.conf
-        -l           gets snx_install.sh and/or cshell_install.sh from cwd directory, if present
+	-l           gets snx_install.sh and/or cshell_install.sh from cwd directory, if present
 	--vpn        selects the VPN DNS full name at install time
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 	--portalurl  custom VPN portal URL prefix (usually sslvpn) ;
@@ -379,6 +379,12 @@ doGetOpts()
 # finds which distribution we are dealing with
 getDistro()
 {
+   local ID
+   local ID_LIKE
+   local DISTRIB
+   local SystemName
+   local i
+
    # init distro flags
    DEB=0
    RH=0
@@ -396,7 +402,37 @@ getDistro()
    # installing dpkg damages Solus, commented out
    #SOLUS=0
 
-   # Debian 
+   # init variables for later use
+
+   [[ -f "/etc/os-release" ]] && ID="$(awk -F= ' /^ID=/ { gsub("\"", ""); print $2 } ' /etc/os-release)"
+   [[ -z "${ID}" ]] && ID="none"
+
+   [[ -f "/etc/os-release" ]] && ID_LIKE="$(awk -F= ' /^ID_LIKE=/ { gsub("\"", ""); print $2 } ' /etc/os-release)"
+   [[ -z "${ID_LIKE}" ]] && ID_LIKE="none"
+
+   [[ -f "/etc/os-release" ]] && DISTRIB="$(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release)"
+   [[ -z "${DISTRIB}" ]] && DISTRIB="none"
+
+   [[ -f "/etc/os-version" ]] && SystemName="$(awk -F= '/SystemName=/ { gsub("\"", ""); print $2 } ' /etc/os-version)"
+   [[ -z "${SystemName}" ]] && SystemName="none"
+
+
+   # start checking for distribution
+
+   case "${ID}" in
+  
+      debian)		DEB=1 	;; # OB2D/others
+      openEuler)	RH=1	;;
+      Euler)            RH=1    ;;
+      kaos)             ARCH=1  ;;
+      kwort)		KWORT=1	;;
+      clear-linux-os)	CLEAR=1	;;
+      nutyx)		NUTYX=1 ;;
+
+   esac
+
+   # [[ "${ID}" == "crux" ]] && CRUX=1
+
    if [[ -f "/etc/debian_version" ]]
    then
       DEB=1 # is Debian family
@@ -404,27 +440,21 @@ getDistro()
       # nice to have, but buggy, only warning and not aborting.
       # systemd-detect-virt -r an alternative
       ischroot && echo "Inside a chroot?" >&2
-
-   else
-      [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "debian" ]] && DEB=1 # OB2D
    fi
 
 
    # Debian / DEEPIN handled slightly differently
    # Deepin
    # forces DEB=1 because as of Deepin 23, /etc/debian_version no longer there
-   [[ -f "/etc/os-version" ]] && [[ $(awk -F= '/SystemName=/ { print $2 } ' /etc/os-version) == Deepin ]] && DEEPIN=1 && DEB=1
+   [[ "${SystemName}" == Deepin ]]   && DEEPIN=1 && DEB=1
 
    # RedHat
    [[ -f "/etc/redhat-release" ]]    && RH=1     # is RedHat family
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "openEuler" ]] && RH=1
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "Euler" ]] && RH=1
-   [[ -f "/etc/openEuler-release" ]]  && RH=1
+   [[ -f "/etc/openEuler-release" ]] && RH=1
 
    # Arch
-   [[ -f "/etc/arch-release" ]]      && ARCH=1   # is Arch family
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID_LIKE=/ { print $2 } ' /etc/os-release) == "arch" ]] && ARCH=1 # Peux
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "kaos" ]] && ARCH=1
+   [[ -f "/etc/arch-release" ]]      && ARCH=1 # is Arch family
+   [[ "${ID_LIKE}" == "arch" ]]      && ARCH=1 # Peux
 
    # SUSE
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
@@ -437,26 +467,42 @@ getDistro()
    [[ -f "/etc/slackware-version" ]] && SLACKWARE=1 # is Slackware
 
    # Void
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release) == "void" ]] && VOID=1 # Void Linux
-
-   #[[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "crux" ]] && CRUX=1
-   # KWORT
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "kwort" ]] && KWORT=1
+   [[ "${DISTRIB}" == "void" ]]      && VOID=1 # Void Linux
 
    # Solus
-   #[[ -f "/etc/solus-release" ]]   && SOLUS=1 # is Solus family
+   #[[ -f "/etc/solus-release" ]]    && SOLUS=1 # is Solus family
 
    # Pisi
-   [[ -f "/etc/pisilinux-release" ]]    && PISI=1 # is PISI
-
-   # Clear
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "clear-linux-os" ]] && CLEAR=1
+   [[ -f "/etc/pisilinux-release" ]] && PISI=1 # is PISI
 
    # Alpine
    [[ -f "/etc/alpine-release" ]]    && ALPINE=1 # is Alpine
 
-   # NuTyx
-   [[ -f "/etc/os-release" ]] && [[ $(awk -F= ' /^ID=/ { print $2 } ' /etc/os-release) == "nutyx" ]] && NUTYX=1
+   # if installing or showing status
+   if [[ "${install}" -eq true ]] || [[ "$1" == "status" ]]
+   then
+
+      # shows some variables from system files
+      for i in ID ID_LIKE DISTRIB SystemName
+      do
+         [[ "${!i}" != "none" ]] && echo "${i}=${!i}"
+      done
+
+      # shows which distribution variable(s) is true
+      for i in DEB DEEPIN RH ARCH SUSE GENTOO SLACKWARE VOID KWORT PISI CLEAR ALPINE NUTYX
+      do
+         [[ "${!i}" -eq 1 ]] && echo "${i}=true"
+      done
+
+      if [[ "$1" == "status" ]]
+      then
+         # displays the contents of distribution /etc release files
+         for i in "os-release" "os-version" "debian_version" "redhat-release" "openEuler-release" "arch-release" "SUSE-brand" "gentoo-release" "redcore-release" "slackware-version" "pisilinux-release" "alpine-release"
+         do
+            [[ -f "/etc/$i" ]] && echo "cat /etc/$i" && cat "/etc/$i" && echo
+         done
+      fi
+   fi
 
    # if none of distribution families above, abort
    [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && [[ "${ALPINE}" -eq 0 ]] && [[ "${NUTYX}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS,NuTyx and Clear Linux family distributions supported"
@@ -473,7 +519,7 @@ PreCheck()
    fi
 
    # fills in distribution variables
-   getDistro
+   getDistro "$1"
 
    # if VPN or VPNIP empty, aborts
    if [[ -z "${VPN}" ]] || [[ -z "${VPNIP}" ]] 
