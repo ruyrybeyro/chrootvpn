@@ -338,7 +338,9 @@ with the following x86_64 hosts:
 |BOSS           |9 (urja)                 |
 |BunsenLabs     |10.5 (Lithium)           |
 |Condres OS     |1.0                      |
+|Crowz          |4.0                      | 
 |cutefishOS     |                         |
+|DragonOS       |22.04 R27                |
 |Debian         |10 Buster                |
 |Debian         |11 Bullseye              |
 |Debian         |12 Bookworm              |
@@ -356,6 +358,7 @@ with the following x86_64 hosts:
 |Enso OS        |0.4                      |
 |Escuelas       |7.6                      |
 |Exe            |20220306 Chimaera        |
+|EXERGOS RED    |22                       |
 |ExTix Deepin   |20.6                     |
 |ExTix Deepin   |22.6                     |
 |Feren OS       |2022.04                  |
@@ -503,6 +506,7 @@ with the following x86_64 hosts:
 |Oracle      |9.0               |
 |PCLinuxOS   |2022.07.10 **(2)**|
 |RHEL        |8                 |
+|RHEL        |8.7               |
 |RHEL        |9.0 Plow          |
 |risiOS      |36                |
 |Rocky       |8.6 Green Obsidian|
