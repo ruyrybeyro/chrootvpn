@@ -273,6 +273,8 @@ Unable to connect with SSL Network Extender on Linux machine https://supportcent
 
 Check Point Remote Access Solutions - Gateway-Based Access https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk67820
 
+Remote Access FAQ covering IPSec and HTTPS portal based VPN solutions (needs a CheckPoint login) https://supportcenter.checkpoint.com/supportcenter/portal?action=portlets.SearchResultMainAction&eventSubmit_doGoviewsolutiondetails=&solutionid=sk166032
+
 see also Unix SE post: VPN SSL Network Extender in Firefox https://unix.stackexchange.com/questions/450131/vpn-ssl-network-extender-in-firefox
 
 COMPATIBILITY
@@ -333,6 +335,7 @@ with the following x86_64 hosts:
 |antiX          |22 Grup Yorum            |
 |Armbian        |22.08 Jammy              |
 |B2D/OB2D       |2023 1.0.1               |
+|Backbox        |8                        |
 |Bodhi          |6.0.0                    |
 |Bodhi          |7.0.0                    |
 |BOSS           |9 (urja)                 |
