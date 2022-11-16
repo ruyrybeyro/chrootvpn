@@ -706,25 +706,15 @@ FirefoxPolicy()
 
    if [[ "$1" == "install" ]]
    then
-      # Slackware and ALT Linux
-      [[ -d "/usr/lib64/firefox" ]] && mkdir "/usr/lib64/firefox/distribution" 2> /dev/null
-
-      [[ ${VOID} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution" 2> /dev/null
-
-      # KaOS, possibly others
-      [[ ${ARCH} -eq 1 ]] && mkdir "/usr/lib/firefox/distribution" 2> /dev/null
 
       # for Firefox SNAPs
-      [[ -d "/etc/firefox" ]] && mkdir /etc/firefox/policies 2> /dev/null
+      [[ -d "/etc/firefox" ]] && [[ ! -d "/etc/firefox/policies" ]] && mkdir /etc/firefox/policies 2> /dev/null
 
-      # BOSS Linux
-      [[ -d "/opt/firefox" ]] && mkdir /opt/firefox/distribution 2> /dev/null
-
-      # PakOS
-      [[ -d "/opt/moz/firefox" ]] && mkdir /opt/moz/firefox/distribution 2> /dev/null
-
-      # NavyLinux
-      [[ -d "/usr/lib64/mozilla" ]] && mkdir "/usr/lib64/mozilla/distribution" 2> /dev/null
+      # code for  Void, Arch, Slackware, ALT Linux, KaOS, Firefox SNAPs, BOSS, PakOS, NavyLinux
+      for i in "/usr/lib64/firefox" "/usr/lib/firefox" "/usr/lib64/firefox" "/opt/firefox" "/opt/moz/firefox" "/usr/lib64/mozilla"
+      do
+         [[ ! -d "$i/distribution" ]] && mkdir "$i/distribution" 2> /dev/null
+      done 
 
    fi
 
