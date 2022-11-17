@@ -433,6 +433,7 @@ with the following x86_64 hosts:
 |Ubuntu Unity   |22.04.1 LTS              |
 |Ubuntu Unity   |22.10                    |
 |Uruk           |3 (Nannar)               |
+|WattOS         |R12                      |
 |Voyager        |22.04 LTS                |
 |Voyager        |22.10                    |
 |Xubuntu        |20.04 LTS                |
@@ -455,6 +456,7 @@ with the following x86_64 hosts:
 |Mandriva based |version|
 |---------------|-------|
 |ALT k          |10.0   |
+|ALT k          |10.1   |
 |OpenMandriva Lx|4.3    |
 |OpenMandriva Lx|5.0    |
 
@@ -511,8 +513,10 @@ with the following x86_64 hosts:
 |RHEL        |8                 |
 |RHEL        |8.7               |
 |RHEL        |9.0 Plow          |
+|RHEL        |9.1               |
 |risiOS      |36                |
 |Rocky       |8.6 Green Obsidian|
+|Rocky       |8.7               |
 |Rocky       |9.0 Blue Onyx     |
 |ROSA        |12.2 Fresh Desktop|
 |Springale   |8                 |
