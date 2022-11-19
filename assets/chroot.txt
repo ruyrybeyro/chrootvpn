@@ -1,0 +1,95 @@
+chroot description
+
+minbase Debian 11 or 12 created by debootstrap
+
+changes
+
+/  - chmod 755
+"TZ=${TZ}; export TZ" >> root/.profile
+
+cshell user and group
+create /home/cshell
+
+etc/hosts
+127.0.0.1 localhost
+${VPNIP} ${VPN}
+127.0.0.1 ${HOSTNAME}
+
+${CHROOT}" > etc/debian_chroot
+
+etc/resolv.conf symlink to run file shared with host
+
+
+tmp/.X11-unix - for sharing X11/xorg with the host
+
+
+root/cshell_install.sh
+root/snx_install.sh
+
+snx requirements
+
+sbin/modprobe
+#!/bin/bash
+exit 0
+
+
+
+cshell install requirements
+
+home/cshell/.config 
+
+nopatch/certutil
+#!/bin/bash
+if [[ "$1" == "-H" ]]
+then
+   exit 1
+else
+   exit 0
+fi
+
+ln -s ../sbin/modprobe nopatch/xhost
+ln -s ../sbin/modprobe nopatch/xterm
+
+home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release - directory
+
+home/${CSHELL_USER}/.mozilla/firefox/3ui8lv6m.default-release/cert9.db
+   
+home/${CSHELL_USER}/.mozilla/firefox/installs.ini symlink profiles.ini
+Path=3ui8lv6m.default-release
+Default=3ui8lv6m.default-release
+
+cshell run time requirements
+
+usr/bin/who
+#!/bin/bash
+echo -e "${CSHELL_USER}\t:0"
+
+/etc/xdg/autostart/cshell.desktop
+[Desktop Entry]
+Type=Application
+Name=cshell
+Exec=sudo "${INSTALLSCRIPT}" -s -c "${CHROOT}" start
+Icon=
+Comment=
+X-GNOME-Autostart-enabled=true
+X-KDE-autostart-after=panel
+X-KDE-StartupNotify=false
+StartupNotify=false
+
+extra packages
+
+libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2 adduser openjdk-11-jre
+
+Directories shared with host OS
+
+etc/fstab
+/tmp            ${CHROOT}/tmp           none bind 0 0
+/dev            ${CHROOT}/dev           none bind 0 0
+/dev/pts        ${CHROOT}/dev/pts       none bind 0 0
+/sys            ${CHROOT}/sys           none bind 0 0
+/var/log        ${CHROOT}/var/log       none bind 0 0
+/run            ${CHROOT}/run           none bind 0 0
+/proc           ${CHROOT}/proc          proc defaults 0 0
+/dev/shm        ${CHROOT}/dev/shm       none bind 0 0
+/tmp/.X11-unix  ${CHROOT}/tmp/.X11-unix none bind 0 0
+
