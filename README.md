@@ -487,6 +487,8 @@ with the following x86_64 hosts:
 |Alma        |8.7               |
 |Alma        |9.0 Emerald Puma  |
 |Alma        |9.1               |
+|BlueOnyx    |9.0               |
+|BlueOnyx    |9.1               |
 |CentOS      |8                 |
 |CentOS      |9 stream          |
 |EulixOS     |1.0.1             |
@@ -508,6 +510,7 @@ with the following x86_64 hosts:
 |openEuler   |22.03 LTS         | 
 |openEuler   |22.09             | 
 |Oracle      |8.6               |
+|Oracle      |8.7               |
 |Oracle      |9.0               |
 |PCLinuxOS   |2022.07.10 **(2)**|
 |RHEL        |8                 |
@@ -517,7 +520,8 @@ with the following x86_64 hosts:
 |risiOS      |36                |
 |Rocky       |8.6 Green Obsidian|
 |Rocky       |8.7               |
-|Rocky       |9.0 Blue Onyx     |
+|Rocky       |9.0               |
+|Rocky       |9.1               |
 |ROSA        |12.2 Fresh Desktop|
 |Springale   |8                 |
 |Springale   |9.0 (Parma)       |
@@ -525,9 +529,10 @@ with the following x86_64 hosts:
 
 |Slackware based|version                 |
 |---------------|------------------------|
+|Absolute       |                        |
 |Slackware      |15.0                    |
 |Slackware      |15.1-current            |
-|Salix OS       |15.0 xfce               |
+|Salix OS       |15.0                    |
 |Slackel        |7.3 Openbox **(2)**     |
 |Zenwalk        |221106                  |
 
