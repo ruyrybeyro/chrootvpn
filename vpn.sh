@@ -1179,11 +1179,12 @@ doStart()
       die "something went wrong. CShell daemon not launched." 
    else
       # CShell agent running, now user can authenticate
-      echo "open browser at https://${VPN} to login/start  VPN" >&2
       echo >&2
       # if localhost generated certificate not accepted, VPN auth will fail
       echo "Accept localhost certificate anytime visiting https://localhost:14186/id" >&2
       echo "If it does not work, launch ${SCRIPTNAME} in a terminal from the X11 console" >&2
+      echo >&2
+      echo "open browser at https://${VPN} to login/start  VPN" >&2
    fi
 }
 
