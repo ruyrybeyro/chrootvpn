@@ -496,6 +496,7 @@ with the following x86_64 hosts:
 |Euro        |8.6 Kyiv          |
 |Euro        |8.7 Brussels      |
 |Euro        |9.0               |
+|Euro        |9.1               |
 |Fedora      |23                |
 |Fedora      |36                |
 |Fedora      |37                |
@@ -512,6 +513,7 @@ with the following x86_64 hosts:
 |Oracle      |8.6               |
 |Oracle      |8.7               |
 |Oracle      |9.0               |
+|Oracle      |9.1               |
 |PCLinuxOS   |2022.07.10 **(2)**|
 |RHEL        |8                 |
 |RHEL        |8.7               |
