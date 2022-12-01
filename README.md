@@ -14,6 +14,13 @@ Rui Ribeiro 2022
 
 Tiago Teles @ttmx - Contributions for Arch Linux
 
+## 💥Nominated for best tool of the year 2022 at Checkpoint user forums💥
+
+voting URL http://surveymonkey.com/r/3FF28GL
+
+Description
+===========
+
 This script downloads the Mobile Access Portal Agent (CShell) and the SSL Network Extender (SNX) CheckPoint installation scripts from the firewall/VPN we intend to connect to, and installs them in a chrooted environment.
 
 Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux user desktop, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated 32-bit packages necessary for SNX ; the chroot setup is built to counter some of those behaviours and provide a more secure setup.
