@@ -211,6 +211,8 @@ do_help()
 	shell        bash shell inside chroot
 	upgrade      OS upgrade inside chroot
 	sudoers      installs in /etc/sudoers sudo permission for the user
+	log	     shows CShell Jetty logs
+	taillog	     follows/tail CShell Jetty logs
 	
 	URL for accepting CShell localhost certificate 
 	https://localhost:14186/id
@@ -1351,6 +1353,23 @@ selfUpdate()
 }
 
 
+# shows CShell Jetty logs
+# $1 = cat
+#      tail
+showLogs()
+{
+   local LOGFILE
+
+   LOGFILE="${CHROOT}/var/log/cshell/cshell.elg"
+
+   if [[ -f "${LOGFILE}" ]]
+   then
+      [[ "$1" == "cat"  ]] && cat     "${LOGFILE}"
+      [[ "$1" == "tail" ]] && tail -F "${LOGFILE}"
+   fi
+}
+
+
 # checks if chroot usage is sane
 #
 # $1 : commands after options are processed and wiped out
@@ -1399,6 +1418,7 @@ PreCheck2()
 #
 argCommands()
 {
+
    PreCheck2 "$1"
 
    case "$1" in
@@ -1417,6 +1437,8 @@ argCommands()
       selfupdate)   selfUpdate ;;
       selfdownload) curl -k --output "/tmp/vpn.sh" --silent --fail "https://raw.githubusercontent.com/${GITHUB_REPO}/main/vpn.sh" ;;
       policy)       FirefoxPolicy install ;;
+      log)          showLogs "cat" ;;
+      tailog)       showLogs "tail" ;;
       *)            do_help ;;         # default 
 
    esac

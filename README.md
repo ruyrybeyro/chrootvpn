@@ -128,6 +128,8 @@ vpn.sh shell
 |shell  |  |bash shell inside chroot                             |
 |upgrade|  |OS upgrade inside chroot                             |
 |sudoers|  |installs in /etc/sudoers sudo permission for the user|
+|log    |  |shows CShell Jetty logs                              |
+|taillog|  |follows/tail CShell Jetty logs                       |
 
 This script can be downloaded running:
 
@@ -356,6 +358,7 @@ with the following x86_64 hosts:
 |Debian         |12 Bookworm              |
 |Debian Edu     |11.3                     |
 |Deepin         |20.6                     |
+|Deepin         |20.8                     |
 |Deepin         |23                       |
 |Devuan         |4.0 Chimaera             |
 |Devuan         |5.0 Daedalus             |
@@ -396,6 +399,7 @@ with the following x86_64 hosts:
 |MAX            |11.5                     |
 |Mint           |20.2 Uma                 |
 |Mint           |21 Vanessa               |
+|Mint           |21.2 Vanessa             |
 |MX             |21.1 Wildflower          |
 |MX             |21.2                     |
 |Neptune        |7 ("Faye")               |
