@@ -42,7 +42,7 @@ For the stable release, download rpm or deb file from the last release.
 
 - First time installing, run it as:
 
-        vnp.sh -i --vpn=FQDN_DNS_name_of_VPN
+        vpn.sh -i --vpn=FQDN_DNS_name_of_VPN
 	
 
 - accept localhost certificate in brower if not Firefox or if Firefox is a snap
@@ -53,7 +53,7 @@ For the stable release, download rpm or deb file from the last release.
 
 - To launch it any time after installation or a reboot
 
-        vnp.sh start
+        vpn.sh start
 
 - the script tries to launch itself upon user xorg login via XDG. To have an automatic launch, if vpn.sh was installed via rpm or deb, add to */etc/sudoers*
 
