@@ -1546,9 +1546,9 @@ GetCompileSlack()
 
       # if already installed no need to compile again
       # debootstrap version in SlackWare too old to be useful
-      if [[ ${NAME} != "debootstrap" ]]
+      if [[ "${NAME}" != "debootstrap" ]]
       then
-         command -v ${NAME} &>/dev/null && continue 
+         command -v "${NAME}" &>/dev/null && continue 
       fi
 
       # saves current directory/cwd
@@ -1570,7 +1570,7 @@ GetCompileSlack()
          DOWNLOAD="${SRC_BOOTSTRAP}"
 
          # changing version for SBo.tgz too reflect that
-         sed -i "s/^VERSION=.*/VERSION=${VER_BOOTSTRAP}/" ./${NAME}.SlackBuild
+         sed -i "s/^VERSION=.*/VERSION=${VER_BOOTSTRAP}/" ./"${NAME}.SlackBuild"
 
          # the Debian tar.gz only creates a directory by name
          # contrary to the Ubuntu source repository 
@@ -1578,7 +1578,7 @@ GetCompileSlack()
          #
          # linter is warning against something *we want to do*
          #
-         sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./${NAME}.SlackBuild
+         sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./"${NAME}.SlackBuild"
       else
          # gets info file frrom SlackBuild package
          INFO="${SLACKBUILDREPO}${pkg}/${NAME}.info"
@@ -1593,7 +1593,7 @@ GetCompileSlack()
 
       # executes SlackBuild script for patching, compiling, 
       # and generating SBo.tgz instalation package
-      ./${NAME}.SlackBuild
+      ./"${NAME}".SlackBuild
      
       # returns saved directory at the loop beginning
       popd || die "error restoring cwd [for]"
@@ -2243,19 +2243,19 @@ buildFS()
    # rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
    # downloads SNX installation scripts from CheckPoint machine
-   if curl -k --fail --silent --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/SNX/INSTALL/snx_install.sh"
+   if curl -k --fail --silent --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh"
    then 
-      # downloads CShell installation scripts from CheckPoint machine
-      curl -k --fail --silent --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
-      # registers CShell installed version for later
-      curl -k --fail --silent "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt 
-   else
-      # downloads SNX installation scripts from CheckPoint machine
-      curl -k --fail --silent --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh" 
       # downloads CShell installation scripts from CheckPoint machine
       curl -k --fail --silent --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
-      curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
+      curl -k --fail --silent "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt 
+   else
+      # downloads SNX installation scripts from CheckPoint machine
+      curl -k --fail --silent --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh. Needing --portalurl parameter?" 
+      # downloads CShell installation scripts from CheckPoint machine
+      curl -k --fail --silent --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
+      # registers CShell installed version for later
+      curl -k --silent --fail "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    fi
 
    # replace cshell_install.sh or snx_install.sh with local files for newer versions than the firewall provided
@@ -2272,8 +2272,19 @@ buildFS()
       then
          echo "Replacing cshell_install.sh with local copy at ${LOCALCWD}/cshell_install.sh"
          cp "${LOCALCWD}/cshell_install.sh" "${CHROOT}/root/cshell_install.sh"   
+      fi
    fi
+
+   if [[ -e "${CHROOT}/root/snx_install.sh" ]] && [[ $(awk 'NR==1 && /html/ { print; exit}' "${CHROOT}/root/snx_install.sh" ) == *html* ]]
+   then
+      die "Something went wrong downloading scripts from remote CheckPoint appliance. Might need --portalurl parameter?"
    fi
+
+   if [[ -e "${CHROOT}/root/cshell_install.sh" ]] && [[ $(awk 'NR==1 && /html/ { print; exit}' "${CHROOT}/root/cshell_install.sh" ) == *html* ]]
+   then
+      die "CheckPoint release < R80 suspected. Not supported by this script" 
+   fi
+
 
    # snx calls modprobe
    # snx cannot be called inside a chroot
@@ -2365,11 +2376,23 @@ buildFS()
 	test  -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
 	chown -R "${CSHELL_USER}":"${CSHELL_GROUP}" "${CSHELL_HOME}"
 	chmod -R u=rwx,g=rwx,o= "$CSHELL_HOME"
+
 	# installs SNX and CShell
-	/root/snx_install.sh
+	echo "Installing SNX" >&2
+	if ! /root/snx_install.sh 
+	then
+           echo "snx_install.sh went wrong"
+           exit 1
+	fi
+
 	echo "Installing CShell" >&2
-	DISPLAY="${DISPLAY}" PATH=/nopatch:"${PATH}" /root/cshell_install.sh 
-	
+	export DISPLAY="${DISPLAY}" 
+	export PATH=/nopatch:"${PATH}" 
+	if ! /root/cshell_install.sh 
+	then
+           echo "cshell_install.sh went wrong"
+           exit 1
+	fi	
 	exit 0
 	EOF9
 
