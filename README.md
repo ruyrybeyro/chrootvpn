@@ -6,11 +6,11 @@ VPN client chroot'ed Debian setup/wrapper
 
 for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Pisi/Kwort/Clear/NuTyx Linux based hosts
 
-Checkpoint R80.10 and up
+Checkpoint **R80.10 and up**
 
 https://github.com/ruyrybeyro/chrootvpn
 
-Rui Ribeiro 2022
+Rui Ribeiro 2022-2023
 
 Tiago Teles @ttmx - Contributions for Arch Linux
 
@@ -86,18 +86,19 @@ vpn.sh -h|--help
 
 vpn.sh -v|--version
 
-|Option   |  |Function                                                 |
-|---------|--|---------------------------------------------------------|
-|--install|-i|install mode - creates chroot                            |
-|--chroot |-c|changes default chroot /opt/chroot directory             |
-|--help   |-h|shows this help                                          |
-|--version|-v|script version                                           |
-|--file   |-f|alternate conf file. Default /opt/etc/vpn.conf           |
-|--vpn    |  |selects VPN DNS full name at install time                |
-|--proxy  |  |proxy to use in apt inside chroot 'http://user:pass@IP'  |
-|--output |-o|redirects ALL output for FILE                            |
-|--silent |-s|special case of output, no arguments                     |
-|         |-l|gets snx/cshell_install.sh from cwd directory, if present|
+|Option     |  |Function                                                 |
+|-----------|--|---------------------------------------------------------|
+|--install  |-i|install mode - creates chroot                            |
+|--chroot   |-c|changes default chroot /opt/chroot directory             |
+|--help     |-h|shows this help                                          |
+|--version  |-v|script version                                           |
+|--file     |-f|alternate conf file. Default /opt/etc/vpn.conf           |
+|--vpn      |  |selects VPN DNS full name at install time                |
+|--proxy    |  |proxy to use in apt inside chroot 'http://user:pass@IP'  |
+|--output   |-o|redirects ALL output for FILE                            |
+|--silent   |-s|special case of output, no arguments                     |
+|           |-l|gets snx/cshell_install.sh from cwd directory, if present|
+|--portalurl|  |custom prefix path other than / and sslvpn               |
 
 
 |Command      |Function                                               |

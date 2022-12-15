@@ -185,7 +185,7 @@ do_help()
 	-l           gets snx_install.sh and/or cshell_install.sh from cwd directory, if present
 	--vpn        selects the VPN DNS full name at install time
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
-	--portalurl  custom VPN portal URL prefix (usually sslvpn) ;
+	--portalurl  custom VPN portal URL prefix (usually sslvpn or /) ;
                      use it as --portalurl=STRING together with --install
 	-o|--output  redirects ALL output for FILE
 	-s|--silent  special case of output, no arguments
