@@ -2200,10 +2200,14 @@ createChroot()
 # creates user for running CShell
 # to avoid running server as root
 # more secure running as an independent user
+#
+# host side
 createCshellUser()
 {
    # creates group 
    getent group "^${CSHELL_GROUP}:" &> /dev/null || groupadd --gid "${CSHELL_GID}" "${CSHELL_GROUP}" 2>/dev/null ||true
+
+   getent group "${CSHELL_GROUP}"   &> /dev/null || die "Unable to create group ${CSHELL_GROUP}" 
 
    # creates user
    if ! getent passwd "^${CSHELL_USER}:" &> /dev/null 
@@ -2216,6 +2220,9 @@ createCshellUser()
             --shell "/bin/false" \
             "${CSHELL_USER}" 2>/dev/null || true
    fi
+
+   [[ "$(id -un ${CSHELL_UID} )" != "${CSHELL_USER}" ]] && die "Unable to create user ${CSHELL_USER}"
+
    # adjusts file and directory permissions
    # creates homedir 
    test -d "${CSHELL_HOME}" || mkdir -p "${CSHELL_HOME}"
@@ -2253,7 +2260,7 @@ buildFS()
       # downloads SNX installation scripts from CheckPoint machine
       curl -k --fail --silent --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh. Needing --portalurl parameter?" 
       # downloads CShell installation scripts from CheckPoint machine
-      curl -k --fail --silent --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
+      curl -k --fail --silent --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh. Either transient network error or appliance older than CheckPoint R80" 
       # registers CShell installed version for later
       curl -k --silent --fail "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    fi
