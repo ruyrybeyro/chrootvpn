@@ -155,6 +155,9 @@ LOCALINSTALL=false
 # can be changed for yum
 DNF="dnf"
 
+# curl options
+CURL_OPT="-k --fail --silent"
+
 #
 # user interface handling
 #
@@ -900,9 +903,9 @@ showStatus()
    doChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
    
    echo -n "SNX - available for download "
-   if ! curl -k --silent --fail "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
+   if ! curl $CURL_OPT "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
    then
-      curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
+      curl $CURL_OPT "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
 
    # Mobile Access Portal Agent version installed
@@ -915,9 +918,9 @@ showStatus()
    fi
 
    echo -n "CShell - available for download "
-   if ! curl -k --silent --fail "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
+   if ! curl $CURL_OPT "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
    then
-      curl -k --silent --fail "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null || echo "Could not get CShell download version" >&2
+      curl $CURL_OPT "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null || echo "Could not get CShell download version" >&2
    fi
 
    # Mobile Access Portal Agent X.509 self-signed CA certificate
@@ -967,7 +970,7 @@ showStatus()
       # OS/ca-certificates package needs to be recent
       # or otherwise, the OS CA root certificates chain file needs to be recent
       echo
-      if curl --output /dev/null --silent --fail --noproxy '*' "${URL_VPN_TEST}"
+      if curl $CURL_OPT --output /dev/null  --noproxy '*' "${URL_VPN_TEST}"
       then
          # if it works we are talking with the actual site
          echo "split tunnel VPN"
@@ -995,7 +998,7 @@ showStatus()
     
    # get latest release version of this script
    # do away with jq -r ".tag_name" - jq not available in some distributions
-   VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
+   VER=$(curl $CURL_OPT "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
 
    echo "current ${SCRIPTNAME} version     : ${VERSION}"
 
@@ -1313,7 +1316,7 @@ selfUpdate()
 
     # get this latest script release version
     # do away with jq -r ".tag_name" - jq not available in some distributions
-    VER=$(curl -k --silent --fail "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
+    VER=$(curl $CURL_OPT "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
     echo "current version     : ${VERSION}"
 
     [[ "${VER}" == "null" ]] || [[ -z "${VER}" ]] && die "did not find any github release. Something went wrong"
@@ -1326,7 +1329,7 @@ selfUpdate()
         vpnsh="$(mktemp)" || die "failed creating mktemp file"
 
         # download github more recent version
-        if curl -k --output "${vpnsh}" --silent --fail "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
+        if curl $CURL_OPT --output "${vpnsh}" "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
 
            # if script not run for /usr/local/bin, also updates it
@@ -1435,7 +1438,7 @@ argCommands()
       rmchroot)     doRemoveChroot ;;
       upgrade)      Upgrade ;;
       selfupdate)   selfUpdate ;;
-      selfdownload) curl -k --output "/tmp/vpn.sh" --silent --fail "https://raw.githubusercontent.com/${GITHUB_REPO}/main/vpn.sh" ;;
+      selfdownload) curl $CURL_OPT --output "/tmp/vpn.sh" "https://raw.githubusercontent.com/${GITHUB_REPO}/main/vpn.sh" ;;
       policy)       FirefoxPolicy install ;;
       log)          showLogs "cat" ;;
       tailog)       showLogs "tail" ;;
@@ -1556,7 +1559,7 @@ GetCompileSlack()
      
       # gets SlackBuild package 
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
-      curl -k -O "${BUILD}" --silent --fail || die "could not download ${BUILD}"
+      curl $CURL_OPT -O "${BUILD}" || die "could not download ${BUILD}"
 
       # extracts it and enter directory
       tar -zxvf "${NAME}.tar.gz"
@@ -1582,14 +1585,14 @@ GetCompileSlack()
       else
          # gets info file frrom SlackBuild package
          INFO="${SLACKBUILDREPO}${pkg}/${NAME}.info"
-         curl -k -O "${INFO}" --silent --fail || die "could not download ${INFO}"
+         curl $CURL_OPT -O "${INFO}" || die "could not download ${INFO}"
 
          # gets URL from downloading corresponding package source code
          DOWNLOAD=$(awk -F= ' /DOWNLOAD/ { gsub("\"", ""); print $2 } ' "${NAME}.info")
       fi
 
       # Download package source code
-      curl -k -O "${DOWNLOAD}" --silent --fail || die "could not download ${DOWNLOAD}"
+      curl $CURL_OPT -O "${DOWNLOAD}" || die "could not download ${DOWNLOAD}"
 
       # executes SlackBuild script for patching, compiling, 
       # and generating SBo.tgz instalation package
@@ -1626,7 +1629,7 @@ InstallDebootstrapDeb()
    then
       if command -v dpkg &>/dev/null
       then
-         curl -k --output "${DEB_FILE}" "${DEB_BOOTSTRAP}" --silent --fail || die "could not download ${DEB_BOOTSTRAP}"
+         curl $CURL_OPT --output "${DEB_FILE}" "${DEB_BOOTSTRAP}" || die "could not download ${DEB_BOOTSTRAP}"
          dpkg -i --force-all "${DEB_FILE}"
          rm -f "${DEB_FILE}" &>/dev/null
       fi
@@ -1636,7 +1639,7 @@ InstallDebootstrapDeb()
       if ! command -v debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
       then
          # gets tar.gz from debian pool
-         curl -k --output debootstrap.tar.gz "${SRC_BOOTSTRAP}" --silent --fail || die "could not download ${SRC_BOOTSTRAP}"
+         curl $CURL_OPT --output debootstrap.tar.gz "${SRC_BOOTSTRAP}" || die "could not download ${SRC_BOOTSTRAP}"
          # gz untar it
 	 tar -zxvf debootstrap.tar.gz
 	 
@@ -2250,19 +2253,19 @@ buildFS()
    # rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
    # downloads SNX installation scripts from CheckPoint machine
-   if curl -k --fail --silent --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh"
+   if curl $CURL_OPT --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh"
    then 
       # downloads CShell installation scripts from CheckPoint machine
-      curl -k --fail --silent --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
+      curl $CURL_OPT --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
-      curl -k --fail --silent "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt 
+      curl $CURL_OPT --output "root/.cshell_ver.txt" "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" || die "could not get remote CShell version"
    else
       # downloads SNX installation scripts from CheckPoint machine
-      curl -k --fail --silent --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh. Needing --portalurl parameter?" 
+      curl $CURL_OPT --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh. Needing --portalurl parameter?" 
       # downloads CShell installation scripts from CheckPoint machine
-      curl -k --fail --silent --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh. Either transient network error or appliance older than CheckPoint R80" 
+      curl $CURL_OPT --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh. Either transient network error or appliance older than CheckPoint R80" 
       # registers CShell installed version for later
-      curl -k --silent --fail "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
+      curl $CURL_OPT "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    fi
 
    # replace cshell_install.sh or snx_install.sh with local files for newer versions than the firewall provided
