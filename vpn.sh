@@ -409,15 +409,19 @@ getDistro()
 
    # init variables for later use
 
+   # $ID
    [[ -f "/etc/os-release" ]] && ID="$(awk -F= ' /^ID=/ { gsub("\"", ""); print $2 } ' /etc/os-release)"
    [[ -z "${ID}" ]] && ID="none"
 
+   # $ID_LIKE
    [[ -f "/etc/os-release" ]] && ID_LIKE="$(awk -F= ' /^ID_LIKE=/ { gsub("\"", ""); print $2 } ' /etc/os-release)"
    [[ -z "${ID_LIKE}" ]] && ID_LIKE="none"
 
+   # $DISTRIB
    [[ -f "/etc/os-release" ]] && DISTRIB="$(awk -F= ' /^DISTRIB/ { gsub("\"", ""); print $2 } ' /etc/os-release)"
    [[ -z "${DISTRIB}" ]] && DISTRIB="none"
 
+   # $SystemName
    [[ -f "/etc/os-version" ]] && SystemName="$(awk -F= '/SystemName=/ { gsub("\"", ""); print $2 } ' /etc/os-version)"
    [[ -z "${SystemName}" ]] && SystemName="none"
 
@@ -435,6 +439,10 @@ getDistro()
       nutyx)		NUTYX=1 ;;
 
    esac
+
+   # Dealing with a lot of distributions and derivatives
+   # So lots of apparent "redundant code" for dealing with differences
+   # and "particularities" 
 
    # [[ "${ID}" == "crux" ]] && CRUX=1
 
@@ -488,6 +496,10 @@ getDistro()
    then
 
       # shows some variables from system files
+      # if ID, ID_LIKE, DISTRIB, SystemName
+      # are not "none"
+      # print it = their contents
+      #
       for i in ID ID_LIKE DISTRIB SystemName
       do
          [[ "${!i}" != "none" ]] && echo "${i}=${!i}"
@@ -1122,7 +1134,7 @@ fixDNS()
    [[ "${DEEPIN}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${PISI}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${NUTYX}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
-   # [[ "${SOLUS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+   # [[ "${SOLUS}"   -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 
    [[ ${KWORT}       -eq 1 ]] && fixLinks "..$(find /run/dhcpcd/hook-state/resolv.conf/ -type f | head -1)"
 
@@ -1819,6 +1831,7 @@ installSUSE()
    # debootstrap for creating Debian chroot
    zypper -n install debootstrap
 
+   # clean package manager cache
    zypper clean
 
    [[ ${PACKAGEKIT} -eq true ]] && systemctl start --quiet packagekit
@@ -2009,7 +2022,8 @@ installPackages()
    # if Solus based
    #[[ "${SOLUS}"    -eq 1 ]] && installSolus
 
-   # will work only if debootstrap *too old*
+   # will work only if installd debootstrap is *too old*
+   # or distribution has no debootstrap package
    InstallDebootstrapDeb
 
    if ! command -v debootstrap &> /dev/null
@@ -2170,14 +2184,6 @@ createChroot()
    # W: Download is performed unsandboxed as root as file '/var/cache/apt/archives/partial/xxxxxx.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
    chmod 755 "${CHROOT}"
 
-   # creates and populate minimal 32-bit Debian chroot
-   #
-   # --no-check-gpg for issues with old/expired Debian keys
-   #
-   # another possible solution is
-   # wget https://ftp-master.debian.org/keys/release-11.asc -qO- | gpg --import --no-default-keyring --keyring ./debian-release-11.gpg
-   # debootstrap --keyring=./debian-release-11.gpg 
-
    # ar and dpkg-deb are debootstrap deb files extractors
    # this should not happen if package management is well configured
    # it is a failsafe of last measure
@@ -2190,6 +2196,14 @@ createChroot()
          ln -s "$(which eu-ar)" "/usr/local/bin/ar"
       fi
    fi
+
+   # creates and populate minimal 32-bit Debian chroot
+   #
+   # --no-check-gpg for issues with old/expired Debian keys
+   #
+   # another possible solution is
+   # wget https://ftp-master.debian.org/keys/release-11.asc -qO- | gpg --import --no-default-keyring --keyring ./debian-release-11.gpg
+   # debootstrap --keyring=./debian-release-11.gpg 
 
    # bootstrap initial chroot
    if ! debootstrap --no-check-gpg --variant="${VARIANT}" --arch i386 "${RELEASE}" "${CHROOT}" "${DEBIANREPO}"
@@ -2284,6 +2298,10 @@ buildFS()
          cp "${LOCALCWD}/cshell_install.sh" "${CHROOT}/root/cshell_install.sh"   
       fi
    fi
+
+   # if somewhat packages were not downloaded, but have html content
+   # was happening before curl options were corrected
+   # keep them, maybe it could happen with odd netwoking setups
 
    if [[ -e "${CHROOT}/root/snx_install.sh" ]] && [[ $(awk 'NR==1 && /html/ { print; exit}' "${CHROOT}/root/snx_install.sh" ) == *html* ]]
    then
@@ -2448,6 +2466,7 @@ buildFS()
    ln -s installs.ini profiles.ini
    )
 
+   # files just created in chroot filesystem chmod as executable
    chmod a+rx usr/bin/who sbin/modprobe root/chroot_setup.sh root/snx_install.sh root/cshell_install.sh nopatch/certutil
 
 }
