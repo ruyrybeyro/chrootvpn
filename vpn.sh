@@ -1138,9 +1138,9 @@ fixDNS()
 
    [[ ${KWORT}       -eq 1 ]] && fixLinks "..$(find /run/dhcpcd/hook-state/resolv.conf/ -type f | head -1)"
 
-   [[ "${CLEAR}"        -eq 1 ]] && fixLinks ../run/systemd/resolve/resolv.conf
+   [[ "${CLEAR}"     -eq 1 ]] && fixLinks ../run/systemd/resolve/resolv.conf
 
-   [[ "${ALPINE}"       -eq 1 ]] && fixLinks ../run/dummy.conf
+   [[ "${ALPINE}"    -eq 1 ]] && fixLinks ../run/dummy.conf
 }
 
 

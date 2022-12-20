@@ -322,13 +322,16 @@ with the following x86_64 hosts:
 |EndeavourOS  |2022.06.32      |
 |EndeavourOS  |22.7 Artemis neo|
 |EndeavourOS  |22.9            |
+|EndeavourOS  |22.12           |
 |FreedomOS    |                |
 |Garuda       |220614          |
 |Garuda       |220717          |
 |Garuda       |221017          |
 |Mabox        |22.06           |
 |Mabox        |22.08           |
+|Mabox        |22.12           |
 |Manjaro      |21.2.6.1        |
+|Manjaro      |22.0            |
 |Peux OS      |22.06           |
 |RebornOS     |                |
 |SalientOS    |21.06           |
@@ -350,6 +353,7 @@ with the following x86_64 hosts:
 |Bodhi          |7.0.0                    |
 |BOSS           |9 (urja)                 |
 |BunsenLabs     |10.5 (Lithium)           |
+|BunsenLabs     |11   (Beryllium)         |
 |Condres OS     |1.0                      |
 |Crowz          |4.0                      | 
 |cutefishOS     |                         |
@@ -410,6 +414,7 @@ with the following x86_64 hosts:
 |Nova           |Desktop 8.0              |
 |PakOS          |2021-05                  |
 |Pardus         |21.2 Yazılım Merkezi     |
+|Pardus         |21.4                     |
 |Parrot         |5.0.1 Electro Ara        |
 |Pearl          |11 MATE Studio           |
 |Peppermint OS  |2022-05-22               |
@@ -421,6 +426,7 @@ with the following x86_64 hosts:
 |Refracta       |11.0 Chimaera            |
 |Robo           |12.07                    |
 |Robo           |12.08                    |
+|Robo           |12.09                    |
 |Rhino Remix    |                         |
 |Runtu          |20.04.1                  |
 |Runtu          |22.04                    |
@@ -435,6 +441,7 @@ with the following x86_64 hosts:
 |Ubuntu         |20.04 Focal Fossa LTS    |
 |Ubuntu         |22.04 Jammy Jellyfish LTS|
 |Ubuntu         |22.10 Kinetic Kudu       |
+|Ubuntu         |23.04 Lunar Lobster      |
 |Ubuntu Budgie  |22.04                    |
 |Ubuntu Budgie  |22.10                    |
 |Ubuntu Kylin   |22.04.1                  |
@@ -463,14 +470,16 @@ with the following x86_64 hosts:
 |Redcore     |2102                    |
 |Redcore     |2201 Hardened (Rastaban)|
 |Calculate   |22.0.1                  |
+|Calculate   |23                      |
 
 
-|Mandriva based |version|
-|---------------|-------|
-|ALT k          |10.0   |
-|ALT k          |10.1   |
-|OpenMandriva Lx|4.3    |
-|OpenMandriva Lx|5.0    |
+|Mandriva based |version   |
+|---------------|----------|
+|ALT k          |10.0      |
+|ALT k          |10.1      |
+|OpenMandriva Lx|4.3       |
+|OpenMandriva Lx|5.0       |
+|OpenMandriva   |23.01 ROME|
 
 
 |NuTyx     |version              |
@@ -519,6 +528,7 @@ with the following x86_64 hosts:
 |Miracle     |9.0               |
 |Navy        |Enterprise 8.6 r1 |
 |Nobara      |36                |
+|Nobara      |37                |
 |NST         |36                |
 |openEuler   |22.03 LTS         | 
 |openEuler   |22.09             | 
