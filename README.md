@@ -292,8 +292,8 @@ Tested with:
 
 |chroot'ed|ver|release |arch|
 |---------|---|--------|----|
-|Debian   |11 |Bullseye|i386|
 |Debian   |12 |Bookworm|i386|
+|Debian   |11 |Bullseye|i386|
 
 with the following x86_64 hosts:
 

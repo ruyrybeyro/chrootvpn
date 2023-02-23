@@ -81,7 +81,8 @@ CONFFILE="/opt/etc/vpn.conf"
 # OS to deploy inside 32-bit chroot  
 # minimal Debian
 VARIANT="minbase"
-RELEASE="bullseye" # Debian 11
+#RELEASE="bullseye" # Debian 11
+RELEASE="bookworm"  # Debian 12
 DEBIANREPO="http://deb.debian.org/debian/" # fastly repo
 
 # github repository for selfupdate command
