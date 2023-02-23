@@ -2381,7 +2381,7 @@ buildFS()
 	apt -y install libstdc++5 libx11-6 libpam0g libnss3-tools procps net-tools bzip2 adduser
 
 	# needed package
-	apt -y install openjdk-11-jre
+	apt -y install default-jre
 
 	# cleans APT chroot cache
 	apt clean
