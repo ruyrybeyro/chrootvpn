@@ -16,8 +16,6 @@ Tiago Teles @ttmx - Contributions for Arch Linux
 
 ## 💥Nominated for best tool of the year 2022 at Checkpoint user forums💥
 
-voting URL http://surveymonkey.com/r/3FF28GL
-
 Description
 ===========
 
