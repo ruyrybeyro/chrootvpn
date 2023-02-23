@@ -368,6 +368,7 @@ with the following x86_64 hosts:
 |Diamond LinuxTT|Gen5+                    |
 |Drauger OS     |7.6 Strigoi              |
 |Elementary OS  |6.1 Jolnir               |
+|Elementary OS  |7.0                      |
 |Elive          |3.8.30                   |
 |Emmabuntüs DE4 |1.01                     |
 |Emmabuntüs DE4 |1.02                     |
@@ -408,6 +409,7 @@ with the following x86_64 hosts:
 |MX             |21.2                     |
 |Neptune        |7 ("Faye")               |
 |Neptune        |7.5                      |
+|Neptune        |7.9                      |
 |Netrunner      |21.01 (“XOXO”)           |
 |Nitrux         |2.4.1                    |
 |Nova           |Desktop 8.0              |
@@ -415,6 +417,7 @@ with the following x86_64 hosts:
 |Pardus         |21.2 Yazılım Merkezi     |
 |Pardus         |21.4                     |
 |Parrot         |5.0.1 Electro Ara        |
+|Parrot         |5.2                      |
 |Pearl          |11 MATE Studio           |
 |Peppermint OS  |2022-05-22               |
 |Pop!_OS        |22.04 LTS                |
@@ -563,8 +566,10 @@ with the following x86_64 hosts:
 |SUSE based|version              |
 |----------|---------------------|
 |SLES      |15-SP4               |
+|SLES      |15-SP5               |
 |openSUSE  |15.3 Leap            |
 |openSUSE  |15.4 Leap            |
+|openSUSE  |15.5 Leap            |
 |Gecko     |153.x STATIC Cinnamon|
 |Gecko     |154.x STATIC Cinnamon|
 |Kamarada  |15.3                 |
