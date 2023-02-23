@@ -393,6 +393,7 @@ with the following x86_64 hosts:
 |Kubuntu        |20.04 LTS                |
 |Kubuntu        |22.04 LTS                |
 |Kubuntu        |22.10                    |
+|Legacy OS      |2023                     |
 |LinuxFx        |11                       |
 |Lite           |6.0 Fluorite             |
 |Lliurex        |21                       |
