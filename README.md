@@ -473,6 +473,7 @@ with the following Linux x86_64 hosts:
 |Gentoo      |2.8                     |
 |Redcore     |2102                    |
 |Redcore     |2201 Hardened (Rastaban)|
+|Redcore     |2301 Hardened           |
 |Calculate   |22.0.1                  |
 |Calculate   |23                      |
 
