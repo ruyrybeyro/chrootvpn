@@ -91,7 +91,7 @@ GITHUB_REPO="ruyrybeyro/chrootvpn"
 
 # needed by SLES and Slackware
 # version of debootstrap taken from Debian pool repository
-# 1.0.128 has bullseye rules file
+# 1.0.128 has bullseye and bookworm rules files
 #
 #
 # http://deb.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.128+nmu2_all.deb
@@ -916,8 +916,10 @@ showStatus()
    doChroot snx -v 2> /dev/null | awk '/build/ { print $2 }'
    
    echo -n "SNX - available for download "
+   # shellcheck disable=SC2086
    if ! curl $CURL_OPT "https://${VPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null
    then
+      # shellcheck disable=SC2086
       curl $CURL_OPT "https://${VPN}/${SSLVPN}/SNX/CSHELL/snx_ver.txt" 2> /dev/null || echo "Could not get SNX download version" >&2
    fi
 
@@ -931,8 +933,10 @@ showStatus()
    fi
 
    echo -n "CShell - available for download "
+   # shellcheck disable=SC2086
    if ! curl $CURL_OPT "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null
    then
+      # shellcheck disable=SC2086
       curl $CURL_OPT "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null || echo "Could not get CShell download version" >&2
    fi
 
@@ -983,6 +987,7 @@ showStatus()
       # OS/ca-certificates package needs to be recent
       # or otherwise, the OS CA root certificates chain file needs to be recent
       echo
+      # shellcheck disable=SC2086
       if curl $CURL_OPT --output /dev/null  --noproxy '*' "${URL_VPN_TEST}"
       then
          # if it works we are talking with the actual site
@@ -1011,6 +1016,7 @@ showStatus()
     
    # get latest release version of this script
    # do away with jq -r ".tag_name" - jq not available in some distributions
+   # shellcheck disable=SC2086
    VER=$(curl $CURL_OPT "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
 
    echo "current ${SCRIPTNAME} version     : ${VERSION}"
@@ -1329,6 +1335,7 @@ selfUpdate()
 
     # get this latest script release version
     # do away with jq -r ".tag_name" - jq not available in some distributions
+    # shellcheck disable=SC2086
     VER=$(curl $CURL_OPT "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | awk -F: '/tag_name/ { gsub("\"", ""); gsub(" ", ""); gsub(",", ""); print $2 }' )
     echo "current version     : ${VERSION}"
 
@@ -1342,6 +1349,7 @@ selfUpdate()
         vpnsh="$(mktemp)" || die "failed creating mktemp file"
 
         # download github more recent version
+        # shellcheck disable=SC2086
         if curl $CURL_OPT --output "${vpnsh}" "https://github.com/${GITHUB_REPO}/releases/download/${VER}/vpn.sh" 
         then
 
@@ -1572,6 +1580,7 @@ GetCompileSlack()
      
       # gets SlackBuild package 
       BUILD="${SLACKBUILDREPO}${pkg}.tar.gz"
+      # shellcheck disable=SC2086
       curl $CURL_OPT -O "${BUILD}" || die "could not download ${BUILD}"
 
       # extracts it and enter directory
@@ -1594,10 +1603,12 @@ GetCompileSlack()
          #
          # linter is warning against something *we want to do*
          #
+         # shellcheck disable=SC2016
          sed -i 's/cd $PRGNAM-$VERSION/cd $PRGNAM/' ./"${NAME}.SlackBuild"
       else
          # gets info file frrom SlackBuild package
          INFO="${SLACKBUILDREPO}${pkg}/${NAME}.info"
+         # shellcheck disable=SC2086
          curl $CURL_OPT -O "${INFO}" || die "could not download ${INFO}"
 
          # gets URL from downloading corresponding package source code
@@ -1605,6 +1616,7 @@ GetCompileSlack()
       fi
 
       # Download package source code
+      # shellcheck disable=SC2086
       curl $CURL_OPT -O "${DOWNLOAD}" || die "could not download ${DOWNLOAD}"
 
       # executes SlackBuild script for patching, compiling, 
@@ -1642,6 +1654,7 @@ InstallDebootstrapDeb()
    then
       if command -v dpkg &>/dev/null
       then
+         # shellcheck disable=SC2086
          curl $CURL_OPT --output "${DEB_FILE}" "${DEB_BOOTSTRAP}" || die "could not download ${DEB_BOOTSTRAP}"
          dpkg -i --force-all "${DEB_FILE}"
          rm -f "${DEB_FILE}" &>/dev/null
@@ -1652,6 +1665,7 @@ InstallDebootstrapDeb()
       if ! command -v debootstrap &>/dev/null || [[ ! -e "/usr/share/debootstrap/scripts/${RELEASE}" ]]
       then
          # gets tar.gz from debian pool
+         # shellcheck disable=SC2086
          curl $CURL_OPT --output debootstrap.tar.gz "${SRC_BOOTSTRAP}" || die "could not download ${SRC_BOOTSTRAP}"
          # gz untar it
 	 tar -zxvf debootstrap.tar.gz
@@ -2268,18 +2282,24 @@ buildFS()
    # rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
    # downloads SNX installation scripts from CheckPoint machine
+   # shellcheck disable=SC2086
    if curl $CURL_OPT --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh"
    then 
       # downloads CShell installation scripts from CheckPoint machine
+      # shellcheck disable=SC2086
       curl $CURL_OPT --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
       # registers CShell installed version for later
+      # shellcheck disable=SC2086
       curl $CURL_OPT --output "root/.cshell_ver.txt" "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" || die "could not get remote CShell version"
    else
       # downloads SNX installation scripts from CheckPoint machine
+      # shellcheck disable=SC2086
       curl $CURL_OPT --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh. Needing --portalurl parameter?" 
       # downloads CShell installation scripts from CheckPoint machine
+      # shellcheck disable=SC2086
       curl $CURL_OPT --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh. Either transient network error or appliance older than CheckPoint R80" 
       # registers CShell installed version for later
+      # shellcheck disable=SC2086
       curl $CURL_OPT "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
    fi
 
