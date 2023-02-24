@@ -23,9 +23,9 @@ This script downloads the Mobile Access Portal Agent (CShell) and the SSL Networ
 
 Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux user desktop, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated 32-bit packages necessary for SNX ; the chroot setup is built to counter some of those behaviours and provide a more secure setup.
 
-Whilst the script supports several Linux distributions as the host OS, it still uses Debian 11 for the chroot "light container".
+Whilst the script supports several Linux distributions as the host OS, it still uses Debian i386 for the chroot "light container".
 
-CShell CheckPoint Java agent needs Java (already in the chroot) and X11 desktop rights. The binary SNX VPN client needs a 32-bits environment. The SNX binary, the CShell agent/daemon (and Java) install and run under chrooted  Debian. The Linux host runs Firefox (or another browser).
+CShell CheckPoint Java agent needs Java (already in the chroot) and X11 desktop rights. The binary SNX VPN client needs a 32-bits environment. The SNX binary, the CShell agent/daemon (and Java) install and run under chrooted Debian. The Linux host runs Firefox (or another browser).
 
 resolv.conf, VPN IP address, routes and X11 "rights" "bleed" from the chroot directories and kernel shared with the host to the host Linux OS.
 
@@ -295,7 +295,9 @@ Tested with:
 |Debian   |12 |Bookworm|i386|
 |Debian   |11 |Bullseye|i386|
 
-with the following x86_64 hosts:
+The default for the chroot is Debian 12 i386.
+
+with the following Linux x86_64 hosts:
 
 |Alpine        |version      |
 |--------------|-------------|

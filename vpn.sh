@@ -27,8 +27,8 @@
 # CShell CheckPoint Java agent needs Java *and* X11 desktop rights
 # binary SNX VPN client needs 32-bits environment
 #
-# tested with chroot Debian Bullseye 11 (32 bits) and
-# 64 bits hosts. 
+# tested with chroot both with Debian Bullseye 11/Bookworm 12 (32 bits) and
+# 64 bits Linux hosts. 
 #
 # see list and instructions at https://github.com/ruyrybeyro/chrootvpn/
 #
