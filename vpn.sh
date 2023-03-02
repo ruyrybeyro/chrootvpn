@@ -1916,7 +1916,7 @@ installGentoo()
    # dpkg for installing debootstrap from deb
    # debootstrap for creating Debian chroot
    # firefox for installing policy afterwards
-   emerge -atv ca-certificates wget curl xhost debootstrap dpkg binutils firefox
+   emerge -atv ca-certificates net-misc/wget curl xhost debootstrap dpkg binutils firefox
 
    # clean caches
    emerge --ask --verbose --depclean
