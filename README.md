@@ -16,6 +16,23 @@ Tiago Teles @ttmx - Contributions for Arch Linux
 
 ## 💥Nominated for best tool of the year 2022 at Checkpoint user forums💥
 
+|Repography logo| / Recent activity |Time period|
+-----
+|recent-activity_timeline| |recent-activity_issues| 
+
+.. |Time period| image:: https://images.repography.com/36666788/ruyrybeyro/chrootvpn/recent-activity/LB9SXh03A1U_KKBzJVszTogsaTsDhqXweoD-J6-0bqU/mWvWwROxtYdvqNfahT1OfGUK8QixuHI75J4L2Hrb1I0_badge.svg
+   :alt: Time period
+   :target: https://repography.com
+.. |Repography logo| image:: https://images.repography.com/logo.svg
+   :alt: Repography logo
+   :target: https://repography.com
+.. |recent-activity_timeline| image:: https://images.repography.com/36666788/ruyrybeyro/chrootvpn/recent-activity/LB9SXh03A1U_KKBzJVszTogsaTsDhqXweoD-J6-0bqU/mWvWwROxtYdvqNfahT1OfGUK8QixuHI75J4L2Hrb1I0_timeline.svg
+   :alt: Timeline graph
+   :target: https://github.com/ruyrybeyro/chrootvpn/commits
+.. |recent-activity_issues| image:: https://images.repography.com/36666788/ruyrybeyro/chrootvpn/recent-activity/LB9SXh03A1U_KKBzJVszTogsaTsDhqXweoD-J6-0bqU/mWvWwROxtYdvqNfahT1OfGUK8QixuHI75J4L2Hrb1I0_issues.svg
+   :alt: Issue status graph
+   :target: https://github.com/ruyrybeyro/chrootvpn/issues
+
 Description
 ===========
 
