@@ -186,7 +186,8 @@ do_help()
 	-h|--help    shows this help
 	-v|--version script version
 	-f|--file    alternate conf file. Default /opt/etc/vpn.conf
-	-l           gets snx_install.sh and/or cshell_install.sh from cwd directory, if present
+	-l           gets snx_install.sh and/or cshell_install.sh from cwd directory
+	             the files wont be loaded from the remote CheckPoint
 	--vpn        selects the VPN DNS full name at install time
 	--proxy      proxy to use in apt inside chroot 'http://user:pass@IP'
 	--portalurl  custom VPN portal URL prefix (usually sslvpn or /) ;
@@ -2281,43 +2282,49 @@ buildFS()
    # from the firewall
    # rm -f snx_install.sh cshell_install.sh 2> /dev/null
 
-   # downloads SNX installation scripts from CheckPoint machine
-   # shellcheck disable=SC2086
-   if curl $CURL_OPT --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh"
-   then 
-      # downloads CShell installation scripts from CheckPoint machine
-      # shellcheck disable=SC2086
-      curl $CURL_OPT --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
-      # registers CShell installed version for later
-      # shellcheck disable=SC2086
-      curl $CURL_OPT --output "root/.cshell_ver.txt" "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" || die "could not get remote CShell version"
-   else
-      # downloads SNX installation scripts from CheckPoint machine
-      # shellcheck disable=SC2086
-      curl $CURL_OPT --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh. Needing --portalurl parameter?" 
-      # downloads CShell installation scripts from CheckPoint machine
-      # shellcheck disable=SC2086
-      curl $CURL_OPT --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh. Either transient network error or appliance older than CheckPoint R80" 
-      # registers CShell installed version for later
-      # shellcheck disable=SC2086
-      curl $CURL_OPT "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
-   fi
-
    # replace cshell_install.sh or snx_install.sh with local files for newer versions than the firewall provided
    # get them from the current working directory of when this script was called
 
    if [[ $LOCALINSTALL -eq true ]]
    then
-      if [[ -e "${LOCALCWD}/snx_install.sh" ]]  
+      if [[ -e "${LOCALCWD}/snx_install.sh" ]]
       then
-         echo "Replacing snx_install.sh with local copy at ${LOCALCWD}/snx_install.sh"
+         echo "Using local copy of ${LOCALCWD}/snx_install.sh"
          cp "${LOCALCWD}/snx_install.sh" "${CHROOT}/root/snx_install.sh"
+      else
+         echo "${LOCALCWD}/snx_install.sh missing"
       fi
-      if [[ -e "${LOCALCWD}/cshell_install.sh" ]] 
+      if [[ -e "${LOCALCWD}/cshell_install.sh" ]]
       then
-         echo "Replacing cshell_install.sh with local copy at ${LOCALCWD}/cshell_install.sh"
-         cp "${LOCALCWD}/cshell_install.sh" "${CHROOT}/root/cshell_install.sh"   
+         echo "Using local copy of ${LOCALCWD}/cshell_install.sh"
+         cp "${LOCALCWD}/cshell_install.sh" "${CHROOT}/root/cshell_install.sh"  
+      else
+         echo "${LOCALCWD}/cshell_install.sh missing"
       fi
+   else 
+
+      # downloads SNX installation scripts from CheckPoint machine
+      # shellcheck disable=SC2086
+      if curl $CURL_OPT --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/snx_install.sh"
+      then 
+         # downloads CShell installation scripts from CheckPoint machine
+         # shellcheck disable=SC2086
+         curl $CURL_OPT --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/${SSLVPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh" 
+         # registers CShell installed version for later
+         # shellcheck disable=SC2086
+         curl $CURL_OPT --output "root/.cshell_ver.txt" "https://${VPN}/${SSLVPN}/SNX/CSHELL/cshell_ver.txt" || die "could not get remote CShell version"
+      else
+         # downloads SNX installation scripts from CheckPoint machine
+         # shellcheck disable=SC2086
+         curl $CURL_OPT --output "${CHROOT}/root/snx_install.sh" "https://${VPN}/SNX/INSTALL/snx_install.sh" || die "could not download snx_install.sh. Needing --portalurl parameter?" 
+         # downloads CShell installation scripts from CheckPoint machine
+         # shellcheck disable=SC2086
+         curl $CURL_OPT --output "${CHROOT}/root/cshell_install.sh" "https://${VPN}/SNX/INSTALL/cshell_install.sh" || die "could not download cshell_install.sh. Either transient network error or appliance older than CheckPoint R80" 
+         # registers CShell installed version for later
+         # shellcheck disable=SC2086
+         curl $CURL_OPT "https://${VPN}/SNX/CSHELL/cshell_ver.txt" 2> /dev/null > root/.cshell_ver.txt
+      fi
+
    fi
 
    # if somewhat packages were not downloaded, but have html content
@@ -2333,7 +2340,6 @@ buildFS()
    then
       die "CheckPoint release < R80 suspected. Not supported by this script" 
    fi
-
 
    # snx calls modprobe
    # snx cannot be called inside a chroot

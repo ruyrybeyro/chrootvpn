@@ -100,6 +100,7 @@ vpn.sh -v|--version
 |--output   |-o|redirects ALL output for FILE                            |
 |--silent   |-s|special case of output, no arguments                     |
 |           |-l|gets snx/cshell_install.sh from cwd directory, if present|
+|           |  |the files wont be loaded from the remote CheckPoint      |
 |--portalurl|  |custom prefix path other than / and sslvpn               |
 
 
