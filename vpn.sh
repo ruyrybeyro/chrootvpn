@@ -406,6 +406,7 @@ getDistro()
    CLEAR=0
    ALPINE=0
    NUTYX=0
+   NIXOS=0
    # installing dpkg damages Solus, commented out
    #SOLUS=0
 
@@ -439,6 +440,7 @@ getDistro()
       kwort)		KWORT=1	;;
       clear-linux-os)	CLEAR=1	;;
       nutyx)		NUTYX=1 ;;
+      nixos)		NIXOS=1 ;;
 
    esac
 
@@ -493,6 +495,9 @@ getDistro()
    # Alpine
    [[ -f "/etc/alpine-release" ]]    && ALPINE=1 # is Alpine
 
+   # NixOS
+   [[ -f "/etc/NIXOS" ]]             && NIXOS=1 # is NixOS
+
    # if installing or showing status
    if [[ "${install}" -eq true ]] || [[ "$1" == "status" ]]
    then
@@ -508,7 +513,7 @@ getDistro()
       done
 
       # shows which distribution variable(s) is true
-      for i in DEB DEEPIN RH ARCH SUSE GENTOO SLACKWARE VOID KWORT PISI CLEAR ALPINE NUTYX
+      for i in DEB DEEPIN RH ARCH SUSE GENTOO SLACKWARE VOID KWORT PISI CLEAR ALPINE NUTYX NIXOS
       do
          [[ "${!i}" -eq 1 ]] && echo "${i}=true"
       done
@@ -524,7 +529,7 @@ getDistro()
    fi
 
    # if none of distribution families above, abort
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && [[ "${ALPINE}" -eq 0 ]] && [[ "${NUTYX}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS,NuTyx and Clear Linux family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && [[ "${ALPINE}" -eq 0 ]] && [[ "${NUTYX}" -eq 0 ]] && [[ "${NIXOS}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS, NuTyx, Clear and NixOS Linux family distributions supported"
 }
 
 
@@ -534,7 +539,7 @@ PreCheck()
    # If not Intel based
    if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
-      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/KaOS/Deepin/Kwort/Pisi/NuTyx/Clear Linux Intel based flavours only"
+      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/KaOS/Deepin/Kwort/Pisi/NuTyx/Clear/NixOS Linux Intel based flavours only"
    fi
 
    # fills in distribution variables
@@ -1142,6 +1147,7 @@ fixDNS()
    [[ "${DEEPIN}"    -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${PISI}"      -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    [[ "${NUTYX}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
+   [[ "${NIXOS}"     -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
    # [[ "${SOLUS}"   -eq 1 ]] && fixLinks ../run/NetworkManager/resolv.conf
 
    [[ ${KWORT}       -eq 1 ]] && fixLinks "..$(find /run/dhcpcd/hook-state/resolv.conf/ -type f | head -1)"
@@ -1891,6 +1897,18 @@ installVoid()
 #   eopkg install ca-certificates xhost curl debootstrap dpkg make
 #}
 
+# installs NixOs Linux
+installNixOS()
+{
+   echo "NixOs setup" >&2
+
+   nix-channel --update
+
+   # needed packages
+   nix-env -iA nixos.cacert nixos.xorg.xauth nixos.xorg.xhost nixos.openssh nixos.curl nixos.debootstrap nixos.gnumake nixos.wget
+}
+
+
 
 # installs Gentoo
 installGentoo()
@@ -2034,6 +2052,9 @@ installPackages()
 
    # if NuTyx based
    [[ "${NUTYX}"     -eq 1 ]] && installNuTyx
+
+   # if NixOS based
+   [[ "${NIXOS}"     -eq 1 ]] && installNixOS
 
    # if Solus based
    #[[ "${SOLUS}"    -eq 1 ]] && installSolus

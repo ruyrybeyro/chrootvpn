@@ -590,6 +590,10 @@ with the following Linux x86_64 hosts:
 |Void      |2021-09-30|
 |Void      |2022-10-01|
 
+|NixOS based|version   |
+|-----------|----------|
+|NixOS      |23.05     |
+
 **(1)** - implementation for advanced users/VMs
 
 **(2)** - no /etc/resolv.conf from VPN
