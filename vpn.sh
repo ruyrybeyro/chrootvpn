@@ -1905,7 +1905,7 @@ installNixOS()
    nix-channel --update
 
    # needed packages
-   nix-env -iA nixos.cacert nixos.xorg.xauth nixos.xorg.xhost nixos.openssh nixos.curl nixos.debootstrap nixos.gnumake nixos.wget
+   nix-env -iA nixos.cacert nixos.binutils nixos.xorg.xauth nixos.xorg.xhost nixos.openssh nixos.curl nixos.debootstrap nixos.gnumake nixos.wget
 }
 
 
