@@ -4,7 +4,7 @@ Checkpoint R80+ VPN client chroot wrapper
 
 VPN client chroot'ed Debian setup/wrapper 
 
-for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Pisi/Kwort/Clear/NuTyx Linux based hosts
+for Debian/Ubuntu/RedHat/CentOS/Fedora/Arch/SUSE/Gentoo/Slackware/Void/Deepin/KaOS/Pisi/Kwort/Clear/NuTyx/Mariner Linux based hosts
 
 Checkpoint **R80.10 and up**
 
@@ -520,6 +520,7 @@ with the following Linux x86_64 hosts:
 |Alma        |9.1               |
 |BlueOnyx    |9.0               |
 |BlueOnyx    |9.1               |
+|CBL-Mariner |2.0               |
 |CentOS      |8                 |
 |CentOS      |9 stream          |
 |EulixOS     |1.0.1             |

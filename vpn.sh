@@ -407,6 +407,7 @@ getDistro()
    ALPINE=0
    NUTYX=0
    NIXOS=0
+   MARINER=0
    # installing dpkg damages Solus, commented out
    #SOLUS=0
 
@@ -433,14 +434,16 @@ getDistro()
 
    case "${ID}" in
   
-      debian)		DEB=1 	;; # OB2D/others
-      openEuler)	RH=1	;;
-      Euler)            RH=1    ;;
-      kaos)             ARCH=1  ;;
-      kwort)		KWORT=1	;;
-      clear-linux-os)	CLEAR=1	;;
-      nutyx)		NUTYX=1 ;;
-      nixos)		NIXOS=1 ;;
+      debian)		DEB=1 	  ;; # OB2D/others
+      openEuler)	RH=1	  ;;
+      Euler)            RH=1      ;;
+      kaos)             ARCH=1    ;;
+      kwort)		KWORT=1	  ;;
+      clear-linux-os)	CLEAR=1	  ;;
+      nutyx)		NUTYX=1   ;;
+      nixos)		NIXOS=1   ;;
+      mariner)          RH=1
+                        MARINER=1 ;;
 
    esac
 
@@ -529,7 +532,7 @@ getDistro()
    fi
 
    # if none of distribution families above, abort
-   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && [[ "${ALPINE}" -eq 0 ]] && [[ "${NUTYX}" -eq 0 ]] && [[ "${NIXOS}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS, NuTyx, Clear and NixOS Linux family distributions supported"
+   [[ "${DEB}" -eq 0 ]] && [[ "${RH}" -eq 0 ]] && [[ "${ARCH}" -eq 0 ]] && [[ "${SUSE}" -eq 0 ]] && [[ "${GENTOO}" -eq 0 ]] && [[ "${SLACKWARE}" -eq 0 ]] && [[ "${VOID}" -eq 0 ]] && [[ "${KWORT}" -eq 0 ]] && [[ "${PISI}" -eq 0 ]] && [[ "${CLEAR}" -eq 0 ]] && [[ "${ALPINE}" -eq 0 ]] && [[ "${NUTYX}" -eq 0 ]] && [[ "${NIXOS}" -eq 0 ]] && die "Only Debian, RedHat, ArchLinux, SUSE, Gentoo, Slackware, Void, Deepin, Kwort, Pisi, KaOS, NuTyx, Clear, NixOS and CBL-Mariner Linux family distributions supported"
 }
 
 
@@ -539,7 +542,7 @@ PreCheck()
    # If not Intel based
    if [[ "$(uname -m)" != 'x86_64' ]] && [[ "$(uname -m)" != 'i386' ]]
    then
-      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/KaOS/Deepin/Kwort/Pisi/NuTyx/Clear/NixOS Linux Intel based flavours only"
+      die "This script is for Debian/RedHat/Arch/SUSE/Gentoo/Slackware/Void/KaOS/Deepin/Kwort/Pisi/NuTyx/Clear/NixOS/Mariner Linux Intel based flavours only"
    fi
 
    # fills in distribution variables
@@ -1775,11 +1778,12 @@ installRedHat()
    # xauth for sshd
    # dpkg for installing debootstrap from deb
    # debootstrap for creating Debian chroot
+   $DNF -y install ca-certificates wget curl debootstrap make binutils
+
    # firefox for installing policy afterwards
-   $DNF -y install ca-certificates wget curl debootstrap make binutils firefox
+   [[ ${MARINER} -eq 1 ]] || $DNF -y install firefox
 
-   $DNF -y install dpkg
-
+   command -v debootstrap &>/dev/null || $DNF -y install dpkg
 
    # xhost should be present
    if [[ ! -f "/usr/bin/xhost" ]]
