@@ -464,6 +464,7 @@ with the following Linux x86_64 hosts:
 |WattOS         |R12                      |
 |Voyager        |22.04 LTS                |
 |Voyager        |22.10                    |
+|Xebian         |                         |
 |Xubuntu        |20.04 LTS                |
 |Xubuntu        |22.04 Jammy Jellyfish LTS|
 |Xubuntu        |22.10                    |

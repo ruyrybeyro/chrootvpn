@@ -147,7 +147,7 @@ true=0
 false=1
 
 # PATH for being called outside the command line (from xdg)
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:${PATH}"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:${PATH}"
 
 # if true, cwd cshell_install.sh and/or snx_install.sh will be used
 # if present 
