@@ -23,7 +23,7 @@ Tiago Teles @ttmx - Contributions for Arch Linux
 Description
 ===========
 
-This script downloads the Mobile Access Portal Agent (CShell) and the SSL Network Extender (SNX) CheckPoint installation scripts from the firewall/VPN we intend to connect to, and installs them in a chrooted environment.
+The official Mobile Access Portal Agent (CShell) and the SSL Network Extender (SNX) CheckPoint scripts are severely outdated. This script downloads them from the firewall/VPN we intend to connect to, and installs them in a chrooted environment. (*)
 
 Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux user desktop, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated 32-bit packages necessary for SNX ; the chroot setup is built to counter some of those behaviours and provide a more secure setup.
 
@@ -36,6 +36,8 @@ resolv.conf, VPN IP address, routes and X11 "rights" "bleed" from the chroot dir
 The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official setup, runs with its own non-privileged user which is different than the logged in user. In addition, instead of adding the localhost self-signed Agent certificate to a user personal profile as the official setup does, this script install a server-wide global Firefox policy file instead when possible. Notably when Firefox is a snap, or the distribution already has a default Firefox policy file, a new policy won't be installed.
 
 As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run successfully. Void, Gentoo, Slackware, Deepin,NuTyx,Pisi/Kwort and KaOS variants are not so thoroughly tested. Have a look near the end of this document, for the more than 110 recent versions/distributions successfully tested.
+
+(*) It is of no use opening issues with the CShell/SNX scripts failing to installs in your normal OS shell/outside the chroot environment. The whole point of this script is providing an alternative environment able to run them and getting in sync with the host OS.
 
 INSTRUCTIONS
 ============
@@ -72,6 +74,14 @@ For the stable release, download rpm or deb file from the last release.
 - For delivering the script to other users, you can fill up VPN and VPNIP variables at the beginning of the script. They can then install it as:
 
         vpn.sh -i
+
+- For opening issues, please provide de output debug information, adding -d to your command line:
+
+        vpn.sh -d
+
+- Depending on how much of the chroot is installed, also seeing logs can be useful, as in:
+
+        vpn.sh logs
 
 USAGE
 =====
@@ -399,6 +409,7 @@ with the following Linux x86_64 hosts:
 |Kubuntu        |20.04 LTS                |
 |Kubuntu        |22.04 LTS                |
 |Kubuntu        |22.10                    |
+|Kubuntu        |23.10                    |
 |Legacy OS      |2023                     |
 |LinuxFx        |11                       |
 |Lite           |6.0 Fluorite             |
@@ -407,13 +418,16 @@ with the following Linux x86_64 hosts:
 |Lubuntu        |20.04 LTS                |
 |Lubuntu        |22.04 LTS                |
 |Lubuntu        |22.10                    |
+|Lubuntu        |23.10                    |
 |Makulu         |2022-06.10 Shift         |
 |MAX            |11.5                     |
 |Mint           |20.2 Uma                 |
 |Mint           |21 Vanessa               |
 |Mint           |21.2 Vanessa             |
+|Mint           |23.10                    |
 |MX             |21.1 Wildflower          |
 |MX             |21.2                     |
+|MX             |23.10                    |
 |Neptune        |7 ("Faye")               |
 |Neptune        |7.5                      |
 |Neptune        |7.9                      |
@@ -451,23 +465,31 @@ with the following Linux x86_64 hosts:
 |Ubuntu         |22.04 Jammy Jellyfish LTS|
 |Ubuntu         |22.10 Kinetic Kudu       |
 |Ubuntu         |23.04 Lunar Lobster      |
+|Ubuntu         |23.10 Mantic Minotaur    |
 |Ubuntu Budgie  |22.04                    |
 |Ubuntu Budgie  |22.10                    |
+|Ubuntu Budgie  |23.10                    |
 |Ubuntu Kylin   |22.04.1                  |
+|Ubuntu Kylin   |23.10                    |
 |Ubuntu Mate    |20.04.4 LTS              |
 |Ubuntu Mate    |22.04 LTS                |
 |Ubuntu Mate    |22.10                    |
+|Ubuntu Mate    |23.10                    |
 |Ubuntu Studio  |22.10                    |
+|Ubuntu Studio  |23.10                    |
 |Ubuntu Unity   |22.04.1 LTS              |
 |Ubuntu Unity   |22.10                    |
+|Ubuntu Unity   |23.10                    |
 |Uruk           |3 (Nannar)               |
 |WattOS         |R12                      |
 |Voyager        |22.04 LTS                |
 |Voyager        |22.10                    |
+|Voyager        |23.10                    |
 |Xebian         |                         |
 |Xubuntu        |20.04 LTS                |
 |Xubuntu        |22.04 Jammy Jellyfish LTS|
 |Xubuntu        |22.10                    |
+|Xubuntu        |23.10                    |
 |Zentyal Server |7.0                      |
 |Zevenet CE     |5.12.2                   |
 |Zorin OS       |16.1                     |
@@ -534,6 +556,7 @@ with the following Linux x86_64 hosts:
 |Fedora      |36                |
 |Fedora      |37                |
 |Fedora      |38                |
+|Fedora      |39                |
 |Mageia      |8 mga8            |
 |Mageia      |9                 |
 |Miracle     |8.4 (Peony)       |
@@ -542,6 +565,7 @@ with the following Linux x86_64 hosts:
 |Nobara      |36                |
 |Nobara      |37                |
 |NST         |36                |
+|NST         |38                |
 |openEuler   |22.03 LTS         | 
 |openEuler   |22.09             | 
 |Oracle      |8.6               |
@@ -551,6 +575,7 @@ with the following Linux x86_64 hosts:
 |PCLinuxOS   |2022.07.10 **(2)**|
 |RHEL        |8                 |
 |RHEL        |8.7               |
+|RHEL        |8.8               |
 |RHEL        |9.0 Plow          |
 |RHEL        |9.1               |
 |risiOS      |36                |
