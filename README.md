@@ -10,9 +10,11 @@ Checkpoint **R80.10 and up**
 
 https://github.com/ruyrybeyro/chrootvpn
 
-Rui Ribeiro 2022-2023
+Rui Ribeiro 2022-2024
 
 Tiago Teles @ttmx - Contributions for Arch Linux
+
+Robson Rodrigues @robsonrod - Contribution for NixOS
 
 ## 💥Nominated for best tool of the year 2022 at Checkpoint user forums💥
 
@@ -23,11 +25,11 @@ Tiago Teles @ttmx - Contributions for Arch Linux
 Description
 ===========
 
-The official Mobile Access Portal Agent (CShell) and the SSL Network Extender (SNX) CheckPoint scripts are severely outdated. This script downloads them from the firewall/VPN we intend to connect to, and installs them in a chrooted environment. (*)
+The official Mobile Access Portal Agent (CShell) and the SSL Network Extender (SNX) CheckPoint scripts are severely outdated, not working with recent Linux distributions. This script downloads them from the firewall/VPN we intend to connect to, and installs them in a chrooted environment. (*)
 
 Being SNX still a 32-bits binary together with the multiples issues of satisfying cshell_install.sh requirements, a chroot is used in order to not to corrupt (so much) the Linux user desktop, and yet still tricking snx / cshell_install.sh into "believing" all the requirements are satisfied; e.g. both SNX and CShell behave on odd ways ; furthermore, Fedora and others already deprecated 32-bit packages necessary for SNX ; the chroot setup is built to counter some of those behaviours and provide a more secure setup.
 
-Whilst the script supports several Linux distributions as the host OS, it still uses Debian i386 for the chroot "light container".
+Whilst the script supports most of the Linux distributions around as the host OS, it still uses Debian i386 for the chroot "light container".
 
 CShell CheckPoint Java agent needs Java (already in the chroot) and X11 desktop rights. The binary SNX VPN client needs a 32-bits environment. The SNX binary, the CShell agent/daemon (and Java) install and run under chrooted Debian. The Linux host runs Firefox (or another browser).
 
@@ -37,7 +39,9 @@ The Mobile Access Portal Agent, unlike the ordinary cshell_install.sh official s
 
 As long the version of the Debian/RedHat/SUSE/Arch distribution is not at the EOL stage, chances are very high the script will run successfully. Void, Gentoo, Slackware, Deepin,NuTyx,Pisi/Kwort and KaOS variants are not so thoroughly tested. Have a look near the end of this document, for the more than 110 recent versions/distributions successfully tested.
 
-(*) It is of no use opening issues with the CShell/SNX scripts failing to installs in your normal OS shell/outside the chroot environment. The whole point of this script is providing an alternative environment able to run them and getting in sync with the host OS.
+(*) It is of no use opening issues with the CShell/SNX scripts failing to installs in your normal OS shell/outside the chroot environment. The whole point of this script is automagically installing and providing an alternative environment able to run them and getting in sync with the host OS.
+
+Moreover, the author acknowledges that Linux has the capability to establish a connection to a FW/1 VPN through IPSEC. However, it's important to note that this configuration is not commonly implemented in the majority of corporate or educational setups. It typically requires a more technically proficient end user to navigate and set up.
 
 INSTRUCTIONS
 ============
@@ -326,6 +330,7 @@ with the following Linux x86_64 hosts:
 |Arch         |                |
 |ArchBang     |2022.07.02      |
 |Archcraft    |2022.06.08      |
+|Archcraft    |2023.07.05      |
 |ArchEx       |220206          |
 |ArchLabs     |                |
 |ArchMan      |2022.07.02      |
@@ -338,19 +343,25 @@ with the following Linux x86_64 hosts:
 |EndeavourOS  |22.7 Artemis neo|
 |EndeavourOS  |22.9            |
 |EndeavourOS  |22.12           |
+|EndeavourOS  |11-2023         |
 |FreedomOS    |                |
 |Garuda       |220614          |
 |Garuda       |220717          |
 |Garuda       |221017          |
+|Garuda       |231029          |
 |Mabox        |22.06           |
 |Mabox        |22.08           |
 |Mabox        |22.12           |
+|Mabox        |23.12           |
 |Manjaro      |21.2.6.1        |
 |Manjaro      |22.0            |
+|Manjaro      |23.1.0          |
 |Peux OS      |22.06           |
 |RebornOS     |                |
 |SalientOS    |21.06           |
+|Sdesk        |2024.01         |
 |Xero         |2022.09         |
+|Xero         |2023.08         |
 
 |Clear          |version                 |
 |---------------|------------------------|
@@ -361,6 +372,7 @@ with the following Linux x86_64 hosts:
 |---------------|-------------------------|
 |antiX          |21 Grup Yorum            |
 |antiX          |22 Grup Yorum            |
+|antiX          |23                       |
 |Armbian        |22.08 Jammy              |
 |B2D/OB2D       |2023 1.0.1               |
 |Backbox        |8                        |
@@ -369,6 +381,7 @@ with the following Linux x86_64 hosts:
 |BOSS           |9 (urja)                 |
 |BunsenLabs     |10.5 (Lithium)           |
 |BunsenLabs     |11   (Beryllium)         |
+|BunsenLabs     |12   (Boron)             |
 |Condres OS     |1.0                      |
 |Crowz          |4.0                      | 
 |cutefishOS     |                         |
@@ -384,11 +397,14 @@ with the following Linux x86_64 hosts:
 |Devuan         |5.0 Daedalus             |
 |Diamond LinuxTT|Gen5+                    |
 |Drauger OS     |7.6 Strigoi              |
+|Drauger OS     |7.7 Nzambi               |
 |Elementary OS  |6.1 Jolnir               |
 |Elementary OS  |7.0                      |
+|Elementary OS  |7.1                      |
 |Elive          |3.8.30                   |
 |Emmabuntüs DE4 |1.01                     |
 |Emmabuntüs DE4 |1.02                     |
+|Emmabuntüs DE5 |1.01                     |
 |Enso OS        |0.4                      |
 |Escuelas       |7.6                      |
 |Exe            |20220306 Chimaera        |
@@ -398,17 +414,20 @@ with the following Linux x86_64 hosts:
 |Feren OS       |2022.04                  |
 |Freespire      |82                       |
 |Gnuinos        |4.0 Chimaera             |
+|Gnoppix        |24.1                     |
 |Greenie        |20.04                    |
 |HamoniKR       |5.0 Hanla                |
 |Kaisen         |2.1                      |
 |Kaisen         |2.2                      |
 |Kali           |2022.2                   |
 |Kali           |2022.3                   |
+|Kali           |2023.4                   |
 |Kanotix64      |Silverfire               |
 |KDE neon       |5.25                     |
 |Kubuntu        |20.04 LTS                |
 |Kubuntu        |22.04 LTS                |
 |Kubuntu        |22.10                    |
+|Kubuntu        |23.04                    |
 |Kubuntu        |23.10                    |
 |Legacy OS      |2023                     |
 |LinuxFx        |11                       |
@@ -424,21 +443,28 @@ with the following Linux x86_64 hosts:
 |Mint           |20.2 Uma                 |
 |Mint           |21 Vanessa               |
 |Mint           |21.2 Vanessa             |
+|Mint           |21.3                     |
 |Mint           |23.10                    |
 |MX             |21.1 Wildflower          |
 |MX             |21.2                     |
+|MX             |23.2                     |
 |MX             |23.10                    |
 |Neptune        |7 ("Faye")               |
 |Neptune        |7.5                      |
 |Neptune        |7.9                      |
+|Neptune        |8.0                      |
 |Netrunner      |21.01 (“XOXO”)           |
 |Nitrux         |2.4.1                    |
 |Nova           |Desktop 8.0              |
+|Nova           |9.0                      |
 |PakOS          |2021-05                  |
+|PakOS          |2023-04                  |
 |Pardus         |21.2 Yazılım Merkezi     |
 |Pardus         |21.4                     |
+|Pardus         |23.0                     |
 |Parrot         |5.0.1 Electro Ara        |
 |Parrot         |5.2                      |
+|Parrot         |6.0                      |
 |Pearl          |11 MATE Studio           |
 |Peppermint OS  |2022-05-22               |
 |Pop!_OS        |22.04 LTS                |
@@ -447,10 +473,11 @@ with the following Linux x86_64 hosts:
 |Q4OS           |4.10 Gemini              |
 |Q4OS           |4.8 Gemini               |
 |Refracta       |11.0 Chimaera            |
+|Rhino          |2023.4                   |
+|Rhino Remix    |                         |
 |Robo           |12.07                    |
 |Robo           |12.08                    |
 |Robo           |12.09                    |
-|Rhino Remix    |                         |
 |Runtu          |20.04.1                  |
 |Runtu          |22.04                    |
 |Septor         |2022                     |
@@ -494,6 +521,7 @@ with the following Linux x86_64 hosts:
 |Zevenet CE     |5.12.2                   |
 |Zorin OS       |16.1                     |
 |Zorin OS       |16.2                     |
+|Zorin OS       |17                       |
 
 
 |Gentoo based|version                 |
@@ -502,6 +530,7 @@ with the following Linux x86_64 hosts:
 |Redcore     |2102                    |
 |Redcore     |2201 Hardened (Rastaban)|
 |Redcore     |2301 Hardened           |
+|Redcore     |2401 Hardened           |
 |Calculate   |22.0.1                  |
 |Calculate   |23                      |
 
@@ -528,6 +557,7 @@ with the following Linux x86_64 hosts:
 |KaOS      |version              |
 |----------|---------------------|
 |KaOS      |2022.10              |
+|KaOS      |2023.09              |
 
 
 |Kwort          |version                 |
@@ -564,6 +594,7 @@ with the following Linux x86_64 hosts:
 |Navy        |Enterprise 8.6 r1 |
 |Nobara      |36                |
 |Nobara      |37                |
+|Nobara      |39                |
 |NST         |36                |
 |NST         |38                |
 |openEuler   |22.03 LTS         | 
@@ -586,6 +617,7 @@ with the following Linux x86_64 hosts:
 |ROSA        |12.2 Fresh Desktop|
 |Springale   |8                 |
 |Springale   |9.0 (Parma)       |
+|Springale   |9.2               |
 
 
 |Slackware based|version                 |
@@ -608,7 +640,10 @@ with the following Linux x86_64 hosts:
 |Gecko     |153.x STATIC Cinnamon|
 |Gecko     |154.x STATIC Cinnamon|
 |Kamarada  |15.3                 |
+|Kamarada  |15.4                 |
+|Kamarada  |15.5                 |
 |Regata OS |22 Discovery         |
+|Regata OS |23                   |
 
 
 |Void based|version   |
@@ -616,6 +651,7 @@ with the following Linux x86_64 hosts:
 |AgarimOS  |          |
 |Void      |2021-09-30|
 |Void      |2022-10-01|
+|Void      |2023-06-28|
 
 |NixOS based|version   |
 |-----------|----------|
