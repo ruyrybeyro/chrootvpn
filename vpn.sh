@@ -42,7 +42,7 @@ VERSION="v1.96"
 # created first time upon successful setup/run
 # so vpn.sh can be successfuly replaced by new versions
 # or reinstalled from scratch
-CONFFILE="/opt/etc/vpn.conf"
+CONFFILE="/opt/checkpoint/etc/vpn.conf"
 
 # if vpn.conf present, source VPN, VPNIP, SPLIT and SSLVPN from it
 [[ -f "${CONFFILE}" ]] && . "${CONFFILE}"
@@ -58,7 +58,7 @@ CONFFILE="/opt/etc/vpn.conf"
 [[ -z "$VPN" ]] && VPN=""
 [[ -z "$VPNIP" ]] && VPNIP=""
 # default chroot location (700 MB needed - 1.5GB while installing)
-[[ -z "$CHROOT" ]] && CHROOT="/opt/chroot"
+[[ -z "$CHROOT" ]] && CHROOT="/opt/checkpoint/chroot"
 
 # split VPN routing table if deleting VPN gateway is not enough
 # selfupdate brings it from the older version
@@ -76,14 +76,14 @@ CONFFILE="/opt/etc/vpn.conf"
 # for chroot shell correct time
 # if TZ is empty
 # set TZ before first time creating chroot
-[[ -z "${TZ}" ]] && TZ='Europe/Lisbon'
+[[ -z "${TZ}" ]] && TZ='Europe/Vilnius'
 
 # OS to deploy inside 32-bit chroot  
 # minimal Debian
 VARIANT="minbase"
 #RELEASE="bullseye" # Debian 11
 RELEASE="bookworm"  # Debian 12
-DEBIANREPO="http://deb.debian.org/debian/" # fastly repo
+DEBIANREPO="http://ftp.lt.debian.org/debian/" # fastly repo
 
 # github repository for selfupdate command
 # https://github.com/ruyrybeyro/chrootvpn
@@ -136,11 +136,11 @@ INSTALLSCRIPT="/usr/local/bin/${SCRIPTNAME}"
 PKGSCRIPT="/usr/bin/vpn.sh"
 
 # cshell user
-CSHELL_USER="cshell"
+CSHELL_USER="checkpoint"
 CSHELL_UID="9000"
 CSHELL_GROUP="${CSHELL_USER}"
 CSHELL_GID="9000"
-CSHELL_HOME="/home/${CSHELL_USER}"
+CSHELL_HOME="/opt/${CSHELL_USER}/home"
 
 # "booleans"
 true=0
@@ -558,17 +558,7 @@ PreCheck()
    # if not root/sudo
    if [[ "${EUID}" -ne 0 ]]
    then
-      # This script needs a user with sudo privileges
-      command -v sudo &>/dev/null || die "install sudo and configure sudoers/groups for this user"
-
-      # The user needs sudo privileges
-      [[ $(sudo -l) !=  *"not allowed"* ]] || die "configure sudoers/groups for this user"
-
-      # for using/relaunching
-      # self-promoting script to sudo
-      # recursively call the script with sudo
-      # hence no needing sudo before the command
-      exec sudo "$0" "${args[@]}"
+      die "Run this script with super user rights"
    else
       # This script might need a user with sudo privileges
       command -v sudo &>/dev/null || echo "you might want to install sudo" >&2
@@ -1490,7 +1480,7 @@ preFlight()
    # if not sudo/root, call the script as root/sudo script
    if [[ "${EUID}" -ne 0 ]] || [[ "${install}" -eq false ]]
    then
-      exec sudo "$0" "${args[@]}"
+      die "This script must be run as root user"
    fi
 
    if  isCShellRunning 
@@ -2685,7 +2675,7 @@ chrootEnd()
 
       # installs xdg autorun file
       # last thing to run
-      XDGAutoRun
+      # XDGAutoRun
 
       echo "chroot setup done." >&2
       echo "${SCRIPT} copied to ${INSTALLSCRIPT}" >&2
