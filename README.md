@@ -493,30 +493,38 @@ with the following Linux x86_64 hosts:
 |Ubuntu         |22.10 Kinetic Kudu       |
 |Ubuntu         |23.04 Lunar Lobster      |
 |Ubuntu         |23.10 Mantic Minotaur    |
+|Ubuntu         |24.04 Noble Numbat LTS   |
 |Ubuntu Budgie  |22.04                    |
 |Ubuntu Budgie  |22.10                    |
 |Ubuntu Budgie  |23.10                    |
+|Ubuntu Budgie  |24.04                    |
 |Ubuntu Kylin   |22.04.1                  |
 |Ubuntu Kylin   |23.10                    |
+|Ubuntu Kylin   |24.04                    |
 |Ubuntu Mate    |20.04.4 LTS              |
 |Ubuntu Mate    |22.04 LTS                |
 |Ubuntu Mate    |22.10                    |
 |Ubuntu Mate    |23.10                    |
+|Ubuntu Mate    |24.04 LTS                |
 |Ubuntu Studio  |22.10                    |
 |Ubuntu Studio  |23.10                    |
+|Ubuntu Studio  |24.04 LTS                |
 |Ubuntu Unity   |22.04.1 LTS              |
 |Ubuntu Unity   |22.10                    |
 |Ubuntu Unity   |23.10                    |
+|Ubuntu Unity   |24.04                    |
 |Uruk           |3 (Nannar)               |
 |WattOS         |R12                      |
 |Voyager        |22.04 LTS                |
 |Voyager        |22.10                    |
 |Voyager        |23.10                    |
+|Voyager        |24.04 LTS                |
 |Xebian         |                         |
 |Xubuntu        |20.04 LTS                |
 |Xubuntu        |22.04 Jammy Jellyfish LTS|
 |Xubuntu        |22.10                    |
 |Xubuntu        |23.10                    |
+|Xubuntu        |24.04 LTS                |
 |Zentyal Server |7.0                      |
 |Zevenet CE     |5.12.2                   |
 |Zorin OS       |16.1                     |
@@ -587,6 +595,7 @@ with the following Linux x86_64 hosts:
 |Fedora      |37                |
 |Fedora      |38                |
 |Fedora      |39                |
+|Fedora      |40                |
 |Mageia      |8 mga8            |
 |Mageia      |9                 |
 |Miracle     |8.4 (Peony)       |
