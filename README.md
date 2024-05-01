@@ -472,6 +472,7 @@ with the following Linux x86_64 hosts:
 |Pearl          |11 MATE Studio           |
 |Peppermint OS  |2022-05-22               |
 |Pop!_OS        |22.04 LTS                |
+|Pop!_OS        |24.04 LTS                |
 |Primtux        |7                        |
 |PureOS         |10.0 (Byzantium)         |
 |Q4OS           |4.10 Gemini              |
