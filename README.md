@@ -429,6 +429,7 @@ with the following Linux x86_64 hosts:
 |Kubuntu        |22.10                    |
 |Kubuntu        |23.04                    |
 |Kubuntu        |23.10                    |
+|Kubuntu        |24.04 LTS                |
 |Legacy OS      |2023                     |
 |LinuxFx        |11                       |
 |Lite           |6.0 Fluorite             |
@@ -438,6 +439,7 @@ with the following Linux x86_64 hosts:
 |Lubuntu        |22.04 LTS                |
 |Lubuntu        |22.10                    |
 |Lubuntu        |23.10                    |
+|Lubuntu        |24.04 LTS                |
 |Makulu         |2022-06.10 Shift         |
 |MAX            |11.5                     |
 |Mint           |20.2 Uma                 |
@@ -445,10 +447,12 @@ with the following Linux x86_64 hosts:
 |Mint           |21.2 Vanessa             |
 |Mint           |21.3                     |
 |Mint           |23.10                    |
+|Mint           |24.04 LTS                |
 |MX             |21.1 Wildflower          |
 |MX             |21.2                     |
 |MX             |23.2                     |
 |MX             |23.10                    |
+|MX             |24.04                    |
 |Neptune        |7 ("Faye")               |
 |Neptune        |7.5                      |
 |Neptune        |7.9                      |
