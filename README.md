@@ -657,6 +657,7 @@ with the following Linux x86_64 hosts:
 |Kamarada  |15.5                 |
 |Regata OS |22 Discovery         |
 |Regata OS |23                   |
+|Regata OS |24 Artic Fox         |
 
 
 |Void based|version   |
