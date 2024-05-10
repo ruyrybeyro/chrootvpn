@@ -1165,7 +1165,7 @@ fixDNS()
 doStart()
 {
    # ${CSHELL_USER} (cshell) apps - X auth
-   if [[ -z "$SUDO_USER" ]] || ! su "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:"
+   if [[ -z "$SUDO_USER" ]] || ! su "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:" || ! su "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +si:localuser:${SUDO_USER}" 
    then
       echo "If there are not X11 desktop permissions, the VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2

@@ -398,6 +398,7 @@ with the following Linux x86_64 hosts:
 |Diamond LinuxTT|Gen5+                    |
 |Drauger OS     |7.6 Strigoi              |
 |Drauger OS     |7.7 Nzambi               |
+|Edubuntu       |24.04                    |
 |Elementary OS  |6.1 Jolnir               |
 |Elementary OS  |7.0                      |
 |Elementary OS  |7.1                      |
@@ -651,6 +652,7 @@ with the following Linux x86_64 hosts:
 |openSUSE  |15.3 Leap            |
 |openSUSE  |15.4 Leap            |
 |openSUSE  |15.5 Leap            |
+|openSUSE  |15.6 Leap            |
 |Gecko     |153.x STATIC Cinnamon|
 |Gecko     |154.x STATIC Cinnamon|
 |Kamarada  |15.3                 |
