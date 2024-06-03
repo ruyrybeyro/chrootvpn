@@ -370,6 +370,7 @@ doGetOpts()
                                                      # support for multiple clients/VPNs
                            CONFFILE="${OPTARG}"
                            [[ -e $CONFFILE ]] || die "no configuration file $CONFFILE"
+                           # shellcheck disable=SC1090
                            . "${CONFFILE}" ;; 
          l)                LOCALINSTALL=true ;;      # if cwd snx/cshell_install.sh, uses it
          sudoers)          doSudoers 
