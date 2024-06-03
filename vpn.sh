@@ -2466,7 +2466,6 @@ buildFS()
 	fi
 
 	echo "Installing CShell" >&2
-	export DISPLAY="${DISPLAY}" 
 	export PATH=/nopatch:"${PATH}" 
 	if ! /root/cshell_install.sh 
 	then
