@@ -569,7 +569,7 @@ PreCheck()
       # self-promoting script to sudo
       # recursively call the script with sudo
       # hence no needing sudo before the command
-      exec sudo "$0" "${args[@]}"
+      exec sudo -sE "$0" "${args[@]}"
    else
       # This script might need a user with sudo privileges
       command -v sudo &>/dev/null || echo "you might want to install sudo" >&2
