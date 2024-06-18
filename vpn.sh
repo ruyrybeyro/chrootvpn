@@ -2755,6 +2755,9 @@ main()
       # handling of stop/start/status/shell 
       argCommands "$1"
    else
+      xhost si:localuser:"${USER}"
+      xhost +local:
+
       # -i|--install subroutine
       InstallChroot
    fi
