@@ -1166,7 +1166,7 @@ fixDNS()
 doStart()
 {
    # ${CSHELL_USER} (cshell) apps - X auth
-   if [[ -z "$SUDO_USER" ]] || ! su "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:" || ! su "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +si:localuser:${SUDO_USER}" 
+   if [[ -z "$SUDO_USER" ]] || ! su "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +si:localuser:${SUDO_USER}" || ! su "${SUDO_USER}" -c "DISPLAY=${DISPLAY} xhost +local:"
    then
       echo "If there are not X11 desktop permissions, the VPN won't run" >&2
       echo "run this while logged in to the graphic console," >&2
@@ -1174,6 +1174,8 @@ doStart()
       echo 
       echo "X11 auth not given" >&2
       echo "Please run as the X11/regular user:" >&2
+      echo "xhost +si:localuser:$SUDO_USER" >&2
+      echo "or" >&2
       echo "xhost +local:" >&2
    fi
 
@@ -2467,6 +2469,7 @@ buildFS()
 	fi
 
 	echo "Installing CShell" >&2
+	export DISPLAY="${DISPLAY}"
 	export PATH=/nopatch:"${PATH}" 
 	if ! /root/cshell_install.sh 
 	then
