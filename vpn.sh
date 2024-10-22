@@ -479,6 +479,7 @@ getDistro()
 
    # SUSE
    [[ -f "/etc/SUSE-brand" ]]        && SUSE=1   # is SUSE family
+   [[ "$ID_LIKE" = *"suse"* ]]       && SUSE=1   # OpenSUSE and SUSE
 
    # Gentoo
    [[ -f "/etc/gentoo-release" ]]    && GENTOO=1 # is GENTOO family
