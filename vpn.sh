@@ -217,7 +217,7 @@ do_help()
 	upgrade      OS upgrade inside chroot
 	sudoers      installs in /etc/sudoers sudo permission for the user
 	log	     shows CShell Jetty logs
-	taillog	     follows/tail CShell Jetty logs
+	tailog	     follows/tail CShell Jetty logs
 	
 	URL for accepting CShell localhost certificate 
 	https://localhost:14186/id
